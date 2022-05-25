@@ -1,18 +1,16 @@
-<Header>
-    <Parent> Unity
-    <Title> Assetの紹介
-    <CreatedAt> 2019-11-10
-    <Tags> ライブラリ
-    <Summary>
-        筆者がこれまでに作成したアセットを紹介します.
-        
-        各アセットの詳しい説明は, 別ページになります.
-        
-        
-        
-        
-    </Summary>
-</Header>
+---
+parent: Unity
+title: Assetの紹介
+date: 2019-11-10
+tags: ライブラリ
+---
+
+筆者がこれまでに作成したアセットを紹介します.
+
+各アセットの詳しい説明は, 別ページになります.
+
+===
+
 # ダウンロード
     [GitHub](https://github.com/ContentsViewer/Unity-BasicAssets)
     

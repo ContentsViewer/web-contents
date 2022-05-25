@@ -1,53 +1,54 @@
-<Header>
-    <Parent> ../Arduino
-    <Title> Arduino上で走るOSの作り方
-    <CreatedAt> 2017-7-11
-    <Tags> リアルタイムOS
-    <Summary>
-        OSは日常のあらゆる場所で目にします. パソコンには必ずと言っていいほどOSが走っており,
-        携帯, ゲーム機などにもOSが走っております.
-        このような普段よく使うOSですが, そのOSの仕組みを分かっていても,
-        実際どのように作るのかはよく知られておらず気になります.
-        
-        このページでは, 実際にArduinoで動くOSを作成することで, OSの理解を深めます. 使用するプログラミング言語はC言語です.
-        (作成といいましても, すでに在ります[FreeRTOS](http://www.freertos.org/index.html)から必要な機能を抜き出し,
-        Arduinoで動くようにしました.)
-        なお, 今回扱うOSは汎用OSではなくリアルタイムOS(RTOS)と呼ばれるものです.
-        汎用OSとは, すべてのタスクに等しく優先度が与えられますが, RTOSではタスクごとに優先度を設定できます.
-        
-        話の進め方ですが, 今回のOS製作では実装に重きを置くため, コードを中心に話を進めていきます.
-        各コードごとに簡単な説明を行い, その中で特に重要な部分―OSの仕組みに深くかかわる部分―
-        もしくはさらに詳しい説明については別ページで行います. これら別ページ―詳細ページ―は子コンテンツである
-        "仕組み"にまとめられています.
-        
-        話の流れは次のとおりです.
-        
-        * RTOSとは
-        * 目標と使い方
-        * 準備
-        * ファイル構成
-        * スクリプト
-        * ボードの設定
-        * 仕組み
-        
-        # 対応状況
-            * Arduino UNO
-            * Arduino Mega
-        
-        # 動作確認済み環境
-            * Arduino IDE 1.8.10
-            * Arduino AVR Boards 1.8.1
-        
-        <!--現在このページは更新中です. 2018年夏までに完了します. WebPageのシステム更新で遅れています.-->
-        
-    </Summary>
-    <Child> WhatRTOS
-    <Child> Objective
-    <Child> Ready
-    <Child> Files
-    <Child> Scripting/Scripting
-    <Child> SetupBoard
-    <Child> Structure
-    <Child> Reference/Reference
-    <Child> Refs
-</Header>
+---
+parent: ../Arduino
+title: Arduino上で走るOSの作り方
+date: 2017-7-11
+tags: リアルタイムOS
+children:
+    WhatRTOS
+    Objective
+    Ready
+    Files
+    Scripting/Scripting
+    SetupBoard
+    Structure
+    Reference/Reference
+    Refs
+---
+
+OSは日常のあらゆる場所で目にします. パソコンには必ずと言っていいほどOSが走っており,
+携帯, ゲーム機などにもOSが走っております.
+このような普段よく使うOSですが, そのOSの仕組みを分かっていても,
+実際どのように作るのかはよく知られておらず気になります.
+
+このページでは, 実際にArduinoで動くOSを作成することで, OSの理解を深めます. 使用するプログラミング言語はC言語です.
+(作成といいましても, すでに在ります[FreeRTOS](http://www.freertos.org/index.html)から必要な機能を抜き出し,
+Arduinoで動くようにしました.)
+なお, 今回扱うOSは汎用OSではなくリアルタイムOS(RTOS)と呼ばれるものです.
+汎用OSとは, すべてのタスクに等しく優先度が与えられますが, RTOSではタスクごとに優先度を設定できます.
+
+話の進め方ですが, 今回のOS製作では実装に重きを置くため, コードを中心に話を進めていきます.
+各コードごとに簡単な説明を行い, その中で特に重要な部分―OSの仕組みに深くかかわる部分―
+もしくはさらに詳しい説明については別ページで行います. これら別ページ―詳細ページ―は子コンテンツである
+"仕組み"にまとめられています.
+
+話の流れは次のとおりです.
+
+* RTOSとは
+* 目標と使い方
+* 準備
+* ファイル構成
+* スクリプト
+* ボードの設定
+* 仕組み
+
+# 対応状況
+    * Arduino UNO
+    * Arduino Mega
+
+# 動作確認済み環境
+    * Arduino IDE 1.8.10
+    * Arduino AVR Boards 1.8.1
+
+<!--現在このページは更新中です. 2018年夏までに完了します. WebPageのシステム更新で遅れています.-->
+
+===

@@ -1,16 +1,9 @@
-<Header>
-    <Parent> 
-    <Title> 📝Home
-    <CreatedAt> 2018/10/11
-    <Tag> メモ, noindex
-    <Summary>
-        
-        
-        
-        
-        
-        
-    </Summary>
-    <Child> Note2019
-    <Child> Note2018
-</Header>
+---
+parent: 
+title: 📝Home
+date: 2018/10/11
+tags: メモ, noindex
+children:
+    Note2019
+    Note2018
+---

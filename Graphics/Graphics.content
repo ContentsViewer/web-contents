@@ -1,11 +1,12 @@
-<Header>
-    <Parent> ../Root
-    <Title> Graphics
-    <CreatedAt> 2020-12-16
-    <Tags> Graphics
-    <Summary>
-        Computer Graphics に関する知識
-        
-        <!--物理 Shaderとか-->
-    </Summary>
-</Header>
+---
+parent: ../Root
+title: Graphics
+date: 2020-12-16
+tags: Graphics
+---
+
+Computer Graphics に関する知識
+
+<!--物理 Shaderとか-->
+
+===

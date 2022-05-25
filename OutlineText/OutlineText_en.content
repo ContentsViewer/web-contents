@@ -1,26 +1,27 @@
-<Header>
-    <Parent> ../Root_en
-    <Title> OutlineText (lightweight markup language)
-    <CreatedAt> 2020-05-06
-    <Tags> lightweight markup language
-    <Summary>
-        ![OutlineText](CURRENT_DIR/Images/OutlineText.png)
-        
-        OutlineText is a __lightweight markup language__ 
-        that has been developed to __make the outline of a sentence easier to understand__ at the plain text stage. 
-        Unlike other lightweight markup languages (Markdown, AsciiDoc, ReStructuredText, ...), 
-        __the indentation represents the hierarchical structure of the text.__ 
-        This makes the hierarchical structure of the text easier to understand visually.
-        
-        To see an example of OutlineText, 
-        please check this web page. 
-        This web page is written entirely in OutlineText. 
-        You can check the plain text of OutlineText 
-        by clicking the `View the source code of this page` at the bottom right of the web page.
-        
-        **Do you want to try the syntax ?**\\
-        [Try This Page.](ROOT_URI/Client/OutlineText/outlinetext-editor.html)
-        
-    </Summary>
-    <Child> Syntax_en
-</Header>
+---
+parent: ../Root_en
+title: OutlineText (lightweight markup language)
+date: 2020-05-06
+tags: lightweight markup language
+children:
+    Syntax_en
+---
+
+![OutlineText](CURRENT_DIR/Images/OutlineText.png)
+
+OutlineText is a __lightweight markup language__ 
+that has been developed to __make the outline of a sentence easier to understand__ at the plain text stage. 
+Unlike other lightweight markup languages (Markdown, AsciiDoc, ReStructuredText, ...), 
+__the indentation represents the hierarchical structure of the text.__ 
+This makes the hierarchical structure of the text easier to understand visually.
+
+To see an example of OutlineText, 
+please check this web page. 
+This web page is written entirely in OutlineText. 
+You can check the plain text of OutlineText 
+by clicking the `View the source code of this page` at the bottom right of the web page.
+
+**Do you want to try the syntax ?**\\
+[Try This Page.](ROOT_URI/Client/OutlineText/outlinetext-editor.html)
+
+===

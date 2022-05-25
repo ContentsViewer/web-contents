@@ -1,12 +1,14 @@
-<Header>
-    <Parent> ../Programming
-    <Title> 参考書
-    <CreatedAt> 2020-05-25
-    <Tags> 参考書
-    <Summary>
-        プログラミングするにあたり役に立った本たち
-    </Summary>
-</Header>
+---
+parent: ../Programming
+title: 参考書
+date: 2020-05-25
+tags: 参考書
+---
+
+プログラミングするにあたり役に立った本たち
+
+===
+
 # 定本 Cプログラマのためのアルゴリズムとデータ構造
     著者:
         近藤嘉雪(こんどう よしゆき)

@@ -1,14 +1,14 @@
-<Header>
-    <Parent> Structure
-    <Title> Arduino標準機能との融合
-    <CreatedAt> 2017-7-11
-    <Tags> 
-    <Summary>
-        ここでは, OSの機能とArduino標準機能と融合していきます.
-        融合するものとしては, Arduino言語―setup(), loop()―, 
-        Arduino標準関数に影響するタイマー割り込み部分です.
-    </Summary>
-</Header>
+---
+parent: Structure
+title: Arduino標準機能との融合
+date: 2017-7-11
+---
+
+ここでは, OSの機能とArduino標準機能と融合していきます.
+融合するものとしては, Arduino言語―setup(), loop()―, 
+Arduino標準関数に影響するタイマー割り込み部分です.
+
+===
 
 # Arduino言語との融合
     Arduinoには, setup(), loop()があります.

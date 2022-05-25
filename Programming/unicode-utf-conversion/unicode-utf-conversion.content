@@ -1,16 +1,18 @@
-<Header>
-    <Parent> ../Programming
-    <Title> C++で学ぶUnicodeの基本とUTF-8, UTF-16, UTF-32の相互変換アルゴリズム
-    <CreatedAt> 2020-11-26
-    <Tags> Unicode, UTF-8, UTF-16, UTF-32, Cpp
-    <Summary>
-        広く使われているUnicode規格を理解し,
-        エンコーディングの手法, UTF-8, UTF-16, UTF-32, を理解して, 
-        多言語の文字コードを扱えるようになることを目指します.
-        具体的に, UTF-8, UTF-16, UTF-32間の変換方法をC++で実装し, 
-        手法はできるだけ速い方法を用います.
-    </Summary>
-</Header>
+---
+parent: ../Programming
+title: C++で学ぶUnicodeの基本とUTF-8, UTF-16, UTF-32の相互変換アルゴリズム
+date: 2020-11-26
+tags: Unicode, UTF-8, UTF-16, UTF-32, Cpp
+---
+
+広く使われているUnicode規格を理解し,
+エンコーディングの手法, UTF-8, UTF-16, UTF-32, を理解して, 
+多言語の文字コードを扱えるようになることを目指します.
+具体的に, UTF-8, UTF-16, UTF-32間の変換方法をC++で実装し, 
+手法はできるだけ速い方法を用います.
+
+===
+
 # はじめに
     コンピュータで文字を処理するにあたり, Unicode規格が多く使われています^[w3techs-usage-statistics].
     2021年4月でのW3Techsの調査によると, Webサイトで用いられる文字エンコーディングで, Unicode規格であるUTF-8が全体の96.7%を占めています^[w3techs-usage-statistics].

@@ -1,18 +1,18 @@
-<Header>
-    <Parent> String
-    <Title> Stringの使い方
-    <CreatedAt> 2016-3-3
-    <Tags> 
-    <Summary>
-        ここでは, Stringの基本的な使い方を説明します.
-        各説明項目は以下のとおりです.
-        
-        * 使用例
-        * Splitについて
-        * GetLineについて
-        
-    </Summary>
-</Header>
+---
+parent: String
+title: Stringの使い方
+date: 2016-3-3
+---
+
+ここでは, Stringの基本的な使い方を説明します.
+各説明項目は以下のとおりです.
+
+* 使用例
+* Splitについて
+* GetLineについて
+
+===
+
 # 使用例
     ここでは, 使用例として文字列結合を行いたいと思います.
 

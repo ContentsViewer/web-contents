@@ -1,12 +1,14 @@
-<Header>
-    <Parent> ../PHP
-    <Title> PHPでキャッシュ管理 CacheManager
-    <CreatedAt> 2020-05-06
-    <Tags> ライブラリ, PHP, キャッシュ, ダウンロード
-    <Summary>
-        PHPで, キャッシュを管理するライブラリ
-    </Summary>
-</Header>
+---
+parent: ../PHP
+title: PHPでキャッシュ管理 CacheManager
+date: 2020-05-06
+tags: ライブラリ, PHP, キャッシュ, ダウンロード
+---
+
+PHPで, キャッシュを管理するライブラリ
+
+===
+
 # はじめに
     PHPでアプリケーションを作成するとき, データを一時的に保存したい時があります.
     例えば, 重いテキストの変換処理を毎アクセス時にするよりは, 

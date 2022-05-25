@@ -1,12 +1,13 @@
-<Header>
-    <Parent> ../Tips
-    <Title> SyntaxHighlighter の非同期読み込み
-    <CreatedAt> 2021-08-09
-    <Tags> JavaScript, 非同期処理
-    <Summary>
-        本稿では, コードをハイライトするライブラリ//SyntaxHighlighter//の//非同期読み込み方法//について説明します. 
-    </Summary>
-</Header>
+---
+parent: ../Tips
+title: SyntaxHighlighter の非同期読み込み
+date: 2021-08-09
+tags: JavaScript, 非同期処理
+---
+
+本稿では, コードをハイライトするライブラリ//SyntaxHighlighter//の//非同期読み込み方法//について説明します. 
+
+===
 
 # SyntaxHighlighter について
     SyntaxHighlighter は, Webサイト上でコードをハイライトするためのライブラリです.

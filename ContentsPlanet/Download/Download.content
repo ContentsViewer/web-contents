@@ -1,13 +1,14 @@
-<Header>
-    <Parent> ../ContentsPlanet
-    <Title> ダウンロード
-    <CreatedAt> 2018-10-07
-    <Tags> ダウンロード, CMS
-    <Summary>
-        本CMSは以下のサイトからダウンロードできます.
-        
-    </Summary>
-</Header>
+---
+parent: ../ContentsPlanet
+title: ダウンロード
+date: 2018-10-07
+tags: ダウンロード, CMS
+---
+
+本CMSは以下のサイトからダウンロードできます.
+
+===
+
 # Github
 ____________________________
 

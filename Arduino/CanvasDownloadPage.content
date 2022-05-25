@@ -1,13 +1,12 @@
-<Header>
-    <Parent> Canvas
-    <Title> ダウンロードページ
-    <CreatedAt> 2017-3-29
-    <Tags> 
-    <Summary>
-        キャンバスは以下のページからダウンロードできます.
-    </Summary>
-</Header>
+---
+parent: Canvas
+title: ダウンロードページ
+date: 2017-3-29
+---
 
+キャンバスは以下のページからダウンロードできます.
+
+===
 
 [Canvas](https://github.com/ContentsViewer/Arduino-Canvas)<br />
 GitHubで公開

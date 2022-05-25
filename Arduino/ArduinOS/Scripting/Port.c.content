@@ -1,14 +1,16 @@
-<Header>
-    <Parent> Scripting
-    <Title> Port.c
-    <CreatedAt> 2020-05-25
-    <Tags> C言語, 編集中
-    <Summary>
-        PortMacro.hで宣言されているOSコア部分の関数をここで定義します. 
-        このファイルはAVRマイコン専用です.
-        
-    </Summary>
-</Header>
+---
+parent: Scripting
+title: Port.c
+date: 2020-05-25
+tags: C言語, 編集中
+---
+
+PortMacro.hで宣言されているOSコア部分の
+関数をここで定義します. 
+このファイルはAVRマイコン専用です.
+
+===
+
 # 機能
 
 # include 関係

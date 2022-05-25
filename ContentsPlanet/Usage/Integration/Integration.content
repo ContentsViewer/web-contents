@@ -1,12 +1,12 @@
-<Header>
-    <Parent> ../Usage
-    <Title> 他システムとの連携方法
-    <CreatedAt> 2020-08-31
-    <Tags> 
-    <Summary>
-        Google Drive, Slack, Gitlab, Github, といった他システムの連携方法について
-    </Summary>
-</Header>
+---
+parent: ../Usage
+title: 他システムとの連携方法
+date: 2020-08-31
+---
+
+Google Drive, Slack, Gitlab, Github, といった他システムの連携方法について
+
+===
 
 # 応用例
     # + Google Drive + Slack

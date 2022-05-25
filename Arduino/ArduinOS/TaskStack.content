@@ -1,15 +1,15 @@
-<Header>
-    <Parent> TaskScheduler
-    <Title> メモリの構造
-    <CreatedAt> 2017-7-11
-    <Tags> OS, メモリ, Stack, C言語
-    <Summary>
-        ここでは, 実際にタスクが作成されたときのメモリの構造を示していきたいと思います.
-        メモリでの各領域の説明, この構造によるmallocの問題を示します.
-        
-        
-    </Summary>
-</Header>
+---
+parent: TaskScheduler
+title: メモリの構造
+date: 2017-7-11
+tags: OS, メモリ, Stack, C言語
+---
+
+ここでは, 実際にタスクが作成されたときのメモリの構造を示していきたいと思います.
+メモリでの各領域の説明, この構造によるmallocの問題を示します.
+
+===
+
 # 構造
     ![メモリ構造](CURRENT_DIR/Images/MemoryStructure.png)
 

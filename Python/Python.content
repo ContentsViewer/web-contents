@@ -1,10 +1,8 @@
-<Header>
-    <Parent> ../Root
-    <Title> Python
-    <CreatedAt> 2020-08-27
-    <Tags> Python
-    <Summary>
-        
-    </Summary>
-    <Child> stdlib/stdlib
-</Header>
+---
+parent: ../Root
+title: Python
+date: 2020-08-27
+tags: Python
+children:
+    stdlib/stdlib
+---

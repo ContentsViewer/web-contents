@@ -1,21 +1,22 @@
-<Header>
-    <Parent> ../Troubleshooting
-    <Title> シリアルモニタを開くまでArduino-Python間のシリアル通信のデータ破損
-    <CreatedAt> 2020-07-14
-    <Tags> シリアル通信, Arduino, Python
-    <Summary>
-        //ArduinoとPython間のシリアル通信//で, 
-        Arduino側から送られたシリアルデータをPythonの`pySerial`モジュールで読み込むと,
-        //破損したデータ-予想していないデータ-を受信//する.
-        だが, //一度Arduinoのシリアルモニタでデータを確認すると正常に受信//できており,
-        //それ以降, pythonの方でも正常に受信//できる.
-        
-        ![pythonで受信. 予期しないデータが受信されている](CURRENT_DIR/Images/corruption.jpg)
-        
-        本稿では, 上記の問題の原因と解決方法について述べる.
-        
-    </Summary>
-</Header>
+---
+parent: ../Troubleshooting
+title: シリアルモニタを開くまでArduino-Python間のシリアル通信のデータ破損
+date: 2020-07-14
+tags: シリアル通信, Arduino, Python
+---
+
+//ArduinoとPython間のシリアル通信//で, 
+Arduino側から送られたシリアルデータをPythonの`pySerial`モジュールで読み込むと,
+//破損したデータ-予想していないデータ-を受信//する.
+だが, //一度Arduinoのシリアルモニタでデータを確認すると正常に受信//できており,
+//それ以降, pythonの方でも正常に受信//できる.
+
+![pythonで受信. 予期しないデータが受信されている](CURRENT_DIR/Images/corruption.jpg)
+
+本稿では, 上記の問題の原因と解決方法について述べる.
+
+===
+
 # 症状
     環境:
         * Arduino

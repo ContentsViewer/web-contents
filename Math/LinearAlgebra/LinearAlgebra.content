@@ -1,13 +1,8 @@
-<Header>
-    <Parent> ../Math
-    <Title> 線形代数
-    <CreatedAt> 2018-12-11
-    <Tags> 
-    <Summary>
-        
-        
-        
-    </Summary>
-    <Child> Theorems/Theorems
-    <Child> TransAndRep/TransAndRep
-</Header>
+---
+parent: ../Math
+title: 線形代数
+date: 2018-12-11
+children:
+    Theorems/Theorems
+    TransAndRep/TransAndRep
+---

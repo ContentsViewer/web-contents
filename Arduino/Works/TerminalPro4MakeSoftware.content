@@ -1,17 +1,17 @@
-<Header>
-    <Parent> TerminalPro4
-    <Title> TerminalPro4ソフトウェア製作
-    <CreatedAt> 2017-5-4
-    <Tags> 
-    <Summary>
-        TerminalPro4用のソフトウェアの作り方を説明します.
-        
-        * ソフト作製の流れ
-        * TerminalPro4での制御流れ
-        * ソフトの作り方
-        
-    </Summary>
-</Header>
+---
+parent: TerminalPro4
+title: TerminalPro4ソフトウェア製作
+date: 2017-5-4
+---
+
+TerminalPro4用のソフトウェアの作り方を説明します.
+
+* ソフト作製の流れ
+* TerminalPro4での制御流れ
+* ソフトの作り方
+
+===
+
 # ソフト作製の流れ
     ソフト製作全体の流れは次の通りです.
 

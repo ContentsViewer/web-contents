@@ -1,25 +1,26 @@
-<Header>
-    <Parent> ../Root
-    <Title> ContentsPlanet (CMS)
-    <CreatedAt> 2020-08-04
-    <Tags> CMS, Web
-    <Summary>
-        ![ContentsPlanet](CURRENT_DIR/Images/Logo.jpg)
-        
-        ContentsPlanet は, 次の三つの特徴を持つWebコンテンツ管理システム(CMS)です.
-        
-        * OS標準のファイルシステムを介した他システム(Git, FTP, GitHub, GitLab, OneDrive, Google Drive, ...) との連携
-        * アウトラインの視認性と可読性を考慮したエディタに依存しないコンテンツ記述軽量マークアップ言語
-        * ディレクトリを超えたコンテンツの検索性とトピックモデルに基づいたコンテンツ管理(自動タグ付け, 自動カテゴライズ, 関連提示)
-        
-    </Summary>
-    <Child> Download/Download
-    <Child> Install/Install
-    <Child> Concept/Concept
-    <Child> Usage/Usage
-    <Child> ChangeLog/ChangeLog
-    <Child> HowItWorks/HowItWorks
-</Header>
+---
+parent: ../Root
+title: ContentsPlanet (CMS)
+date: 2020-08-04
+tags: CMS, Web
+children:
+    Download/Download
+    Install/Install
+    Concept/Concept
+    Usage/Usage
+    ChangeLog/ChangeLog
+    HowItWorks/HowItWorks
+---
+
+![ContentsPlanet](CURRENT_DIR/Images/Logo.jpg)
+
+ContentsPlanet は, 次の三つの特徴を持つWebコンテンツ管理システム(CMS)です.
+
+* OS標準のファイルシステムを介した他システム(Git, FTP, GitHub, GitLab, OneDrive, Google Drive, ...) との連携
+* アウトラインの視認性と可読性を考慮したエディタに依存しないコンテンツ記述軽量マークアップ言語
+* ディレクトリを超えたコンテンツの検索性とトピックモデルに基づいたコンテンツ管理(自動タグ付け, 自動カテゴライズ, 関連提示)
+
+===
 
 # 特徴
     # 他システムとの連携

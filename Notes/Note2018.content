@@ -1,29 +1,10 @@
-<Header>
-    <Parent> Notes
-    <Title> メモ(2018)
-    <CreatedAt> 2018/10/11
-    <Tag> noindex
-    <Summary>
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-    </Summary>
-</Header>
+---
+parent: Notes
+title: メモ(2018)
+date: 2018/10/11
+tags: noindex
+---
+
 # やることりすと
     # Slam
     

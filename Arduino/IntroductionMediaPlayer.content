@@ -1,23 +1,20 @@
-<Header>
-    <Parent> MediaPlayer
-    <Title> MediaPlayerの導入方法
-    <CreatedAt> 2016-12-8
-    <Tags> 
-    <Summary>
-        MediaPlayerの導入方法を説明します.
-        説明項目は以下のとおりです.
-        
-        * ダウンロード
-        * ファイルの説明
-        * 音楽再生モジュールの作成
-        * 再生モジュールとコントローラの接続
-        * コントローラ側の準備
-        
-        
-        
-        
-    </Summary>
-</Header>
+---
+parent: MediaPlayer
+title: MediaPlayerの導入方法
+date: 2016-12-8
+---
+
+MediaPlayerの導入方法を説明します.
+説明項目は以下のとおりです.
+
+* ダウンロード
+* ファイルの説明
+* 音楽再生モジュールの作成
+* 再生モジュールとコントローラの接続
+* コントローラ側の準備
+
+===
+
 # ダウンロード
     下記からダウンロードできます.
 

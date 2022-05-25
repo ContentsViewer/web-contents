@@ -1,22 +1,22 @@
-<Header>
-    <Parent> EventController
-    <Title> EventControllerの関数, 変数一覧
-    <CreatedAt> 2016-12-8
-    <Tags> 
-    <Summary>
-        |[関数]
-        |----------------||--------------------------------------------|
-        | [ResetTrigger](#ResetTrigger) || TriggerをResetします |
-        | [GetBool](#GetBool)			|| 指定したbool型Parameterの値を取得 |
-        | [GetInteger](#GetInteger)		|| 指定したint型Parameterの値を取得 |
-        | [GetFloat](#GetFloat)			|| 指定したfloat型Parameterの値を取得 |
-        | [SetTrigger](#SetTrigger)		|| Triggerを引きます				|
-        | [SetBool](#SetBool)			|| 指定したbool型Parameterを設定	|
-        | [SetInteger](#SetInteger)     || 指定したint型Parameterを設定 |
-        | [SetFloat](#SetFloat)         || 指定したfloat型Parameterを設定   |
-        
-    </Summary>
-</Header>
+---
+parent: EventController
+title: EventControllerの関数, 変数一覧
+date: 2016-12-8
+---
+
+|[関数]
+|----------------||--------------------------------------------|
+| [ResetTrigger](#ResetTrigger) || TriggerをResetします |
+| [GetBool](#GetBool)			|| 指定したbool型Parameterの値を取得 |
+| [GetInteger](#GetInteger)		|| 指定したint型Parameterの値を取得 |
+| [GetFloat](#GetFloat)			|| 指定したfloat型Parameterの値を取得 |
+| [SetTrigger](#SetTrigger)		|| Triggerを引きます				|
+| [SetBool](#SetBool)			|| 指定したbool型Parameterを設定	|
+| [SetInteger](#SetInteger)     || 指定したint型Parameterを設定 |
+| [SetFloat](#SetFloat)         || 指定したfloat型Parameterを設定   |
+
+===
+
 # [[ResetTrigger]]ResetTrigger
     public void ResetTrigger(string name)
 

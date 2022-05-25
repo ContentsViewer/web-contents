@@ -1,14 +1,14 @@
-<Header>
-    <Parent> ../ImageProcessing
-    <Title> 参考書
-    <CreatedAt> 2020-06-10
-    <Tags> 参考書
-    <Summary>
-        
-        画像処理で役立つ本たち
-        
-    </Summary>
-</Header>
+---
+parent: ../ImageProcessing
+title: 参考書
+date: 2020-06-10
+tags: 参考書
+---
+
+画像処理で役立つ本たち
+
+===
+
 # ディジタル画像処理[改訂新版]
     著者:
         ディジタル画像処理[改訂新版] 編集委員会

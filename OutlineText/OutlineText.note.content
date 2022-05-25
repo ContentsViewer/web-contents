@@ -1,12 +1,7 @@
-<Header>
-    <Parent> 
-    <Title> 
-    <CreatedAt> 2020-07-01
-    <Tags> 
-    <Summary>
-        
-    </Summary>
-</Header>
+---
+date: 2020-07-01
+---
+
 # 2020-7-1
     >>>
         インデントをインデントとして出力します.

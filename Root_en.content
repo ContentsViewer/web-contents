@@ -1,14 +1,14 @@
-<Header>
-    <Parent> 
-    <Title> Welcome!
-    <CreatedAt> 2020-05-06
-    <Tags> root
-    <Summary>
-        Welcome to ContentsViewer!
-        This page is the root page of all contents.
-        From this page, You can access any contents you want.
-        
-    </Summary>
-    <Child> ContentsPlanet/ContentsPlanet_en
-    <Child> OutlineText/OutlineText_en
-</Header>
+---
+title: Welcome!
+date: 2020-05-06
+tags: root
+children:
+    ContentsPlanet/ContentsPlanet_en
+    OutlineText/OutlineText_en
+---
+
+Welcome to ContentsViewer!
+This page is the root page of all contents.
+From this page, You can access any contents you want.
+
+===

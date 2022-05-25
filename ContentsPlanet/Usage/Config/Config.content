@@ -1,12 +1,13 @@
-<Header>
-    <Parent> ../Usage
-    <Title> 設定方法
-    <CreatedAt> 2020-08-31
-    <Tags> 
-    <Summary>
-        本CMSの設定方法について
-    </Summary>
-</Header>
+---
+parent: ../Usage
+title: 設定方法
+date: 2020-08-31
+---
+
+本CMSの設定方法について
+
+===
+
 # 設定ファイル
     `ContentsPlanet.php`内に設定内容が書かれています.
     

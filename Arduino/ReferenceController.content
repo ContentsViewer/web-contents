@@ -1,18 +1,16 @@
-<Header>
-    <Parent> Controller
-    <Title> Controllerの関数一覧
-    <CreatedAt> 2016-12-8
-    <Tags> 
-    <Summary>
-        |-----------------||---------------------------------------------|
-        | [Begin](#Begin) || Controllerの開始                            |
-        | [Stick](#Stick) || スイッチ情報取得                             |
-        | [Read](#Read)   || スイッチ情報取得                             |
-        
-        
-        
-    </Summary>
-</Header>
+---
+parent: Controller
+title: Controllerの関数一覧
+date: 2016-12-8
+---
+
+|-----------------||---------------------------------------------|
+| [Begin](#Begin) || Controllerの開始                            |
+| [Stick](#Stick) || スイッチ情報取得                             |
+| [Read](#Read)   || スイッチ情報取得                             |
+
+===
+
 # [[Begin]]Begin
     Begin(byte pin, byte numSW, byte mode)
 

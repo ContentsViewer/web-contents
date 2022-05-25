@@ -1,12 +1,13 @@
-<Header>
-    <Parent> TwitterBot
-    <Title> 更新履歴
-    <CreatedAt> 2017-3-20
-    <Tags> 更新履歴
-    <Summary>
-        ここにはTwitterBotの更新履歴が書かれます.
-    </Summary>
-</Header>
+---
+parent: TwitterBot
+title: 更新履歴
+date: 2017-3-20
+tags: 更新履歴
+---
+
+ここにはTwitterBotの更新履歴が書かれます.
+
+===
 
 # 2017/11/25
     改良のため停止(無期限)

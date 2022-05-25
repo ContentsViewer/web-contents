@@ -1,14 +1,13 @@
-<Header>
-    <Parent> About
-    <Title> お問い合わせ
-    <CreatedAt> 2016-12-8
-    <Tags> お問い合わせ
-    <Summary>
-        このWebPageに関して何かありましたら下の問い合わせフォームよりお知らせください.
-        
-        
-    </Summary>
-</Header>
+---
+parent: About
+title: お問い合わせ
+tags: お問い合わせ
+date: 2016-12-8
+---
+
+このサイトに関して何かありましたら, 下の問い合わせフォームよりお知らせください.
+
+===
 
 <form method="POST" action="/Service/mail-service.php" name="form" onsubmit="return CheckForm()">
     <input type="hidden" name="subject" value="Message from a site visitor " />

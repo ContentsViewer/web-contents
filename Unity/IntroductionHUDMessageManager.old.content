@@ -1,19 +1,18 @@
-<Header>
-    <Parent> HUDMessageManager
-    <Title> HUDMessageManagerの導入方法
-    <CreatedAt> 2016-12-8
-    <Tags> 
-    <Summary>
-        HUDMessageManagerの導入方法を説明します.
-        説明項目は以下のとおりです.
-        
-        * ダウンロード
-        * Unityにインポート
-        * 表示位置の設定
-        
-        
-    </Summary>
-</Header>
+---
+parent: HUDMessageManager
+title: HUDMessageManagerの導入方法
+date: 2016-12-8
+---
+
+HUDMessageManagerの導入方法を説明します.
+説明項目は以下のとおりです.
+
+* ダウンロード
+* Unityにインポート
+* 表示位置の設定
+
+===
+
 # ダウンロード
     下記からダウンロードできます.
 

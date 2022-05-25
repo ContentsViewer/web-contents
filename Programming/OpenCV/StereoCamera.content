@@ -1,20 +1,21 @@
-<Header>
-    <Parent> OpenCV
-    <Title> OpenCVで二つのWEBカメラを用いたステレオカメラの実装
-    <CreatedAt> 2019-06-19
-    <Tags> OpenCV, Python, ステレオカメラ, 画像処理
-    <Summary>
-        ステレオカメラは，空間の深度を測定するのに使われます．
-        本稿では，二台のウェブカメラを用いてステレオカメラを実装します．
-        ある程度のロバスト性を確保するため，キャリブレーションも行います．
-        
-        結果，以下のような深度画像を得ることができた．
-        
-        
-        ![結果画像](CURRENT_DIR/Images/StereoCamera/result.jpg)
-            
-    </Summary>
-</Header>
+---
+parent: OpenCV
+title: OpenCVで二つのWEBカメラを用いたステレオカメラの実装
+date: 2019-06-19
+tags: OpenCV, Python, ステレオカメラ, 画像処理
+---
+
+ステレオカメラは，空間の深度を測定するのに使われます．
+本稿では，二台のウェブカメラを用いてステレオカメラを実装します．
+ある程度のロバスト性を確保するため，キャリブレーションも行います．
+
+結果，以下のような深度画像を得ることができた．
+
+
+![結果画像](CURRENT_DIR/Images/StereoCamera/result.jpg)
+
+===
+
 # ステレオカメラの準備
     "LOGICOOL ウェブカム HD画質 120万画素 C270" を二つ用意し，
     水平になるように並べて固定します．

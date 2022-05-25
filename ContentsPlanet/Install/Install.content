@@ -1,16 +1,16 @@
-<Header>
-    <Parent> ../ContentsPlanet
-    <Title> 導入方法
-    <CreatedAt> 2018-10-12
-    <Tags> Web, CMS
-    <Summary>
-        ここでは, 本CMSの導入方法を説明します.
-        
-        
-        すぐに使用したい方は, 項目の[はじめる](#Start)をご覧ください.
-        
-    </Summary>
-</Header>
+---
+parent: ../ContentsPlanet
+title: 導入方法
+date: 2018-10-12
+tags: Web, CMS
+---
+
+ここでは, 本CMSの導入方法を説明します.
+
+すぐに使用したい方は, 項目の[はじめる](#Start)をご覧ください.
+
+===
+
 # [[Start]]はじめる
 ____________
     # サーバに ContentsPlanet フォルダを置く

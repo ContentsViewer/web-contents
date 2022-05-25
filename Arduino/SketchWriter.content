@@ -1,35 +1,37 @@
-<Header>
-    <Parent> SketchWriteWithoutComputer
-    <Title> SketchWriter
-    <CreatedAt> 2016-12-8
-    <Tags> ライブラリ
-    <Summary>
-        SketchWriterとは、optiboot―これが書き込まれているArduinoはArduinoUnoです―と通信することができるものです。
-        このSketchWriterはoptibootに対してメモリのセット、データの送信、アプリの実行、を命令することができます。
-        それらの命令を使ってパソコンを用いずにArduinoにスケッチ―Arduinoではプログラムのことをスケッチと呼んでいます―を書き込むことができます。
-        SketchWriterができることは以下のことです。
-        
-        * optibootに対しての基本命令の送信
-        * スケッチが書かれたHexFile(Hexファイル)の読み込み
-        * Arduinoにスケッチを送信
-        * 今後応用可能な関数セット
-        
-        optibootに対しての基本命令とはメモリのセット、 データの送信、 アプリの実行、 optibootと同期などをさします。
-        このヘッダを用いるとArduinoからArduinoへスケッチ―プログラム―を書き込むことができます。
-        
-        
-        ただし、以下の環境が必要です。
-        
-        # スケッチを書き込まれるArduinoにはブートローダー"optiboot"がかきこまれていること
-            optibootがかきこまれているArduinoは"Arduino UNO"です。このサイトでもこれを使用しています。
-        
-        # スケッチを書き込むArduinoは16MHzで動作していること
-            optibootとの通信には115200bpsのシリアル通信が用いられています。
-            8MHzなどの低周波数で動作するArduinoではこの通信がうまくいきません。
-        
-        SketchWriterを改良、強化、何でもしてください(;´∀｀)
-    </Summary>
-    <Child> IntroductionSketchWriter
-    <Child> UsageSketchWriter
-    <Child> ReferenceSketchWriter
-</Header>
+---
+parent: SketchWriteWithoutComputer
+title: SketchWriter
+date: 2016-12-8
+tags: ライブラリ
+children:
+    IntroductionSketchWriter
+    UsageSketchWriter
+    ReferenceSketchWriter
+---
+
+SketchWriterとは、optiboot―これが書き込まれているArduinoはArduinoUnoです―と通信することができるものです。
+このSketchWriterはoptibootに対してメモリのセット、データの送信、アプリの実行、を命令することができます。
+それらの命令を使ってパソコンを用いずにArduinoにスケッチ―Arduinoではプログラムのことをスケッチと呼んでいます―を書き込むことができます。
+SketchWriterができることは以下のことです。
+
+* optibootに対しての基本命令の送信
+* スケッチが書かれたHexFile(Hexファイル)の読み込み
+* Arduinoにスケッチを送信
+* 今後応用可能な関数セット
+
+optibootに対しての基本命令とはメモリのセット、 データの送信、 アプリの実行、 optibootと同期などをさします。
+このヘッダを用いるとArduinoからArduinoへスケッチ―プログラム―を書き込むことができます。
+
+
+ただし、以下の環境が必要です。
+
+# スケッチを書き込まれるArduinoにはブートローダー"optiboot"がかきこまれていること
+    optibootがかきこまれているArduinoは"Arduino UNO"です。このサイトでもこれを使用しています。
+
+# スケッチを書き込むArduinoは16MHzで動作していること
+    optibootとの通信には115200bpsのシリアル通信が用いられています。
+    8MHzなどの低周波数で動作するArduinoではこの通信がうまくいきません。
+
+SketchWriterを改良、強化、何でもしてください(;´∀｀)
+
+===

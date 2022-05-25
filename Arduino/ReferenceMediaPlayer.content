@@ -1,24 +1,23 @@
-<Header>
-    <Parent> MediaPlayer
-    <Title> MediaPlayerの関数, 変数一覧
-    <CreatedAt> 2016-12-8
-    <Tags> 
-    <Summary>
-        |[関数]
-        |---------------------||--------------------------|
-        | [Begin](#Begin)     || MediaPlayerControllerの開始 |
-        | [Stop](#Stop)       || 音楽停止 |
-        | [Load](#Load)       || 音楽ファイルロード |
-        | [Play](#Play)       || 音楽再生 |
-        
-        
-        |[Enum]
-        |-------------------------||-------------------------------|
-        | [PLAY_MODE](#PLAY_MODE) || プレイモード                   |
-        
-        
-    </Summary>
-</Header>
+---
+parent: MediaPlayer
+title: MediaPlayerの関数, 変数一覧
+date: 2016-12-8
+---
+
+|[関数]
+|---------------------||--------------------------|
+| [Begin](#Begin)     || MediaPlayerControllerの開始 |
+| [Stop](#Stop)       || 音楽停止 |
+| [Load](#Load)       || 音楽ファイルロード |
+| [Play](#Play)       || 音楽再生 |
+
+
+|[Enum]
+|-------------------------||-------------------------------|
+| [PLAY_MODE](#PLAY_MODE) || プレイモード                   |
+
+===
+
 # [[Begin]]Begin
     void Begin(byte stopPin, byte statePin)
 

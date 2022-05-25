@@ -1,12 +1,7 @@
-<Header>
-    <Parent> 
-    <Title> 
-    <CreatedAt> 2020-10-10
-    <Tags> 
-    <Summary>
-        
-    </Summary>
-</Header>
+---
+date: 2020-10-10
+---
+
 # 2020-10-10
     Ubuntu 20.04 の環境を調査する。
     

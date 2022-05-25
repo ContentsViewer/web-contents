@@ -1,11 +1,12 @@
-<Header>
-    <Parent> Contact
-    <Title> Sorry...
-    <CreatedAt> 2016-12-8
-    <Tags> noindex
-    <Summary>
-        申し訳ございません. 
-    </Summary>
-</Header>
+---
+parent: Contact
+title: Sorry...
+date: 2016-12-8
+tags: noindex
+---
+
+申し訳ございません. 
+
+===
 
 送信に失敗しました. 一日に送信されたメールの数が上限を上回った可能性があります.

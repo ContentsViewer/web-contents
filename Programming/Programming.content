@@ -1,16 +1,17 @@
-<Header>
-    <Parent> ../Root
-    <Title> プログラミング
-    <CreatedAt> 2019-04-26
-    <Tags> 
-    <Summary>
-        ここでは, プログラミングに関することが書かれます.
-        多くのプログラミング言語で共通することが書かれます.
-    </Summary>
-    <Child> OpenCV/OpenCV
-    <Child> Python/Python
-    <Child> NamingRules
-    <Child> DirectoryTraversal
-    <Child> unicode-utf-conversion/unicode-utf-conversion
-    <Child> Books/Books
-</Header>
+---
+parent: ../Root
+title: プログラミング
+date: 2019-04-26
+children:
+    OpenCV/OpenCV
+    Python/Python
+    NamingRules
+    DirectoryTraversal
+    unicode-utf-conversion/unicode-utf-conversion
+    Books/Books
+---
+
+ここでは, プログラミングに関することが書かれます.
+多くのプログラミング言語で共通することが書かれます.
+
+===

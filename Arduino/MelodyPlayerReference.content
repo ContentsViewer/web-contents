@@ -1,24 +1,23 @@
-<Header>
-    <Parent> MelodyPlayer
-    <Title> MelodyPlayerの関数一覧
-    <CreatedAt> 2017-3-3
-    <Tags> 
-    <Summary>
-        |[関数]
-        |-----------------||-----------------------------------------|
-        | [Begin](#Begin) || MelodyPlayerの開始                       |
-        | [End](#End)     || MelodyPlayerの終了                       |
-        | [Play](#Play)   || メロディー再生                           |
-        | [Stop](#Stop)   || メロディー停止                           |
-        | [IsPlaying](#IsPlaying) || 再生中かどうか                   |
-        
-        |[Enum]
-        |-------------------------||-------------------------------|
-        | [PLAY_MODE](#PLAY_MODE) || プレイモード                   |
-        
-        
-    </Summary>
-</Header>
+---
+parent: MelodyPlayer
+title: MelodyPlayerの関数一覧
+date: 2017-3-3
+---
+
+|[関数]
+|-----------------||-----------------------------------------|
+| [Begin](#Begin) || MelodyPlayerの開始                       |
+| [End](#End)     || MelodyPlayerの終了                       |
+| [Play](#Play)   || メロディー再生                           |
+| [Stop](#Stop)   || メロディー停止                           |
+| [IsPlaying](#IsPlaying) || 再生中かどうか                   |
+
+|[Enum]
+|-------------------------||-------------------------------|
+| [PLAY_MODE](#PLAY_MODE) || プレイモード                   |
+
+===
+
 # [[Begin]]Begin
     static void Begin(unsigned char speakerPin)
 

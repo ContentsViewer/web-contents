@@ -1,10 +1,9 @@
-<Header>
-    <Parent> Unity
-    <Title> エフェクト
-    <CreatedAt> 2019-11-10
-    <Tags> 
-    <Summary>
-        シェーダなど
-        
-    </Summary>
-</Header>
+---
+parent: Unity
+title: エフェクト
+date: 2019-11-10
+---
+
+シェーダなど
+
+===

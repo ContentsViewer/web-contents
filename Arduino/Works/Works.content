@@ -1,10 +1,11 @@
-<Header>
-    <Parent> ../Arduino
-    <Title> 作品例
-    <CreatedAt> 2017-5-4
-    <Tags> 
-    <Summary>
-        ここには, Arduinoを用いた作品を紹介します.
-    </Summary>
-    <Child> TerminalPro4
-</Header>
+---
+parent: ../Arduino
+title: 作品例
+date: 2017-5-4
+children:
+    TerminalPro4
+---
+
+ここには, Arduinoを用いた作品を紹介します.
+
+===

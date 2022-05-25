@@ -1,13 +1,14 @@
-<Header>
-    <Parent> ../Install
-    <Title> フローチャートで進む, NVIDIA GPU ドライバ, CUDA, cuDNN, tensorflow のインストール方法
-    <CreatedAt> 2020-08-18
-    <Tags> NVIDIA, GPU, CUDA, cuDNN, tensorflow, ドライバ, Ubuntu, フローチャート
-    <Summary>
-        公式リファレンスを参考しつつ, 
-        Ubuntu 上にNVIDIA GPU ドライバ, CUDA, cuDNNを入れて, tensorflow をGPUで動かす方法を, フローチャートで進めます.
-    </Summary>
-</Header>
+---
+parent: ../Install
+titile: フローチャートで進む, NVIDIA GPU ドライバ, CUDA, cuDNN, tensorflow のインストール方法
+date: 2020-08-18
+tags: NVIDIA, GPU, CUDA, cuDNN, tensorflow, ドライバ, Ubuntu, フローチャート
+---
+
+公式リファレンスを参考しつつ, 
+Ubuntu 上にNVIDIA GPU ドライバ, CUDA, cuDNNを入れて, tensorflow をGPUで動かす方法を, フローチャートで進めます.
+
+===
 
 # はじめに
     tensorflow で, NVIDIA GPU での計算を有効にするためには, 各種ドライバやライブラリが必要です^[tf-install-gpu].

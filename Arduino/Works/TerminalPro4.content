@@ -1,38 +1,37 @@
-<Header>
-    <Parent> Works
-    <Title> 端末第四世代(TerminalPro4)
-    <CreatedAt> 2017-5-4
-    <Tags> 作品, 自作
-    <Summary>
-        ![本体外観](CURRENT_DIR/Images/TerminalPro4/Top.jpg)
-        
-        TerminalPro4とはSDカードに保存されている任意のプログラムを選択, 実行することができるものです. 
-        また外部のマイコン(optibootのみ対応)に対してプログラムを書き込むことも可能です.
-        プログラマはTerminalPro4が備えている液晶, 音楽再生機, ボタンを自由に使用することができます. 
-        TerminalPro4が音楽プレイヤーからゲーム機まで様々なものになるのは, プログラマ次第です.
-        
-        このページでは, TerminalPro4のハードウェア製作方法, 
-        TerminalPro4用のソフトウェア(アプリケーション)作製方法を説明していきます.
-        
-        大まかな仕様は次のようになっています.
-        
-        * マイコン数: 3(ArduinoUno)
-        * 入出力デバイス: 白黒ディスプレイ, スイッチ, 音声, SD
-        * 音声出力法: PWM方式
-        
-        TerminalPro4は次のライブラリを使用します.
-        
-        * [グラフィック液晶操作ライブラリ](./../GLCDController)
-        * [コントローラー読み取りライブラリ](./../Controller)
-        * [音楽再生ライブラリ](./../MediaPlayer)
-        * [スケッチ書き込みライブラリ](./../SketchWriter)
-        
-        
-        
-    </Summary>
-    <Child> TerminalPro4Features
-    <Child> TerminalPro4Download
-    <Child> TerminalPro4MakeHardware
-    <Child> TerminalPro4MakeSoftware
-    <Child> TerminalPro4ExampleApplications
-</Header>
+---
+parent: Works
+title: 端末第四世代(TerminalPro4)
+date: 2017-5-4
+tags: 作品, 自作
+children:
+    TerminalPro4Features
+    TerminalPro4Download
+    TerminalPro4MakeHardware
+    TerminalPro4MakeSoftware
+    TerminalPro4ExampleApplications
+---
+
+![本体外観](CURRENT_DIR/Images/TerminalPro4/Top.jpg)
+
+TerminalPro4とはSDカードに保存されている任意のプログラムを選択, 実行することができるものです. 
+また外部のマイコン(optibootのみ対応)に対してプログラムを書き込むことも可能です.
+プログラマはTerminalPro4が備えている液晶, 音楽再生機, ボタンを自由に使用することができます. 
+TerminalPro4が音楽プレイヤーからゲーム機まで様々なものになるのは, プログラマ次第です.
+
+このページでは, TerminalPro4のハードウェア製作方法, 
+TerminalPro4用のソフトウェア(アプリケーション)作製方法を説明していきます.
+
+大まかな仕様は次のようになっています.
+
+* マイコン数: 3(ArduinoUno)
+* 入出力デバイス: 白黒ディスプレイ, スイッチ, 音声, SD
+* 音声出力法: PWM方式
+
+TerminalPro4は次のライブラリを使用します.
+
+* [グラフィック液晶操作ライブラリ](./../GLCDController)
+* [コントローラー読み取りライブラリ](./../Controller)
+* [音楽再生ライブラリ](./../MediaPlayer)
+* [スケッチ書き込みライブラリ](./../SketchWriter)
+
+===

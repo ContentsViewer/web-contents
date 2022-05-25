@@ -1,19 +1,18 @@
-<Header>
-    <Parent> Controller
-    <Title> Controllerの使い方
-    <CreatedAt> 2016-12-8
-    <Tags> 
-    <Summary>
-        ここでは, Controllerの基本的な説明を行います.
-        説明項目は以下のとおりです.
-        
-        * ボタン数,ピン設定
-        * ボタン番号設定
-        * スイッチ情報の読み込み
-        
-        
-    </Summary>
-</Header>
+---
+parent: Controller
+title: Controllerの使い方
+date: 2016-12-8
+---
+
+ここでは, Controllerの基本的な説明を行います.
+説明項目は以下のとおりです.
+
+* ボタン数,ピン設定
+* ボタン番号設定
+* スイッチ情報の読み込み
+
+===
+
 # ボタン数,ピン設定
     Controller使用前にボタン数とスイッチ情報入力ピンを設定する必要があります。
     設定には関数"Begin"を使用します。

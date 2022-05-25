@@ -1,16 +1,15 @@
-<Header>
-    <Parent> ArduinOS
-    <Title> ボードの設定
-    <CreatedAt> 2017-9-12
-    <Tags> 
-    <Summary>
-        ここでは, OSをArduinoIDE上で使用できるようにします.
-        
-        するべきことは, コアフォルダの追加とボードの追加です.
-        
-        
-    </Summary>
-</Header>
+---
+parent: ArduinOS
+title: ボードの設定
+date: 2017-9-12
+---
+
+ここでは, OSをArduinoIDE上で使用できるようにします.
+
+するべきことは, コアフォルダの追加とボードの追加です.
+
+===
+
 # コアフォルダの追加
     作業フォルダ"arduino.ArduinOS"を以下のディレクトリ内にコピー&ペーストしてください.
     ArduinoIDEのプログラムフォルダは通常"C:\Program Files (x86)\"下にあります.

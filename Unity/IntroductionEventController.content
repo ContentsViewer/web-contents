@@ -1,18 +1,17 @@
-<Header>
-    <Parent> EventController
-    <Title> EventControllerの導入方法
-    <CreatedAt> 2016-12-8
-    <Tags> 
-    <Summary>
-        EventControllerの導入方法を説明します.
-        説明項目は以下のとおりです.
-        
-        * ダウンロード
-        * Unityにインポート
-        
-        
-    </Summary>
-</Header>
+---
+parent: EventController
+title: EventControllerの導入方法
+date: 2016-12-8
+---
+
+EventControllerの導入方法を説明します.
+説明項目は以下のとおりです.
+
+* ダウンロード
+* Unityにインポート
+
+===
+
 # ダウンロード
     下記からダウンロードできます.
 

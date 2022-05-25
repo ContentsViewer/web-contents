@@ -1,12 +1,14 @@
-<Header>
-    <Parent> ../ContentsPlanet
-    <Title> 更新履歴
-    <CreatedAt> 2018-10-07
-    <Tags> CMS
-    <Summary>
-        本CMSの更新履歴が書かれます.
-    </Summary>
-</Header>
+---
+parent: ../ContentsPlanet
+title: 更新履歴
+date: 2018-10-07
+tags: CMS
+---
+
+本CMSの更新履歴が書かれます.
+
+===
+
 # 2021/8/31
 __________
     このリリースで, タグマップページ, コンテンツ編集ページのデザインを大きく変更しました.

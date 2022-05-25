@@ -1,12 +1,14 @@
-<Header>
-    <Parent> ../ShellScript
-    <Title> 参考書
-    <CreatedAt> 2020-05-20
-    <Tags> 参考書
-    <Summary>
-        ShellScriptでの実装で役に立った本たち
-    </Summary>
-</Header>
+---
+parent: ../ShellScript
+titile: 参考書
+date: 2020-05-20
+tags: 参考書
+---
+
+ShellScriptでの実装で役に立った本たち
+
+===
+
 # [改訂第3版] シェルスクリプト基本リファレンス
     著者:
         山森 丈範 (やまもり たけのり)

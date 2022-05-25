@@ -1,10 +1,8 @@
-<Header>
-    <Parent> ../WSL
-    <Title> Tips
-    <CreatedAt> 2020-08-15
-    <Tags> Tips
-    <Summary>
-        
-    </Summary>
-    <Child> WSL2-USB/WSL2-USB
-</Header>
+---
+parent: ../WSL
+title: Tips
+date: 2020-08-15
+tags: Tips
+children:
+    WSL2-USB/WSL2-USB
+---

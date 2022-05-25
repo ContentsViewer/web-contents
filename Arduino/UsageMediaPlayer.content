@@ -1,18 +1,18 @@
-<Header>
-    <Parent> MediaPlayer
-    <Title> MediaPlayerの使い方
-    <CreatedAt> 2016-12-8
-    <Tags> 
-    <Summary>
-        ここでは, MediaPlayerの基本的な使い方を説明します.
-        説明項目は以下のとおりです.
-        
-        * 音楽ファイルを準備する
-        * ピン接続
-        * 音楽を再生する
-        
-    </Summary>
-</Header>
+---
+parent: MediaPlayer
+title: MediaPlayerの使い方
+date: 2016-12-8
+---
+
+ここでは, MediaPlayerの基本的な使い方を説明します.
+説明項目は以下のとおりです.
+
+* 音楽ファイルを準備する
+* ピン接続
+* 音楽を再生する
+
+===
+
 # 音楽ファイルを準備する
     # 概要
         ここでは, 音楽ファイルの準備について説明します.

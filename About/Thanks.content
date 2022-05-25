@@ -1,12 +1,12 @@
-<Header>
-    <Parent> Contact
-    <Title> Thanks!
-    <CreatedAt> 2016-12-8
-    <Tags> noindex
-    <Summary>
-        ありがとうございます.
-        
-        
-    </Summary>
-</Header>
+---
+parent: Contact
+title: Thanks!
+date: 2016-12-8
+tags: noindex
+---
+
+ありがとうございます.
+
+===
+
 貴重なご意見ありがとうございました.

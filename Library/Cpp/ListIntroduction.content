@@ -1,17 +1,17 @@
-<Header>
-    <Parent> List
-    <Title> Listの導入方法
-    <CreatedAt> 2016-2-8
-    <Tags> ダウンロード
-    <Summary>
-        ここでは, Listの導入方法を説明します.
-        説明項目は以下のとおりです.
-        
-        * ダウンロード
-        * インクルード
-    </Summary>
-</Header>
+---
+parent: List
+title: Listの導入方法
+date: 2016-2-8
+tags: ダウンロード
+---
 
+ここでは, Listの導入方法を説明します.
+説明項目は以下のとおりです.
+
+* ダウンロード
+* インクルード
+
+===
 
 # ダウンロード
     下記からダウンロードしてください.<br />
@@ -19,12 +19,12 @@
 
 # インクルード
     'List.h'をインクルードします.
-    
-    <pre class="brush: cpp;">
-#include "List.h"
-int main()
-{
-    List&lt;int&gt; list;
-    return 0;
-}
-    </pre>
+
+    ```cpp
+        #include "List.h"
+        int main()
+        {
+            List<int> list;
+            return 0;
+        }
+    ```

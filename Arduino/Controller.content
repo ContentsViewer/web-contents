@@ -1,22 +1,23 @@
-<Header>
-    <Parent> ControllerRoot
-    <Title> コントローラ読み取りライブラリ
-    <CreatedAt> 2016-12-8
-    <Tags> ライブラリ
-    <Summary>
-        Controllerとは、このページで紹介したコントローラーを制御するものです。
-        このヘッダファイルにある関数でコントローラーからのスイッチ情報を読み取りどのボタンが押されているかを判断します。
-        Controllerができることは次の通りです。
-        
-        * ボタンが押されている間もそのボタン入力を検出すること(トリガー形式)ができます
-        * ボタンが一回押されてそのあとも押されているときはそのボタン入力を検出しないこと（非トリガー形式)ができます
-        * インスタンス生成でコントローラーを簡単に追加できます
-        * ボタンの同時入力に対応しています
-        
-        Controllerを改良、強化、何でもしてください(;´∀｀)
-        
-    </Summary>
-    <Child> IntroductionController
-    <Child> UsageController
-    <Child> ReferenceController
-</Header>
+---
+parent: ControllerRoot
+title: コントローラ読み取りライブラリ
+date: 2016-12-8
+tags: ライブラリ
+children:
+    IntroductionController
+    UsageController
+    ReferenceController
+---
+
+Controllerとは、このページで紹介したコントローラーを制御するものです。
+このヘッダファイルにある関数でコントローラーからのスイッチ情報を読み取りどのボタンが押されているかを判断します。
+Controllerができることは次の通りです。
+
+* ボタンが押されている間もそのボタン入力を検出すること(トリガー形式)ができます
+* ボタンが一回押されてそのあとも押されているときはそのボタン入力を検出しないこと（非トリガー形式)ができます
+* インスタンス生成でコントローラーを簡単に追加できます
+* ボタンの同時入力に対応しています
+
+Controllerを改良、強化、何でもしてください(;´∀｀)
+
+===

@@ -1,17 +1,11 @@
-<Header>
-    <Parent> 
-    <Title> user-scripts
-    <CreatedAt> 2022-05-06
-    <Tags> noindex
-    <Summary>
-        
-    </Summary>
-</Header>
+---
+date: 2022-05-06
+tags: noindex
+---
 
 ```
     <script>console.log('[contents-viewer.html] loaded')</script>
 ```
-
 
 # Google AdSense
     ```html

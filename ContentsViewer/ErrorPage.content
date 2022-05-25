@@ -1,11 +1,9 @@
-<Header>
-    <Parent> DebugPage
-    <Title> ErrorPage
-    <CreatedAt> 2016-12-8
-    <Tags> 
-    <Summary>
-        [存在しないコンテンツ](./?content=Hoge)
-        
-        
-    </Summary>
-</Header>
+---
+parent: DebugPage
+title: ErrorPage
+date: 2016-12-8
+---
+
+[存在しないコンテンツ](./?content=Hoge)
+
+===

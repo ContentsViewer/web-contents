@@ -1,36 +1,34 @@
-<Header>
-    <Parent> List
-    <Title> Listの関数一覧
-    <CreatedAt> 2018-12-15
-    <Tags> 
-    <Summary>
-        Listが持つ関数は以下のとおりです.
-        
-        |-------------------||---------------------------------------------------------|
-        | [List](#List)     || コンストラクタ                                           |
-        | [Count](#Count)   || 要素数を取得                                              |
-        | [Capacity](#Capacity) || 容量を取得                                           |
-        | [SetCapacity](#SetCapacity) || 容量を設定                                     |
-        | [Array](#Array)             || 内部配列先頭アドレス取得                        |
-        | [Add](#Add)                 || List末尾に要素追加                             |
-        | [Insert](#Insert)           || 指定した位置に要素挿入                          |
-        | [IndexOf](#IndexOf)         || 指定されたオブジェクトの位置                     |
-        | [LastIndexOf](#LastIndexOf) || 最後から検索して最初に見つかったオブジェクトの位置 |
-        | [CopyTo](#CopyTo)           || 配列にコピー                                    |
-        | [RemoveAt](#RemoveAt)       || 指定した位置を削除                              |
-        | [Clear](#Clear)             || 要素をゼロ                                     |
-        | [Sort](#Sort)               || 並び替え                                       |
-        | [Trim](#Trim)               || 容量を要素数に設定                              |
-        | [CopyFrom](#CopyFrom)       || 指定されたListからコピー                        |
-        | [MoveFrom](#MoveFrom)       || 指定された配列そのものをListに差し替え           |
-        
-        筆者がこのListを作る際, [C#のListリファレンス(accessed: 2.1.2017)](https://msdn.microsoft.com/ja-jp/library/6sh2ey19.aspx)
-        を参考にしました. 関数名はほとんど同じにしています.
-        
-        
-        
-    </Summary>
-</Header>
+---
+parent: List
+title: Listの関数一覧
+date: 2018-12-15
+---
+
+Listが持つ関数は以下のとおりです.
+
+|-------------------||---------------------------------------------------------|
+| [List](#List)     || コンストラクタ                                           |
+| [Count](#Count)   || 要素数を取得                                              |
+| [Capacity](#Capacity) || 容量を取得                                           |
+| [SetCapacity](#SetCapacity) || 容量を設定                                     |
+| [Array](#Array)             || 内部配列先頭アドレス取得                        |
+| [Add](#Add)                 || List末尾に要素追加                             |
+| [Insert](#Insert)           || 指定した位置に要素挿入                          |
+| [IndexOf](#IndexOf)         || 指定されたオブジェクトの位置                     |
+| [LastIndexOf](#LastIndexOf) || 最後から検索して最初に見つかったオブジェクトの位置 |
+| [CopyTo](#CopyTo)           || 配列にコピー                                    |
+| [RemoveAt](#RemoveAt)       || 指定した位置を削除                              |
+| [Clear](#Clear)             || 要素をゼロ                                     |
+| [Sort](#Sort)               || 並び替え                                       |
+| [Trim](#Trim)               || 容量を要素数に設定                              |
+| [CopyFrom](#CopyFrom)       || 指定されたListからコピー                        |
+| [MoveFrom](#MoveFrom)       || 指定された配列そのものをListに差し替え           |
+
+筆者がこのListを作る際, [C#のListリファレンス(accessed: 2.1.2017)](https://msdn.microsoft.com/ja-jp/library/6sh2ey19.aspx)
+を参考にしました. 関数名はほとんど同じにしています.
+
+===
+
 # [[List]]List
     List() <br/>
     List(int capacity)

@@ -1,12 +1,13 @@
-<Header>
-    <Parent> ../Usage
-    <Title> アップデート方法
-    <CreatedAt> 2020-08-31
-    <Tags> 
-    <Summary>
-        本CMSのアップデート方法について
-    </Summary>
-</Header>
+---
+parent: ../Usage
+title: アップデート方法
+date: 2020-08-31
+---
+
+本CMSのアップデート方法について
+
+===
+
 # 使用しているバージョンを確認
     現在使用しているバージョンを確認します.
     

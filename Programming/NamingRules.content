@@ -1,15 +1,10 @@
-<Header>
-    <Parent> Programming
-    <Title> プログラミング言語の命名規則まとめ
-    <CreatedAt> 2018/12/06
-    <Tags> 編集中
-    <Summary>
-        
-        
-        
-        
-    </Summary>
-</Header>
+---
+parent: Programming
+title: プログラミング言語の命名規則まとめ
+date: 2018/12/06
+tags: 編集中
+---
+
 # 表
     
     | 種類             || C#     | C++/C               | PHP    | Python      | Java   | JavaScript | Shell       |

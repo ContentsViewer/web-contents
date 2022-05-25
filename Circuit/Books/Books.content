@@ -1,12 +1,14 @@
-<Header>
-    <Parent> ../Circuit
-    <Title> 参考書
-    <CreatedAt> 2020-05-20
-    <Tags> 参考書
-    <Summary>
-        回路製作で役立った本たち
-    </Summary>
-</Header>
+---
+parent: ../Circuit
+title: 参考書
+date: 2020-05-20
+tags: 参考書
+---
+
+回路製作で役立った本たち
+
+===
+
 # 回路の素101
     著者:
         鈴木雅臣(すずき まさおみ)

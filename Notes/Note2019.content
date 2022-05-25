@@ -1,12 +1,10 @@
-<Header>
-    <Parent> Notes
-    <Title> Note2019
-    <CreatedAt> 2019/02/14
-    <Tag> noindex
-    <Summary>
-        
-    </Summary>
-</Header>
+---
+parent: Notes
+title: Note2019
+date: 2019/02/14
+tags: noindex
+---
+
 # 🍕ぴざ
     🍔ハンバーガ３個分
 

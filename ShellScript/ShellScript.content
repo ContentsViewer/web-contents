@@ -1,17 +1,19 @@
-<Header>
-    <Parent> ../Root
-    <Title> ShellScript
-    <CreatedAt> 2019-04-26
-    <Tags> ShellScript
-    <Summary>
-        ここでは, プログラミング言語'ShellScript'について書かれます.
-    </Summary>
-    <Child> Setup
-    <Child> Snippet/Snippet
-    <Child> parameter/parameter
-    <Child> ANSI-Codes/ANSI-Codes
-    <Child> SendMail
-    <Child> Library/Library
-    <Child> Apps/Apps
-    <Child> Books/Books
-</Header>
+---
+parent: ../Root
+titile: ShellScript
+date: 2019-04-26
+tags: ShellScript
+children:
+    Setup
+    Snippet/Snippet
+    parameter/parameter
+    ANSI-Codes/ANSI-Codes
+    SendMail
+    Library/Library
+    Apps/Apps
+    Books/Books
+---
+
+ここでは, プログラミング言語'ShellScript'について書かれます.
+
+===

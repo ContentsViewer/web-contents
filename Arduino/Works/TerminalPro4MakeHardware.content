@@ -1,17 +1,17 @@
-<Header>
-    <Parent> TerminalPro4
-    <Title> TerminalPro4ハードウェア製作
-    <CreatedAt> 2017-5-4
-    <Tags> 
-    <Summary>
-        TerminalPro4のハードウェアを作っていきます.
-        次のことを説明していきます.
-        
-        * 各モジュールの用意
-        * モジュール間の接続
-        
-    </Summary>
-</Header>
+---
+parent: TerminalPro4
+title: TerminalPro4ハードウェア製作
+date: 2017-5-4
+---
+
+TerminalPro4のハードウェアを作っていきます.
+次のことを説明していきます.
+
+* 各モジュールの用意
+* モジュール間の接続
+
+===
+
 # 各モジュールの用意
     # 概要
         TerminalPro4は次のモジュールを含みます.

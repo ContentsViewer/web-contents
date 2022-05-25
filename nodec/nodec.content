@@ -1,16 +1,16 @@
-<Header>
-    <Parent> ../Root
-    <Title> nodec (GameEngine)
-    <CreatedAt> 2019-02-06
-    <Tags> プロジェクト
-    <Summary>
-        このプロジェクト(nodec プロジェクト)は, 自分でゲームエンジンを作ることを目指したプロジェクトです.
-        ゲームエンジンを自作する過程で得られるプログラミング技術の習得が主な目的です.
-        
-        <https://github.com/ContentsViewer/nodec>
-        
-    </Summary>
-</Header>
+---
+parent: ../Root
+title: nodec (GameEngine)
+date: 2019-02-06
+tags: プロジェクト
+---
+
+このプロジェクト(nodec プロジェクト)は, 自分でゲームエンジンを作ることを目指したプロジェクトです.
+ゲームエンジンを自作する過程で得られるプログラミング技術の習得が主な目的です.
+
+<https://github.com/ContentsViewer/nodec>
+
+===
 
 # 要素技術
     本プロジェクトで開発された要素技術

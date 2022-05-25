@@ -1,17 +1,14 @@
-<Header>
-    <Parent> OutlineText
-    <Title> ダウンロード
-    <CreatedAt> 2018-9-19
-    <Tags> ダウンロード
-    <Summary>
-        
-        ここでは, OutlineTextのダウンロードリンクを示します.
-        
-        
-        
-        
-    </Summary>
-</Header>
+---
+parent: OutlineText
+title: ダウンロード
+date: 2018-9-19
+tags: ダウンロード
+---
+
+ここでは, OutlineTextのダウンロードリンクを示します.
+
+===
+
 # ダウンロード
 _________________________________________________________________
     以下のページからダウンロード可能です.

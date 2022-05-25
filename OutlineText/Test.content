@@ -1,13 +1,11 @@
-<Header>
-    <CreatedAt> 2017/6/7
-    <Title> Test
+---
+date: 2017/6/7
+title: Test
+---
 
-    <Summary>
-        Test
-    </Summary>
+Test
 
-
-</Header>
+===
 
 Section
 ______________________________________

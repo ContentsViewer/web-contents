@@ -1,10 +1,11 @@
-<Header>
-    <Parent> ../OutlineText
-    <Title> 仕組み
-    <CreatedAt> 2019-11-23
-    <Tags> 
-    <Summary>
-        OutlineTextの仕組み
-    </Summary>
-    <Child> Parser
-</Header>
+---
+parent: ../OutlineText
+title: 仕組み
+date: 2019-11-23
+children:
+    Parser
+---
+
+OutlineTextの仕組み
+
+===

@@ -1,25 +1,22 @@
-<Header>
-    <Parent> ArduinOS
-    <Title> 仕組み
-    <CreatedAt> 2017-7-11
-    <Tags> 編集中, OS
-    <Summary>
-        ここには, OSの仕組みに関する情報が書かれます.
-        OSは非常に多くのことが関わっているため以下のように分けていきます.
-        
-        * メモリ管理
-        * タスク管理
-        * OSの設定
-        * Arduino標準機能との融合
-        
-        
-        
-        
-    </Summary>
-    <Child> CLanguage
-    <Child> MemoryManagement
-    <Child> TaskScheduler
-    <Child> Setting
-    <Child> CombineWithArduino
-</Header>
+---
+parent: ArduinOS
+title: 仕組み
+date: 2017-7-11
+tags: 編集中, OS
+children:
+    CLanguage
+    MemoryManagement
+    TaskScheduler
+    Setting
+    CombineWithArduino
+---
 
+ここには, OSの仕組みに関する情報が書かれます.
+OSは非常に多くのことが関わっているため以下のように分けていきます.
+
+* メモリ管理
+* タスク管理
+* OSの設定
+* Arduino標準機能との融合
+
+===

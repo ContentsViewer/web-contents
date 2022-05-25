@@ -1,13 +1,10 @@
-<Header>
-    <Parent> ../Network
-    <Title> ラズパイ, VPN, Steamを用いた, 外出先でのストリーミングゲームプレイの提案
-    <CreatedAt> 2019-02-10
-    <Tags> ラズパイ, VPN, Steam, 遊び
-    <Summary>
-        
-        
-    </Summary>
-</Header>
+---
+parent: ../Network
+title: ラズパイ, VPN, Steamを用いた, 外出先でのストリーミングゲームプレイの提案
+date: 2019-02-10
+tags: ラズパイ, VPN, Steam, 遊び
+---
+
 # 背景と問題
     近年, Google Stadia^[stadia], 任天堂スイッチでのクラウドゲームサービス^[bio7]といった,
     ゲーム処理をコンソール上ではなく, 外部サーバで行い,

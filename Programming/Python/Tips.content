@@ -1,12 +1,9 @@
-<Header>
-    <Parent> Python
-    <Title> Tips
-    <CreatedAt> 2019-05-15
-    <Tags> 
-    <Summary>
-        
-    </Summary>
-</Header>
+---
+parent: Python
+title: Tips
+date: 2019-05-15
+---
+
 # フォルダがなければ作成
     ```python
         import os

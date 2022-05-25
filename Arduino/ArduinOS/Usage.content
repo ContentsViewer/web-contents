@@ -1,9 +1,10 @@
-<Header>
-    <Parent> ArduinOS
-    <Title> 使用方法
-    <CreatedAt> 2017/7/11
-    <Tag> 編集中
-    <Summary>
-        ここでは, ArduinOSの使用方法を説明します.
-    </Summary>
-</Header>
+---
+parent: ArduinOS
+title: 使用方法
+date: 2017/7/11
+tags: 編集中
+---
+
+ここでは, ArduinOSの使用方法を説明します.
+
+===

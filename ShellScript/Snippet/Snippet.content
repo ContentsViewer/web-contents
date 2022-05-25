@@ -1,21 +1,20 @@
-<Header>
-    <Parent> ../ShellScript
-    <Title> スニペット
-    <CreatedAt> 2018-10-25
-    <Tags> スニペット
-    <Summary>
-        
-        ShellScriptでよく使いそうな処理をまとめてみました.
-        
-        <!--読者は, __ShellScriptを使い始めたての人__を想定しています(筆者がそうです).-->
-        
-        備忘録を兼ねています.
-        
-        主に, 文献^[book1]^[book2]を参考にしました.
-        
-        
-    </Summary>
-</Header>
+---
+parent: ../ShellScript
+titile: スニペット
+date: 2018-10-25
+tags: スニペット
+---
+
+ShellScriptでよく使いそうな処理をまとめてみました.
+
+<!--読者は, __ShellScriptを使い始めたての人__を想定しています(筆者がそうです).-->
+
+備忘録を兼ねています.
+
+主に, 文献^[book1]^[book2]を参考にしました.
+
+===
+
 # 環境変数$PATHの後にパス追加
     ```bash
         export PATH="$PATH:追加したいパスA:追加したいパスB"

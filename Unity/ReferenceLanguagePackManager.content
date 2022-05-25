@@ -1,18 +1,16 @@
-<Header>
-    <Parent> LanguagePackManager
-    <Title> LanguagePackManager関数一覧
-    <CreatedAt> 2016-12-8
-    <Tags> 
-    <Summary>
-        |[関数]
-        |--------||------------------------|
-        | [LoadFile](#LoadFile) || パックファイルをロード |
-        | [GetString](#GetString) || 指定したラベルに関連付けられた文字列を返します |
-        
-        
-        
-    </Summary>
-</Header>
+---
+parent: LanguagePackManager
+title: LanguagePackManager関数一覧
+date: 2016-12-8
+---
+
+|[関数]
+|--------||------------------------|
+| [LoadFile](#LoadFile) || パックファイルをロード |
+| [GetString](#GetString) || 指定したラベルに関連付けられた文字列を返します |
+
+===
+
 # [[LoadFile]]LoadFile
     public bool LoadFile(LanguagePackFile file, bool dontDestroy)
 

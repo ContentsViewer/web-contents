@@ -1,25 +1,25 @@
-<Header>
-    <Parent> TerminalPro4
-    <Title> TerminalPro4アプリケーション例
-    <CreatedAt> 2017-5-4
-    <Tags> 
-    <Summary>
-        TerminalPro4用のアプリケーション例を挙げていきます.
-        
-        * NON: 何もしないプログラム
-        * GLCDTest: GLCD動作確認プログラム(fps表示)
-        * CtrlTest: コントローラ動作確認プログラム
-        * SerialMonitor: シリアルモニター
-        * MediaPlyer: 音楽プレイヤー
-        * Bullet: シューティングゲーム(東方風)
-        * NadekoAdventure: 千石撫子(化物語)横スクロールゲーム
-        * Notes: 音ゲー
-        
-        これらアプリケーションは[ダウンロードページ](./TerminalPro4Download)
-        から取得したフォルダ内にある'Exapmle'フォルダに存在します.
-        
-    </Summary>
-</Header>
+---
+parent: TerminalPro4
+title: TerminalPro4アプリケーション例
+date: 2017-5-4
+---
+
+TerminalPro4用のアプリケーション例を挙げていきます.
+
+* NON: 何もしないプログラム
+* GLCDTest: GLCD動作確認プログラム(fps表示)
+* CtrlTest: コントローラ動作確認プログラム
+* SerialMonitor: シリアルモニター
+* MediaPlyer: 音楽プレイヤー
+* Bullet: シューティングゲーム(東方風)
+* NadekoAdventure: 千石撫子(化物語)横スクロールゲーム
+* Notes: 音ゲー
+
+これらアプリケーションは[ダウンロードページ](./TerminalPro4Download)
+から取得したフォルダ内にある'Exapmle'フォルダに存在します.
+
+===
+
 # NON
     文字通り何もしません. 
     ですが, このプログラムはすべてのプログラムの基本です.

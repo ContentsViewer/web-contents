@@ -1,12 +1,13 @@
-<Header>
-    <Parent> ../Tips
-    <CreatedAt> 2020-08-28
-    <Tags> Python, Pipenv, ROS
-    <Title> Pipenv上でROS2ノードを動かす
-    <Summary>
-        Pipenv仮想パッケージ環境上でROS2ノードを動かす.
-    </Summary>
-</Header>
+---
+parent: ../Tips
+date: 2020-08-28
+tags: Python, Pipenv, ROS
+title: Pipenv上でROS2ノードを動かす
+---
+
+Pipenv仮想パッケージ環境上でROS2ノードを動かす.
+
+===
 
 # はじめに
     ROS2でノードを実装するときに, PythonかC++を使います. 

@@ -1,23 +1,20 @@
-<Header>
-    <Parent> GLCDController
-    <Title> GLCDControllerの関数, 変数一覧
-    <CreatedAt> 2016-12-8
-    <Tags> 
-    <Summary>
-        |[関数]
-        |--------------||-------------------------------|
-        | [Begin](#Begin) || GLCDControllerの開始 |
-        | [Draw](#Draw)   || グラフィック液晶への描画 |
-        
-        |[変数]
-        |----------------------||------------------------------------|
-        | [canvas](#canvas)    || 描画空間 |
-        
-        
-        
-        
-    </Summary>
-</Header>
+---
+parent: GLCDController
+title: GLCDControllerの関数, 変数一覧
+date: 2016-12-8
+---
+
+|[関数]
+|--------------||-------------------------------|
+| [Begin](#Begin) || GLCDControllerの開始 |
+| [Draw](#Draw)   || グラフィック液晶への描画 |
+
+|[変数]
+|----------------------||------------------------------------|
+| [canvas](#canvas)    || 描画空間 |
+
+===
+
 # [[Begin]]Begin
     Begin(Param param)
 

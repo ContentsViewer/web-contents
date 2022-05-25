@@ -1,20 +1,19 @@
-<Header>
-    <Parent> LanguagePackManager
-    <Title> LanguagePackManagerの使い方
-    <CreatedAt> 2016-12-8
-    <Tags> 
-    <Summary>
-        ここでは, LanguagePackManagerの基本的な使い方を説明します.
-        説明項目は以下のとおりです.
-        
-        * パラメータの説明
-        * 言語パックの作成
-        * 使用例
-        * 言語パックの読み込みについて
-        
-        
-    </Summary>
-</Header>
+---
+parent: LanguagePackManager
+title: LanguagePackManagerの使い方
+date: 2016-12-8
+---
+
+ここでは, LanguagePackManagerの基本的な使い方を説明します.
+説明項目は以下のとおりです.
+
+* パラメータの説明
+* 言語パックの作成
+* 使用例
+* 言語パックの読み込みについて
+
+===
+
 # パラメータの説明
     ![パラメータ](CURRENT_DIR/Images/LanguagePackManager/Img3.png)
 

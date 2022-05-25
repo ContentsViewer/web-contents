@@ -1,19 +1,18 @@
-<Header>
-    <Parent> SketchWriter
-    <Title> SketchWriterの使い方
-    <CreatedAt> 2016-12-8
-    <Tags> 
-    <Summary>
-        ここでは, SketchWriterの基本的な使い方を説明します.
-        説明項目は以下のとおりです.
-        
-        * SketchWriterのしくみ
-        * HexFileの入手
-        * スケッチの送信
-        
-        
-    </Summary>
-</Header>
+---
+parent: SketchWriter
+title: SketchWriterの使い方
+date: 2016-12-8
+---
+
+ここでは, SketchWriterの基本的な使い方を説明します.
+説明項目は以下のとおりです.
+
+* SketchWriterのしくみ
+* HexFileの入手
+* スケッチの送信
+
+===
+
 # SketchWriterのしくみ
     緑色字：変数 \
     黄色字: 関数 \

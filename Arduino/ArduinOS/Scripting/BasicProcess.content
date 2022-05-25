@@ -1,12 +1,9 @@
-<Header>
-    <Parent> Scripting
-    <Title> 基本的な製作の流れ
-    <CreatedAt> 2020-05-25
-    <Tags> 
-    <Summary>
-        
-    </Summary>
-</Header>
+---
+parent: Scripting
+title: 基本的な製作の流れ
+date: 2020-05-25
+---
+
 # ダウンロード
 ____________________________________________
     今回のOS製作で必要なファイルは以下のページでダウンロードできます.<br />

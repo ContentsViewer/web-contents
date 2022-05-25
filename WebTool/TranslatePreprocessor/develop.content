@@ -1,12 +1,10 @@
-<Header>
-    <Parent> TranslatePreprocessor
-    <Title> 
-    <CreatedAt> 2020-06-15
-    <Tags> noindex
-    <Summary>
-        
-    </Summary>
-</Header>
+---
+parent: TranslatePreprocessor
+date: 2020-06-15
+tags: noindex
+---
+
+===
 
 //入力//
 

@@ -1,14 +1,14 @@
-<Header>
-    <Parent> CollabCMS
-    <Title> 更新履歴
-    <CreatedAt> 2018-10-07
-    <Tags> CMS
-    <Summary>
-        CollabCMSの更新履歴が書かれます.
-        
-        
-    </Summary>
-</Header>
+---
+parent: CollabCMS
+title: 更新履歴
+date: 2018-10-07
+tags: CMS
+---
+
+CollabCMSの更新履歴が書かれます.
+
+===
+
 # 2020/08/31
     * システム名を`CollabCMS` から, `ContentsPlanet`へ変更.
     

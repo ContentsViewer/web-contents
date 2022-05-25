@@ -1,17 +1,17 @@
-<Header>
-    <Parent> HowItWorks
-    <Title> コンポーネント
-    <CreatedAt> 2018-10-07
-    <Tags> Web, CMS
-    <Summary>
-        
-        CollabCMSは, 
-        ルート部, フロントエンド部, モジュール部, サービス部, クライアント部に分かれます.
-        
-        各部の詳細を説明します.
-        
-    </Summary>
-</Header>
+---
+parent: HowItWorks
+title: コンポーネント
+date: 2018-10-07
+tags: Web, CMS
+---
+
+CollabCMSは, 
+ルート部, フロントエンド部, モジュール部, サービス部, クライアント部に分かれます.
+
+各部の詳細を説明します.
+
+===
+
 # 全体像
 ____________________________________
     

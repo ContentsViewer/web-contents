@@ -1,16 +1,14 @@
-<Header>
-    <Parent> ../ContentsPlanet
-    <Title> 概念
-    <CreatedAt> 2020-04-27
-    <Tags> 独自研究, コンテンツ管理, 設計方針
-    <Summary>
-        本CMSの基本概念と設計方針
-        
-        
-        
-        
-    </Summary>
-</Header>
+---
+parent: ../ContentsPlanet
+title: 概念
+date: 2020-04-27
+tags: 独自研究, コンテンツ管理, 設計方針
+---
+
+本CMSの基本概念と設計方針
+
+===
+
 # はじめに
     最初, このCMSを作ったときは, 明確な設計方針がありませんでした.
     コンテンツの分け方について特に意識することなく, 

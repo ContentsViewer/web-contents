@@ -1,17 +1,16 @@
-<Header>
-    <Parent> MelodyPlayer
-    <Title> MelodyPlayerの使い方
-    <CreatedAt> 2017-3-3
-    <Tags> 
-    <Summary>
-        ここでは, MelodyPlayerの基本的な使い方を説明します.
-        説明項目は以下のとおりです.
-        
-        * 再生
-        * メロディーの追加方法
-        
-    </Summary>
-</Header>
+---
+parent: MelodyPlayer
+title: MelodyPlayerの使い方
+date: 2017-3-3
+---
+
+ここでは, MelodyPlayerの基本的な使い方を説明します.
+説明項目は以下のとおりです.
+
+* 再生
+* メロディーの追加方法
+
+===
 
 # 再生
     ここでは実際にメロディーを鳴らせてみたいと思います.

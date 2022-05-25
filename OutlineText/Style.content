@@ -1,12 +1,13 @@
-<Header>
-    <Parent> OutlineText
-    <Title> スタイルの変更
-    <CreatedAt> 2018-10-08
-    <Tags> 
-    <Summary>
-        スタイルの変更は, スタイルシートを作成しそのシートをhtmlのheadで読み込むことでスタイルを変更することができます.
-    </Summary>
-</Header>
+---
+parent: OutlineText
+title: スタイルの変更
+date: 2018-10-08
+---
+
+スタイルの変更は, スタイルシートを作成しそのシートをhtmlのheadで読み込むことでスタイルを変更することができます.
+
+===
+
 スタイルの指定が可能なセレクタは以下のとおりです.
 
 

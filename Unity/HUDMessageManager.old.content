@@ -1,29 +1,30 @@
-<Header>
-    <Parent> Components
-    <Title> Message表示'HUDMessageManager'の紹介
-    <CreatedAt> 2016-12-8
-    <Tags> UI表示, C#, ライブラリ
-    <Summary>
-        HUD_MessageManagerとは画面に文字を表示するなどの処理をするコンポーネントです。これはUnity上で動作します。
-        ゲームで文字の表示といえばゲーム内でのキャラのセリフ、ゲームシステム側からプレイヤーに向けてのメッセージ―セーブが完了した,新しい称号を獲得したなど―
-        などがあります。HUD_MessageManagerを使うことでこのようなことが簡単に実装できます。
-        
-        HUD_MessageManagerを使うと以下のことができます。
-        
-        * 画面に文字を表示する
-        * 6つの場所に文字を表示できます
-        * 表示位置はカスタマイズ可能
-        * 表示,非表示時にエフェクトをかけることが可能
-        * 表示時間を指定可能
-        
-        HUD_MessageManagerを改良、強化、何でもしてください(;´∀｀)
-        
-        このコンポーネントは古いバージョンです.
-        これをベースとした改良版[UIMessageManager](CURRENT_DIR/UIMessageManager)をご利用下さい.
-        表示場所が6つに固定されている問題, 初期設定のしにくさの問題を修正しています.
-        
-    </Summary>
-    <Child> IntroductionHUDMessageManager
-    <Child> UsageHUDMessageManager
-    <Child> ReferenceHUDMessageManager
-</Header>
+---
+parent: Components
+title: Message表示'HUDMessageManager'の紹介
+date: 2016-12-8
+tags: UI表示, C#, ライブラリ
+children:
+    IntroductionHUDMessageManager
+    UsageHUDMessageManager
+    ReferenceHUDMessageManager
+---
+
+HUD_MessageManagerとは画面に文字を表示するなどの処理をするコンポーネントです。これはUnity上で動作します。
+ゲームで文字の表示といえばゲーム内でのキャラのセリフ、ゲームシステム側からプレイヤーに向けてのメッセージ―セーブが完了した,新しい称号を獲得したなど―
+などがあります。HUD_MessageManagerを使うことでこのようなことが簡単に実装できます。
+
+HUD_MessageManagerを使うと以下のことができます。
+
+* 画面に文字を表示する
+* 6つの場所に文字を表示できます
+* 表示位置はカスタマイズ可能
+* 表示,非表示時にエフェクトをかけることが可能
+* 表示時間を指定可能
+
+HUD_MessageManagerを改良、強化、何でもしてください(;´∀｀)
+
+このコンポーネントは古いバージョンです.
+これをベースとした改良版[UIMessageManager](CURRENT_DIR/UIMessageManager)をご利用下さい.
+表示場所が6つに固定されている問題, 初期設定のしにくさの問題を修正しています.
+
+===

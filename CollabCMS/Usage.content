@@ -1,13 +1,11 @@
-<Header>
-    <Parent> CollabCMS
-    <Title> 使い方
-    <CreatedAt> 2020-04-27
-    <Tags> 
-    <Summary>
-        本CMSの使い方
-        
-    </Summary>
-</Header>
+---
+parent: CollabCMS
+title: 使い方
+date: 2020-04-27
+---
+
+本CMSの使い方
+
 # コンテンツの編集(本CMSを利用)
     ページ右上にある`編集`から行います.
     

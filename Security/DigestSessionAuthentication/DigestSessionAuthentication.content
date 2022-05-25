@@ -1,15 +1,17 @@
-<Header>
-    <Parent> ../Security
-    <Title> Digest認証とセッション認証を組み合わせた認証の提案
-    <CreatedAt> 2019-11-23
-    <Tags> セッション認証, フォーム認証, ダイジェスト認証, Web, PHP
-    <Summary>
-        本稿では, Digest認証, およびセッション認証の欠点を互いに補うあう, 
-        二つを組み合わせた認証方法を提案する.
-        
-        まず, Digest認証とセッション認証について簡単に説明したのち, 本題に入る.
-    </Summary>
-</Header>
+---
+title: [redirect] Digest認証とセッション認証を組み合わせた認証の提案
+date: 2019-11-23
+tags: noindex
+redirect: Web/Security/DigestSessionAuthentication/article
+---
+
+本稿では, Digest認証, およびセッション認証の欠点を互いに補うあう, 
+二つを組み合わせた認証方法を提案する.
+
+まず, Digest認証とセッション認証について簡単に説明したのち, 本題に入る.
+
+===
+
 # Digest認証
     Digest認証は, HTTPの認証の一つで, Webサーバはユーザのブラウザと
     資格情報(ユーザ名, パスワードなど)をやり取りする^[digest-wiki].

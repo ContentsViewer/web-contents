@@ -1,20 +1,19 @@
-<Header>
-    <Parent> GLCDController
-    <Title> GLCDControllerの使い方
-    <CreatedAt> 2016-12-8
-    <Tags> 
-    <Summary>
-        GLCDControllerの基本的な使い方を説明します.
-        説明項目は以下のとおりです.
-        
-        * GLCDControllerのしくみ
-        * ピン設定とGLCDControllerの開始
-        * 文字の表示
-        * 画像の表示
-        
-        
-    </Summary>
-</Header>
+---
+parent: GLCDController
+title: GLCDControllerの使い方
+date: 2016-12-8
+---
+
+GLCDControllerの基本的な使い方を説明します.
+説明項目は以下のとおりです.
+
+* GLCDControllerのしくみ
+* ピン設定とGLCDControllerの開始
+* 文字の表示
+* 画像の表示
+
+===
+
 # GLCDControllerのしくみ
     ![GLCDControllerのしくみ](./Images/GLCDController/Img1.png)
     

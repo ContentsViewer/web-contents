@@ -1,12 +1,9 @@
-<Header>
-    <Parent> ../Music
-    <Title> Note
-    <CreatedAt> 2020-04-22
-    <Tags> 
-    <Summary>
-        
-    </Summary>
-</Header>
+---
+parent: ../Music
+title: Note
+date: 2020-04-22
+---
+
 # 共通
     # 何を描きたいか. 出口をしっかり
     

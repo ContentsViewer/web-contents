@@ -1,10 +1,8 @@
-<Header>
-    <Parent> ../Root
-    <Title> Web
-    <CreatedAt> 2020-06-25
-    <Tags> 
-    <Summary>
-        
-    </Summary>
-    <Child> Tips/Tips
-</Header>
+---
+parent: ../Root
+title: Web
+date: 2020-06-25
+children:
+    Security/Security
+    Tips/Tips
+---

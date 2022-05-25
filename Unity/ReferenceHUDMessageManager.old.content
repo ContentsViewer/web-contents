@@ -1,40 +1,37 @@
-<Header>
-    <Parent> HUDMessageManager
-    <Title> HUDMessageManager関数一覧
-    <CreatedAt> 2016-12-8
-    <Tags> 
-    <Summary>
-        |[関数]
-        |---------------||----------------------------------------|
-        | [Set](#Set)   || メッセージを設定                         |
-        | [SetAlert](#SetAlert) || Alertメッセージを設定            |
-        | [SetAlertKeepID](#SetAlertKeepID) || Alertメッセージを設定,IDを保持 |
-        | [SetSubtitleTop](#SetSubtitleTop) || SubtitleTopメッセージを設定   |
-        | [SetSubtitleTopKeepID](#SetSubtitleTopKeepID) || SubtitleTopメッセージを設定,IDを保持 |
-        | [SetSubtitleTopTimer](#SetSubtitleTopTimer)   || SubtitleTopメッセージを設定,タイマーモード |
-        | [SetSubtitleTopTimerKeepID](#SetSubtitleTopTimerKeepID) || SubtitleTopメッセージを設定,IDを保持,タイマーモード |
-        | [SetSubtitleBottom](#SetSubtitleBottom)                 || SubtitleBottomメッセージを設定                     |
-        | [SetSubtitleBottomKeepID](#SetSubtitleBottomKeepID)     || SubtitleBottomメッセージを設定,IDを保持            |
-        | [SetSubtitleBottomTimer](#SetSubtitleBottomTimer)       || SubtitleBottomメッセージを設定,タイマーモード       |
-        | [SetSubtitleBottomTimerKeepID](#SetSubtitleBottomTimerKeepID) || SubtitleBottomメッセージを設定,IDを保持,タイマーモード   |
-        | [SetMemoTopLeft](#SetMemoTopLeft)                             || MemoTopLeftメッセージを設定                          |
-        | [SetMemoTopLeftKeepID](#SetMemoTopLeftKeepID)                 || MemoTopLeftメッセージを設定,IDを保持                 |
-        | [SetMemoBottomRight](#SetMemoBottomRight)                     || MemoBottomRightメッセージを設定                      |
-        | [SetMemoBottomRightKeepID](#SetMemoBottomRightKeepID)         || MemoBottomRightメッセージを設定,IDを保持             |
-        | [Show](#Show)                                                 || メッセージを開始                                     |
-        | [ShowDontOverride](#ShowDontOverride)                         || メッセージを開始,命令を上書きしない                      |
-        | [ShowAlert](#ShowAlert)                                       || Alertメッセージを開始                                   |
-        | [ShowSubtitleTopTimer](#ShowSubtitleTopTimer)                 || SubtitleTopTimerメッセージを開始                         |
-        | [ShowSubtitleBottomTimer](#ShowSubtitleBottomTimer)           || SubtitleBottomTimerメッセージを開始                      |
-        | [ShowMemoTopLeft](#ShowMemoTopLeft)                           || MemoTopLeftメッセージを開始                              |
-        | [ShowMemoBottomRight](#ShowMemoBottomRight)                   || MemoBottomRightメッセージを開始                          |
-        | [Exit](#Exit)                                                 || メッセージを終了する                                     |
-        | [CheckID](#CheckID)                                           || 指定したメッセージIDが使用されているか確認                   |
-        
-        
-        
-    </Summary>
-</Header>
+---
+parent: HUDMessageManager
+title: HUDMessageManager関数一覧
+date: 2016-12-8
+---
+
+|[関数]
+|---------------||----------------------------------------|
+| [Set](#Set)   || メッセージを設定                         |
+| [SetAlert](#SetAlert) || Alertメッセージを設定            |
+| [SetAlertKeepID](#SetAlertKeepID) || Alertメッセージを設定,IDを保持 |
+| [SetSubtitleTop](#SetSubtitleTop) || SubtitleTopメッセージを設定   |
+| [SetSubtitleTopKeepID](#SetSubtitleTopKeepID) || SubtitleTopメッセージを設定,IDを保持 |
+| [SetSubtitleTopTimer](#SetSubtitleTopTimer)   || SubtitleTopメッセージを設定,タイマーモード |
+| [SetSubtitleTopTimerKeepID](#SetSubtitleTopTimerKeepID) || SubtitleTopメッセージを設定,IDを保持,タイマーモード |
+| [SetSubtitleBottom](#SetSubtitleBottom)                 || SubtitleBottomメッセージを設定                     |
+| [SetSubtitleBottomKeepID](#SetSubtitleBottomKeepID)     || SubtitleBottomメッセージを設定,IDを保持            |
+| [SetSubtitleBottomTimer](#SetSubtitleBottomTimer)       || SubtitleBottomメッセージを設定,タイマーモード       |
+| [SetSubtitleBottomTimerKeepID](#SetSubtitleBottomTimerKeepID) || SubtitleBottomメッセージを設定,IDを保持,タイマーモード   |
+| [SetMemoTopLeft](#SetMemoTopLeft)                             || MemoTopLeftメッセージを設定                          |
+| [SetMemoTopLeftKeepID](#SetMemoTopLeftKeepID)                 || MemoTopLeftメッセージを設定,IDを保持                 |
+| [SetMemoBottomRight](#SetMemoBottomRight)                     || MemoBottomRightメッセージを設定                      |
+| [SetMemoBottomRightKeepID](#SetMemoBottomRightKeepID)         || MemoBottomRightメッセージを設定,IDを保持             |
+| [Show](#Show)                                                 || メッセージを開始                                     |
+| [ShowDontOverride](#ShowDontOverride)                         || メッセージを開始,命令を上書きしない                      |
+| [ShowAlert](#ShowAlert)                                       || Alertメッセージを開始                                   |
+| [ShowSubtitleTopTimer](#ShowSubtitleTopTimer)                 || SubtitleTopTimerメッセージを開始                         |
+| [ShowSubtitleBottomTimer](#ShowSubtitleBottomTimer)           || SubtitleBottomTimerメッセージを開始                      |
+| [ShowMemoTopLeft](#ShowMemoTopLeft)                           || MemoTopLeftメッセージを開始                              |
+| [ShowMemoBottomRight](#ShowMemoBottomRight)                   || MemoBottomRightメッセージを開始                          |
+| [Exit](#Exit)                                                 || メッセージを終了する                                     |
+| [CheckID](#CheckID)                                           || 指定したメッセージIDが使用されているか確認                   |
+
+===
 
 # [[Set]]Set
     public int Set(string text, MESSAGE_TYPE type, MESSAGE_MODE mode, Param messageParam)

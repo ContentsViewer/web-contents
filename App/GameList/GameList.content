@@ -1,12 +1,14 @@
-<Header>
-    <Parent> ../App
-    <Title> 製作ゲーム一覧
-    <CreatedAt> 2019-04-09
-    <Tags> ゲーム, 製作
-    <Summary>
-        私が製作に携わったゲームを紹介します.
-    </Summary>
-</Header>
+---
+parent: ../App
+title: 製作ゲーム一覧
+date: 2019-04-09
+tags: ゲーム, 製作
+---
+
+私が製作に携わったゲームを紹介します.
+
+===
+
 # Prototype-CUBE
     
     ![](CURRENT_DIR/Images/Prototype-CUBE.jpg)
@@ -55,8 +57,7 @@
         AR技術に触れられた.
         
         まだ垂直平面認識が公式で実装されていないときに, 実装した.
-        
-        
+
 
 # カンソク者
     ![](CURRENT_DIR/Images/Observer.jpg)
@@ -87,4 +88,3 @@
         * [EventController](ROOT_URI/Master/Unity/EventController)
         * [LanguagePackManager](ROOT_URI/Master/Unity/LanguagePackManager)
         * [HUDMessageManager](ROOT_URI/Master/Unity/HUDMessageManager)
-        

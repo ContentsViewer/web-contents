@@ -1,10 +1,7 @@
-<Header>
-    <Parent> ../Programming
-    <Title> Python
-    <CreatedAt> 2019-05-15
-    <Tags> 
-    <Summary>
-        
-    </Summary>
-    <Child> Tips
-</Header>
+---
+parent: ../Programming
+title: Python
+date: 2019-05-15
+children:
+    Tips
+---

@@ -1,44 +1,42 @@
-<Header>
-    <Parent> SketchWriter
-    <Title> SketchWriterの関数, 変数一覧
-    <CreatedAt> 2016-12-8
-    <Tags> 
-    <Summary>
-        |[関数]
-        | ----------------------||---------------------------------------------|
-        | [Begin](#Begin)       || SketchWriterの開始                           |
-        | [End](#End)           || SketchWriterの終了                           |
-        | [SetReaetPin](#SetReaetPin) || リセット信号を出すピンの設定             |
-        | [ResetArduino](#ResetArduino) || Arduinoにリセットをかける                |
-        | [GetCh](#GetCh)               || optibootからシリアルデータを受け取る     |
-        | [Wait](#Wait)                 || optibootからの処理完了信号-STK_OK-待機   |
-        | [GetInSync](#GetInSync)       || optibootからのSTK_INSYNK信号待機         |
-        | [VerifySpace](#VerifySpace)   || コマンド有効化                           |
-        | [AppStart](#AppStart)         || プログラムの開始                         |
-        | [GetSync](#GetSync)           || optibootと同期をとる                     |
-        | [GetParameter](#GetParameter) || optibootからOPTIBOOT_MAJVERまたはOPTIBOOT_MINVERを取得 |
-        | [SetAddress](#SetAddress)     || メモリのオフセット値を送信               |
-        | [SendData](#SendData)           || データの送信                             |
-        | [SketchWrite](#SketchWrite)       || スケッチの書き込み                   |
-        | [SerialClear](#SerialClear)       || シリアルデータ削除                   |
-        | [SetFileName](#SetFileName)       || 文字列'sketchName'にファイル名を代入 |
-        | [SketchLoad](#SketchLoad)         || スケッチ-HexFile-の読み込み          |
-        | [SketchReload](#SketchReload)     || スケッチ-HexFile-の再読み込み        |
-        | [SketchClose](#SketchClose)       || スケッチ-HexFile-を閉じる            |
-        | [ReadHexVal](#ReadHexVal)         || HexFileから1Byteの数値を読み込む     |
-        | [ReadHexData](#ReadHexData)       || HexData読み込み, 配列'hexData'に格納 |
-        
-        |[変数]
-        |-----------------------------------------------------||---------------------------------------------|
-        | [hexData[hexDataBufSize]](#hexData)                 || 読み込んだHexData                              |
-        | [fileEnded](#fileEnded)                             || HexFile読み取り位置状態                        |
-        | [sketchName](#sketchName)                           || ロードしたHexFile名                            |
-        | [sendDataSize](#sendDataSize)                       || 一回でoptibootに送るデータサイズ                 |
-        | [hexDataBufSize](#hexDataBufSize)                   || 配列'hexData'のサイズ                          |
-        
-        
-    </Summary>
-</Header>
+---
+parent: SketchWriter
+title: SketchWriterの関数, 変数一覧
+date: 2016-12-8
+---
+
+|[関数]
+| ----------------------||---------------------------------------------|
+| [Begin](#Begin)       || SketchWriterの開始                           |
+| [End](#End)           || SketchWriterの終了                           |
+| [SetReaetPin](#SetReaetPin) || リセット信号を出すピンの設定             |
+| [ResetArduino](#ResetArduino) || Arduinoにリセットをかける                |
+| [GetCh](#GetCh)               || optibootからシリアルデータを受け取る     |
+| [Wait](#Wait)                 || optibootからの処理完了信号-STK_OK-待機   |
+| [GetInSync](#GetInSync)       || optibootからのSTK_INSYNK信号待機         |
+| [VerifySpace](#VerifySpace)   || コマンド有効化                           |
+| [AppStart](#AppStart)         || プログラムの開始                         |
+| [GetSync](#GetSync)           || optibootと同期をとる                     |
+| [GetParameter](#GetParameter) || optibootからOPTIBOOT_MAJVERまたはOPTIBOOT_MINVERを取得 |
+| [SetAddress](#SetAddress)     || メモリのオフセット値を送信               |
+| [SendData](#SendData)           || データの送信                             |
+| [SketchWrite](#SketchWrite)       || スケッチの書き込み                   |
+| [SerialClear](#SerialClear)       || シリアルデータ削除                   |
+| [SetFileName](#SetFileName)       || 文字列'sketchName'にファイル名を代入 |
+| [SketchLoad](#SketchLoad)         || スケッチ-HexFile-の読み込み          |
+| [SketchReload](#SketchReload)     || スケッチ-HexFile-の再読み込み        |
+| [SketchClose](#SketchClose)       || スケッチ-HexFile-を閉じる            |
+| [ReadHexVal](#ReadHexVal)         || HexFileから1Byteの数値を読み込む     |
+| [ReadHexData](#ReadHexData)       || HexData読み込み, 配列'hexData'に格納 |
+
+|[変数]
+|-----------------------------------------------------||---------------------------------------------|
+| [hexData[hexDataBufSize]](#hexData)                 || 読み込んだHexData                              |
+| [fileEnded](#fileEnded)                             || HexFile読み取り位置状態                        |
+| [sketchName](#sketchName)                           || ロードしたHexFile名                            |
+| [sendDataSize](#sendDataSize)                       || 一回でoptibootに送るデータサイズ                 |
+| [hexDataBufSize](#hexDataBufSize)                   || 配列'hexData'のサイズ                          |
+
+===
 
 # [[Begin]]Begin
     void Begin(byte pinCS)

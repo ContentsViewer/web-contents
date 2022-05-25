@@ -1,16 +1,18 @@
-<Header>
-    <Parent> ../Apps
-    <Title> shtris
-    <CreatedAt> 2020-05-21
-    <Tags> ゲーム, テトリス
-    <Summary>
-        bashでもなく, zshでもなく, cshでもなく, 
-        純粋なshで動く, テトリスの公式ガイドラインにそった
-        テトリスを作りたい.
-        
-        ![](CURRENT_DIR/Images/shtris.jpg)
-    </Summary>
-</Header>
+---
+parent: ../Apps
+titile: shtris
+date: 2020-05-21
+tags: ゲーム, テトリス
+---
+
+bashでもなく, zshでもなく, cshでもなく, 
+純粋なshで動く, テトリスの公式ガイドラインにそった
+テトリスを作りたい.
+
+![](CURRENT_DIR/Images/shtris.jpg)
+
+===
+
 # このゲームについて
     純粋なshell環境で動作するテトリス ゲーム です.
     

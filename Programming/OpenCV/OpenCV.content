@@ -1,10 +1,7 @@
-<Header>
-    <Parent> ../Programming
-    <Title> OpenCV
-    <CreatedAt> 2019-06-19
-    <Tags> 
-    <Summary>
-        
-    </Summary>
-    <Child> StereoCamera
-</Header>
+---
+parent: ../Programming
+title: OpenCV
+date: 2019-06-19
+children:
+    StereoCamera
+---

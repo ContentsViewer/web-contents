@@ -1,24 +1,16 @@
-<Header>
-    <Parent> ShellScript
-    <Title> gmailを経由してsendmailでメール送信
-    <CreatedAt> 2018-11-26
-    <Tags> ShellScript, メール送信
-    <Summary>
-        
-        
-        ここでは, `sendmail`コマンドを利用した, メール送信の方法について説明する.
-        通常, 25番ポートに対するメール送信には制限があるため, gmailを利用して,
-        サブミッションポートでのメール送信を行った.
-        
-        
-        
-        
-        
-        
-        
-        
-    </Summary>
-</Header>
+---
+parent: ShellScript
+titile: gmailを経由してsendmailでメール送信
+date: 2018-11-26
+tags: ShellScript, メール送信
+---
+
+ここでは, `sendmail`コマンドを利用した, メール送信の方法について説明する.
+通常, 25番ポートに対するメール送信には制限があるため, gmailを利用して,
+サブミッションポートでのメール送信を行った.
+
+===
+
 # 背景と問題
 ____________________
     ubuntuなどのターミナル上でメールを送信する際, よく使うコマンドとして`sendmail`があります.

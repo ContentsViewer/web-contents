@@ -1,14 +1,14 @@
-<Header>
-    <Parent> ContentsViewer
-    <Title> 更新履歴
-    <CreatedAt> 2016-8-28
-    <Tags> 更新履歴
-    <Summary>
-        ここにはWebPageViewerの更新履歴が書かれます.
-        
-        
-    </Summary>
-</Header>
+---
+parent: ContentsViewer
+title: 更新履歴
+date: 2016-8-28
+tags: 更新履歴
+---
+
+ここにはWebPageViewerの更新履歴が書かれます.
+
+===
+
 # 2018/10/7
     * このシステムの更新打ち切り. [CollabCMS](./../CollabCMS/CollabCMS)に引き継ぎ.
 
@@ -121,5 +121,3 @@
 
 # 8.28.2016
     WebPageViewer本体完成
-
-

@@ -1,19 +1,18 @@
-<Header>
-    <Parent> HUDMessageManager
-    <Title> HUDMessageManagerの使い方
-    <CreatedAt> 2016-12-8
-    <Tags> 
-    <Summary>
-        ここでは, HUDMessageManagerの基本的な使い方を説明します.
-        説明項目は以下のとおりです.
-        
-        * パラメータの説明
-        * 使ってみる
-        * 対応文字列
-        
-        
-    </Summary>
-</Header>
+---
+parent: HUDMessageManager
+title: HUDMessageManagerの使い方
+date: 2016-12-8
+---
+
+ここでは, HUDMessageManagerの基本的な使い方を説明します.
+説明項目は以下のとおりです.
+
+* パラメータの説明
+* 使ってみる
+* 対応文字列
+
+===
+
 # パラメータの説明
     # defaultDisplayTime
         Message表示時に自動で表示を自動で消すデフォルト時間

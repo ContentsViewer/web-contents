@@ -1,10 +1,6 @@
-<Header>
-    <Parent> ../Web
-    <Title> 
-    <CreatedAt> 2020-06-25
-    <Tags> 
-    <Summary>
-        
-    </Summary>
-</Header>
+---
+parent: ../Web
+date: 2020-06-25
+---
+
 <https://gist.github.com/tzmartin/1cf85dc3d975f94cfddc04bc0dd399be>

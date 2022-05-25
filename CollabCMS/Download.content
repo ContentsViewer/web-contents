@@ -1,20 +1,14 @@
-<Header>
-    <Parent> CollabCMS
-    <Title> ダウンロード
-    <CreatedAt> 2018-10-07
-    <Tags> ダウンロード, CMS
-    <Summary>
-        CollabCMSは以下のサイトからダウンロードできます.
-        
-        
-        
-        
-        
-        
-        
-        
-    </Summary>
-</Header>
+---
+parent: CollabCMS
+title: ダウンロード
+date: 2018-10-07
+tags: ダウンロード, CMS
+---
+
+CollabCMSは以下のサイトからダウンロードできます.
+
+===
+
 # Github
 ____________________________
 

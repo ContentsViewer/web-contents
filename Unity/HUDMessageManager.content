@@ -1,25 +1,25 @@
-<Header>
-    <Parent> Components
-    <Title> HUDMessageManager UI表示のためのコンポーネント
-    <CreatedAt> 2018-8-30
-    <Tags> ライブラリ, UI表示, C#
-    <Summary>
-        Unityでゲーム制作もしくはツール制作においてちょっとしたUIを表示したい時があります.
-        HUDMessageManagerはその時のために製作されたものです.
-        
-        HUDMessageManagerはちょっとしたUIの表示に最適です.
-        特徴は以下のとおりです.
-        
-        * 固定されないUIの表示場所
-        * フェードイン, フェードアウトエフェクト
-        * 表示時間設定
-        
-        <!--このコンポーネントは前身の[HUDMessageManager](CURRENT_DIR/HUDMessageManager)の改良版です.-->
-        
-        Unity 2018.2.5f1で動作確認済みです.
-        
-    </Summary>
-</Header>
+---
+parent: Components
+title: HUDMessageManager UI表示のためのコンポーネント
+date: 2018-8-30
+tags: ライブラリ, UI表示, C#
+---
+
+Unityでゲーム制作もしくはツール制作においてちょっとしたUIを表示したい時があります.
+HUDMessageManagerはその時のために製作されたものです.
+
+HUDMessageManagerはちょっとしたUIの表示に最適です.
+特徴は以下のとおりです.
+
+* 固定されないUIの表示場所
+* フェードイン, フェードアウトエフェクト
+* 表示時間設定
+
+<!--このコンポーネントは前身の[HUDMessageManager](CURRENT_DIR/HUDMessageManager)の改良版です.-->
+
+Unity 2018.2.5f1で動作確認済みです.
+
+===
 
 [::WARNING]
 ============

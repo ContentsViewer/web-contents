@@ -1,22 +1,23 @@
-<Header>
-    <Parent> ../WebTool
-    <Title> QR-Universal Scanner: ブラウザで動作するQRコード読み取りウェブアプリ
-    <CreatedAt> 2021-06-20
-    <Tags> ウェブアプリ, Web, QRコード, ツール, PWA
-    <Summary>
-        //QR-Universal Scanner// は, ブラウザ上で動作する, //インストール不要//で//多くの入力方法(カメラとクリップボード)に対応した//QRコード^[注.qrcode]読み取りWebアプリです.
-        PWAに対応しており//オフラインでも動作//します.
-        
-        QRコードを標準で読み取れるデバイスがありますが,
-        主にモバイル端末に多く^[iphone-qr-code-apple]^[android-qr-code-google-play], 
-        PC上でQRコードを読み込むためにはアプリをインストールする必要があります^[mac-qr-code-1]^[mac-qr-code-2]^[mac-qr-code-3]^[windows-qr-code-1]^[windows-qr-code-2].
-        
-        インストール不要のQRコード読み取りアプリもあります^[webapp-qr-code-1]^[webapp-qr-code-2]^[webapp-qr-code-3]^[webapp-qr-code-4]^[webapp-qr-code-5]が, 
-        ファイルのみ, もしくはカメラのみからの読み込みであったりと, 入力方法が限定されています.
-        
-        本稿では, インストール不要で多くの入力方法に対応したQRコード読み取りWebアプリ QR-Universal Scanner を紹介します. PWAに対応しており, オフラインでも動作します.
-    </Summary>
-</Header>
+---
+parent: ../WebTool
+title: QR-Universal Scanner: ブラウザで動作するQRコード読み取りウェブアプリ
+date: 2021-06-20
+tags: ウェブアプリ, Web, QRコード, ツール, PWA
+---
+
+//QR-Universal Scanner// は, ブラウザ上で動作する, //インストール不要//で//多くの入力方法(カメラとクリップボード)に対応した//QRコード^[注.qrcode]読み取りWebアプリです.
+PWAに対応しており//オフラインでも動作//します.
+
+QRコードを標準で読み取れるデバイスがありますが,
+主にモバイル端末に多く^[iphone-qr-code-apple]^[android-qr-code-google-play], 
+PC上でQRコードを読み込むためにはアプリをインストールする必要があります^[mac-qr-code-1]^[mac-qr-code-2]^[mac-qr-code-3]^[windows-qr-code-1]^[windows-qr-code-2].
+
+インストール不要のQRコード読み取りアプリもあります^[webapp-qr-code-1]^[webapp-qr-code-2]^[webapp-qr-code-3]^[webapp-qr-code-4]^[webapp-qr-code-5]が, 
+ファイルのみ, もしくはカメラのみからの読み込みであったりと, 入力方法が限定されています.
+
+本稿では, インストール不要で多くの入力方法に対応したQRコード読み取りWebアプリ QR-Universal Scanner を紹介します. PWAに対応しており, オフラインでも動作します.
+
+===
 
 <iframe width="100%" height="640px" scrolling="no" allow="camera; clipboard-read; clipboard-write" frameborder="no" src="https://contentsviewer.github.io/QR-UniversalScanner/"></iframe>
 

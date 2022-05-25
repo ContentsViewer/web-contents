@@ -1,17 +1,16 @@
-<Header>
-    <Parent> ../Root
-    <Title> このサイトについて
-    <CreatedAt> 2018-11-24
-    <Tags> お問い合わせ
-    <Summary>
-        
-        当サイトの目的など.
-        
-        
-        
-    </Summary>
-    <Child> Contact
-</Header>
+---
+parent: ../Root
+title: このサイトについて
+date: 2018-11-24
+tags: お問い合わせ
+children:
+    Contact
+---
+
+当サイトの目的など.
+
+===
+
 # 目的
 ________________
     当サイトの主な目的は, __筆者の知識と成果物の保存__です.

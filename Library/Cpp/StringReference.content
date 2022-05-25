@@ -1,48 +1,39 @@
-<Header>
-    <Parent> String
-    <Title> Stringの関数一覧
-    <CreatedAt> 2016-3-3
-    <Tags> 
-    <Summary>
-        Stringが持つ関数は以下のとおりです.
-        
-        |---------------------------||----------------------------------------------------|
-        | [String](#String)         || コンストラクタ                                      |
-        | [Length](#Length)         || 文字の長さ-バイト数-                                  |
-        | [operator=](#operator=)   || 代入演算子                                           |
-        | [operator[]](#operator[]) || 添え字演算子                                          |
-        | [operator+](#operator+)   || 文字列結合                                           |
-        | [operator+=](#operator+=) || 文字列結合                                           |
-        | [CopyFrom](#CopyFrom)     || 指定されたStringからコピー                           |
-        | [CharArray](#CharArray)   || String内部Char配列の先頭アドレス                     |
-        | [IndexOf](#IndexOf)       || 指定した文字列の位置                                 |
-        | [Contains](#Contains)     || 指定した文字列が含まれるか                           |
-        | [Equals](#Equals)         || 指定した文字列と等しいか                             |
-        | [Insert](#Insert)         || 文字列挿入                                           |
-        | [Replace](#Replace)       || 文字列置き換え                                       |
-        | [Split](#Split)           || 文字列分割                                           |
-        | [Substring](#Substring)   || 部分文字列を取得                                     |
-        | [ToUpper](#ToUpper)       || すべて大文字に -英語のみ対応-                          |
-        | [ToLower](#ToLower)       || すべて小文字に -英語のみ対応-                         |
-        | [Concat](#Concat)         || 文字列結合                                           |
-        | [GetLine](#GetLine)       || ストリームから文字列取得                             |
-        | [Copy](#Copy)             || 文字列コピー                                         |
-        
-        筆者がこのStringを作る際,
-        [C#のStringリファレンス(accessed: 3.3.2017)](https://msdn.microsoft.com/ja-jp/library/system.string.aspx)
-        を参考にしました. 関数名はほとんど一緒にしてあります.
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-    </Summary>
-</Header>
+---
+parent: String
+title: Stringの関数一覧
+date: 2016-3-3
+---
+
+Stringが持つ関数は以下のとおりです.
+
+|---------------------------||----------------------------------------------------|
+| [String](#String)         || コンストラクタ                                      |
+| [Length](#Length)         || 文字の長さ-バイト数-                                  |
+| [operator=](#operator=)   || 代入演算子                                           |
+| [operator[]](#operator[]) || 添え字演算子                                          |
+| [operator+](#operator+)   || 文字列結合                                           |
+| [operator+=](#operator+=) || 文字列結合                                           |
+| [CopyFrom](#CopyFrom)     || 指定されたStringからコピー                           |
+| [CharArray](#CharArray)   || String内部Char配列の先頭アドレス                     |
+| [IndexOf](#IndexOf)       || 指定した文字列の位置                                 |
+| [Contains](#Contains)     || 指定した文字列が含まれるか                           |
+| [Equals](#Equals)         || 指定した文字列と等しいか                             |
+| [Insert](#Insert)         || 文字列挿入                                           |
+| [Replace](#Replace)       || 文字列置き換え                                       |
+| [Split](#Split)           || 文字列分割                                           |
+| [Substring](#Substring)   || 部分文字列を取得                                     |
+| [ToUpper](#ToUpper)       || すべて大文字に -英語のみ対応-                          |
+| [ToLower](#ToLower)       || すべて小文字に -英語のみ対応-                         |
+| [Concat](#Concat)         || 文字列結合                                           |
+| [GetLine](#GetLine)       || ストリームから文字列取得                             |
+| [Copy](#Copy)             || 文字列コピー                                         |
+
+筆者がこのStringを作る際,
+[C#のStringリファレンス(accessed: 3.3.2017)](https://msdn.microsoft.com/ja-jp/library/system.string.aspx)
+を参考にしました. 関数名はほとんど一緒にしてあります.
+
+===
+
 # [[String]]String
     String()<br/>
     String(char *chars)

@@ -1,18 +1,19 @@
-<Header>
-    <Parent> SketchWriteWithoutComputer
-    <Title> Optibootについて
-    <CreatedAt> 2016/12/8
-    <Tags> ブートローダ
-    <Summary>
-        Optibootに関して簡単に説明します.
-        説明項目は以下のとおりです.
-        
-        * optibootとは
-        * optibootの起動方法
-        * optibootにコマンドを送る
-        * optibootにスケッチを送る
-    </Summary>
-</Header>
+---
+parent: SketchWriteWithoutComputer
+title: Optibootについて
+date: 2016/12/8
+tags: ブートローダ
+---
+
+Optibootに関して簡単に説明します.
+説明項目は以下のとおりです.
+
+* optibootとは
+* optibootの起動方法
+* optibootにコマンドを送る
+* optibootにスケッチを送る
+
+===
 
 # optibootとは
     optibootとは、Arduinoが用意しているブートローダーです。

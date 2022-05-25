@@ -1,17 +1,16 @@
-<Header>
-    <Parent> CollabCMS
-    <Title> 導入方法
-    <CreatedAt> 2018-10-12
-    <Tags> Web, CMS
-    <Summary>
-        ここでは, CollabCMSの導入方法を説明します.
-        
-        
-        すぐに使用したい方は, 項目の[はじめる](#Start)をご覧ください.
-        
-        
-    </Summary>
-</Header>
+---
+parent: CollabCMS
+title: 導入方法
+date: 2018-10-12
+tags: Web, CMS
+---
+
+ここでは, CollabCMSの導入方法を説明します.
+
+すぐに使用したい方は, 項目の[はじめる](#Start)をご覧ください.
+
+===
+
 # [[Start]]はじめる
 ____________
     # サーバにCollabCMSフォルダを置く

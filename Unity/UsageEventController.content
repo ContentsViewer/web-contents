@@ -1,22 +1,20 @@
-<Header>
-    <Parent> EventController
-    <Title> EventControllerの使い方
-    <CreatedAt> 2016-12-8
-    <Tags> 
-    <Summary>
-        ここでは, EventControllerの基本的な使い方を説明します.
-        説明項目は以下のとおりです.
-        
-        * 用語
-        * EventClipとは
-        * 外部スクリプトによるParameter設定と取得
-        * 実際に使ってみる
-        * 応用例
-        
-        
-        
-    </Summary>
-</Header>
+---
+parent: EventController
+title: EventControllerの使い方
+date: 2016-12-8
+---
+
+ここでは, EventControllerの基本的な使い方を説明します.
+説明項目は以下のとおりです.
+
+* 用語
+* EventClipとは
+* 外部スクリプトによるParameter設定と取得
+* 実際に使ってみる
+* 応用例
+
+===
+
 # 用語
     # EventNode
         各状態のこと<br />

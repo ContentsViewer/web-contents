@@ -1,10 +1,8 @@
-<Header>
-    <Parent> ../Root
-    <Title> Ubuntu
-    <Tags> Ubuntu
-    <CreatedAt> 2020-08-18
-    <Summary>
-        
-    </Summary>
-    <Child> Install/Install
-</Header>
+---
+parent: ../Root
+titile: Ubuntu
+tags: Ubuntu
+date: 2020-08-18
+children:
+    Install/Install
+---

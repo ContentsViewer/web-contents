@@ -1,12 +1,8 @@
-<Header>
-    <Parent> 
-    <Title> user-scripts
-    <CreatedAt> 2022-05-06
-    <Tags> noindex
-    <Summary>
-        
-    </Summary>
-</Header>
+---
+date: 2022-05-06
+tags: noindex
+---
+
 ```html
     <!--<link rel="stylesheet" href="{PLUGIN_URI}/" media="print" onload="this.media='all'; this.onload=null;">-->
     
@@ -284,5 +280,3 @@ console.log('[viewer.js] loaded');
             [/wiki/ARL/.plugins/images/miku-1.jpg](CURRENT_DIR/images/miku-1.jpg)
         初音ミク(黒):
             [/wiki/ARL/.plugins/images/miku-2.jpg](CURRENT_DIR/images/miku-2.jpg)
-    
-    

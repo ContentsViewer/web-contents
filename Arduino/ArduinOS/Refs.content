@@ -1,12 +1,12 @@
-<Header>
-    <Parent> ArduinOS
-    <Title> 参考文献
-    <CreatedAt> 2017-7-11
-    <Tags> 
-    <Summary>
-        ここでは, 筆者が参考にしたページ, 資料の一覧が書かれます.
-    </Summary>
-</Header>
+---
+parent: ArduinOS
+title: 参考文献
+date: 2017-7-11
+---
+
+ここでは, 筆者が参考にしたページ, 資料の一覧が書かれます.
+
+===
 
 # 参考文献
     * <cite>Arduino. <a href="https://github.com/arduino/Arduino/wiki/Build-Process" target="_blank">Build Process - arduino</a>(accessed 2017/9/6)</cite>

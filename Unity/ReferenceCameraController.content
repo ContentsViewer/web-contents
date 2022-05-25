@@ -1,17 +1,15 @@
-<Header>
-    <Parent> CameraController
-    <Title> CameraController関数一覧
-    <CreatedAt> 2016-12-8
-    <Tags> 
-    <Summary>
-        |[関数]
-        |---------||-------------------------|
-        | [SetCamera](#SetCamera) || カメラのパラメータ設定 |
-        
-        
-        
-    </Summary>
-</Header>
+---
+parent: CameraController
+title: CameraController関数一覧
+date: 2016-12-8
+---
+
+|[関数]
+|---------||-------------------------|
+| [SetCamera](#SetCamera) || カメラのパラメータ設定 |
+
+===
+
 # [[SetCamera]]SetCamera
     public void SetCamera(Param cameraPara)
 

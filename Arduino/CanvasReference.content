@@ -1,36 +1,34 @@
-<Header>
-    <Parent> Canvas
-    <Title> キャンバスの関数, 変数一覧
-    <CreatedAt> 2017-3-29
-    <Tags> 
-    <Summary>
-        # 関数
-            |---------------------||-------------------------------------|
-            | [SetSize](#SetSize) || キャンバスの大きさ設定                |
-            | [Canvas](#Canvas)   || コンストラクタ                       |
-            | [SizeX](#SizeX)     || キャンバスx方向の大きさ               |
-            | [SizeY](#SizeY)     || キャンバスy方向の大きさ               |
-            | [Pos](#Pos)         || 描画位置の指定                       |
-            | [Dot](#Dot)         || 点の描画                             |
-            | [Line](#Line)       || 直線の描画                           |
-            | [VerticalLine](#VerticalLine) || 垂直直線の描画             |
-            | [Boxf](#Boxf)       || 矩形の描画                          |
-            | [Boxw](#Boxw)       || ワイヤー矩形の描画                   |
-            | [Celput](#Celput)   || 画像の表示                           |
-            | [Mes](#Mes)         || 文字列の描画                         |
-            | [PutChar](#PutChar) || 文字の描画                          |
-        
-        
-        # 変数
-            |---------------------||-------------------------------------|
-            | [color](#color)     || 色情報                               |
-            | [posX](#posX)       || 描画位置x座標                        |
-            | [posY](#posY)       || 描画位置y座標                        |
-        
-        
-        
-    </Summary>
-</Header>
+---
+parent: Canvas
+title: キャンバスの関数, 変数一覧
+date: 2017-3-29
+---
+
+# 関数
+    |---------------------||-------------------------------------|
+    | [SetSize](#SetSize) || キャンバスの大きさ設定                |
+    | [Canvas](#Canvas)   || コンストラクタ                       |
+    | [SizeX](#SizeX)     || キャンバスx方向の大きさ               |
+    | [SizeY](#SizeY)     || キャンバスy方向の大きさ               |
+    | [Pos](#Pos)         || 描画位置の指定                       |
+    | [Dot](#Dot)         || 点の描画                             |
+    | [Line](#Line)       || 直線の描画                           |
+    | [VerticalLine](#VerticalLine) || 垂直直線の描画             |
+    | [Boxf](#Boxf)       || 矩形の描画                          |
+    | [Boxw](#Boxw)       || ワイヤー矩形の描画                   |
+    | [Celput](#Celput)   || 画像の表示                           |
+    | [Mes](#Mes)         || 文字列の描画                         |
+    | [PutChar](#PutChar) || 文字の描画                          |
+
+
+# 変数
+    |---------------------||-------------------------------------|
+    | [color](#color)     || 色情報                               |
+    | [posX](#posX)       || 描画位置x座標                        |
+    | [posY](#posY)       || 描画位置y座標                        |
+
+===
+
 # [[SetSize]]SetSize
     SetSize(int x, int y)
 

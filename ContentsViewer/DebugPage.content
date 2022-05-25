@@ -1,15 +1,14 @@
-<Header>
-    <Parent> ContentsViewer
-    <Title> DebugPage
-    <CreatedAt> 2016-12-8
-    <Tags> 
-    <Summary>
-        このPageはContentsViewerの動作を確認するものです.
-        
-        この先からのコンテンツの動作は保証はできません.
-        
-        
-    </Summary>
-    <Child> ErrorPage
-    <Child> TemplateContent
-</Header>
+---
+parent: ContentsViewer
+title: DebugPage
+date: 2016-12-8
+children:
+    ErrorPage
+    TemplateContent
+---
+
+このPageはContentsViewerの動作を確認するものです.
+
+この先からのコンテンツの動作は保証はできません.
+
+===

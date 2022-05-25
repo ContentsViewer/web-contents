@@ -1,18 +1,19 @@
-<Header>
-    <Parent> MelodyPlayer
-    <Title> MelodyPlayerの導入方法
-    <CreatedAt> 2017-3-3
-    <Tags> 
-    <Summary>
-        MelodyPlayerの導入方法を説明します.
-        説明項目は以下のとおりです.
-        
-        * ダウンロード
-        * ファイルの説明
-        * インクルード
-        * ピン接続
-    </Summary>
-</Header>
+---
+parent: MelodyPlayer
+title: MelodyPlayerの導入方法
+date: 2017-3-3
+---
+
+MelodyPlayerの導入方法を説明します.
+説明項目は以下のとおりです.
+
+* ダウンロード
+* ファイルの説明
+* インクルード
+* ピン接続
+
+===
+
 # ダウンロード
     下記からダウンロードしてください.
 

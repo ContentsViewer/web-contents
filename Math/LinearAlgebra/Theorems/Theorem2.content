@@ -1,23 +1,10 @@
-<Header>
-    <Parent> Theorems
-    <Title> 定理集2
-    <CreatedAt> 2018-12-12
-    <Tags> 行列, 定理
-    <Summary>
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-    </Summary>
-</Header>
+---
+parent: Theorems
+title: 定理集2
+date: 2018-12-12
+tags: 行列, 定理
+---
+
 # ランクが1
     $rank(A)=1$のとき, $A^2=\alpha A$を満たすスカラ$\alpha$はただ一つ存在する.
     

@@ -1,12 +1,14 @@
-<Header>
-    <Parent> HowItWorks
-    <Title> パーサー
-    <CreatedAt> 2019-11-23
-    <Tags> 構文解析, アルゴリズム
-    <Summary>
-        OutlineTextのパーサ(Parser)について
-    </Summary>
-</Header>
+---
+parent: HowItWorks
+title: パーサー
+date: 2019-11-23
+tags: 構文解析, アルゴリズム
+---
+
+OutlineTextのパーサ(Parser)について
+
+===
+
 # はじめに
     OutlineTextは，2018年4月から開発され，明確なパーサモデルがないまま，
     トライアル・アンド・エラーで構築，改良されていきました．

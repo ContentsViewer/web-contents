@@ -1,12 +1,10 @@
-<Header>
-    <Parent> Network
-    <Title> ルータの設定を変更できない環境でVPNを構築する方法
-    <CreatedAt> 2019-05-15
-    <Tags> OpenVPN, VPN, ラズパイ, ngrok
-    <Summary>
-        
-    </Summary>
-</Header>
+---
+parent: Network
+title: ルータの設定を変更できない環境でVPNを構築する方法
+date: 2019-05-15
+tags: OpenVPN, VPN, ラズパイ, ngrok
+---
+
 # 背景と問題
     社内や, 学内のLANに外から接続したいことがあります.
     ですが, 一般的に, 社員, 学生が社内や学内のルータの設定は変更できません.

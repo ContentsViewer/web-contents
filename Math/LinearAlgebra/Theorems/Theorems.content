@@ -1,11 +1,8 @@
-<Header>
-    <Parent> ../LinearAlgebra
-    <Title> 行列定理集
-    <CreatedAt> 2019-11-25
-    <Tags> 
-    <Summary>
-        
-    </Summary>
-    <Child> Theorem1
-    <Child> Theorem2
-</Header>
+---
+parent: ../LinearAlgebra
+title: 行列定理集
+date: 2019-11-25
+children:
+    Theorem1
+    Theorem2
+---

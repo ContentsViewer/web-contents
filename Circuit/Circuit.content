@@ -1,12 +1,9 @@
-<Header>
-    <Parent> ../Root
-    <Title> 電子回路
-    <CreatedAt> 2020-02-22
-    <Tags> 
-    <Summary>
-        
-    </Summary>
-    <Child> Power/Power
-    <Child> recipes/recipes
-    <Child> Books/Books
-</Header>
+---
+parent: ../Root
+title: 電子回路
+date: 2020-02-22
+children:
+    Power/Power
+    recipes/recipes
+    Books/Books
+---

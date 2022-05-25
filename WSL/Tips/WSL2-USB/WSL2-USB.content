@@ -1,25 +1,27 @@
-<Header>
-    <Parent> ../Tips
-    <Title> WSL2でUSBデバイスを認識させる
-    <CreatedAt> 2020-08-15
-    <Tags> WSL, WSL2, USB
-    <Summary>
-        [この方法は古い可能性があります::WARNING]
-        ====
-            2021年12月現在, この記事で紹介している方法は古い可能性があります.
-            
-            最新の方法について,
-            microsoft 公式の以下のページか, 他の最新情報サイトをご覧ください.
-            
-            * ["Connecting USB devices to WSL". microsoft. accessed at 2021-12-16.](https://devblogs.microsoft.com/commandline/connecting-usb-devices-to-wsl/)
-        ====
+---
+parent: ../Tips
+title: WSL2でUSBデバイスを認識させる
+date: 2020-08-15
+tags: WSL, WSL2, USB
+---
+
+[この方法は古い可能性があります::WARNING]
+====
+    2021年12月現在, この記事で紹介している方法は古い可能性があります.
     
-        WSL2上でUSBデバイスを認識させるために, [VirtualHere](https://www.virtualhere.com)を用いた方法を, 
-        Linux側でUSB/IPの機能を有効にする方法も含めて, 説明します.
-        
-        ![WSL2上でArduino UNO が認識されている](CURRENT_DIR/Images/lsusb.jpg)
-    </Summary>
-</Header>
+    最新の方法について,
+    microsoft 公式の以下のページか, 他の最新情報サイトをご覧ください.
+    
+    * ["Connecting USB devices to WSL". microsoft. accessed at 2021-12-16.](https://devblogs.microsoft.com/commandline/connecting-usb-devices-to-wsl/)
+====
+
+WSL2上でUSBデバイスを認識させるために, [VirtualHere](https://www.virtualhere.com)を用いた方法を, 
+Linux側でUSB/IPの機能を有効にする方法も含めて, 説明します.
+
+![WSL2上でArduino UNO が認識されている](CURRENT_DIR/Images/lsusb.jpg)
+
+===
+
 # はじめに
     WSL2は, Linuxのディストリビューションと, Windowsとの相互の通信方法が変更された, WSLの新しいバージョンのアーキテクチャです^[wsl2-new].
     WSL1と比較して, WSL2にはシステムコールの完全な互換性を持ち, ファイルIOパフォーマンスが向上しています^[wsl1-wsl2].

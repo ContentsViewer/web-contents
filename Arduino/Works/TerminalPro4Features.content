@@ -1,17 +1,17 @@
-<Header>
-    <Parent> TerminalPro4
-    <Title> TerminalPro4の特徴
-    <CreatedAt> 2017-5-4
-    <Tags> 
-    <Summary>
-        TerminalPro4の特徴としては以下があげられます.
-        
-        * ゲーム機として成り立つ必要最低限の機能
-        * 迅速なアプリケーション切り替え
-        * 簡単なソフトウェア開発
-        
-    </Summary>
-</Header>
+---
+parent: TerminalPro4
+title: TerminalPro4の特徴
+date: 2017-5-4
+---
+
+TerminalPro4の特徴としては以下があげられます.
+
+* ゲーム機として成り立つ必要最低限の機能
+* 迅速なアプリケーション切り替え
+* 簡単なソフトウェア開発
+
+===
+
 # ゲーム機として成り立つ必要最低限の機能
     TerminalPro4はゲーム機として成り立つ最低限の機能を持ちます.
     TerminalPro4はゲーム画面としたディスプレイ, ユーザーからの入力として八つのスイッチ, 雰囲気を出すための音楽再生―ピーピー音ではない―機能を持ちます.

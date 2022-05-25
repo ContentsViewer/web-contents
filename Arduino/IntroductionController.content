@@ -1,19 +1,18 @@
-<Header>
-    <Parent> Controller
-    <Title> Controllerの導入方法
-    <CreatedAt> 2016-12-8
-    <Tags> 
-    <Summary>
-        Controllerの導入方法を説明します.
-        説明項目は以下のとおりです.
-        
-        * ダウンロード
-        * ファイルの説明
-        * インクルード
-        * コントローラの使用開始
-        
-    </Summary>
-</Header>
+---
+parent: Controller
+title: Controllerの導入方法
+date: 2016-12-8
+---
+
+Controllerの導入方法を説明します.
+説明項目は以下のとおりです.
+
+* ダウンロード
+* ファイルの説明
+* インクルード
+* コントローラの使用開始
+
+===
 
 # ダウンロード
     下記からダウンロードが可能です.

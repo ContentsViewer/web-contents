@@ -1,14 +1,13 @@
-<Header>
-    <Parent> ArduinOS
-    <Title> 準備
-    <CreatedAt> 2017-7-11
-    <Tags> 
-    <Summary>
-        OSを作成するにあたっての準備を行います.
-        
-        
-    </Summary>
-</Header>
+---
+parent: ArduinOS
+title: 準備
+date: 2017-7-11
+---
+
+OSを作成するにあたっての準備を行います.
+
+===
+
 # 用意するもの
     # ボード: ArduinoUno もしくは ArudinoMega
         今回のOSは以下の対応表にあるAVRマイコンが用いられているボードならば対応できますが,

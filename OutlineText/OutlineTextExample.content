@@ -1,12 +1,13 @@
-<Header>
-    <Parent> OutlineText
-    <Title> アウトライン例
-    <CreatedAt> 2018-4-16
-    <Tags> 
-    <Summary>
-        OutlineTextのアウトライン例
-    </Summary>
-</Header>
+---
+parent: OutlineText
+title: アウトライン例
+date: 2018-4-16
+---
+
+OutlineTextのアウトライン例
+
+===
+
 # 大見出し
 ____________________________________________________
     見出しは`#`のほかに`_`で見出しとすることができます.

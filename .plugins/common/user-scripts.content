@@ -1,12 +1,7 @@
-<Header>
-    <Parent> 
-    <Title> user-scripts
-    <CreatedAt> 2022-05-07
-    <Tags> noindex
-    <Summary>
-        
-    </Summary>
-</Header>
+---
+date: 2022-05-07
+tags: noindex
+---
 
 ```
     <script>console.log('[common.html] loaded')</script>
@@ -24,4 +19,3 @@
           gtag('config', 'UA-82386354-3');
         </script>
     ```
-

@@ -1,18 +1,19 @@
-<Header>
-    <Parent> ../Root_en
-    <Title> ContentsPlanet (CMS)
-    <CreatedAt> 2020-08-04
-    <Tags> CMS, Web
-    <Summary>
-        ![ContentsPlanet](CURRENT_DIR/Images/Logo.jpg)
-        
-        ContentsPlanet is a web content management system (CMS) with the following three features
-        
-        * Integration with other systems (e.g. Git, FTP, GitHub, GitLab, OneDrive, Google Drive) via the OS standard file system. 
-        * An editor-independent, lightweight markup language for content description with outline visibility and readability
-        * Across directories, Content Search and Content management (auto-tagging, auto-categorization, and related-suggestions) based on  topic model.
-    </Summary>
-</Header>
+---
+parent: ../Root_en
+title: ContentsPlanet (CMS)
+date: 2020-08-04
+tags: CMS, Web
+---
+
+![ContentsPlanet](CURRENT_DIR/Images/Logo.jpg)
+
+ContentsPlanet is a web content management system (CMS) with the following three features
+
+* Integration with other systems (e.g. Git, FTP, GitHub, GitLab, OneDrive, Google Drive) via the OS standard file system. 
+* An editor-independent, lightweight markup language for content description with outline visibility and readability
+* Across directories, Content Search and Content management (auto-tagging, auto-categorization, and related-suggestions) based on  topic model.
+
+===
 
 # Features
     # Integration with other systems

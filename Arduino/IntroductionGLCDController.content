@@ -1,18 +1,18 @@
-<Header>
-    <Parent> GLCDController
-    <Title> GLCDControllerの導入方法
-    <CreatedAt> 2016-12-8
-    <Tags> 
-    <Summary>
-        ここでは, GLCDControllerの導入方法を説明します.
-        説明項目は以下のとおりです.
-        
-        * ダウンロード
-        * ファイルの説明
-        * インクルード
-        
-    </Summary>
-</Header>
+---
+parent: GLCDController
+title: GLCDControllerの導入方法
+date: 2016-12-8
+---
+
+ここでは, GLCDControllerの導入方法を説明します.
+説明項目は以下のとおりです.
+
+* ダウンロード
+* ファイルの説明
+* インクルード
+
+===
+
 # ダウンロード
     下記からダウンロードできます.
 

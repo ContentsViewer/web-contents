@@ -1,12 +1,13 @@
-<Header>
-    <Parent> ../ArduinOS
-    <Title> リファレンス
-    <CreatedAt> 2020-05-26
-    <Tags> 
-    <Summary>
-        関数一覧
-    </Summary>
-</Header>
+---
+parent: ../ArduinOS
+title: リファレンス
+date: 2020-05-26
+---
+
+関数一覧
+
+===
+
 # InitMainLoopPriority
     `InitMainLoopPriority(priority)`
     

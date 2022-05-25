@@ -1,10 +1,7 @@
-<Header>
-    <Parent> ../Circuit
-    <Title> レシピ集
-    <CreatedAt> 2020-11-06
-    <Tags> 
-    <Summary>
-        
-    </Summary>
-    <Child> positive-oscillator/positive-oscillator
-</Header>
+---
+parent: ../Circuit
+title: レシピ集
+date: 2020-11-06
+children:
+    positive-oscillator/positive-oscillator
+---

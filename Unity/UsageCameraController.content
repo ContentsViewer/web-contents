@@ -1,18 +1,17 @@
-<Header>
-    <Parent> CameraController
-    <Title> CameraControllerの使い方
-    <CreatedAt> 2016-12-8
-    <Tags> 
-    <Summary>
-        ここでは, CameraControllerの基本的な使い方を説明します.
-        説明項目は以下のとおりです.
-        
-        * パラメータの説明
-        * タイプの説明
-        
-        
-    </Summary>
-</Header>
+---
+parent: CameraController
+title: CameraControllerの使い方
+date: 2016-12-8
+---
+
+ここでは, CameraControllerの基本的な使い方を説明します.
+説明項目は以下のとおりです.
+
+* パラメータの説明
+* タイプの説明
+
+===
+
 # パラメータの説明
     ![パラメータ](CURRENT_DIR/Images/CameraController/Img3.png)
 

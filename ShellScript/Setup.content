@@ -1,17 +1,16 @@
-<Header>
-    <Parent> ShellScript
-    <Title> Shell環境セットアップ(WSL含む)
-    <CreatedAt> 2019-06-25
-    <Tags> WSL
-    <Summary>
-        shell環境における開発をするためには,まずその開発環境を整える必要があります.
-        本稿では,開発環境を整えるスクリプトを公開します.
-        
-        本稿で上げるスクリプトは,WSL(Windows Subsystem For Linux)上でのセットアップにも対応させています.
-        
-        
-    </Summary>
-</Header>
+---
+parent: ShellScript
+titile: Shell環境セットアップ(WSL含む)
+date: 2019-06-25
+tags: WSL
+---
+
+shell環境における開発をするためには,まずその開発環境を整える必要があります.
+本稿では,開発環境を整えるスクリプトを公開します.
+
+本稿で上げるスクリプトは,WSL(Windows Subsystem For Linux)上でのセットアップにも対応させています.
+
+===
 
 # ねらい
     * Shellはどこでもある

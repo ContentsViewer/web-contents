@@ -1,10 +1,11 @@
-<Header>
-    <Parent> ../ContentsPlanet
-    <Title> 仕組み
-    <CreatedAt> 2019-11-23
-    <Tags> 
-    <Summary>
-        本CMSの仕組みについて
-    </Summary>
-    <Child> Component
-</Header>
+---
+parent: ../ContentsPlanet
+title: 仕組み
+date: 2019-11-23
+children:
+    Component
+---
+
+本CMSの仕組みについて
+
+===

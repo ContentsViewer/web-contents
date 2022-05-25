@@ -1,10 +1,11 @@
-<Header>
-    <Parent> ../Root
-    <Title> Cpp
-    <CreatedAt> 2021-12-30
-    <Tags> 
-    <Summary>
-        ここには, C++ に関することが書かれます.
-    </Summary>
-    <Child> how-to-implement-a-thread-pool/article
-</Header>
+---
+parent: ../Root
+title: Cpp
+date: 2021-12-30
+children:
+    how-to-implement-a-thread-pool/article
+---
+
+ここには, C++ に関することが書かれます.
+
+===

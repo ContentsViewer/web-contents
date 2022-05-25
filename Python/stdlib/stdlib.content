@@ -1,14 +1,14 @@
-<Header>
-    <Parent> ../Python
-    <Title> stdlib
-    <CreatedAt> 2020-08-27
-    <Tags> ライブラリ
-    <Summary>
-        筆者がこれまでに作成した, モジュールを紹介します.
-        
-        
-    </Summary>
-</Header>
+---
+parent: ../Python
+title: stdlib
+date: 2020-08-27
+tags: ライブラリ
+---
+
+筆者がこれまでに作成した, モジュールを紹介します.
+
+===
+
 # ダウンロード
     Github:
         <https://github.com/ContentsViewer/Python-stdlib>
