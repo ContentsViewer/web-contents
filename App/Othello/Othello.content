@@ -1,0 +1,162 @@
+<Header>
+    <Parent> ../App
+    <Title> オセロ
+    <CreatedAt> 2018-8-30
+    <Tags> オセロ, Python, 遊び
+    <Summary>
+        オセロです. 遊びで作ったものなので, きれいにできている自信はありません.
+        
+        より多くの石をひっくり返した方が勝利です.
+        
+        遊ぶには, pythonの環境が必要です.
+        
+        AI搭載で一人でも遊べます. (貧弱なAIですので改良しちゃってください.)
+        
+        
+        
+        
+    </Summary>
+</Header>
+# ダウンロード
+______________________________________
+    [github](https://github.com/ContentsViewer/App-Othello)でダウンロード可能です.
+
+# 使い方
+______________________________________
+    # pythonの環境を用意してください.
+
+    # 起動
+        ```python
+            python3 main.py
+
+        ```
+
+    # 設定
+        # 二人で遊びたい時
+            `main.py`を以下のように修正します.
+
+            ```python
+                from game import *
+                
+                from ai import *
+                
+                def main():
+                    ai = AI()
+                
+                    game = Game()
+                
+                    game.loop()
+                
+                if __name__ == "__main__":
+                    main()
+
+            ```
+
+        # AIと戦いたい時
+            `main.py`を以下のように修正します.
+
+
+            ```python
+                from game import *
+                
+                from ai import *
+                
+                def main():
+                    ai = AI()
+                
+                    # AI側を白石にしたい時
+                    game = Game(put_white_stone_func = ai.put_stone)
+                
+                    # AI側を黒石にしたい時
+                    # game = Game(put_black_stone_func = ai.put_stone)
+                
+                    
+                
+                    game.loop()
+                
+                if __name__ == "__main__":
+                    main()
+
+            ```
+
+        # AI同士で戦わせたい時
+            `main.py`を以下のように修正します.
+
+
+            ```python
+                from game import *
+                
+                from ai import *
+                
+                def main():
+                    ai = AI()
+                
+                    game = Game(put_white_stone_func = ai.put_stone, put_black_stone_func = ai.put_stone)
+                
+                    game.loop()
+                
+                if __name__ == "__main__":
+                    main()
+
+            ```
+
+# 詳細
+______________________________________
+    # モジュール
+        console_graphics:
+            コンソールにおける背景色, 文字色に関する設定を行います.
+
+        othello:
+            オセロに関するオブジェクト群(石, 盤)
+
+        game:
+            ゲーム進行を行う
+
+        ai:
+            AI本体
+
+        game_tree:
+            ゲーム木
+
+        main:
+            プログラムの開始, モジュールの起動
+
+        ![モジュール関係](CURRENT_DIR/Images/module.png)
+    
+    # AIのカスタマイズ
+        AIというものは, 現在の盤面の状況から次の手を出力するものです.
+        現在の盤面の状況を引数として, 次の手を返す関数がAIとなります.
+        `main.py`においてgameオブジェクトを作成する際, 引数に石を置くときのコールバック関数を渡すことができます.
+        
+        コールバック関数の仕様は以下のとおりです.
+
+        [put_stone]
+        =================================
+            `def put_stone(self, turn, board, placeable_position_list)`
+
+            引数:
+                |-------------------------||--------------------|
+                | self                    || メンバ関数にするため |
+                | turn                    || 今のターン(黒 or 白) |
+                | board                   || 現在の盤 Boardオブジェクト |
+                | placeable_position_list || 次における場所 (x, y) タプル |
+            
+            返り値:
+                placeable_position_list のインデックス値もしくは, 
+                次に置く位置(x, y)
+        =================================
+        
+        あなたが確信するAIを実装してみましょう.
+
+        現在の盤面で置ける場所をランダムに選択するのも立派な?AIです.
+
+        ```python
+            
+            def random_put_stone(self, turn, board, placeable_position_list):
+                print("thinking...")
+                sleep(1)
+                return random.randrange(len(placeable_position_list))
+
+        ```
+
+

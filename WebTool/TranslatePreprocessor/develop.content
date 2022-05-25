@@ -1,0 +1,101 @@
+<Header>
+    <Parent> TranslatePreprocessor
+    <Title> 
+    <CreatedAt> 2020-06-15
+    <Tags> noindex
+    <Summary>
+        
+    </Summary>
+</Header>
+
+//入力//
+
+　　　　　<-厳しい　　　甘い->\\
+段落判定: <input id="paragraph-threshold" type="range" min=0 max=1 step=0.05 value=0.8 oninput="Update()" />\\
+
+<textarea id='input' style="width: 100%; resize: vertical;" rows=20 oninput="Update()"></textarea>
+
+↓
+
+//出力//
+
+<textarea id="output" style="width: 100%; resize: vertical;" rows=20></textarea>
+
+<script>
+var input = document.getElementById("input");
+var output = document.getElementById("output");
+var thresholdInput = document.getElementById("paragraph-threshold");
+
+function Update() {
+  var lines = input.value.replace(/\r\n|\r/g, "\n").split("\n");
+  if (lines.length <= 0) {
+    output.value = "";
+    return;
+  }
+  
+  var outText = "";
+  var alpha   = 0.5;
+  var thresh  = thresholdInput.value;
+  var thMax   = 1.8;
+
+  var lineLengthAvg = lines[0].length;
+
+  for (var i = 0; i < lines.length; i++) {
+    outText += lines[i];
+    
+    if(i + 1 < lines.length){
+      // 次の行があるとき
+      outText += " ";
+      
+      var nextLineLength = lines[i + 1].length;
+      if (nextLineLength >= lineLengthAvg * thMax) {
+        // 平均より多い行長さ. `-`による行の連続の可能性
+        nextLineLength /= Math.round(nextLineLength / lineLengthAvg);
+      }
+      lineLengthAvg += alpha * (nextLineLength - lineLengthAvg);
+      
+      var currentLineLength = lines[i].length;
+      if(currentLineLength >= lineLengthAvg * thMax) {
+        currentLineLength /= Math.round(currentLineLength / lineLengthAvg);
+      }
+      if (currentLineLength <= lineLengthAvg * thresh) {
+        outText += "\n\n";
+      }
+    }
+  }
+  output.value = outText;
+}
+
+function ClickLink(element) {
+    var link = element.getAttribute('data-url');
+    var text = encodeURIComponent(output.value);
+    link += text;
+    window.open(link, '_blank');
+}
+</script>
+
+↓
+
+<a data-url="https://translate.google.com/?view=home&op=translate&sl=en&tl=ja&text=" href="javascript:void(0);" onclick="ClickLink(this)">英→日Google翻訳</a><br />
+<a data-url="https://www.deepl.com/translator#en/ja/" href="javascript:void(0);" onclick="ClickLink(this)">英→日DeepL翻訳</a>
+
+
+更新履歴:
+    * 2020-06-16
+        ハイフン`-`による行の連続に対応
+
+    * 2020-06-10
+        翻訳ページに飛ぶ際, 翻訳内容が入力済みに変更
+        
+    * 2019-12-10
+        Release
+
+------
+[ref-1]: "[論文をGoogle翻訳にかける時に便利なWebApp「Shaper」を公開しました](http://dream-exp.hatenablog.com/entry/2017/07/22/shaper)". \
+    地力不足の地蔵からの脱却. (accessed: 2019/12/10)
+    
+[ref-2]: "[google翻訳のための英語論文(pdf文書)の文末整形ツール（javascript）](https://www.robotech-note.com/entry/2016/11/22/120020)". \
+    技術メモ集. (accessed: 2019/12/10)
+    
+[ref-3]: "[PDFをコピペした時の改行を消す方法](https://qiita.com/amata525/items/7cda251abb65acc972c8)". \
+    Qitta. (accessed: 2019/12/10)

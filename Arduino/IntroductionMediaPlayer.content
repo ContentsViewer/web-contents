@@ -1,0 +1,261 @@
+<Header>
+    <Parent> MediaPlayer
+    <Title> MediaPlayerの導入方法
+    <CreatedAt> 2016-12-8
+    <Tags> 
+    <Summary>
+        MediaPlayerの導入方法を説明します.
+        説明項目は以下のとおりです.
+        
+        * ダウンロード
+        * ファイルの説明
+        * 音楽再生モジュールの作成
+        * 再生モジュールとコントローラの接続
+        * コントローラ側の準備
+        
+        
+        
+        
+    </Summary>
+</Header>
+# ダウンロード
+    下記からダウンロードできます.
+
+    [Arduino-MediaPlayer](https://github.com/ContentsViewer/Arduino-MediaPlayer/)
+    
+# ファイルの説明
+    # MediaPLayer.ino
+        MediaPLayer本体
+
+    # WaveArduino.h
+        Waveファイルに対する処理を担当するヘッダファイル
+
+    # MediaPlayerController.h
+        'MediaPlayerController'本体
+
+    # MediaPlayerControllerTest.ino
+        'MediaPlayer', 'MediaPlayerController'の動作を確認するプログラム
+
+# 音楽再生モジュールの作成
+    # 概要
+        ここでは音楽再生モジュールの作成について説明します.
+        まず, 音楽再生モジュールについての説明します.
+        次に, 詳しい作成方法を説明します.
+
+    # 音楽再生モジュールにつて
+        音楽再生モジュールとは, 音楽を再生する機能のみを持つモジュールです.
+        もっと言うと, 音楽を再生する機能を持つプログラム―Arduinoではスケッチと呼ぶ―が書かれたArduinoです.
+        このモジュールを操作する―音楽を鳴らす, 止めるなど―ために, シリアル通信を用いて命令を送信する必要があります.
+
+        ![各モジュールの関係](CURRENT_DIR/Images/MediaPlayer/Img0.png)
+
+
+        音楽再生モジュールには二つのタイプがあります. 一つはPWM_MODE, もう一つは8bitModeです.
+
+        # PWM_MODE
+            音を出力するときPWMで出力します. 出力するピンはDP2です.
+            このピンに直接圧電スピーカを接続することで音が鳴ります.
+            あまりお勧めはできませんが, 直接コイルスピーカにも接続できます.
+
+            PWM信号をアナログ波形にしたい時はLPF(ローパスフィルタ)を通すことで実現できます.
+            動作周波数が16Mhzの場合, LPFは次のようになります.
+
+            ![動作周波数16MhzのときのLPF](CURRENT_DIR/Images/MediaPlayer/AudioOutput.png)
+
+
+            コンデンサC1はフィルムコンデンサ,
+            コンデンサC2はオーディオ用アルミ電解コンデンサにするとよいでしょう.
+            
+            8Mhzで動作するArduinoを使用する際, 上のLPFではPWM信号が完全にアナログ波形になりません.
+            周波数32khz以上のゲインを十分下げるようなLPFを別に作成する必要があります.
+
+        # 8BIT_MODE
+            DP0からDP7から音声信号を8bitで出力します.
+            DP0の信号は音声情報の1bit目に対応します.
+
+
+        このモジュールが使用するピンは以下のようになっています.
+
+        # 8BitModeの時
+
+            |[ピン配置(8BitModeの時)]
+            | ピン番号 | 名前 | 機能 |
+            |---------|-------|---------|
+            | 0       | DP0   | 音声情報の1bit目 |
+            | 1       | DP1   | 音声信号の2bit目 |
+            | 2       | DP2   | 音声信号の3bit目 |
+            | 3       | DP3   | 音声信号の4bit目 |
+            | 4       | DP4   | 音声信号の5bit目 |
+            | 5       | DP5   | 音声信号の6bit目 |
+            | 6       | DP6   | 音声信号の7bit目 |
+            | 7       | DP7   | 音声信号の8bit目 |
+            | 8       | StopPin | コントローラーから送られる再生停止信号を受信 |
+            | 9(変更可能) | StatePin | コントローラーに再生情報を送信 |
+            | 10      | CS    | SDカードのCSピンに接続 |
+            | 11      | MOSI  | SDカードのDIピンに接続 |
+            | 12      | MISO  | SDカードのDOピンに接続 |
+            | 13      | SCK   | SDカードのCLKピンに接続 |
+            | 14(変更可能) | RX   | コントローラーのTXピンに接続 |
+            | 15(変更可能) | TX   | 接続する必要はありません |
+
+        # PWMModeの時
+
+            |[ピン配置(PWMModeの時)]
+            | ピン番号 | 名前 | 機能 |
+            |---------|------|------|
+            | 3       | DP3  | 音声信号のPWM |
+            | 8       | StopPin | コントローラーから送られる再生停止信号を受信 |
+            | 9(変更可能) | StatePin | コントローラーに再生情報を送信 |
+            | 10 | CS | SDカードのCSピンに接続 |
+            | 11 | MOSI | SDカードのDIピンに接続 |
+            | 12 | MISO | SDカードのDOピンに接続 |
+            | 13 | SCK | SDカードのCLKピンに接続 |
+            | 14(変更可能) | RX | コントローラーのTXピンに接続 |
+            | 15(変更可能) | TX | 接続する必要はありません |
+
+    # 作成方法
+        # 周波数設定
+            使用するArduinoに応じてクロック周波数の設定を行ってください
+
+
+            ダウンロードしたファイル'MediaPLayer.ino'内の上のほうに以下のような記述があります.
+
+            ```cpp
+                //使用するマイコンのクロック周波数に従って変更
+                //#define _DEFINE_8MHz_
+                #define _DEFINE_16MHz_
+            ```
+            
+            16MHzのArduino―ArduinoUnoは16MHzです―を使う場合は以下のように設定してください.
+
+            ```cpp
+                //使用するマイコンのクロック周波数に従って変更
+                //#define _DEFINE_8MHz_
+                #define _DEFINE_16MHz_
+            ```
+            
+            8MHzのArduino―ArduinoUnoは16MHzです―を使う場合は以下のように設定してください.
+
+            ```cpp
+                //使用するマイコンのクロック周波数に従って変更
+                #define _DEFINE_8MHz_
+                //#define _DEFINE_16MHz_
+            ```
+
+        # Mode設定
+            使用したいModeに応じて設定を行ってください.
+            
+            ダウンロードしたファイル'MediaPLayer.ino'内の上のほうに以下のような記述があります.
+
+            ```cpp
+                //音声出力モードの選択
+                //PWMMode:
+                //  DP3から音声信号をPWMとして出力します
+                //
+                //8BitMode:
+                //  DP0からDP7から音声信号を8bitで出力します
+                //  DP0の信号は音声情報の1bit目に対応します
+                //#define _USE_PWM_MODE_
+                #define _USE_8BIT_MODE_
+            ```
+
+            8BitModeを使う場合は以下のように設定してください.
+
+            ```cpp
+                //音声出力モードの選択
+                //PWMMode:
+                //  DP3から音声信号をPWMとして出力します
+                //
+                //8BitMode:
+                //  DP0からDP7から音声信号を8bitで出力します
+                //  DP0の信号は音声情報の1bit目に対応します
+                //#define _USE_PWM_MODE_
+                #define _USE_8BIT_MODE_
+            ```
+
+            PWMModeを使う場合は以下のように設定してください.
+
+            ```cpp
+                //音声出力モードの選択
+                //PWMMode:
+                //  DP3から音声信号をPWMとして出力します
+                //
+                //8BitMode:
+                //  DP0からDP7から音声信号を8bitで出力します
+                //  DP0の信号は音声情報の1bit目に対応します
+                #define _USE_PWM_MODE_
+                //#define _USE_8BIT_MODE_
+            ```
+
+        # Pin設定
+            # StatePin
+                ダウンロードしたファイル'MediaPLayer.ino'内の上のほうに以下のような記述があります.
+
+                ```cpp
+                    //命令送信用Arudinoと接続するpinを設定
+                    //命令送信用Arudinoへ曲の再生情報を送信するときに使う
+                    #define STATE_PIN_MEDIA 9
+                ```
+
+                お好みで設定してください.
+
+            # シリアル通信ピン
+                ダウンロードしたファイル'MediaPLayer.ino'内の上のほうに以下のような記述があります.
+                
+                ```cpp
+                    //シリアル通信ピン
+                    #define SERIAL_PIN_RX 14
+                    #define SERIAL_PIN_TX 15
+                ```
+                
+                お好みで設定してください.
+
+            # 書き込み
+                上の設定を終えたらいよいよ書き込みます. ArduinoIDEで書き込みましょう. \
+                注意: \
+                書き込むファイルは'MediaPlayer.ino'です. 同じ階層に'WaveArduino.h'が存在する必要があります.
+
+# 音楽再生モジュールとの接続
+    # 概要
+        ここでは, 上で作成した音楽再生モジュールとコントローラを実際に接続します.
+        まづ, コントローラについて説明します. 次に接続方法について説明します.
+
+    # コントローラーとは
+        コントローラーとは, 音楽再生モジュールを操作するものです.
+        コントローラーとなったArduinoは音楽の再生と停止のみの機能を持つわけではありません.
+        音楽の再生機能を新たに得るという意味です. 例えば, グラフィック液晶を用いてゲーム機をつくたっとします.
+        ただし, そのゲーム機は音を鳴らすことができません. そこでこのコントローラーを導入すると, 音楽を再生する機能を得ます.
+        
+        ![コントローラー概念図](CURRENT_DIR/Images/MediaPlayer/Img1.png)
+
+    # ピン接続
+        コントローラーは音楽再生モジュールと次のように接続します.
+
+        |[ピン接続表]
+        | ピン番号 | 名前 | 機能 |
+        |---------|------|-----|
+        | 任意    | stopPin | 音楽再生モジュールのStopPinに接続 |
+        | 任意    | statePin | 音楽再生モジュールのStatePinに接続 |
+        | TX      | TX | 音楽再生モジュールのRXピンに接続 |
+        
+# コントローラー側の準備
+    # 新しくスケッチファイルを作る
+
+    # 同じ階層に'MediaPlayerController.h'をコピー&ペースト
+
+    # includeおよび初期設定
+        MediaPlayerControllerを使用するために必ず以下をかく必要があります.
+
+        ```cpp
+            //インクルード
+            #include "MediaPlayerController.h"
+            //インスタンス生成
+            MediaPlayerController mediaPlayerCtrl;
+            void setup() {
+                //設定; DP12をstopPinに設定; DP13をstatePinに設定
+                mediaPlayerCtrl.Begin(12, 13);
+            }
+            void loop() {
+            }
+        ```
+

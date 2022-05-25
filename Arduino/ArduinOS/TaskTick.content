@@ -1,0 +1,259 @@
+<Header>
+    <Parent> TaskScheduler
+    <Title> システム割り込み
+    <CreatedAt> 2017-9-5
+    <Tags> タイマ, C言語
+    <Summary>
+        OSがタスクの切り替えを行うためには, 定期的にOSが現在実行中のタスクの処理
+        を中断してタスク切り替え処理を行う必要があります.
+        
+        ここでは, このようなOSが定期的に割り込み処理を行う方法を説明します.
+        また, 割り込み時の処理について説明します.
+        
+    </Summary>
+</Header>
+
+# 割り込み設定
+    割り込みは, AVRマイコンに搭載されているタイマー割り込み機能を用いることで実現します.
+    使用するタイマーはタイマー0にします.
+    ここでは, このタイマー割り込みの設定を行います.
+    まず, タイマー0に関する簡単な説明をし, 具体的な設定方法を説明します.
+
+    # タイマー0について
+        タイマー0は, 0から255までカウントできるものです.
+        タイマー0には, 二つの出力―OCR0A, OCR0B―を持ち, これらのピンはそれぞれ
+        ポートDの6, 5番ピンに接続されています(Unoの場合, デジタルピンの6, 5番ピンを指します).
+        これらのピンから, タイマーを使用した様々な出力(PWMなど)を出すことができます.
+        加えて, タイマーのカウントがオバーフローしたときに割り込み関数を呼び出すこともできます
+        (今回のシステム割り込みではこの機能を使います).
+
+    # タイマー0の設定
+        タイマー0は, 二つのレジスタ―TCCR0A(TC0 Control Register A), TCCR0B―で設定を行います.
+        これら二つのレジスタの詳細は以下のとおりです.
+        
+        |[TCCR0A]
+        |-------||---------|-------|--------|---------|------|----|------|-------|
+        | ビット || 7      | 6      | 5      | 4      | 3    | 2  | 1     | 0     |
+        | 名前   || COM0A1 | COM0A0 | COM0B1 | COM0B0 | NON | NON | WGM01 | WGM00 |
+
+        
+        |[TCCR0B]
+        |-------||--------|-------|-----|-----|------|-------|------|-------|
+        | ビット || 7     | 6     | 5   | 4   | 3     | 2    | 1     | 0   |
+        | 名前   || FOC0A | FOC0B | NON | NON | WGM02 | CS02 | CS01 | CS00 |
+
+        COM0A1(Compare Output Mode for Channel A), COM0A0および, COM0B1, COM0B0は, 出力OCR0A, OCR0Bの挙動を設定するフラグです.
+        今回のシステム割り込みでは, 何も出力しないのでこれらフラグを立てません(つまり, これらのビットを0にします.).
+        何もフラグを立てない場合, 出力OCR0A, OCR0Bは出力ピンと切り離されます.
+
+        FOC0A(Force Output Compare A), FOC0Bは, 強制コンペアマッチを行うかどうかのフラグです.
+        今回のシステム割り込みでは, この機能を利用しないのでこれらフラグを立てません.
+
+        WGM02(Waveform Generation Mode), WGM01, WGM00は, タイマーのモードを設定するフラグです.
+        今回のシステム割り込みで設定するモードですが,
+        Arduinoの標準関数analogWrite()―PWMを出力する関数―は, 内部でタイマー0の高速PWMの機能を用いる必要があるため,
+        高速PWMモード(Top = 0xFF)に設定します.
+        WGMの役割は以下のとおりです.
+
+        |[WGMの役割]
+        | Mode | WGM02 | WGM01 | WGM00 | タイマーモード | Top |
+        |------|-------|-------|-------|---------------|-----|
+        | 0    | 0     | 0     | 0     | Normal        | 0xFF |
+        | 1    | 0     | 0     | 1     | 位相基準PWM    | 0xFF |
+        | 2    | 0     | 1     | 0     | CTC           | OCRA |
+        | 3    | 0     | 1     | 1     | 高速PWM       | 0xFF |
+        | 4    | 1     | 0     | 0     | 予約          |      |
+        | 5    | 1     | 0     | 1     | 位相基準PWM    | OCRA |
+        | 6    | 1     | 1     | 0     | 予約           |      |
+        | 7    | 1     | 1     | 1     | 高速PWM        | OCRA |
+        
+        
+        CS2, CS1, CS0は分周を設定するフラグです.
+        通常, タイマーが一つカウントを進める周期はCPUの動作周波数と一致します.
+        CPUの動作クロックが一つ進むのと同時にカウンタも一つ進みます.
+        このカウンタの速度を調整するのがこの分周の役割です.
+        分周1/8の場合は, 動作クロック8つ分でカウンタを一つ進めます.
+        分周1024/1の場合は, 動作クロック1024個分でカウンタを一つ進めます.
+        CSと設定内容の関係は以下のとおりです.
+
+        |[CSと設定内容の関係]
+        | CS02 | CS01 | CS00 | 説明        |
+        |------|------|------|-------------|
+        | 0    | 0    | 0    | タイマー停止 |
+        | 0    | 0    | 1    | 分周なし     |
+        | 0    | 1    | 0    | 1/8分周     |
+        | 0    | 1    | 1    | 1/64分周    |
+        | 1    | 0    | 0    | 1/256分周   |
+        | 1    | 0    | 1    | 1/1024分周  |
+        | 1    | 1    | 0    | 外部クロック使用. 立ち下りでクロック  |
+        | 1    | 1    | 1    | 外部クロック使用. 立ち上がりでクロック  |
+        
+
+        分周の設定ですが, 今回のOSは1秒間に1000回システム割り込みを行うように設定することにします.
+        ArduinoUNO, Megaともに動作周波数が16Mhz, また, タイマー0の最大カウント数が256のことから,
+        分周なしの場合の割り込み周波数は(16Mhz / 256) = 62.5khzとなります.
+        これを目標の1khzにするためには, (62.5khz / 1khz) = 62.5分周である必要があります.
+        ただ, 62.5分周は設定できないためこれに近い64分周を採用します.
+
+        以上を踏まえ, タイマー0による割り込み設定のコードは以下のようになります.
+
+        <pre class="brush: cpp;">
+// 
+// 分周: 64
+// Timerトップ値: 255
+//
+// クロック周波数ごとのTimer割り込み周波数:
+//  クロック周波数: 16Mhz
+//   Timer割り込み周波数: 16Mhz / (256 * 64) = 976.5625 Hz
+//
+// Setup timer 0 compare match A to generate a tick interrupt.
+static void SetupTimerInterrupt( void )
+{
+    // On the ATmega168, timer 0 is also used for fast hardware pwm
+    // (using phase-correct PWM would mean that timer 0 overflowed half as often
+    // resulting in different mills() behavior on ATmega8 and ATmage168)
+#if defined(TCCR0A) && defined(WGM01)
+    sbi(TCCR0A, WGM01);
+    sbi(TCCR0A, WGM00);
+#endif
+
+    // set timer 0 prescale factor to 64
+#if defined(__AVR_ATmega128__)
+    // CPU spwcific: different values for the ATmega128
+    sbi(TCCR0, CS02);
+
+#elif defined(TCCR0) && defined(CS01) && defined(CS00)
+    // This combination is for the standard atmega8
+    sbi(TCCR0, CS01);
+    sbi(TCCR0, CS00);
+
+#elif defined(TCCR0B) && defined(CS01) && defined(CS00)
+    // This combination is for the standard 168/328/1280/2560
+    sbi(TCCR0B, CS01);
+    sbi(TCCR0B, CS00);
+
+#elif defined(TCCR0A) && defined(CS01) && defined(CS00)
+    // This combination is for the standard __AVR_ATmega645__ series
+    sbi(TCCR0A, CS01);
+    sbi(TCCR0A, CS00);
+#else
+    #error Timer 0 prescale factor 64 not set correctry
+#endif
+
+    // enable timer 0 overflow interrupt
+#if defined(TIMSK) && defined(TOIE0)
+    sbi(TIMSK, TOIE0);
+#elif defined(TIMSK0) && defined(TOIE0)
+    sbi(TIMSK0, TOIE0);
+#else
+    #error Timer 0 overflow interrupt not set correctly
+#endif
+}
+        </pre>
+
+        上のコードを見ると分かりますが, 各レジスタ設定でそのレジスタ, そして設定するフラグが存在するか確認しています.
+        これは, マイコンによって存在するレジスタ, フラグが異なるためです. 各マイコンに応じた設定がなされております.
+        最後のレジスタTIMSK0の設定では, TOIE0フラグを立てることでオバーフローによる割り込みを有効にしています
+        (これをしなかった場合は, 割り込みが行われません).
+
+# 割り込み時処理
+    以上までで, 割り込みの設定が終わりました. ここからは, 実際に割り込み時の処理について説明していきます.
+
+    割り込み関数内に, 割り込み処理を書くのですが, OSにプリエンプション機能を持たせるか持たせないかで異なります.
+    プリエンプション機能を持たせる場合, 次の処理を行います.
+
+
+    * コンテキストの保存
+    * システム時間の更新
+    * コンテキストの切り替え
+    * コンテキストの復帰
+    
+    一方, プリエンプション機能を持たせない場合は, 次の処理のみ行います.
+
+    * システム時間の更新
+    
+    [プリエンプション]
+    ===========================================================
+        プリエンプションとは, OSがタスクの切り替えを自動に行うことを言います.
+        詳しく言うと, OSが現在実行中のタスク処理を一時停止にし, 別のタスク処理を実行します.
+        プリエンプション機能を有効にすることで, ユーザ側はタスク切り替えに関する処理を省ける利点がありますが,
+        タスクの競合に注意する必要があります.
+
+    ===========================================================
+    
+
+    システム時間の更新では, システム時間を1tick進めると同時に, ブロックされているタスクの有効化を行います.
+
+    コンテキストの保存では, 現時点でのCPUの状態を保存します.
+    こうすることで, 一時停止された処理を復帰することができます.
+
+    コンテキストの切り替えでは, 実行するタスクを切り替えます.
+    ここで, 実行中のタスクより優先度の高いタスクがあれば, この優先度の高いタスクに切り替えられます.
+
+    コンテキストの復帰では, 休止される前のCPUの状態に復帰します.
+
+    以上を踏まえて, 割り込み時の処理は以下のようになります.
+
+
+
+    <pre class="brush: cpp;">
+            
+//
+// Context switch function used by the tick. This must be identical to
+// PortYield() from the call to TaskSwitchContext() onwards.
+// The only difference from PortYield() is the tick is incremented as the 
+// call comes from the tick ISR.
+void PortYieldFromTick(void) __attribute__((naked));
+void PortYieldFromTick(void)
+{
+    PortSaveContext();
+    TaskIncrementTick();
+    TaskSwitchContext();
+    PortRestoreContext();
+
+    asm volatile ("ret");
+}
+
+
+#if CONFIG_USE_PREEMPTION == 1
+// Tick ISR(Interrupt Service Routine) for preemptive scheduler. We can use a naked attribute as
+// the context is saved at the start of PortYieldFromTick(). The tick count
+// is incremented after the context is saved.
+    #if defined(__AVR_ATtiny24__) || defined(__AVR_ATtiny44__) || defined(__AVR_ATtiny84)
+        void TIM0_OVF_vect(void) __attribute__((signal, __INTR_ATTRS, naked));
+        void TIM0_OVF_vect(void)
+    #else
+        void TIMER0_OVF_vect(void) __attribute__((signal, __INTR_ATTRS, naked));
+        void TIMER0_OVF_vect(void)
+    #endif
+    {
+        PortYieldFromTick();
+        asm volatile("reti");
+    }
+
+#else
+// Tick ISR(Interrupt Service Routine) for the cooperative scheduler. All this does is increment
+// the tick count. We do't need to switch context, this can only be done by manual calls to TaskYield()
+    #if defined(__AVR_ATtiny24__) || defined(__AVR_ATtiny44__) || defined(__AVR_ATtiny84)
+        void TIM0_OVF_vect(void) __attribute__((signal, __INTR_ATTRS));
+        void TIM0_OVF_vext(void)
+    #else
+        void TIMER0_OVF_vect(void) __attribute__((signal, __INTR_ATTRS));
+        void TIMER0_OVF_vect(void)
+    #endif
+    {
+        TaskIncrementTick();
+    }
+#endif
+</pre>
+
+        <p>
+            割り込みの処理を書く関数の名前は"TIMER0_OVF_vect()"です.
+            この関数名内に書かれた処理が, 割り込み時に実行されることになります.
+        </p>
+        <pre class="brush: cpp;">
+void TIMER0_OVF_vect(void)
+{
+    //ここに割り込みで行いたい処理を書く.
+}
+    </pre>

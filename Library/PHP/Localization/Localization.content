@@ -1,0 +1,126 @@
+<Header>
+    <Parent> ../PHP
+    <Title> PHPでローカリゼーション(多言語化)に対応する
+    <CreatedAt> 2020-05-06
+    <Tags> PHP, ライブラリ, ローカリゼーション, ダウンロード
+    <Summary>
+        PHPアプリケーションでローカリゼーション(多言語化)に対応できるライブラリ
+        
+    </Summary>
+</Header>
+# はじめに
+    アプリケーションで, 特定の国のユーザを対象とするときは, 一つの言語で問題ありませんが,
+    複数の国を対象とするときは, アプリケーションで使用している言語を切り替える仕組みが必要です.
+    
+    本稿では, //PHPアプリケーションでローカリゼーションに対応できるライブラリ//を紹介します.
+    
+    このライブラリは, //言語パックをファイルごとに分けられる//ため, 
+    すべての言語パックを読み込まず, //メモリを節約し不要なファイルの読み込みを行いません//.
+
+# 使い方
+    # 言語パックの用意
+        `Locales`フォルダ内に対応したいロケール名のフォルダを作成します.
+        例で, 日本語に対応してみましょう. 日本語のロケール名を`ja`とします.
+        
+        + Locales
+            + ja
+        
+        `ja`フォルダ内に`ja.json`を用意し, 内部に以下を書き込みます.
+        
+        + Locales
+            + ja
+                + ja.json
+        
+        ```
+            {
+                "languageName": "Japanese",
+                "localizedLanguageName": "日本語"
+            }
+        ```
+        
+        翻訳が書かれた言語パック`translations.core.json`を用意します.
+        
+        + Locales
+            + ja
+                + ja.json
+                + translations.core.json
+        
+        言語パック`translations.core.json`内に, keyと翻訳内容のセットを並べていきます.
+        
+        ```
+            {
+                "clear": "消去",
+                "login": "ログイン",
+                "logout": "ログアウト",
+                "title": "タイトル",
+                "tags": "タグ",
+                "ncontents": "{0}件のコンテンツ"
+            }
+        ```
+        
+        基本は以上ですが, 言語パックを分けたい時は, 
+        `translations.{namespace}.json`で分けていきます.
+        例えば, 名前空間`setup`の場合は, `translations.setup.json`を用意し, 翻訳内容を書き込みます.
+        
+        
+        + Locales
+            + ja
+                + ja.json
+                + translations.core.json
+                + translations.setup.json
+        
+        ```
+            {
+                "setup": "セットアップ",
+            }
+        ```
+    # ローカライズの方法
+        `Localization.php`を読み込みます.
+        
+        ```php
+            require_once('/Localization.php');
+        ```
+        
+        ロケールを設定します.
+        
+        ```php
+            Localization\SetLocale('ja');
+        ```
+        
+        ローカライズします.
+        
+        ```php
+            Localization\Localize('login', 'login');
+            
+            // 上の言語パックの場合これは, "ログイン"が出力されます.
+            // ロケールが設定されていない, 翻訳keyが見つからない場合は, "logout"が返ります.
+        ```
+        
+        
+        翻訳内容内に`{n}`がある場合は, `Localize()`の第三引数以降が代入されていきます.
+        
+        ```php
+            Localization\Localize('ncontents', '{0} contents', 2);
+            
+            // この結果は, "2件のコンテンツ"です.
+        ```
+        
+        
+        ある名前空間にあるkeyの指定は, `{namespace.key}`で指定します.
+        
+        ```php
+            Localization\Localize('setup.setup', 'Setup');
+            
+            // この結果は, "セットアップ"です.
+        ```
+        
+
+        
+# ダウンロード
+    <https://github.com/ContentsViewer/ContentsPlanet/blob/master/Module/Localization.php>
+    
+    [::NOTE]
+    =======
+        Localizationは, [ContentsPlanet(コンテンツ管理システム)](ROOT_URI/Master/ContentsPlanet/ContentsPlanet)
+        に導入され, メンテナンスは ContentsPlanet プロジェクト内で行われることになりました.
+    =======

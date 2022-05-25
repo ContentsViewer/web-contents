@@ -1,0 +1,206 @@
+<Header>
+    <Parent> ../Troubleshooting
+    <Title> シリアルモニタを開くまでArduino-Python間のシリアル通信のデータ破損
+    <CreatedAt> 2020-07-14
+    <Tags> シリアル通信, Arduino, Python
+    <Summary>
+        //ArduinoとPython間のシリアル通信//で, 
+        Arduino側から送られたシリアルデータをPythonの`pySerial`モジュールで読み込むと,
+        //破損したデータ-予想していないデータ-を受信//する.
+        だが, //一度Arduinoのシリアルモニタでデータを確認すると正常に受信//できており,
+        //それ以降, pythonの方でも正常に受信//できる.
+        
+        ![pythonで受信. 予期しないデータが受信されている](CURRENT_DIR/Images/corruption.jpg)
+        
+        本稿では, 上記の問題の原因と解決方法について述べる.
+        
+    </Summary>
+</Header>
+# 症状
+    環境:
+        * Arduino
+            * Arduino UNO
+            * Arduino IDE v1.8.10
+        * Windows 10 ビルド 18363.900
+        * WSL1 Ubuntu -18.04
+        * python環境
+            * pipenv
+        
+    まず, //ArduinoからPythonアプリにシリアルデータを送信するプログラム//を作成する.
+    
+    SerialTest:
+        ```cpp
+            void setup() {
+              Serial.begin(19200);
+            }
+            
+            void loop() {
+              Serial.println(millis());
+              delay(1000);
+            }
+        ```
+        
+        一秒ごとに現在時間(ms)を送信するだけの単純なプログラムである.
+    
+    この段階で, //シリアルモニタを確認すると, 正常に取れている//ことがわかる.
+    
+    ![シリアルモニタでの確認. 正常に一秒ごと現在時間が送られている](CURRENT_DIR/Images/monitor.jpg)
+    
+    次に, //受信するpythonコード//を作成する.
+    
+    serial-test.py:
+        ```py
+            import serial
+            import time
+            
+            ser = serial.Serial()
+            ser.baudrate = 19200
+            ser.port = '/dev/ttyS9'
+            ser.open()
+            
+            print('Serial warming up...')
+            time.sleep(2)
+            
+            while True:
+                line = ser.readline()
+                print(line)
+        ```
+        
+        ただシリアルデータを受信するだけの単純なプログラムである.
+        多くのサイト^[serial-sample-1]^[serial-sample-2]^[serial-sample-3]^[serial-sample-4]^[serial-sample-5]
+        で挙げられているサンプルコードをもとに作成した.
+    
+    ここで, //いったんUSBを差しなおす//.
+    
+    `serial-test.py`を実行すると, //予期しないデータが受信//される.
+    
+    ```
+        Serial warming up...
+        b'\x10\n'
+        b'\x08\x01\x19\n'
+        b'\n'
+        b'\n'
+        b'\x08\x01\x11\n'
+        b'\n'
+        b'\n'
+        b'\n'
+        b'\x08\x01\x13\x02\x02\x02\n'
+        b'\x08\x01\x13\n'
+        b'\n'
+        b'\n'
+        b'\n'
+        b'\x08\x01\x15\x02\x02\x02\n'
+        b'\x08\x01\x16\x02\x02\x02\n'
+    ```
+    
+    ![pythonで受信. 予期しないデータが受信されている](CURRENT_DIR/Images/corruption.jpg)
+    
+    そこで, //もう一度シリアルモニタを立ち上げ//, 正常に送られているのを確認後, `serial-test.py`を実行すると,
+    //正常にデータをとることができる//.
+    
+    
+    ```
+        Serial warming up...
+        b'13093422\r\n'
+        b'1394422\r\n'
+        b'0\r\n'
+        b'999\r\n'
+        b'1999\r\n'
+        b'3000\r\n'
+        b'3999\r\n'
+        b'5000\r\n'
+        b'6000\r\n'
+        b'7001\r\n'
+    ```
+    
+    ![シリアルモニタで確認後pythonで受信. 正常にデータが受信されている](CURRENT_DIR/Images/after-monitor.jpg)
+    
+# 原因
+    結果から言うと, 明確にわからない.
+    
+    消去法で考えていくと,
+    
+    * ボーレートの確認
+        -> 同じである
+    * ポートの確認
+        -> 受信はしている
+    * `ser`作成後の`ser.flushInput()` `ser.flushOutput()` の実行
+        -> 変化なし
+        
+        参考:
+            >>>
+                Try to insert ser.flushInput() and ser.flushOutput() after ser creation.
+            >>>
+            ["Corrupted data with serial connection"](https://stackoverflow.com/questions/40951658/corrupted-data-with-serial-connection). stack overflow. (accessed at 2020-7-14)
+            
+    * バイナリで送っている
+        -> `Serial.println`を使っているので, 文字である
+        
+        参考:
+            ["PySerial: Data corrupted when reading from serial port"](https://stackoverflow.com/questions/32676066/pyserial-data-corrupted-when-reading-from-serial-port). stack overflow. (accessed at 2020-7-14)
+    
+    
+    * Arduinoのリセット(ブートローダの再起動)を待っていない
+        -> 待っている
+            >>>
+                ```py
+                print('Serial warming up...')
+                time.sleep(2)
+                ```
+            >>>
+        参考:
+            ["Problem with Pyserial"](https://forum.arduino.cc/index.php?topic=585676.0). Arduino Forum. (accessed at 2020-7-14)
+    
+# 対処
+    問題を多く検索していき, 最終的にこちらの解決策が有効だった.
+    
+    ["Connection using pyserial doesn't work properly"](https://forum.arduino.cc/index.php?topic=91291.0). Arduino Forum. (accessed at 2020-7-14)
+    
+    このポストによると,
+    * `pySerial`の//パリティオプション//をいじった結果, `serial.PARITY_ODD`を選択すると文字が違って変だとしても, ある程度のコミュニケーションが取れた.
+    * デフォルト値（`serial.PARITY_NONE`）に戻すと、すべてが正常に機能する.
+    * なぜだかわからない 🥺
+    * コードに次のものを入れると解決
+        ```py
+            ser.parity = serial.PARITY_ODD
+            ser.open()
+            ser.close()
+            ser.parity = serial.PARITY_NONE
+            ser.open()
+        ```
+    
+    上記に従って, `serial-test.py`を変更
+    
+    serial-test.py:
+        ```py
+            import serial
+            import time
+            
+            ser = serial.Serial()
+            ser.baudrate = 19200
+            ser.port = '/dev/ttyS9'
+            ser.parity = serial.PARITY_ODD
+            ser.open()
+            ser.close()
+            ser.parity = serial.PARITY_NONE
+            ser.open()
+            
+            print('Serial warming up...')
+            time.sleep(2)
+            
+            while True:
+                line = ser.readline()
+                print(line)
+        ```
+    
+    //シリアルモニタを開かなくても, 正常に受信//できた.
+    
+    ![正常に受信できている](CURRENT_DIR/Images/work-fine.jpg)
+    
+------
+[serial-sample-1]: ["【Python入門】pySerialでシリアル通信を実行する方法を解説"](https://www.sejuku.net/blog/69511). Samurai Blog. (accessed at 2020-7-14)
+[serial-sample-2]: ["Pythonでシリアル通信"](https://qiita.com/kosystem/items/0023cfee941fdf099087). Qitta. (accessed at 2020-7-14)
+[serial-sample-3]: ["PythonのpySerialでシリアル通信する方法を現役エンジニアが解説【初心者向け】"](https://techacademy.jp/magazine/24674). TECH ACADEMY. (accessed at 2020-7-14)
+[serial-sample-4]: ["Arduino Python Communication Via USB"](https://www.instructables.com/id/Arduino-Python-Communication-via-USB/). instructables circuits. (accessed at 2020-7-14)
+[serial-sample-5]: ["Python Datalogger - Using pySerial to Read Serial Data Output from Arduino"](https://makersportal.com/blog/2018/2/25/python-datalogger-reading-the-serial-output-from-arduino-to-analyze-data-using-pyserial). \
+    Maker Portal. (accessed at 2020-7-14)

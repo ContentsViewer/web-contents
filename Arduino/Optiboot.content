@@ -1,0 +1,71 @@
+<Header>
+    <Parent> SketchWriteWithoutComputer
+    <Title> Optibootについて
+    <CreatedAt> 2016/12/8
+    <Tags> ブートローダ
+    <Summary>
+        Optibootに関して簡単に説明します.
+        説明項目は以下のとおりです.
+        
+        * optibootとは
+        * optibootの起動方法
+        * optibootにコマンドを送る
+        * optibootにスケッチを送る
+    </Summary>
+</Header>
+
+# optibootとは
+    optibootとは、Arduinoが用意しているブートローダーです。
+    このブートローダー"optiboot"が書き込まれているArduinoはArduinoUnoです。
+    optibootは通信速度の点で従来のブートローダの二倍、ブートローダーサイズの点で二分の一倍になっています。
+    このoptibootとパソコンが通信することでマイコンにスケッチを書き込むことができます。
+
+# 起動方法
+    optibootを起動する方法はArduinoに三回ほどリセットをかけることです。
+    Arduinoにリセットをかけるとまずoptibootが起動します。
+    opribootが起動した後optibootはシリアルデータが届いているか確認します。
+    一定時間シリアルデータが来なかったときoptibootは自動で終了しマイコンに書き込まれたスケッチが実行されます。
+        
+# optibootにコマンドを送る
+    コマンドとはoptibootがあらかじめ用意しているものです。
+    用意されているコマンドとしてメモリのオフセット設定、データの書き込み、アプリの実行などがあります。
+    このコマンドを使用してパソコンはArduinoにスケッチを書き込んでいます。
+    
+    optibootにコマンドを送る流れは次の通りです。
+
+    # コマンドのタグ
+        optibootにコマンドを送る際必ずそのコマンドに関連付けられたタグを送信する必要があります。以下がその一覧です。<br />
+        <br />
+        STK_LEAVE_PROGMODE(0x51; 'Q'): プログラムの実行<br />
+        STK_GET_PARAMETER(0x41; 'A'): optibootのパラメータ取得<br />
+        STK_LOAD_ADDRESS(0x55; 'U'): メモリのオフセット値送信<br />
+        STK_PROG_PAGE(0x64; 'd'): HexDataの送信<br />
+             
+    # コマンドの内容
+        コマンドの内容とは各コマンドが送るべきデータそのものです。
+        メモリのオフセット送信コマンドならメモリのオフセット値、HexData送信コマンドならHexDataそのものをさします。
+    
+    # CRC_EOP(0x20; Space)
+        これを送らなければそのコマンドは無効にされます。
+        同時にoptibootは自動的に終了しArduinoに書き込まれているスケッチを実行します。<br />
+        このCRC_EOPを認識しそのコマンドを有効にすることをVerifySpaceと呼びます。
+
+# optibootにスケッチを送る
+    optibootにスケッチを送る流れは次の通りです。
+
+    # optibootを起動する
+        Arduinoに三回ほどリセットをかけることでoptibootが起動します
+
+    # optibootが起動しているか確認する
+        CRC_EOP(0x20; Space)を等間隔に送りつづけます。
+        するとoptibootはSTK_INSYNC(0x14; Space(UnicodeではSpace)), STK_OK(0x10)を返します。
+
+    # メモリをセットする
+        optibootに送信するコマンドは、STK_LOAD_ADDRESS, アドレスの下位ビット, アドレスの上位ビット, CRC_EOPです。
+        セットしたメモリからHexFileが書き込まれます。
+
+    # データを送信する
+        optibootに送信するコマンドは、STK_PROG_PAGE, '0', データのサイズ, '70', HexData, CRC_EOPです。
+
+    # スケッチを実行します
+        optibootに送信するコマンドは、STK_LEAVE_PROGMODE, CRC_EOPです。

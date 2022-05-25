@@ -1,0 +1,23 @@
+<Header>
+    <Parent> 
+    <Title> リダイレクト
+    <CreatedAt> 2019/04/27
+    <Tag> 
+    <Summary>
+        
+        [:: WARNING]
+        ============
+            このコンテンツは移動しています.
+            5秒後に対象のコンテンツに移動します.
+        ============
+        
+        <script>
+        setTimeout("redirect()", 5000);
+        
+        function redirect(){
+            window.location.replace('./?content=.%2FMaster%2FContents%2FShellScript%2FSendMail');   
+        }
+        
+        </script>
+    </Summary>
+</Header>

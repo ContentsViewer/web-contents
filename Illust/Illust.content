@@ -1,0 +1,10 @@
+<Header>
+    <Parent> ../Root
+    <Title> イラスト
+    <CreatedAt> 2019-10-19
+    <Tags> 
+    <Summary>
+        
+    </Summary>
+    <Child> Note/Note
+</Header>

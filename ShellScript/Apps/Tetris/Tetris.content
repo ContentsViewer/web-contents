@@ -1,0 +1,78 @@
+<Header>
+    <Parent> ../Apps
+    <Title> shtris
+    <CreatedAt> 2020-05-21
+    <Tags> ゲーム, テトリス
+    <Summary>
+        bashでもなく, zshでもなく, cshでもなく, 
+        純粋なshで動く, テトリスの公式ガイドラインにそった
+        テトリスを作りたい.
+        
+        ![](CURRENT_DIR/Images/shtris.jpg)
+    </Summary>
+</Header>
+# このゲームについて
+    純粋なshell環境で動作するテトリス ゲーム です.
+    
+    2009年度版のテトリスのガイドラインにそって製作しました.
+    
+    URL: [Tetris Guideline. Tetris Wiki. accessed at 2020-05-23](https://tetris.fandom.com/wiki/Tetris_Guideline)
+
+    単純そうで奥の深いTetris の仕組み や, ShellScript でここまでできる可能性を知ってもらえると幸いです.
+    
+# システム
+    実装したシステム:
+        * Hold Queue
+        * Next Queue
+        * Random Generation with Bag System
+        * Score System
+        * Variable Goal System
+        * T-Spin / Mini T-Spin
+        * Back-to-Back Bonus
+        * Extended Placement / Infinite Placement / Classic Lock Down
+        * Super / Classic Rotation System
+        * Changing the Starting Level 
+        * Ghost Piece
+
+ 
+# ダウンロード
+    <https://github.com/ContentsViewer/shtris>
+
+# 遊び方
+    ```bash
+        $ git clone https://github.com/ContentsViewer/shtris.git
+        $ cd shtris
+        $ ./shtris
+    ```
+
+# 動作対応環境
+    
+    |------------|---|
+    | Linux   sh | ✔ |
+    | FreeBSD sh | ✔ |
+    | BusyBox sh | ✔ |
+    | Solaris sh | ✔️ (Almost Works) |
+
+
+# 感想
+    bashと比較して文法やコマンドの機能が制限されており, 
+    複数のコマンドで足りない機能を補う必要があった.
+    そのため, 同じ機能でもコマンドの実行数が多くなったり,
+    コード設計が複雑になりやすかった.
+    
+    使えないコマンドオプションで, `read -s -n 1`があったのだが,
+    これは, エコーバックなしで, キーボードから一文字取得という機能を持つ.
+    ゲームのキーボード操作に非常に適していたのだが, sh で使えなかった :-(
+    
+    Solaris sh にも対応したかったが, フレーム速度の問題で断念した.
+    Solaris では, 算術式展開`$(( ))`が使用できなく代わりに, `expr`コマンドを使用しなければならないのだが,
+    このコマンドが致命的に遅く, フレームの速度が十分でなかった.
+    
+    
+    どうしてもゲームのフレーム更新速度がbashと比較して遅くなりやすく, 
+    無駄な処理は致命的で, その緊張感が面白かった :-)
+    
+    完成に近くなるにつれて, デバッグのつもりが遊んでしまい, 
+    開発速度が遅くなるのを何とかしたい.
+    
+    

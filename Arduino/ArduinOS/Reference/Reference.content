@@ -1,0 +1,612 @@
+<Header>
+    <Parent> ../ArduinOS
+    <Title> リファレンス
+    <CreatedAt> 2020-05-26
+    <Tags> 
+    <Summary>
+        関数一覧
+    </Summary>
+</Header>
+# InitMainLoopPriority
+    `InitMainLoopPriority(priority)`
+    
+    mainLoopの優先度を設定します.
+    これは, setup()関数内でのみ有効です.
+    
+    Params:
+        |----------||---|
+        | priority || タスク優先度. \
+                      タスク優先度の種類は合計三つです. \
+                      次のマクロを使用してください. `LOW_PRIORITY`, `NORMAL_PRIORITY`, `HIGH_PRIORITY` |
+    
+    Usage:
+        ```c
+            void setup() {
+                InitMainLoopPriority(HIGH_PRIORITY); // loop タスクの優先度をHIGH_PRIORITYに設定
+            }
+            
+            void loop() {
+                
+            }
+        ```
+# InitMainLoopStackSize
+    `InitMainLoopStackSize(stackSize)`
+    
+    mainLoopのスタックサイズを設定します.
+    これは, setup()関数内でのみ有効です.
+    
+    Params:
+        |---------||-----|
+        | stackSize || タスクに割り当てられるスタックサイズ. \
+                       通常は, マクロ`CONFIG_MINIMAL_STACK_SIZE`の値です. \
+                       増やしたい場合は, `CONFIG_MINIMAL_STACK_SIZE * 2` などとする. |
+    
+    Usage:
+        ```c
+            void setup() {
+                // loop タスクのスタックサイズを通常の二倍に設定
+                InitMainLoopStackSize(CONFIG_MINIMAL_STACK_SIZE * 2);
+            }
+            
+            void loop() {
+                
+            }
+        ```
+        
+# TaskLoop
+    `TaskLoop(name)`
+    
+    タスクコードを書く前の宣言マクロ
+    
+    このマクロはタスクハンドル, タスクコード関数など, Kernelに渡すための
+    関数などを作成します.
+    
+    このマクロを書いてから, 実際に行いたいタスクコードを書きます.
+    この宣言子の下にあるブロックがタスクコードとなります.
+    
+    Params:
+        |-------||------|
+        | name  || タスク名 |
+    
+    Usage:
+        ```c
+            // タスク宣言
+            DeclareTaskLoop(taskA);
+            
+            // TaskCode宣言
+            TaskLoop(taskA)
+            {
+                // ここに, 処理を書く.
+                // ここに書かれたコードは繰り返されます.
+            }
+        ```
+
+# DeclareTaskLoop
+    `DeclareTaskLoop(name)`
+    
+    タスクループ宣言マクロ
+    
+    タスクハンドルの宣言, タスクコード関数の宣言を行います.
+    
+    TaskLoop()前に宣言する必要があります.
+    
+    Params:
+        |-------||------|
+        | name  || タスク名 |
+    
+    Usage:
+        ```c
+            // タスク宣言
+            DeclareTaskLoop(taskA);
+            
+            // TaskCode宣言
+            TaskLoop(taskA)
+            {
+                // ここに, 処理を書く.
+                // ここに書かれたコードは繰り返されます.
+            }
+        
+        ```
+    
+# CreateTaskLoop
+    `CreateTaskLoop(name, priority)`
+    
+    タスクを作成するマクロ.
+    
+    このマクロは, KernelにTaskを登録します.
+    
+    タスクを作成するためにTaskLoop()でタスクコードを作成する必要があります.
+    
+    Params:
+        |-------||------|
+        | name  || タスク名 |
+        | priority || タスク優先度. \
+                      タスク優先度の種類は合計三つです. \
+                      次のマクロを使用してください. `LOW_PRIORITY`, `NORMAL_PRIORITY`, `HIGH_PRIORITY` |
+    
+        
+    Usage:
+        ```c
+            // タスクの宣言
+            DeclareTaskLoop(TaskA);
+
+            void setup() {
+                CreateTaskLoop(TaskA, HIGH_PRIORITY); // タスクの作成
+            }
+            
+            // タスクコードの実装
+            TaskLoop(TaskA){
+                // ...
+            }
+            
+        ```
+# CreateTaskLoopWithStackSize
+    `CreateTaskLoopWithStackSize(name, priority, stackSize)`
+    
+    タスクを作成します.
+    
+    このマクロはスタックサイズを設定することができます.
+    
+    タスクを作成するためにTaskLoop()でタスクコードを作成する必要があります.
+    
+    Params:
+        |-------||------|
+        | name  || タスク名 |
+        | priority || タスク優先度. \
+                      タスク優先度の種類は合計三つです. \
+                      次のマクロを使用してください. `LOW_PRIORITY`, `NORMAL_PRIORITY`, `HIGH_PRIORITY` |
+        | stackSize || タスクに割り当てられるスタックサイズ. \
+                       通常は, マクロ`CONFIG_MINIMAL_STACK_SIZE`の値です. \
+                       増やしたい場合は, `CONFIG_MINIMAL_STACK_SIZE * 2` などとする. |
+    
+# TaskStartScheduler
+    `TaskStartScheduler()`
+    
+    カーネルによるタスク管理を開始します. 
+    
+    この関数が呼ばれたのち, カーネルは, どのタスクをいつ実行するかをコントロールします.
+
+# TaskEndScheduler
+    `TaskEndScheduler()`
+    
+    カーネルによるタスク管理を停止します.
+    
+
+# TaskSuspendSelf
+    `TaskSuspendSelf()`
+    
+    このコード(TaskSuspendSelf)が書かれているTaskを一時停止します.
+    
+    一時停止されたタスクは, TaskResume()を実行するまで再開されません.
+    
+    Usage:
+        ```c
+            TaskLoop(TaskA){
+                // Create a task, storing the handle.
+                CreateTaskLoop(TaskB, LOW_PRIORITY);
+
+                TaskSuspend(TaskB); // 作成したTaskBを一時停止する.
+                
+                TaskSuspendSelf(); // 自分自身も一時停止する.
+            }
+        ```
+        
+# TaskSuspend
+    `TaskSuspend(name)`
+    
+    指定されたTaskを一時停止状態にします.
+    
+    一時停止されたタスクは, ResumeTask()を実行するまで再開されません.
+    
+    Params:
+        |-------||------|
+        | name  || 一時停止をしたいTask名 |
+    
+    Usage:
+        ```c
+            TaskLoop(TaskA){
+                // Create a task, storing the handle.
+                CreateTaskLoop(TaskB, LOW_PRIORITY);
+
+                TaskSuspend(TaskB); // 作成したTaskBを一時停止する.
+                
+                TaskSuspendSelf(); // 自分自身も一時停止する.
+            }
+        ```
+    
+# TaskSuspendAll
+    `TaskSuspendAll()`
+    
+    すべてのタスクを一時停止状態にします.
+    
+    TaskResumeAll()を実行するまで, これらタスクは再開せれません.
+    
+    Usage:
+        ```c
+            TaskLoop(Task1) {
+                // タスク処理コード
+    
+                // ...
+    
+                // これからの処理が長く, カーネルによるタスクの切り替えをされたくなく, 
+                // また, EnterCritical(), ExitCritical() を使えない場合, 
+                // つまり, カーネル時間(Ticks)を止めたくないとき,
+                
+                // カーネルによるタスク切り替えを防ぐ
+                TaskSuspendAll();
+                
+                // 処理を書く. 
+                // ここでは, critical section を使っていなく, マイコンの処理時間を利用できる.
+                // kernel tick count は, 更新される.
+    
+                // ...
+                
+                // 処理が終わり, カーネルを再開する
+                TaskResumeAll();
+            }
+        ```
+
+# TaskResume
+    `TaskResume(name)`
+    
+    一時停止されたタスクを再開します.
+    
+    Usage:
+    ```c
+        TaskLoop(TaskA){
+            // Create a task, storing the handle.
+            CreateTaskLoop(TaskB, LOW_PRIORITY);
+
+            TaskSuspend(TaskB); // 作成したTaskBを一時停止する.
+            
+            // この間TaskBは, 実行されない. ただし, ほかのタスクがTaskResume(TaskB)を呼ばない限り.
+            
+            // ...
+            
+            // 一時停止されていたTaskBを再開する
+            TaskResume(TaskB);
+        }
+    ```
+    
+# TaskResumeAll
+    `TaskResumeAll()`
+    
+    TaskSuspendAll()によって, 一時停止されたすべてのタスクを再開します.
+    
+    Returns:
+        |------||------|
+        | alreadyYielded || スケジューラの再開時, コンテキストの切り替えが行われたとき, `PD_TRUE`, その他は`PD_FALSE` |
+        
+    Usage:
+        ```c
+            TaskLoop(Task1) {
+                // タスク処理コード
+    
+                // ...
+    
+                // これからの処理でカーネルによるタスクの切り替えをされたくなく.
+                // また, EnterCritical(), ExitCritical() を使えない場合, 
+                // つまり, カーネル時間(Ticks)を止めたくないとき,
+                
+                // カーネルによるタスク切り替えを防ぐ
+                TaskSuspendAll();
+                
+                // 処理を書く. 
+                // ここでは, critical section を使っていなく, マイコンの処理時間を利用できる.
+                // kernel tick count は, 更新される.
+    
+                // ...
+                
+                // 処理が終わり, カーネルを再開する.
+                // そして, コンテキストの切り替えを行う. 
+                // ただし, スケジューラの再開時, コンテキストの切り替えが行われていないとき
+                if(!TaskResumeAll()) {
+                    Yield();
+                }
+            }
+        ```
+
+    
+# Yield
+    `Yield()`
+    
+    このコードが呼ばれた時点で, ほかのタスクに処理を移します.
+    
+    処理の再開位置はこのコード以降からです.
+    
+    
+
+# TaskDeleteSelf
+    `TaskDeleteSelf()`
+    
+    このコードが書かれているタスクを削除します.
+    
+
+# TaskDelete
+    `TaskDelete(name)`
+    
+    指定されたタスクを削除します.
+    
+    Params:
+        |-------||------|
+        | name  || 削除したいTask名 |
+    
+# EnterCritical
+    `EnterCritical()`
+    
+    クリティカルセクションに入ることを宣言します.
+    
+    あるタスクがクリティカルセクションに入っている間は,
+    ほかのタスクは実行されなくなります.
+    これにより単一リソースに対する衝突を防ぎます.
+    
+    [::WARNING]
+    ==========
+        クリティカルセクションに入る時間は短くすべきです.
+        
+        クリティカルセクション中では, Kernelの割り込みも停止されており,
+        システム時間も更新されません. また, ほかタスクの処理も行われなくなります.
+    ==========
+
+    Usage:
+        ```c
+            // タスク宣言
+            DeclareTaskLoop(taskA);
+            
+            // TaskCode宣言
+            TaskLoop(taskA)
+            {
+                // ...
+            
+                // クリティカルセクションに入る
+                EnterCritical();
+                {
+                    // ここのブロック内では, OSによる割り込みは行われない.
+                    // ...
+            
+                    // クリティカルセクションから出る.
+                    ExitCritical();
+                }
+            }
+        ```
+        
+# ExitCritical
+    `ExitCritical()`
+    
+    クリティカルセクションに出ることを宣言します.
+    
+    あるタスクがクリティカルセクションに入っている間は,
+    ほかのタスクは実行されなくなります.
+    これにより単一リソースに対する衝突を防ぎます.
+    
+    
+    [::WARNING]
+    ==========
+        クリティカルセクションに入る時間は短くすべきです.
+        
+        クリティカルセクション中では, Kernelの割り込みも停止されており,
+        システム時間も更新されません. また, ほかタスクの処理も行われなくなります.
+    ==========
+    
+    Usage:
+        ```c
+            // タスク宣言
+            DeclareTaskLoop(taskA);
+            
+            // TaskCode宣言
+            TaskLoop(taskA)
+            {
+                // ...
+            
+                // クリティカルセクションに入る
+                EnterCritical();
+                {
+                    // ここのブロック内では, OSによる割り込みは行われない.
+                    // ...
+            
+                    // クリティカルセクションから出る.
+                    ExitCritical();
+                }
+            }
+        ```
+
+# TaskDelayMillis
+    `TaskDelayMillis(ms)`
+    
+    指定時間の間, タスクを停止します.
+    
+    Arduino組み込み関数`delay()`と違って, 停止期間中, 
+    カーネルは他のタスクに処理を回します.
+    
+    Params:
+        |-------||------|
+        | ms  || 待機時間(ms) |
+
+# TaskGetTickCount
+    `TaskGetTickCount()`
+    
+    カーネル時間の取得
+
+# TaskDelayUntilMillis
+    `TaskDelayUntilMillis(previousWakeTime, frequency)`
+    
+    Params:
+        |-------||------|
+        | previousWakeTime  || タスクが待機状態から解放されたときの時間変数のポインタ. \
+                               使用前に必ず現在時刻(tick)で初期化する必要があります. GetTickCount()を使用してください. \
+                               のちのこの値は, 自動でDelayUntilWithBlocked()で更新されます. |
+        | frequency || サイクル周期(ms). タスクが次に待機状態を抜ける時間は, previousWakeTime(tick) + frequency(ms) / PORT_TICK_RATE_MS(ms / tick) です. |
+        
+    Usage:
+        ```c
+            TaskLoop(taskA)
+            {
+                unsigned long lastWakeTime;
+            
+                // 1000msごとの周期
+                const unsigned long frequency = 1000;
+            
+                // lastWakeTime変数を現在時刻で初期化
+                lastwakeTime = TaskGetTickCount();
+                for (;;)
+                {
+                    // 次のサイクルまで待機
+                    TaskDelayUntilMillis(&lastWakeTime, frequency);
+            
+                    // 何かルーチン処理
+                    // ...
+                }
+            }
+        ```
+
+# CreateBinarySemaphore
+    `CreateBinarySemaphore(semaphore)`
+    
+    バイナリセマフォを作成します.
+    
+    このタイプのセマフォは, 純粋なタスク間の同期に用いられます.
+    
+    動機が必要な例として, 複数のタスクが一つのリソースにアクセスするときなどが挙げられるでしょう.
+    
+    あるタスクが, セマフォを獲得している際, 他のタスクはこのセマフォを獲得できません.
+    
+    獲得しているタスクがセマフォを開放したとき, 他のタスクはこのセマフォを獲得できます.
+    
+    Params:
+        |------||-------|
+        | semahore || 作成されたセマフォへのハンドル |
+        
+    Usage:
+        ```c
+            SemaphoreHandle semaphore;
+            
+            TaskLoop(taskA)
+            {
+                // セマフォはCreateBinarySemaphore()を呼ぶまで使用できません.
+                CreateBinarySemaphore(semaphore);
+            
+                if (semaphore != NULL)
+                {
+                    // セマフォの作成に成功したとき.
+                    // ...
+                }
+            }
+        ```
+    
+# CreateMutex
+    `CreateMutex(semaphore)`
+    
+    ミューテックスを作成します.
+    
+    このタイプのセマフォは, バイナリセマフォとほとんど同じですが,
+    優先度継承を行う点が異なります.
+    優先度継承とは, セマフォ獲得による優先度の逆転の問題を解決します.
+    
+    Params:
+        |------||-------|
+        | semahore || 作成されたセマフォへのハンドル |
+        
+    Usage:
+        ```c
+            SemaphoreHandle semaphore;
+            
+            TaskLoop(taskA)
+            {
+                // セマフォはCreateMutex()を呼ぶまで使用できません.
+                CreateMutex(semaphore);
+            
+                if (semaphore != NULL)
+                {
+                    // セマフォの作成に成功したとき.
+                    // ...
+                }
+            }
+        ```
+    
+# Acquire
+    `Acquire(semaphore, blockTime)`
+    
+    セマフォを獲得します.
+    
+    そのセマフォは必ずCreate関数であらかじめ作成する必要があります.
+    
+    Params:
+        |------||-------|
+        | semahore || 作成されたセマフォへのハンドル |
+        | blockTime || 獲得するまでの最大待機時間(ms). \
+                       この時間を超えても, セマフォを獲得できない場合, \
+                       獲得処理を停止します. |
+    
+    Usage:
+        ```c
+            SemaphoreHandle semaphore;
+            
+            TaskLoop(taskA)
+            {
+                // セマフォはCreateBinarySemaphore()を呼ぶまで使用できません.
+                CreateBinarySemaphore(semaphore);
+            
+                if (semaphore != NULL)
+                {
+                    // セマフォの作成に成功したとき.
+                    // ...
+            
+                    // セマフォを獲得するのに, 100ms待機する
+                    if(Acuire(semaphore, 100)){
+                        // 獲得できた時
+                        
+                        // ...
+            
+                        // 共有しているリソースへの処理を終えたとき,
+                        // セマフォの開放
+                        Relese(semaphore);
+                    else{
+                        // 獲得できなかったとき
+                        // 共有しているリソースへのアクセス権が得られなかった.
+                    }
+                }
+            }
+        ```
+
+# Release
+    `Release(semaphore)`
+    
+    セマフォを解放します.
+    
+    そのセマフォは必ずCreate関数であらかじめ作成する必要があります.
+    
+    
+    Params:
+        |------||-------|
+        | semahore || 作成されたセマフォへのハンドル |
+    
+    Usage:
+        ```c
+            SemaphoreHandle semaphore;
+            
+            TaskLoop(taskA)
+            {
+                // セマフォはCreateBinarySemaphore()を呼ぶまで使用できません.
+                CreateBinarySemaphore(semaphore);
+            
+                if (semaphore != NULL)
+                {
+                    // セマフォの作成に成功したとき.
+                    // ...
+            
+                    // セマフォを獲得するのに, 100ms待機する
+                    if(Acuire(semaphore, 100)){
+                        // 獲得できた時
+                        
+                        // ...
+            
+                        // 共有しているリソースへの処理を終えたとき,
+                        // セマフォの開放
+                        Relese(semaphore);
+                    else{
+                        // 獲得できなかったとき
+                        // 共有しているリソースへのアクセス権が得られなかった.
+                    }
+                }
+            }
+        ```

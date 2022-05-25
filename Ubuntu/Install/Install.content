@@ -1,0 +1,10 @@
+<Header>
+    <Parent> ../Ubuntu
+    <Title> 環境構築
+    <Tags> 
+    <CreatedAt> 2020-08-18
+    <Summary>
+        
+    </Summary>
+    <Child> nvidia-tf/nvidia-tf
+</Header>

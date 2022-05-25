@@ -1,0 +1,70 @@
+<Header>
+    <Parent> ../iPhone
+    <Title> ショートカットで複数アラームを時間指定して設定する
+    <CreatedAt> 2019-08-31
+    <Tags> ショートカット, iOS, 生活, アラーム
+    <Summary>
+        iPhoneで目覚ましを設定するときは，起床時間から何分かおきにアラームを設定することがあります．
+        アラーム設定を複数かけるショートカットが多く提案されています^[trad-1]^[trad-2]^[trad-3]が，
+        そのほとんどが設定時間をスクリプトに//直書き//しています．
+        起床時間を変えるときに一からスクリプトを書きなおすのは手間がかかります．
+        
+        本稿では，//時間指定して//複数アラームをかけられるショートカットを紹介します．
+        
+        ![時間指定可能ショートカット](CURRENT_DIR/Images/set-alarm.jpg)
+    </Summary>
+</Header>
+# ダウンロード
+    以下のリンクから本ショートカットをダウンロードできます.
+    
+    [アラーム複数掛け(v1.0.1)](https://www.icloud.com/shortcuts/942ff340f175440cad484eaf2cad7d52)
+
+# 使い方
+    # 1. "アラーム複数掛け"ショートカットタップ
+    # 2. 設定時間を入力
+        
+        ![時間設定](CURRENT_DIR/Images/set-alarm.jpg)
+        
+    # 3. アラーム間隔を設定
+
+        ![間隔設定](CURRENT_DIR/Images/set-interval.jpg)
+        
+    # 4. 繰り返し回数を設定
+        ![繰り返し回数設定](CURRENT_DIR/Images/set-count.jpg)
+    
+    # 5. 完了!
+        ![アラーム設定完了](CURRENT_DIR/Images/done.jpg)
+
+# 仕組み
+    仕組みは，最初に入力された時間から間隔時間を加算しながら，指定回数ループさせただけです．
+    
+    1. 開始時間入力要求し，変数`AlarmTimeInd`に保存
+    2. 間隔時間入力要求し，変数`Interval`に保存
+    3. 指定された回数繰り返す
+        3.1. `AlarmTimeInd`時間でアラーム設定
+        3.2. `AlarmTimeInd <- AlarmTimeInd + Interval`
+
+# バージョン履歴
+    v1.0.1 [最新]:
+        [ダウンロード](https://www.icloud.com/shortcuts/942ff340f175440cad484eaf2cad7d52)
+        
+        リリース日: 
+            2020-09-25
+        
+        アップデート内容:
+            * ios14アップデートに伴うアップデート
+                * アラーム作成時に確認が表示される問題を修正
+        
+    v1.0.0:
+        [ダウンロード](https://www.icloud.com/shortcuts/991d20a9d95f4b46b37902f4b5ff5ce7)
+        
+        リリース日:
+            2019-08-31
+        
+        アップデート内容:
+            * 初期リリース
+        
+# 参考文献
+    [trad-1]: [大量の目覚ましを一気にセットできるショートカットレシピ(accessed:2019/8/31)](https://japanese.engadget.com/2018/12/15/iphone-tips/)
+    [trad-2]: [Siriショートカットで複数アラームを一発でオンにするやつ作ってみた(accessed:2019/8/31)](https://lazylife555.xsrv.jp/?p=1507)
+    [trad-3]: [アラームを複数同時に設定（オン・オフ）する方法(accessed:2019/8/31)](https://sbapp.net/appnews/app/upinfo/ios-12/aram-shortcut-91761)

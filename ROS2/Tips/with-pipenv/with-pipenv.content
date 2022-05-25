@@ -1,0 +1,223 @@
+<Header>
+    <Parent> ../Tips
+    <CreatedAt> 2020-08-28
+    <Tags> Python, Pipenv, ROS
+    <Title> Pipenv上でROS2ノードを動かす
+    <Summary>
+        Pipenv仮想パッケージ環境上でROS2ノードを動かす.
+    </Summary>
+</Header>
+
+# はじめに
+    ROS2でノードを実装するときに, PythonかC++を使います. 
+    Python では, すでに公開されている多くのパッケージを使ってノードを実装することができます.
+    ですが, ROS2を`apt`コマンドでインストールした際, ROS2のPythonパッケージはシステムのグローバル環境上にインストールされ,
+    そのほかのパッケージを使うときも必然的にグローバル上にインストールしなければなりません.
+    
+    本稿では, Pipenv仮想パッケージ環境上でROS2ノードを動かす方法を説明します.
+    
+    [ハックな方法です::CAUTION]
+    ===========
+        このやり方は, 公式ではなく, 結果的にうまくいった方法です.
+    ===========
+
+# Pipenv とは
+    Pipenv は, パッケージの追加と削除に加えて, パッケージの仮想環境の作成と管理を行えるツールです^[pipenv-official].
+    
+    ["Pipenv: 人間のためのPython開発ワークフロー"](https://pipenv-ja.readthedocs.io/ja/translate-ja/). Pipenv. accessed at 2020-08-28.
+    
+    主な特徴としては,
+    
+    * パッケージの管理ツールである`pip`と, 仮想環境の管理ツールである`virtualenv`を別々に使う必要はなく, 両者は連携して動作
+    * ほかの人の仮想環境を`Pipfile`を通じて, 同じ環境を構築可能
+    * `pyenv`をインストールすることで, インタプリタの切り替えも可能
+    
+    です.
+    
+    `pyenv`, `virtualenv`, `pip`, `pipenv`の機能を表にまとめると以下の通りです.
+    
+    |[機能比較]
+    |              || インタプリタ管理 | 仮想環境管理 | パッケージ管理 |
+    |--------------||------------------|--------------|----------------|
+    | `pyenv`      || o                | x            | x              |
+    | `virtualenv` || x                | o            | x              |
+    | `pip`        || x                | x            | o              |
+    | `pipenv`     || △(pyenvと連携)   | o            | o              |
+    
+    このように比較すると, `Pipenv`は非常に優秀なツールであることが分かります.
+    
+# 環境構築 
+
+    1. Pipenvのインストール
+
+        ```bash
+            pip install pipenv --user
+        ```
+        
+
+    2. ROS2のインストール
+        公式ドキュメントを参考してください(この記事を読んでいる時点で, もう入っていると思います). 
+        
+        ["ROS 2 Documentation"](https://index.ros.org/doc/ros2/). ROS2. accessed at 2020-08-28.
+        
+# 環境
+    本稿では, 以下の環境のもとで行っています.
+    
+    * Ubuntu 20.04.1 LTS
+    * ROS 2 Foxy Fitzroy
+    * pipenv, version 2020.8.13
+    
+# 方法
+    # 仮想環境を構築する
+        まず, ROS2のワークスペースが以下のようであるとします.
+        
+        + workspace
+            + src
+                + package-1
+                + package-2
+                + ...
+        
+        workspace内に, pipenv のPipfileを入れるためのディレクトリ`env`を作成します.
+        
+        + workspace
+            + env
+            + src
+                + package-1
+                + package-2
+                + ...
+        
+        `env`に移動後, `pipenv install`を行い, 仮想環境を構築します.
+        
+        ```shell
+            cd env
+            pipenv install
+        ```
+        
+        **注意**:
+            ここで, //Pythonバージョンを指定してはいけません//.
+            //システムPythonを使用する//ようにします.
+            
+            理由:
+                ROS2は, あくまでシステムPythonを使用します.
+                
+                ROS2ノードがシステムPythonを使用する以上, 仮想パッケージ環境のインタプリタもシステムPythonを使用しましょう.
+            
+            [他の人からもらった`Pipfile`でPythonバージョンを指定されているのだが...]
+            =========
+                `Pipfile`内で, このようにPythonバージョンが指定されている場合.
+                
+                ```
+                    [requires]
+                    python_version = "3.6"
+                ```
+                
+                残念ながら, システムPythonのバージョンと異なるバージョンで動かすことはできません.
+                
+                ですが, メジャーバージョンのみ合わせればいいのならば, 対応可能です. 
+                (逆にマイナーバージョンの指定はできません.)
+                
+                `pipenv install`時に, 以下のようにPythonバージョンを指定します.
+                
+                ```shell
+                    pipenv install --python 3
+                ```
+            =========
+        
+    # ワークフロー
+        # [[build-package]]ROS2 のパッケージビルドを行う
+            **仮想環境に入らずに**ビルドをします.
+            
+            `workspace`移動後, 以下のコマンドでビルドします.
+            
+            ```shell
+                colcon build
+            ```
+            
+            [なぜ, 仮想環境でやらないの?]
+            ===========
+                本稿では, 仮想環境上でROS2ノードを動かすのを目的としています.
+                実際に仮想環境上にあるパッケージが使用されるのは, ROS2ノードが実行しているときのはずです.
+                
+                colcon は, システムPythonのパッケージを使用しており, ビルド時まで仮想環境上で動かして, 
+                エラーが出るリスクを侵したくありません.
+            ===========
+            
+        # ROS2ノードを仮想環境で実行する
+            ROS2ノードの実行スクリプト(Pythonスクリプト)が仮想環境にあるパッケージを必要とするときは, 仮想環境上でROS2ノードを実行しなければなりません.
+            
+            まず, ROS2環境を読み込みましょう.
+            
+            ```shell
+                source /opt/ros/foxy/setup.zsh  
+            ```
+            
+            `env`ディレクトリに移動後, 以下のコマンドで, 仮想環境のシェルに入ります.
+            
+            ```shell
+                pipenv shell
+            ```
+            
+            上のコマンドを実行後, 次のようなメッセージが表示されたはずです.
+            
+            ```shell
+                ~/o/h/s/p/S/env ❯❯❯ pipenv shell                                                                  master
+                Warning: Your Pipfile requires python_version 3.6, but you are using 3.8.2 (/home/ken/.local/share/v/e/bin/python).
+                  $ pipenv --rm and rebuilding the virtual environment may resolve the issue.
+                  $ pipenv check will surely fail.
+                Launching subshell in virtual environment…
+                 . /home/ken/.local/share/virtualenvs/env-nmD9sybt/bin/activate
+
+            ```
+            
+            大事なのは, 次の行です.
+            ```shell
+                 . /home/ken/.local/share/virtualenvs/env-nmD9sybt/bin/activate
+            ```
+            
+            このメッセージが意味するのは, 仮想環境を`/home/ken/.local/share/virtualenvs/env-nmD9sybt/bin/activate`でアクティベートしたことです.
+            
+            そして, 仮想環境で使用されるパッケージは, `/home/ken/.local/share/virtualenvs/env-nmD9sybt/lib/python3.8/site-packages`にあります.
+            (実際に確認してみてください. パス内にある`python3.8`は各自の環境で異なる可能性があります.)
+            
+            ですが, このままROS2ノードを実行しても, 仮想環境上のPythonインタプリタが実行されるのではなく,
+            システムPyhtonを実行することになり^[注.symb-python], 仮想環境にあるパッケージをシステムPythonが見つけることができません.
+            
+            よってすることは, //システムPythonがこれらパッケージを見つけられるように, `PYTHONPATH`にパッケージのパスを追加する//ことです.
+            
+            以下のコマンドを実行します.
+            
+            ```shell
+                PYTHONPATH=$PYTHONPATH:~/.local/share/virtualenvs/env-nmD9sybt/lib/python3.8/site-packages 
+            ```
+            
+            [なぜ`export`しないの?]
+            ============
+                なぜこうしないのか?
+                    
+                ```shell
+                    export PYTHONPATH=$PYTHONPATH:~/.local/share/virtualenvs/env-nmD9sybt/lib/python3.8/site-packages 
+                ```
+                
+                理由:
+                    仮想環境を出たあとに, `PYTHONPATH`は, 仮想環境に入る前に戻って欲しいから.
+            ============
+            
+            別ターミナルで[パッケージのビルド](#build-package)を行ったあと, 
+            ディレクトリ`workspace`で, パッケージのインストールを行い(筆者は, `zsh`を使ってます),
+            
+            ```shell
+                . install/setup.zsh
+            ```
+            
+            ノードを実行します.
+            
+            ```shell
+                ros2 run <package-name> <node-name>
+            ```
+# 注釈
+    [注.symb-python]: 実際は, システムのPyhtonインタプリタにシンボリックリンクが貼られていて, リンクを通らずにそのまま, 直接システムPythonを呼んでいることになります^[注.not-certain].
+    [注.not-certain]: たぶん。。。
+    
+# 参考文献
+    [pipenv-official]: ["Pipenv: 人間のためのPython開発ワークフロー"](https://pipenv-ja.readthedocs.io/ja/translate-ja/). Pipenv. accessed at 2020-08-28.
+    

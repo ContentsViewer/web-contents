@@ -1,0 +1,216 @@
+<Header>
+    <Parent> HowItWorks
+    <Title> コンポーネント
+    <CreatedAt> 2018-10-07
+    <Tags> Web, CMS
+    <Summary>
+        
+        本CMSは, 
+        ルート部, フロントエンド部, モジュール部, サービス部, クライアント部に分かれます.
+        
+        各部の詳細を説明します.
+        
+    </Summary>
+</Header>
+# 全体像
+____________________________________
+    
+    ![全体像](CURRENT_DIR/Images/module-overview.jpg)
+    
+    # モジュール
+        サーバサイドのモジュール.
+        
+        モジュールにアクセスしても, それ自体は何もしない.
+        
+        モジュール単体で動作することが好ましい.
+        
+    # サービス
+        外部からのアクセスがあったときに, 決められたタスクを実行する.
+        
+        ユーザからは見えない. モジュールを使用して動作する.
+    
+    # ルート
+        ユーザの窓口, システム設定
+        
+    # フロントエンド
+        `index.php`からの遷移先. Webページになる.
+        リクエストURI，ログインユーザ，コンテントパスなどの
+        環境変数を利用できる．
+        
+        サービスとモジュールを使用して動作する.
+        
+    # クライアントサイド
+        ブラウザで動作するスクリプトとスタイルシート
+    
+# モジュール
+__________________________________
+    
+    # Authentiator
+        ユーザ認証, と権限の管理
+    
+    # BinarySearch
+        二分探索機
+    
+    # CacheManager
+        ページキャッシュ管理
+    
+    # ContentsDatabase
+        コンテンツの読み込み, 保存
+        
+    # ContentsDatabaseManager
+        ContentsDatabaseのパス設定, フォルダ管理
+    
+    # ContentsViewerUtils
+        Contetns表示のための関数群
+    
+    # Debug
+        デバッグ情報の出力. 詳しい説明は, [/Library/PHP/Debug]を参照してください.
+    
+    # OutlineText
+        階層化された文章を作成するための, 文章作成支援フォーマット.
+        詳しい説明は, [/OutlineText/OutlineText]を参照.
+    
+    # SearchEngine
+        検索エンジン
+    
+    # ServiceUtils
+        サービスで使用される補助関数
+        
+    # Stopwatch
+        PHP実行時の処理時間計測ライブラリ.
+        
+        詳しい説明は, [/Library/PHP/Stopwatch]を参照してください.
+
+    # Utils
+        基本補助関数
+        
+# サービス
+________________________________
+    
+    # contents-databse-edit-service
+        コンテンツ情報の編集サービス
+    
+    # contetns-search-service
+        コンテンツ検索サービス
+    
+    # file-management-service
+        ファイル管理(ファイル作成, 削除)サービス
+    
+    # mail-service
+        メール送信サービス
+
+    # outlinetext-decode-service
+        OutlineTextフォーマットをhtmlに変換するサービス.
+        
+    # related-search-service
+        関連コンテンツ提示サービス
+    
+# フロントエンド
+_________________________________
+    # 400
+        400ページ．
+        不正なリクエストが起きたときに表示する．
+        
+    # 403
+        403ページ．
+        アクセス権が無いときに表示される.
+        
+    # 404
+        404ページ．
+        ファイルが見つからないときに表示する．
+    
+    # 500
+        500ページ．
+        サーバエラーが起きたときに表示．
+        
+    # contents-editor
+        コンテンツ編集ページ
+        
+    # contents-viewer
+        コンテンツ表示ページ
+    
+    # directory-viewer
+        ディレクトリ表示ページ
+        
+    # error-page
+        400などのエラーページの基本ページ
+        
+    # error-page-setup
+        400などのページを表示する前に，
+        エラー情報などの環境変数を設定する．
+        
+    # file-manager
+        ファイル管理ページ
+        
+    # file-server
+        ファイルサーバ
+        
+    # login
+        ログインページ
+    
+    # logout
+        ログアウトページ
+    
+    # note-viewer
+        ノート表示ページ
+    
+    # plaintext
+        プレインテキスト表示ページ
+        
+    # preview
+        プレビューページ
+        
+    # setup
+        セットアップページ
+        
+    # tag-viewer
+        タグ一覧表示ページ
+    
+    # viewer
+        ビューページ
+
+# ルート
+________
+    # index
+        アクセスユーザの窓口
+        ここから，目的のフロントエンドに遷移する．
+    
+    # LinkageCMS
+        設定ファイル．パスの設定などを行う．
+        
+
+# クライアントサイド
+_________________________________
+    
+    # Splitter
+        画面分割ライブラリ.
+        詳しくは, [/Library/JavaScript/Splitter]を参照.
+    
+    # Space-RUN
+        エラーページで遊べるゲーム．
+        飛行機を操作して障害物をよけながら突き進むだけのゲーム．
+        詳しくは, [/App/BrowserGames/BrowserGames]を参照．
+        
+    # ace
+        エディタ
+        [ace](https://ace.c9.io/).
+        このライブラリは, 
+        __三条項BSDライセンス__が適用されています.
+        
+    # Ace-diff
+        文章差分表示, マージライブラリ
+        [Ace-diff](http://ace-diff.github.io/ace-diff/).
+        このライブラリは, 
+        __MITライセンス__が適用されています.
+        
+    # FileManager
+        クライアント側でfile-management-serviceへ命令の送受信を行う.
+        
+    # syntaxhighlighter
+        コードハイライト[SyntaxHighlighter](http://alexgorbatchev.com/SyntaxHighlighter/).
+        このライブラリは, 
+        __MIT License__ もしくは,  
+        __GNU General Public License (GPL) Version 3__が適用されています.
+    
+    # ThemeChanger
+        テーマ切り替えスクリプト

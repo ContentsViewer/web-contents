@@ -1,0 +1,403 @@
+<Header>
+    <Parent> Scripting
+    <Title> 基本的な製作の流れ
+    <CreatedAt> 2020-05-25
+    <Tags> 
+    <Summary>
+        
+    </Summary>
+</Header>
+# ダウンロード
+____________________________________________
+    今回のOS製作で必要なファイルは以下のページでダウンロードできます.<br />
+    [GitHub-Arduino-ArduinOS](https://github.com/ContentsViewer/Arduino-ArduinOS)
+    
+
+    ダウンロードしたフォルダから,
+    `Arduino-ArduinOS/ArduinOS/hardware/avr/cores/arduino.ArduinOS/`
+    下に今回実装および変更するファイルがあります.
+    
+# スクリプティング
+____________________________________________
+    ここから, 実際にスクリプトを書いていきます.
+    スクリプトを書かずにすぐに始めたい方はダウンロードしたものをcoreフォルダに配置しこれ以降の
+    内容を飛ばしてくれて構いません.
+    スクリプトを追っていきたい方は, 以下の項目を進めてください.
+
+    スクリプティングでは, 一から作成する(写経), ソースコードを追って行くといった好きな方法で進めてください.
+    いづれにしても, 書き始める順番, 追っていく順番があると思いますので, その順番について説明します.
+    一番初めに, "main.cpp"ファイルから入り次に[目標](./?content=./Master/Contents/Arduino/ArduinOS/Objective)で示した
+    もしOSが完成したときのスケッチファイルに入っていくと, OSのソースファイルが作成できます.
+
+    `main.cpp`から見ていきましょう.
+    `main.cpp`の内容は次のようになっています.
+
+    
+    ```cpp
+        #include <Arduino.h>
+        
+        unsigned PortBaseType mainSetupPriority = HIGH_PRIORITY;
+        unsigned short mainSetupStackSize = CONFIG_MINIMAL_STACK_SIZE;
+        unsigned PortBaseType mainLoopPriority = LOW_PRIORITY;
+        
+        unsigned short mainLoopStackSize = CONFIG_MINIMAL_STACK_SIZE;
+        
+        
+        TaskHandle loopTaskHandle;
+        TaskHandle setupTaskhandle;
+        
+        
+        void MainTask(void *parameters)
+        {
+            for (;;)
+            {
+                loop();
+                if (serialEventRun) serialEventRun();
+            }
+        }
+        
+        
+        void SetupTask(void *parameters)
+        {
+            // SetupTaskが処理を終えるまで他タスクを実行させない.
+            TaskSuspendAll();
+            {
+        
+                setup();
+                TaskCreate(MainTask, (signed PortChar *)"Main", mainLoopStackSize, NULL, mainLoopPriority, &loopTaskHandle);
+            }
+        
+            TaskResumeAll();
+        
+        
+        
+            #if INCLUDE_TASK_DELETE
+                TaskDelete(NULL);
+            #else
+                while (true) TaskSuspend(NULL);
+            #endif
+        
+        }
+        
+        
+        int main()
+        {
+        
+            init();
+        
+        #if defined(USBCON)
+            USBDevice.attach();
+        #endif
+        
+            TaskCreate(SetupTask, (signed PortChar *)"Setup", mainSetupStackSize, NULL, mainSetupPriority, &setupTaskhandle);
+        
+            //setup();
+        
+            //TaskCreate(MainTask, (signed PortChar *)"Main", mainLoopStackSize, NULL, mainLoopPriority, &loopTaskHandle);
+        
+            TaskStartScheduler();
+        
+            for (;;);
+        
+            return 0;
+        }
+    ```
+
+    プログラムはまず`main()`から開始します. まず, `init()`関数でArduinoを初期化しています.
+    この関数は, Arduinoにもともとあった関数です.
+    この後, USBCONが定義されている場合`USBDevice.attach()`を実行しています. これも, Arduinoにもともとあった関数です.
+    
+    その次に`TaskCreate()`でSetupTaskを作成しています. それでは, SetupTask関数を見ていきましょう.
+    SetupTaskでは, まず`TaskSuspendAll()` で全タスクを一時停止していることがわかります.
+    そのあと, setup()を実行しMainTaskを作成しています. それが終わって, 一時停止していたタスクを再開しています.
+    これは, setup関数実行時にほかのタスクが実行されない効果があることが想像できます.
+    その次に, `INCLUDE_TASK_DELETE`が定義されているときは, TaskDelete(NULL)が実行され,
+    それ以外のときは, TaskSuspend(NULL)を常にループで実行し続けていることがわかります.
+
+    SetupTaskを見てきました. `main()`内に戻りましょう. SetupTaskを作成後次にしているのは, TaskStartScheduler()です.
+    名前から, タスクのスケジューリングを開始しています.
+
+    今まで, `TaskCreate()`, `TaskDelete()`, `TaskStartScheduler()`, `TaskResumeAll()`, `TaskSuspendAll()`関数がありました.
+    __これらはどこで宣言, 定義されているのでしょうか?__ 上のinclude宣言を見ます. `Arduino.h`がインクルードされていますね.
+    その中を見ていきましょう.
+
+    Arduino.h内に以下のコードがありました.
+
+    
+    ```cpp
+        #include "ArduinOS\ArduinOS.h"
+    ```
+
+    OS関連の関数などが宣言されてそうです. その中を見ましょう.
+    するとこの中に以下のコードがあります.
+
+    
+
+    ```cpp
+        // Task削除を有効にするか
+        //
+        #ifndef INCLUDE_TASK_DELETE
+            #error Missing definition: INCLUDE_TASK_DELETE should be defined in ArduinOSConfig.h as either 1 or 0.
+        #endif
+
+    ```
+
+    ちょっと寄り道ですが, `INCLUDE_TASK_DELETE`は`main.cpp`にありましたね. このコードが意味するのは,
+    INCLUDE_TASK_DELETEが定義されていないときはコンパイルエラーを吐くことです.
+    この前にINCLUDE_TASK_DELETEが定義されているはずです.
+    どこでされているのでしょうか? ArduinOS.h内上部でインクルードされている`ArduinOSConfig.h`にありました.
+
+    話を戻します. ArduinOS.hに以下のコードがあります.
+    
+    ```cpp
+        #include "Task.h"
+    ```
+
+    __このファイルが怪しそうです. 見てみましょう.__
+    すると, このファイル内に `TaskCreate()`, `TaskDelete()`, `TaskStartScheduler()`, `TaskResumeAll()`, `TaskSuspendAll()`
+    が定義宣言されていることが確認できます.
+
+    以下は`TaskCreate()`の定義です.
+
+    ```cpp
+        /*
+        // Create a new task and it to the list of tasks that are ready to run.
+        //
+        // TaskCreate() can only be used to create a task that has unrestricted
+        // access to the entire microcontroller memory map. Systems that include MPU
+        // suport can alternatively create an MPU constrained task using TaskCreateRestricted()
+        //
+        // @param taskCode:
+        //  Pointer to the task entry function. Tasks must be implemented to never return (i.e. continuous loop).
+        //
+        // @param name:
+        //  A descriptive name for the task. This is mainly used to
+        // facilitate debuggering. Max length defined by TASK_MAX_TASK_NAME_LEN - default is 16
+        //
+        // @param stackDepth:
+        //  The size of the task stack specified as the number of variables the stack
+        //  can hold - not the number of bytes. For example, if the stack is 16 bits wide
+        //  and stackDepth us defined as 100, 200 bytes will be allocaed for stack storage.
+        //
+        // @param parameters:
+        //  Pointer that will be used as the paramerter for the task being created.
+        //
+        // @param priority:
+        //  The priority at which the task should run.
+        //
+        // @param createdTask:
+        //  Used to pass back a handle by which the created task can be referenced.
+        //
+        // @return PD_PASS:
+        //  if the task was successfully created and added to a ready list,
+        //  otherwise an error code defined in the file "ProjDefs.h"
+        //
+        // TaskHandle の詳しい説明:
+        //  TaskHandleの型は (void *) です.
+        //  TCBのメモリアドレスを保存するものです.
+        //  Create関数に渡すとき, TCBのアドレスを保存するメモリのアドレスを渡します.
+        //  つまり, 関数の引数には &handle と書きます. 渡された関数ではvoid ** となります.
+        //  これで, Create関数はhandleにTCBのメモリアドレスを格納することができます.
+        // 
+        // Example usage:
+        
+        // Task to be created.
+        
+        void TaskCodeFunction(void *paramters)
+        {
+            for (;;)
+            {
+                // Task code goes here
+            }
+        }
+        
+        // Function that creates a task
+        void OtherFunction(void)
+        {
+            static unsigned char parameterToPass;
+            TaskHandle handle;
+        
+            // Create the task, storeing the handle. Note that the passed parameter parameterTopass
+            // must exist for the lifeteime oh the task, so in this case is declared static.
+            // If it was just an automatic stack variable it might no longer exist, or at least have been corrupted,
+            // by the time the new task attempts to access it.
+            TaskCreate(TaskCodeFunction, "NAME", STACK_SIZE, &parameterToPass, IDLE_TASK_PRIORITY, &handle);
+        
+            // Use the handle to delete the task.
+            TaskDelete(handle);
+        }
+        */
+        #define TaskCreate(taskCode, name, stackDepth, parameters, priority, createdTask) \
+            TaskGenericCreate((taskCode), (name), (stackDepth), (parameters), (priority), (createdTask), (NULL))
+
+    ```
+
+    原文の段階で詳しい説明もコメントされています. 一応, この時点で筆者がわからなかったことを調べたものもコメントに追加しています.
+
+    `TaskCreate()`の定義はありましたが, どうやらまだ`TaskGenericCreate()`というものがあるようです.
+    これも見ていきましょう... 
+    
+    mainファイルから掘っていくとOSの根幹部分に到達, Sourceファイルの理解へとつながっていきます.
+    ここからの説明は割愛させてもらいます. 一度ここで, ご自身で`main.cpp`を掘っていってください(深さ優先探索のようです).
+    OSのソースの意味(処理の内容)は分かるけど, なぜそのような処理を行うのかわからない場合があると思いますので, その場合, 
+    このページの下部にあるファイルごとの詳しい説明をご覧ください.
+
+
+
+    .
+    
+    .
+    
+    .
+    
+    .
+    
+    .
+
+
+
+
+
+    今まで, `main.cpp`からOSを掘っていきました.
+    main.cppから掘ってmain.cppに戻ってきたころ(深さ優先探索みたいでしたね)には, OSのソースファイルを大まかに理解できているはずです.
+    そこで, 今度はスケッチファイルを見ます.
+    スケッチファイルは次のようでした.
+
+
+    ```cpp
+        // タスクの宣言
+        DeclareTaskLoop(BlinkTask);
+        DeclareTaskLoop(ButtonChecker);
+         
+         
+        void setup() {
+          // ピン設定
+          pinMode(13, OUTPUT);
+          pinMode(12, OUTPUT);
+          pinMode(2, INPUT);
+         
+          // タスクの作成
+          CreateTaskLoop(BlinkTask, LOW_PRIORITY);
+          CreateTaskLoop(ButtonChecker, HIGH_PRIORITY);
+        }
+         
+        void loop() {
+         
+        }
+         
+        // LEDを点滅させるタスク
+        TaskLoop(BlinkTask) {
+          digitalWrite(13, HIGH);
+          delay(1000);
+          digitalWrite(13, LOW);
+          delay(1000);
+        }
+         
+        // ボタン入力を検知するタスク
+        TaskLoop(ButtonChecker) {
+          // 2番ピンがLOWのとき, ボタンが押されたことにする
+          if (!digitalRead(2)) {
+            digitalWrite(12, HIGH);
+          }
+          else{
+            digitalWrite(12, LOW);
+          }
+          DelayWithBlocked(50);
+        }
+    ```
+
+    まず初めに, DeclareTaskLoop()を使ってタスクの宣言を行っています.
+    これはどこで定義されているのでしょうか. それは, "ArduinOS.h"内です.
+    以下のコードがあります.
+
+
+    ```cpp
+        /*
+        //
+        // タスクループ宣言マクロ
+        // タスクハンドルの宣言, タスクコード関数の宣言を行います
+        //
+        // TaskLoop()前に宣言する必要があります.
+        //
+        // @param name:
+        //  タスク名
+        //
+        // Example usage:
+        
+        // タスク宣言
+        DeclareTaskLoop(taskA);
+        
+        // TaskCode宣言
+        TaskLoop(taskA)
+        {
+            // ここに, 処理を書く.
+            // ここに書かれたコードは繰り返されます.
+        }
+        */
+        #define DeclareTaskLoop(name)                                                       \
+            extern TaskHandle name;                                                         \
+            /*void name##_Task(void *)*/
+    ```
+
+    DeclareTaskLoop()はマクロであったことがわかります.
+    このマクロでは, TaskHadleを宣言していることがわかります.
+    この時点でTaskHandleはご存じのはずです.
+
+
+    次にsetup()が定義されています. これはmain.cppでSetupTaskで実行されていました.
+
+    次にTaskLoop()で各タスクを実装していることがわかります.
+    TaskLoop()は"ArduinOS.h"で次のように定義されています.
+
+    
+
+    ```cpp
+    
+        /*
+        //
+        // タスクコードを書く前の宣言マクロ
+        // このマクロはタスクハンドル, タスクコード関数など, Kernelに渡すための
+        // 関数などを作成します.
+        //
+        // このマクロを書いてから, 実際に行いたいタスクコードを書きます.
+        // この宣言子の下にあるブロックがタスクコードとなります.
+        //
+        // @param name:
+        //  タスク名
+        //
+        // Example usage:
+        
+        // タスク宣言
+        DeclareTaskLoop(taskA);
+        
+        // TaskCode宣言
+        TaskLoop(taskA)
+        {
+            // ここに, 処理を書く.
+            // ここに書かれたコードは繰り返されます.
+        }
+        */
+        #define TaskLoop(name)                                                              \
+            static inline void name##_Function();                                           \
+            /*void name##_Task(void *);*/                                                   \
+            TaskHandle name;                                                                \
+            void name##_Task(void *parameters)                                              \
+            {                                                                               \
+                for (;;)                                                                    \
+                    name##_Function();                                                      \
+            }                                                                               \
+            static inline void name##_Function()    
+
+    ```
+
+    TaskLoop()もマクロであることがわかります.
+    まず, name_Function()という関数を宣言後, TaskHandle name を定義しています.
+    これは, 事前にDeclareTaskLoop()で宣言したものでしたね.
+    そして, Task実行時に行われる関数が定義されています.
+    この関数では, name_Function()を無限に回しています.
+    すなわち, このTaskはname_Function()をずっと回し続けているだけです.
+
+
+    以上のように, main.cppからOSのソースを追っていき, 次に実際にかくアプリケーションのコード-スケッチファイル-
+    から追っていくと, OSが機能するためのソース開発とOSを使ってアプリケーションを作成するためにOSを使いやすくするためのソース開発
+    という二面でOSを学べます.

@@ -1,0 +1,14 @@
+<Header>
+    <Parent> ../Root
+    <Title> 各種ライブラリ
+    <CreatedAt> 2016-12-8
+    <Tags> 
+    <Summary>
+        このページでは, 筆者が作成したライブラリが置かれます.
+        
+        
+    </Summary>
+    <Child> Cpp/Cpp
+    <Child> PHP/PHP
+    <Child> JavaScript/JavaScript
+</Header>

@@ -1,0 +1,44 @@
+<Header>
+    <Parent> LanguagePackManager
+    <Title> LanguagePackManager関数一覧
+    <CreatedAt> 2016-12-8
+    <Tags> 
+    <Summary>
+        |[関数]
+        |--------||------------------------|
+        | [LoadFile](#LoadFile) || パックファイルをロード |
+        | [GetString](#GetString) || 指定したラベルに関連付けられた文字列を返します |
+        
+        
+        
+    </Summary>
+</Header>
+# [[LoadFile]]LoadFile
+    public bool LoadFile(LanguagePackFile file, bool dontDestroy)
+
+    # パラメータ
+        |--------||---------------------|
+        | file || ロードしたいパック情報 |
+        | dontDestroy || シーン間でデストロイするかどうか |
+
+    # 返り値
+        ロード成功時は, true. そのほかは, false.
+
+    # 説明
+        パックファイルをロードします.\\
+        言語パックの詳しい説明は, [LanguagePackManagerの使い方](CURRENT_DIR/UsageLanguagePackManager)
+        を参照してください
+
+# [[GetString]]GetString
+    public string GetString(string label)
+
+    # パラメータ
+        |--------||---------------------|
+        | label || 読み込みたい文字列に関連付けられているラベル名 |
+
+    # 返り値
+        指定したラベルに関連付けられた文字列
+
+    # 説明
+        指定したラベルに関連付けられた文字列を返します. ラベルが存在しないときはから文字列が返ります.
+

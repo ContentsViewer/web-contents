@@ -1,0 +1,49 @@
+<Header>
+    <Parent> ../Usage
+    <Title> 設定方法
+    <CreatedAt> 2020-08-31
+    <Tags> 
+    <Summary>
+        本CMSの設定方法について
+    </Summary>
+</Header>
+# 設定ファイル
+    `ContentsPlanet.php`内に設定内容が書かれています.
+    
+    # SSLリダイレクト
+        `http` -> `https`への自動リダイレクト
+        
+        `REDIRECT_HTTPS_ENABLED`を`true`にします.
+        
+        ```php
+            define('REDIRECT_HTTPS_ENABLED', true);
+        ```
+
+# `.htaccess`カスタマイズ
+    `# BEGIN ContentsPlanet` ~ `# END ContentsPlanet`は, 本CMSが自動で書き込みます.
+    この領域外でお好きなコードをお書きください.
+    
+    ```
+        # ここから
+        # ...
+        # ここまでカスタマイズ
+        
+        # BEGIN ContentsPlanet
+        
+        <IfModule mod_rewrite.c>
+        RewriteEngine On
+        
+        RewriteCond %{HTTPS} off
+        RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
+        
+        RewriteCond %{REQUEST_URI} !(^/ContentsPlanet/Client/)
+        RewriteCond %{REQUEST_URI} !(^/ContentsPlanet/Service/)
+        RewriteRule ^(.*)$ index.php
+        
+        RewriteCond %{HTTP:Authorization} ^(.*)
+        RewriteRule ^(.*) - [E=HTTP_AUTHORIZATION:%1]
+        </IfModule>
+        
+        # END ContentsPlanet
+    ```
+    

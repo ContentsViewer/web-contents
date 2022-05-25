@@ -1,0 +1,87 @@
+<Header>
+    <Parent> TerminalPro4
+    <Title> TerminalPro4アプリケーション例
+    <CreatedAt> 2017-5-4
+    <Tags> 
+    <Summary>
+        TerminalPro4用のアプリケーション例を挙げていきます.
+        
+        * NON: 何もしないプログラム
+        * GLCDTest: GLCD動作確認プログラム(fps表示)
+        * CtrlTest: コントローラ動作確認プログラム
+        * SerialMonitor: シリアルモニター
+        * MediaPlyer: 音楽プレイヤー
+        * Bullet: シューティングゲーム(東方風)
+        * NadekoAdventure: 千石撫子(化物語)横スクロールゲーム
+        * Notes: 音ゲー
+        
+        これらアプリケーションは[ダウンロードページ](./TerminalPro4Download)
+        から取得したフォルダ内にある'Exapmle'フォルダに存在します.
+        
+    </Summary>
+</Header>
+# NON
+    文字通り何もしません. 
+    ですが, このプログラムはすべてのプログラムの基本です.
+
+    ![実行画面](CURRENT_DIR/Images/TerminalPro4/NON1.jpg)
+
+# GLCDTest
+    グラフィック液晶の動作を確認します.
+    同時に, フレームレートも確認します.
+
+    ![実行画面1](CURRENT_DIR/Images/TerminalPro4/GLCDTest.jpg)
+    ![実行画面2](CURRENT_DIR/Images/TerminalPro4/GLCDTest2.jpg)
+
+# CtrlTest
+    コントローラーの動作を確認します.
+    正常にキーが読み込めるか確認します.
+
+    ![実行画面1](CURRENT_DIR/Images/TerminalPro4/ControllerTest1.jpg)
+    ![実行画面2](CURRENT_DIR/Images/TerminalPro4/ControllerTest2.jpg)
+    
+# SerialMonitor
+    シリアル通信で受け取った文字列を画面に表示します.
+    Boot画面表示ではこのプログラムを使用します.
+
+    ![実行画面1](CURRENT_DIR/Images/TerminalPro4/SerialMonitor1.jpg)
+    ![実行画面2](CURRENT_DIR/Images/TerminalPro4/SerialMonitor2.jpg)
+    
+# MediaPlyer
+    SDカードに保存されている音楽ファイル(Wavファイル)を再生します.
+    ユーザーは3つのモード―通常再生, リピート再生, 連続再生―を選択できます.
+
+    ![実行画面1](CURRENT_DIR/Images/TerminalPro4/MediaPlayer1.jpg)
+    ![実行画面2](CURRENT_DIR/Images/TerminalPro4/MediaPlayer2.jpg)
+    ![実行画面3](CURRENT_DIR/Images/TerminalPro4/MediaPlayer3.jpg)
+    ![実行画面4](CURRENT_DIR/Images/TerminalPro4/MediaPlayer4.jpg)
+
+# Bullet
+    東方風シューティングゲーム. 
+    様々な動きをする弾幕を避けつつ敵に弾をあてるゲーム.
+    後半ステージは作者もクリアできない.
+
+    ![実行画面1](CURRENT_DIR/Images/TerminalPro4/Bullet1.jpg)
+    ![実行画面2](CURRENT_DIR/Images/TerminalPro4/Bullet2.jpg)
+    ![実行画面3](CURRENT_DIR/Images/TerminalPro4/Bullet3.jpg)
+
+# NadekoAdventure
+    千石撫子(化物語)横スクロールゲーム.
+    主人公である千石撫子を操作して, 暦おにいちゃんに会いに行くゲーム.
+    途中にいるクチナワさんにあたってはいけない.
+
+    ![実行画面1](CURRENT_DIR/Images/TerminalPro4/Nadeko1.jpg)
+    ![実行画面2](CURRENT_DIR/Images/TerminalPro4/Nadeko2.jpg)
+    ![実行画面3](CURRENT_DIR/Images/TerminalPro4/Nadeko3.jpg)
+    ![実行画面4](CURRENT_DIR/Images/TerminalPro4/Nadeko4.jpg)
+
+# Notes
+    いわゆる音ゲー.
+    音楽に合わせて左右にあるボタンをプッシュ.
+    ユーザーは採譜ソフトを使って好きな曲をプレイ曲にすることが可能.
+    採譜ソフトはUnityを使用.
+
+    ![実行画面1](CURRENT_DIR/Images/TerminalPro4/Notes1.jpg)
+    ![実行画面2](CURRENT_DIR/Images/TerminalPro4/Notes2.jpg)
+    ![実行画面3](CURRENT_DIR/Images/TerminalPro4/Notes3.jpg)
+    ![実行画面4](CURRENT_DIR/Images/TerminalPro4/Notes4.jpg)

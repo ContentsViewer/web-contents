@@ -1,0 +1,170 @@
+<Header>
+    <Parent> Unity
+    <Title> Assetの紹介
+    <CreatedAt> 2019-11-10
+    <Tags> ライブラリ
+    <Summary>
+        筆者がこれまでに作成したアセットを紹介します.
+        
+        各アセットの詳しい説明は, 別ページになります.
+        
+        
+        
+        
+    </Summary>
+</Header>
+# ダウンロード
+    [GitHub](https://github.com/ContentsViewer/Unity-BasicAssets)
+    
+# 内容
+    
+    # Audio
+        # AudioRandomRepeater
+            複数音声ファイルランダムリピート再生
+            
+            <https://github.com/ContentsViewer/Unity-BasicAssets/tree/master/Audio/AudioRandomRepeater>
+        
+        # BGMManager
+            背景音再生マネージャ
+            
+            <https://github.com/ContentsViewer/Unity-BasicAssets/tree/master/Audio/BGMManager>
+        
+        # SoundManager
+            サウンドコントロール.
+            
+            フェード再生, ループ再生
+            
+            <https://github.com/ContentsViewer/Unity-BasicAssets/tree/master/Audio/SoundManager>
+    
+    # CameraController
+        追従カメラコントローラ
+        
+        詳しくは, [/Unity/CameraController]
+        
+        <https://github.com/ContentsViewer/Unity-BasicAssets/tree/master/CameraController>
+    
+    # Character
+        # BaseAI
+            ステートベースAI
+            
+            <https://github.com/ContentsViewer/Unity-BasicAssets/blob/master/Character/Base/BaseAI.cs>
+            
+        # BaseCharacterController
+            キャラクタ身体コントロール
+            
+            ダメージ処理, HP処理, 速度管理
+            
+            <https://github.com/ContentsViewer/Unity-BasicAssets/blob/master/Character/Base/BaseCharacterController.cs>
+    
+    # EventController
+        ゲーム内イベント(次はボスを倒すなど)管理
+        
+        詳しくは, [/Unity/EventController]
+        
+        <https://github.com/ContentsViewer/Unity-BasicAssets/tree/master/EventController>
+        
+    # FollowingObject
+        追従オブジェクトコントロール
+        
+        <https://github.com/ContentsViewer/Unity-BasicAssets/tree/master/FollowingObject>
+        
+    # GameObjectDictionary
+        GameObjectにキー名を設定し, グローバルで参照できるようにする.
+        
+        <https://github.com/ContentsViewer/Unity-BasicAssets/tree/master/GameObjectDictionary>
+    
+    # GameObjectLoader
+        Awake, Start時などでゲームオブジェクトを読み込む
+        
+        すでに存在するオブジェクトは複数読み込まない
+        
+        シングルトンマネージャ系で使用する
+        
+        <https://github.com/ContentsViewer/Unity-BasicAssets/tree/master/GameObjectLoader>
+    
+    # GameObjectSetter
+        決められた場所にゲームオブジェクトを配置する
+        
+        <https://github.com/ContentsViewer/Unity-BasicAssets/tree/master/GameObjectSetter>
+    
+    # JitterMotion
+        カメラジッタ(揺れ)
+        
+        <https://github.com/ContentsViewer/Unity-BasicAssets/tree/master/JitterMotion>
+    
+    # LanguagePackManager
+        言語パック管理
+        
+        詳しくは, [/Unity/LanguagePackManager]
+        
+        <https://github.com/ContentsViewer/Unity-BasicAssets/tree/master/LanguagePackManager>
+        
+    # ObjectNote
+        編集中のメモとして, ゲームオブジェクトに説明をつける
+        
+        <https://github.com/ContentsViewer/Unity-BasicAssets/tree/master/ObjectNote>
+    
+    # PIDComputer
+        PID制御器
+        
+        <https://github.com/ContentsViewer/Unity-BasicAssets/tree/master/PIDComputer>
+    
+    # ParticleSystemUtils
+        # ParticleEmitAudioPlayer
+            粒子放出時に効果音をつける
+            
+            <https://github.com/ContentsViewer/Unity-BasicAssets/blob/master/ParticleSystemUtils/ParticleEmitAudioPlayer.cs>
+    
+    # PostEffects
+        画面効果
+        
+        <https://github.com/ContentsViewer/Unity-BasicAssets/tree/master/PostEffects>
+        
+    # RuntimeDebug
+        ゲーム画面にデバック情報を出す
+        
+        <https://github.com/ContentsViewer/Unity-BasicAssets/tree/master/RuntimeDebug>
+        
+    # SceneLoader
+        シーン遷移管理
+        
+        <https://github.com/ContentsViewer/Unity-BasicAssets/tree/master/SceneLoader>
+    
+    # ShatterController
+        オブジェクトの砕けをコントロール
+        
+        <https://github.com/ContentsViewer/Unity-BasicAssets/tree/master/ShatterController>
+    
+    # StateMachine
+        ステート管理とコントロール
+        
+        <https://github.com/ContentsViewer/Unity-BasicAssets/tree/master/StateMachine>
+        
+    # Tween
+        オブジェクトの移動, 回転を行う
+        物理計算を邪魔しない
+        
+        <https://github.com/ContentsViewer/Unity-BasicAssets/tree/master/Tween>
+    
+    # UI
+        # BarController
+            バー(HPバーなど)コントロール
+            
+            <https://github.com/ContentsViewer/Unity-BasicAssets/tree/master/UI/BarController>
+            
+        # HUDMessageManager
+            HUDに文字表示
+            
+            詳しくは, [/Unity/HUDMessageManager]
+            
+            <https://github.com/ContentsViewer/Unity-BasicAssets/tree/master/UI/HUDMessageManager>
+            
+        # TextAnimator
+            文字効果
+        
+            <https://github.com/ContentsViewer/Unity-BasicAssets/tree/master/UI/TextAnimator>
+            
+        # UILineRenderer
+            線描画
+            
+            <https://github.com/ContentsViewer/Unity-BasicAssets/tree/master/UI/UILineRenderer>

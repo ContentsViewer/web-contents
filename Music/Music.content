@@ -1,0 +1,11 @@
+<Header>
+    <Parent> ../Root
+    <Title> 音楽
+    <CreatedAt> 2019-10-19
+    <Tags> 音楽
+    <Summary>
+        
+    </Summary>
+    <Child> Works/Works
+    <Child> Note/Note
+</Header>

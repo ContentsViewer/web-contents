@@ -1,0 +1,99 @@
+<Header>
+    <Parent> TaskScheduler
+    <Title> メモリの構造
+    <CreatedAt> 2017-7-11
+    <Tags> OS, メモリ, Stack, C言語
+    <Summary>
+        ここでは, 実際にタスクが作成されたときのメモリの構造を示していきたいと思います.
+        メモリでの各領域の説明, この構造によるmallocの問題を示します.
+        
+        
+    </Summary>
+</Header>
+# 構造
+    ![メモリ構造](CURRENT_DIR/Images/MemoryStructure.png)
+
+    各タスクごとにTCBとスタックが割り当てられます.
+    TCBは, そのタスクの状態を格納しています.
+    TCBの詳しい説明は, [TCB](./TaskTCB)を参照して下さい.
+    スタックはこのタスクが使用するスタック領域です.
+    通常のArduinoでは, このスタック領域は一つですが,
+    マルチタスクを実現するために各タスクごとにスタック領域を割り当てます.
+    
+
+    上の二つ-TCB, スタック-は, 静的領域に割り振られます.
+    これらの割り当てにいて, OSのメモリ確保関数を用いています-
+    OSのメモリ管理方法については, [メモリ管理](./MemoryManagement)
+    を参照してください. OSのメモリ管理において, OSが準備するヒープ領域は以下のように定義されていました.
+    これが意味するのは, OSのヒープ領域は静的領域に存在します.
+    
+    ```cpp
+        // Allocate the memory for the heap.
+        static unsigned char heap[CONFIG_TOTAL_HEAP_SIZE];
+    ```
+
+    ヒープ領域は静的領域以降にRAMの終わりまで割り当てられます.
+    
+
+# mallocの問題
+    このメモリの構造では, 通常のmalloc()が正しく機能しません.
+    
+    通常のmalloc()が想定するメモリ構造は以下の通りになっています.
+    malloc()は, 静的領域からスタック領域の間にあるヒープ領域
+    でメモリを確保します. malloc()が定義されているソースファイル"malloc.c"
+    を見ると, スタックポイントを次のように定義してあります.
+    
+    ![通常のメモリ構造](CURRENT_DIR/Images/MemoryStructure1.png)
+
+
+    ```cpp
+        //#define STACK_POINTER() ((char *)AVR_STACK_POINTER_REG)
+    ```
+
+
+    図"メモリ構造"と比較して, スタック領域の位置が異なります.
+    OSにおいては, 静的領域内にスタック領域が含まれる一方, 
+    通常は, 静的領域の後にスタック領域が存在します.
+
+    以上からわかるように, このOSではmalloc()は機能しません.
+    スタック領域の先頭位置-スタックポインタ-が静的領域の終わり以下に存在して,
+    malloc()はスタック領域が静的領域に割り込んでヒープ領域が存在しないと解釈し,
+    メモリを確保しません.
+
+    この解決法はmalloc()のメモリ確保判定基準を変更することです.
+    それはすなわち, 静的領域からスタック領域の先頭までの領域から
+    確保できるメモリを探すのではなく, 静的領域からRAMの最後までの領域から,
+    確保できるメモリを探すことです. 
+    この処理を書き換えるのは簡単で, 以下の一行を変更することです.
+
+
+    ```cpp
+        // マクロ定義されているSTACK_POINTER()を本来のスタックポインタ値から,
+        // RAMの最終アドレスに変更する.
+        //#define STACK_POINTER() ((char *)AVR_STACK_POINTER_REG)
+        #define STACK_POINTER() ((char *)RAMEND)
+    ```
+
+    以上で, このOS上でmalloc()が機能することができましたが,
+    もとのmalloc()を改定したmalloc()に置き換える必要があります.
+    mallocのソースファイルを差し替えると, OSを使わないプログラムにも影響を与えてしまう
+    危険がありますので, ここでは, マクロでmalloc()-もとのもの-をMalloc()-改定したもの-
+    に置き換えます. このマクロは"MallocOverride.h"で定義されています.
+
+
+    ```cpp
+        #ifndef ARDUINOS_MALLOC_OVERRIDE_H
+        #define	ARDUINOS_MALLOC_OVERRIDE_H
+        
+        #include "Malloc.h"
+        
+        #define malloc Malloc
+        #define free Free
+        #define calloc Calloc
+        #define realloc Realloc
+        
+        
+        #endif
+    ```
+
+    

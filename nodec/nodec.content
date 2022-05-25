@@ -1,0 +1,23 @@
+<Header>
+    <Parent> ../Root
+    <Title> nodec (GameEngine)
+    <CreatedAt> 2019-02-06
+    <Tags> プロジェクト
+    <Summary>
+        このプロジェクト(nodec プロジェクト)は, 自分でゲームエンジンを作ることを目指したプロジェクトです.
+        ゲームエンジンを自作する過程で得られるプログラミング技術の習得が主な目的です.
+        
+        <https://github.com/ContentsViewer/nodec>
+        
+    </Summary>
+</Header>
+
+# 要素技術
+    本プロジェクトで開発された要素技術
+    
+    # Unicode 文字列処理
+        * [/Library/Cpp/Unicode/Unicode]
+        * [/Programming/unicode-utf-conversion/unicode-utf-conversion]
+    
+    # スレッドプール
+        * [/Cpp/how-to-implement-a-thread-pool/article]

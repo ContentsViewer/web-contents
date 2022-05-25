@@ -1,0 +1,98 @@
+<Header>
+    <Parent> ../ArduinOS
+    <Title> スクリプティング
+    <CreatedAt> 2017-7-11
+    <Tags> 編集中
+    <Summary>
+        ここから, OSのソースファイル, ヘッダファイルを順番に実装していきます.
+        
+        実装するファイルは次のとおりです.
+        
+        * Heap4.c
+        * List.c
+        * List.h
+        * ArduinOS.h
+        * ArduinOSConfig.h
+        * ArduinOSConfigAtmega328P.h
+        * ArduinOSConfigAtmega2560.h
+        * Port.c
+        * Portable.h
+        * PortMacro.h
+        * ProjDefs.h
+        * Queue.c
+        * Queue.h
+        * Semaphore.h
+        * StackMacros.h
+        * Task.c
+        * Task.h
+        
+        変更を加えるファイルは以下のとおりです.
+        
+        * Arduino.h
+        * wiring.c
+        * main.cpp
+        
+        基本的な製作の流れを踏まえつつ, 各ファイルごとに説明を行っていきます.
+        
+        
+        
+        
+        
+    </Summary>
+    <Child> BasicProcess
+    <Child> Port.c
+    <Child> Heap4.c
+</Header>
+
+
+# 各ファイルの細かな説明
+__________________________________________
+    スクリプトをっていくとき, どうしても必要な知識が必要な時があります.
+    それは, プログラムでの典型的なデータ構造やポインタ, マイコン特有のレジスタ関連, CPUの動きなどといった細かな知識です.
+    ここでは, ファイルごとに, 関係している説明ページを挙げていきます.
+    
+    
+    # List.c / List.h
+    
+        * [../TaskStateList]
+    
+    # ArduinOS.h
+        
+        * [../define]
+    
+    # ArduinOSConfig.h / ArduinOSConfigAtmega328P.h / ArduinOSConfigAtmega2560.h
+        
+        * [../Setting]
+    
+    
+    # PortMacro.h
+        
+        * [../define]
+    
+    # ProjDefs.h
+    
+    # Queue.c / Queue.h
+    
+    # Semaphore.h
+    
+    # StackMacros.h
+    
+    # Malloc.c / Malloc.h / MallocOverride.h
+        
+        * [../TaskStack]
+    
+    # Task.c / Task.h
+    
+        * [../TaskScheduler]
+    
+    # Arduino.h
+    
+    # main.cpp
+    
+    # wiring.c
+    
+        * [../CombineWithArduino]
+    
+
+
+

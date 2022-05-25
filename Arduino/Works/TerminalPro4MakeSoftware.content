@@ -1,0 +1,100 @@
+<Header>
+    <Parent> TerminalPro4
+    <Title> TerminalPro4ソフトウェア製作
+    <CreatedAt> 2017-5-4
+    <Tags> 
+    <Summary>
+        TerminalPro4用のソフトウェアの作り方を説明します.
+        
+        * ソフト作製の流れ
+        * TerminalPro4での制御流れ
+        * ソフトの作り方
+        
+    </Summary>
+</Header>
+# ソフト作製の流れ
+    ソフト製作全体の流れは次の通りです.
+
+    * ArduinoIDEでプログラムをかく
+    * コンパイル & ビルド
+    * Hexファイル入手
+    * SDカード内へHexファイルをコピー
+    * Boot画面でアプリケーション書き込み & 実行
+
+    Hexファイルの入手方法は[SketchWriterの使い方](./../UsageSketchWriter)を参照してください.
+
+    入手したHexファイルはSDカードの決められたフォルダに入れる必要があります.
+    詳しくは, 以下のTerminalPro4での制御流れを参照してください.
+
+    Boot画面に入るにはある条件を満たす必要があります.
+    Boot画面への入り方は以下のTerminalPro4での制御流れを参照してください.
+
+
+# TerminalPro4での制御流れ
+    TerminalPro4に電源を入れてからメインマイコンがアプリケーションを実行するまでの流れは次のようになります.
+
+    ![電源投入からアプリケーション実行まで](./Images/TerminalPro4/Flow.png)
+
+
+    上の図からわかるように, Boot画面に入るにはSDカードが入っていてかつアプリケーション'SerialMonitor'が入っている必要があります.
+    SerialMonitorとはシリアル通信で受け取った文字列をグラフィック液晶に描画するものです.
+    これによってBootはメインマイコンを使って情報を画面に描画することができます.
+    SrialMonitorのプログラムは[ダウンロードページ](./TerminalPro4Download)から取得したフォルダ内にある
+    スケッチ'Example/TerminalPro4SerialMonitor/TerminalPro4SerialMonitor.ino'です.
+    これをビルドしHexファイルにしたものは'SD/Term4/Sketch/SerMon.hex'です.
+    ビルド済みのSerMon.hexをそのままお使いください.
+    ただし, SDカードの'Term4/Sketch'フォルダ内に置く必要があります(この理由は後述).
+
+    ![Boot画面](./Images/TerminalPro4/EnterBoot.jpg)
+
+    作製したアプリケーションのHexファイルはSDの'Term4/Sketch'フォルダに必ず入れてください.
+    Bootはこのフォルダ内にHexファイルがあるかを確認します.
+
+# ソフトの作り方
+    # 概要
+        ここでは, 実際にソフトを作るまでの手順を記述していきます.
+        それほど, 手順は多くありません.
+
+    # 新規にスケッチを作成
+    
+    # 各種ヘッダファイルをコピー&ペースト
+        ヘッダファイルは, [ダウンロードページ](./TerminalPro4Download)から取得したフォルダ内にある
+        'Example/TerminalPro4Non'フォルダ内のすべてのヘッダファイルです.
+
+        * Canvas.h
+        * Controller.h
+        * Font.h
+        * GLCDController.h
+        * Images.h
+        * MediaPlayerController.h
+        * TerminalPro4CommonSetting.h
+
+    # TerminalPro4CommonSetting.hをインクルード & 初期設定
+        次のように書きます.
+
+        ```cpp
+            #include "TerminalPro4CommonSetting.h"
+            
+            void setup() {
+                //初期設定
+                SetupTerminalPro4();
+                
+            }
+            void loop() {
+            }
+        ```
+
+        関数'SetupTerminalPro4()'を実行するだけで, TerminalPro4が備えているすべてのモジュールが使用可能になります.
+        TerminalPro4CommonSetting内で各ライブラリの初期設定(ピン設定)が書かれています.
+        [TerminalPro4ハードウェア製作](./TerminalPro4MakeHardware)
+        の通りのピン接続の場合, 特に変更する必要はありません.
+
+    # 実装
+        あとは実装です. 好きに書きましょう.
+
+        グラフィック液晶に何か書きたい時は, [GLCDControllerの使い方](./../UsageGLCDController)を参照してください.
+
+        スイッチの状態を読みたい時は, [Controllerの使い方](./../UsageController)を参照してください.
+    
+        音楽を再生したい時は, [MediaPlayerの使い方](./../UsageMediaPlayer)を参照してください.
+        用意した音楽ファイルはSDのルートディレクトリに置く必要があります.

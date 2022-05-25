@@ -1,0 +1,208 @@
+<Header>
+    <Parent> ../Network
+    <Title> ラズパイ, VPN, Steamを用いた, 外出先でのストリーミングゲームプレイの提案
+    <CreatedAt> 2019-02-10
+    <Tags> ラズパイ, VPN, Steam, 遊び
+    <Summary>
+        
+        
+    </Summary>
+</Header>
+# 背景と問題
+    近年, Google Stadia^[stadia], 任天堂スイッチでのクラウドゲームサービス^[bio7]といった,
+    ゲーム処理をコンソール上ではなく, 外部サーバで行い,
+    コンソールは処理結果の受信と, 入力情報の送信を行う方法が注目を浴びています.
+    このようなストリーミング方法には, コンソール上に十分な空き容量がない場合や
+    低スペックである場合などでも, 大容量で高品質なゲームをプレイできる利点があります.
+    
+    本稿では, ストリーミング方法を外部のサービスに頼ることなく,
+    個人で行える方法を提案します.
+    使用する機材は, ラズパイ, ハイスペックPC, ルータです.
+    ゲームプラットフォームは, Steam^[steam-top]を使用します.
+    
+    [Steamは公式でリモートプレイに対応しました :: WARNING]
+    ===============
+        2019年後半にかけて, Steamは公式でリモートプレイに対応しています.
+        [Steam リモートプレイ](https://store.steampowered.com/streaming/?l=japanese)
+        
+        * この記事で書かれている"VPNの構築"はする必要はありません.
+        * "WOLのセットアップ"は参考になると思います.
+        
+    ===============
+    
+# 原理
+    # ストリーミング
+        ストリーミングは, Steamのホームストリーミング^[steam-home-streaming]を利用します.
+        Steamホームストリーミングは, ゲームがあるPCと同じLAN内にある端末でゲームができるものです.
+        ただ, このSteamホームストリーミングは同じLAN内にいる必要があるので, 
+        このままでは, 外部LANからプレイできません.
+    
+    # VPN
+        Steamホームストリーミングは, 同じLAN内にある場合のみ機能します.
+        外出先でもこのLANにいるために, VPNを使用します.
+        VPN(virtual private network: 仮想私設ネットワーク)とは, 地理的に分散している箇所でも
+        同じネットワークを構築する方法です.
+        VPNソフトウェアは, [SoftEther VPN](https://ja.softether.org/)を使用します.
+    
+    # WOL
+        外出先でゲームをするためには, ストリーミングを行うハイスペックPCの電源がついている必要があります.
+        いつでもプレイしたい場合, PCの電源を遠隔でつけられるようにしなければなりません.
+        そこで, WOL(Wake On LAN)という方法を使用します.
+        WOLとは, ネットワークにマジックパケットを送信することにより, 遠隔でPCを起動する技術です.
+        
+        ただ, マジックパケットをWAN側から送信するのはなかなかうまくいきません.
+        というのも, 自宅LANとWANの間にはルータがあるのですが,
+        WAN側からルータの指定したポートにマジックパケットを送り, ポートフォーワードで起動したいPCの
+        ipに転送しても, そのPCの電源はその時落ちているため, ルータはそのipへの経路が分からず,
+        マジックパケットの転送に失敗します(電源を落とした直後ならルータが経路情報を記憶していて, うまくいく場合もあります).
+        
+        
+        指定したポートから特定のポート転送に失敗する解決策の一つに, 
+        ルータが属するLANにマジックパケットをブロードキャストする方法がありますが,
+        全てのルータがブロードキャストに対応しているとは限りません(ELECOMのルータはダメでした. バッファローのルータは対応しています).
+        
+        
+    # ラズパイ
+        ポートフォーワードによるWOLはうまくいきません.
+        そこで, マジックパケットの送信をPCと同じLANにあるラズパイで行います.
+        LAN内にマジックパケットをブロードキャストします.
+        
+        ラズパイへのアクセスはSSHで行います.
+    
+    # リモートデスクトップ
+        WOLでメインPCを起動した後, メインPCでVPNサーバを立ち上げたり,
+        Steamを起動したりしなければなりません.
+        そこで, [Chrome リモートデスクトップ](https://remotedesktop.google.com/home)を使用します.
+        リモートデスクトップは, ゲーム以外の目的でも使えるため便利です.
+        
+    # プレイするまでの流れ
+        ![全体像](CURRENT_DIR/Images/Overview.png)
+        
+        1. モバイルPCからまずラズパイにSSHでログイン後, Wake On Lanでゲームが入っているPC(ホストPC)を起動します.
+        2. 電源が入ったころを見計らって, Goole Remote DektopでホストPCの画面を出します.
+        3. ホストPCのVPNサーバを立ち上げた後, ホストPC自身もそのVPNサーバに接続します.
+        4. モバイルPCをVPNサーバに接続します(この段階でホストPC, モバイルPCは同じLANにいることなります).
+        5. ホストPC, モバイルPC両方にあるSteamソフトを立ち上げます.
+        6. Remote desktop を終了し, モバイルPC上のSteamからストリーミングでホストPCのゲームを立ち上げます.
+        7. PLAY
+        8. Play終了後, ホストPCの電源を落とすため, 再びRemote Desktopを立ち上げ, ホストPCの電源をおとす.
+
+# 設定
+    # RemoteDesktopの設定
+        Chromeリモートデスクトップのセットアップは, 本家サイト
+        [Chromeリモートデスクトップ](https://remotedesktop.google.com/home)を参照してください.
+        
+    # VPN環境の構築
+        # ホストPC側
+            [softetherダウンロードセンター](https://www.softether-download.com/ja.aspx?product=softether)から
+            
+            * コンポーネント: `SoftEther VPN Server`
+            * プラットフォーム: `Windows`
+            
+            を選択し, rtm 版をダウンロードします.
+            
+            ウィザードに従って, 設定します.
+            
+            [softetherダウンロードセンター](https://www.softether-download.com/ja.aspx?product=softether)から
+            
+            * コンポーネント: `SoftEther VPN Client`
+            * プラットフォーム: `Windows`
+            
+            を選択し, rtm 版をダウンロードします.
+            
+            ウィザードに従って, 設定します.
+        
+        # モバイルPC側
+        
+            
+            [softetherダウンロードセンター](https://www.softether-download.com/ja.aspx?product=softether)から
+            
+            * コンポーネント: `SoftEther VPN Client`
+            * プラットフォーム: `Windows`
+            
+            を選択し, rtm 版をダウンロードします.
+            
+            ウィザードに従って, 設定します.
+            
+    # ラズパイの設定
+        # SSH
+            [設定] -> [Raspberry Piの設定]からSSHを有効にしておきます.
+            
+            ルータの`22`番ポートを開放し, ラズパイのipに転送します.
+            
+            モバイルPCからラズパイにSSH接続は, 下記コマンドで行います.
+            Windowsの場合, WSL(Windows Subsystem For Linux)でLinux環境を構築するのをお勧めします.
+            WSLは, Microsoft公式のLinux仮想環境です.
+            
+            ```bash
+                ssh <ユーザ名>@<ルータグローバルip>
+            
+            ```
+            
+            `<ユーザ名>`デフォルトは`pi`です.
+            
+            ルータのグローバルipの確認は,
+            [ip確認サイト](https://www.cman.jp/network/support/go_access.cgi)
+            などで確認できます.
+            ルータを通してインターネットに接続していることに注意してください.
+            
+            もしくは, 下記コマンドでも確認可能です.
+            
+            ```bash
+            
+                curl inet-ip.info
+            
+            ```
+            
+            
+            
+        # WOL
+            ルータに無線LAN接続しておきます.
+            
+            下記コマンドで`etherwake`をインストール
+            ```bash
+                apt install etherwake
+            ```
+            
+            ラズパイに新しくファイル`wakeup_main_pc.sh`を作ります.
+            
+            `wakeup_main_pc.sh`に以下を書きます.
+            
+            ```bash
+                #!/bin/sh
+
+                sudo etherwake -i wlan0 -b -D <メインPCのMACアドレス>
+
+            ```
+            
+            `メインPCのMACアドレス`は, `ipconfig /all`コマンドで確認できます.
+            MACアドレスは`XX:XX:XX:XX:XX:XX`の形式です.
+            
+            メインPCの起動は, ラズパイにSSHでログイン後,
+            `./wakeup_main_pc.sh`で起動できます.
+            
+    # Steam設定
+        [設定] -> [ホームストリーミング]で,
+        ストリーミング品質などの設定が行えます.
+        
+        
+    # ルータ設定
+        # ポートフォーワーディング
+            | ポート番号 || 転送先 | 説明 |
+            |------------||--------|------|
+            | 22         || ラズパイ | SSH |
+            | 443         || メインPC | VPN |
+            | 500         || メインPC | L2TP |
+            | 4500         || メインPC | L2TP |
+            
+
+
+--------------------------------------------------------------------------------
+[stadia]: "[Google Stadia](https://store.google.com/us/magazine/stadia?hl=en-US)". \
+    Google. (accessed at 2020-3-1)
+[bio7]: "[バイオハザード7クラウド](http://www.capcom.co.jp/bh7cloud/)". \
+    CAPCOM. (accessed at 2020-3-1)
+[steam-top]: "[Steamホームページ](https://store.steampowered.com/?l=japanese)". \
+    Steam. (accessed at 2020-3-1)
+[steam-home-streaming]: "[Steamホームストリーミング](https://store.steampowered.com/streaming/?l=japanese)". \
+    Steam. (accessed at 2020-3-1)

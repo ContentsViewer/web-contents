@@ -1,0 +1,397 @@
+<Header>
+    <Parent> SketchWriter
+    <Title> SketchWriterの関数, 変数一覧
+    <CreatedAt> 2016-12-8
+    <Tags> 
+    <Summary>
+        |[関数]
+        | ----------------------||---------------------------------------------|
+        | [Begin](#Begin)       || SketchWriterの開始                           |
+        | [End](#End)           || SketchWriterの終了                           |
+        | [SetReaetPin](#SetReaetPin) || リセット信号を出すピンの設定             |
+        | [ResetArduino](#ResetArduino) || Arduinoにリセットをかける                |
+        | [GetCh](#GetCh)               || optibootからシリアルデータを受け取る     |
+        | [Wait](#Wait)                 || optibootからの処理完了信号-STK_OK-待機   |
+        | [GetInSync](#GetInSync)       || optibootからのSTK_INSYNK信号待機         |
+        | [VerifySpace](#VerifySpace)   || コマンド有効化                           |
+        | [AppStart](#AppStart)         || プログラムの開始                         |
+        | [GetSync](#GetSync)           || optibootと同期をとる                     |
+        | [GetParameter](#GetParameter) || optibootからOPTIBOOT_MAJVERまたはOPTIBOOT_MINVERを取得 |
+        | [SetAddress](#SetAddress)     || メモリのオフセット値を送信               |
+        | [SendData](#SendData)           || データの送信                             |
+        | [SketchWrite](#SketchWrite)       || スケッチの書き込み                   |
+        | [SerialClear](#SerialClear)       || シリアルデータ削除                   |
+        | [SetFileName](#SetFileName)       || 文字列'sketchName'にファイル名を代入 |
+        | [SketchLoad](#SketchLoad)         || スケッチ-HexFile-の読み込み          |
+        | [SketchReload](#SketchReload)     || スケッチ-HexFile-の再読み込み        |
+        | [SketchClose](#SketchClose)       || スケッチ-HexFile-を閉じる            |
+        | [ReadHexVal](#ReadHexVal)         || HexFileから1Byteの数値を読み込む     |
+        | [ReadHexData](#ReadHexData)       || HexData読み込み, 配列'hexData'に格納 |
+        
+        |[変数]
+        |-----------------------------------------------------||---------------------------------------------|
+        | [hexData[hexDataBufSize]](#hexData)                 || 読み込んだHexData                              |
+        | [fileEnded](#fileEnded)                             || HexFile読み取り位置状態                        |
+        | [sketchName](#sketchName)                           || ロードしたHexFile名                            |
+        | [sendDataSize](#sendDataSize)                       || 一回でoptibootに送るデータサイズ                 |
+        | [hexDataBufSize](#hexDataBufSize)                   || 配列'hexData'のサイズ                          |
+        
+        
+    </Summary>
+</Header>
+
+# [[Begin]]Begin
+    void Begin(byte pinCS)
+
+    # パラメータ
+        |----||--------|
+        | pinCS || SDカードのチップセレクトピン |
+
+    # 説明
+        SketchWriterを開始します. 
+        SketchWriterを使用する前に一回実行する必要があります.
+
+
+# [[End]]End
+    boolean End(void)
+
+    # 返り値
+        trueの時成功, それ以外は失敗.
+
+    # 説明
+        SketchWriterを終了します。
+        この関数がしているのはシリアル通信の終了とHexFileを閉じるだけです。
+        あまり使う必要はありません。
+
+# [[SetResetPin]]SetResetPin
+    void SetResetPin(byte pin)
+
+    # パラメータ
+        |----||--------|
+        | pin || リセット信号を出すピン |
+
+    # 説明
+        リセット信号を出すピンを設定します.
+        この関数でまずリセット信号ピンを設定して関数'ResetArduino'を使うことになります.
+        ここでリセットピンを設定せずに関数'ResetArduino'を使用することはできません.
+
+
+# [[ResetArduino]]ResetArduino
+    void ResetArduino(byte pin)
+
+    # パラメータ
+        |----||--------|
+        | pin || リセット信号を出すピン |
+
+    # 説明
+        操作されるArduinoにリセットをかけます. 
+        リセットをかけた後そのArduinoでoptibootが起動します.
+        引数として渡す'pin'は関数'SetResetPin'であらかじめ設定する必要があります.
+
+
+# [[GetCh]]GetCh
+    byte GetCh(void)
+
+    # 返り値
+        受信したシリアルデータ
+
+    # 説明
+        optibootからシリアルデータを受け取ります. シリアルデータがとどくまで待機します.
+        optibootからシリアルデータを受信したいときはこの関数を使います.
+
+        この関数を使うことはほとんどありません.
+        この関数はSketchWriter内部で使われる関数です. この関数を使うことはほとんどありません.
+
+
+# [[Wait]]Wait
+    void Wait(void)
+
+    # 説明
+        optibootからの処理完了信号(STK_OK)がとどくまで待機します. 
+        処理完了信号(STK_OK)とは、optibootが処理を完了したことを知らせる信号です. 
+        この信号を受信してoptibootに新しいコマンドを送信しなければなりません.
+
+        この関数を使うことはほとんどありません.
+        この関数はSketchWriter内部で使われる関数です. この関数を使うことはほとんどありません.
+
+        optibootにコマンドを送る関数を新たに作る場合, この'wait'関数を使うことになります.
+        optibootにコマンドを送信した後この関数を実行するとよいでしょう.
+        
+
+
+# [[GetInSync]]GetInSync
+    void GetInSync(void)
+
+    # 説明
+        optibootからのSTK_INSYNC信号がとどくまで待機します.
+        この信号は、信号'CRC_EOP'―コマンド送信後に必ず送らなければならない―送信後に返ってくる信号です.
+        この信号を受信してoptibootに新しいコマンドを送信しなければなりません.
+
+        この関数を使うことはほとんどありません.
+        この関数はSketchWriter内部で使われる関数です. この関数を使うことはほとんどありません.
+
+        optibootにコマンドを送る関数を新たに作る場合, この関数を使うことになります.
+        CRC_EOP信号送信後この関数を実行するとよいでしょう.
+        もしくはCRC_EOP信号の送信とSTK_INSYNC信号の待機―この関数'GetInSync'を使っています―
+        を行っている関数'VerifySpace'を使ってください. 
+        
+
+
+# [[VerifySpace]]VerifySpace
+    void VerifySpace(void)
+
+    # 説明
+        送信したコマンドを有効にします.
+        この関数では、CRC_EOP信号を送信した後STK_INSYNC信号がoptibootから届くまで待機しています.
+        コマンド送信後CRC_EOP信号を送らないとoptibootは自動で終了してしまします.
+
+        この関数を使うことはほとんどありません.
+        この関数はSketchWriter内部で使われる関数です. この関数を使うことはほとんどありません.
+
+        optibootにコマンドを送る関数を新たに作る場合, この関数を使うことになります.
+        コマンド送信後この関数を実行するとよいでしょう.
+        
+
+
+# [[AppStart]]AppStart
+    void AppStart(void)
+
+    # 説明
+        optibootを終了します. 
+        optiboot終了後プログラムが実行します.
+        
+
+        
+
+# [[GetSync]]GetSync
+    void GetSync(void)
+
+    # 説明
+        optibootと同期をとります. 
+        optiboot起動後この関数を実行するとよいでしょう.
+        
+
+# [[GetParameter]]GetParameter
+    byte GetParameter(byte which)
+
+    # パラメータ
+        |-------||-----------|
+        | 0x82 || OPTIBOOT_MINVER |
+        | 0x81 || OPTIBOOT_MAJER |
+
+    # 返り値
+        optibootが返した値
+
+    # 説明
+        optibootからOPTIBOOT_MAJVERまたはOPTIBOOT_MINVERを取得します. 
+        この関数を実行したときoptibootから返ってくる値は'4'のはずです.
+
+
+# [[SetAddress]]SetAddress
+    void SetAddress(word offset)
+
+    # パラメータ
+        |-------||-----------|
+        | offset || 送信したいメモリのオフセット値 |
+
+
+    # 説明
+        指定したメモリのオフセット値を送信します. 
+        optibootはセットしたアドレスからプログラムデータを書き始めます.
+
+
+        この関数を使うことはほとんどありません.
+        この関数はSketchWriter内部で使われる関数です. この関数を使うことはほとんどありません.
+
+
+
+# [[SendData]]SendData
+    byte SendData(byte num)
+
+    # パラメータ
+        |-------||-----------|
+        | num || 送りたいデータの数 |
+
+    # 返り値
+        関数'ReadHexData'の返り値
+
+    # 説明
+        指定した個数のデータをoptibootに送信します. よく使われるデータの送信数は128です.
+        関数'SketchWrite'はoptibootにスケッチを送信するとき、スケッチデータ(HexData)を128個ずつわけて送信しています。
+
+
+        この関数を使うことはほとんどありません.
+        この関数はSketchWriter内部で使われる関数です. この関数を使うことはほとんどありません.
+
+
+
+# [[SketchWrite]]SketchWrite
+    bool SketchWrite(void)
+
+    # 返り値
+        trueの時, 成功. falseの時, 失敗.
+
+    # 説明
+        スケッチをoptibootに送信します. 
+        この関数を実行する前に関数'SketchLoad'でHexFileを読み込んでください。
+        関数'SketchLoad'で読み込まれたスケッチ(HexFile)をoptibootに送信します。
+
+
+# [[SerialClear]]SerialClear
+    void SerialClear(void)
+
+    # 説明
+        シリアルデータを削除します. 
+        optibootから送られてくる信号'STK_OK', 'STK_INSYNC'を消さないように注意してください.
+        関数'Wait', 'GetInSync'内で無限ループする場合があります.
+        
+        この関数を使うことはほとんどありません.
+        この関数はSketchWriter内部で使われる関数です. この関数を使うことはほとんどありません.
+
+
+
+# [[SetFileName]]SetFileName
+    void SetFileName(char *str)
+
+    # パラメータ
+        |---------||------------------|
+        | str   || 格納したい文字列の先頭アドレス |
+
+    # 説明
+        文字列'sketchName'に指定する文字列を格納します.
+        
+        この関数を使うことはほとんどありません.
+        この関数はSketchWriter内部で使われる関数です. この関数を使うことはほとんどありません.
+
+
+# [[SketchLoad]]SketchLoad
+    boolean sketchLoad(char *sketchName)
+
+    # パラメータ
+        |---------||------------------|
+        | sketchName   || 読み込みたいスケッチ名(HexFile名)が書かれた文字列の先頭アドレス |
+
+    # 返り値
+        trueの時, 成功. falseの時, 失敗.
+
+    # 説明
+        スケッチ(HexFile)を読み込みます。
+        読み込み後、関数'sketchWrite'を使用できます.
+        読み込みに成功すると文字列'sketchName'にファイル名が一時保存されます。
+        
+
+# [[SketchReload]]SketchReload
+    boolean SketchReload(void)
+
+    # 返り値
+        trueの時, 成功. falseの時, 失敗.
+
+    # 説明
+        スケッチをリロードします.
+
+
+
+# [[SketchClose]]SketchClose
+    void SketchClose(void)
+
+    # 説明
+        現在開いているスケッチ(HexFile)を閉じます. 閉じた後別のスケッチを開くことができます.
+
+
+# [[ReadHexVal]]ReadHexVal
+    byte ReadHexVal(void)
+
+    # 返り値
+        読み込んだ数値
+
+    # 説明
+        HexFileから1Byteの数値を読み込みます. 
+        つまり、HexFileから二文字分読み込みそしてそれを数値にします. 
+        HexFileでは二文字で8bit数値です. 一文字が4bitの理由は一文字が16進数の文字だからです.
+        読み込んでいる最中でHexFileの最後に到達したときは変数'fileEnded'を'true'にします.
+
+        
+        この関数を使うことはほとんどありません.
+        この関数はSketchWriter内部で使われる関数です. この関数を使うことはほとんどありません.
+
+
+
+# [[ReadHexData]]ReadHexData
+    byte ReadHexData(byte num)
+
+
+    # パラメータ
+        |---------||------------------|
+        | num   || 読み込みたいデータの数<br />上限はhexDataBufSizeまでです |
+
+    # 返り値
+        読み込んだデータの数
+
+    # 説明
+        HEXファイルから指定した個数のデータを配列'hexData'に格納します. 
+        上限はhexDataBufSizeまでです. この関数がHexFileを主に扱います.
+        読み込んでいる最中でHexFileの最後に到達したときは変数'fileEnded'を'true'にします. 
+        
+        この関数を使うことはほとんどありません.
+        この関数はSketchWriter内部で使われる関数です. この関数を使うことはほとんどありません.
+
+
+# [[hexData]]hexData[hexDataBufSize]
+    
+
+    # 説明
+        読み込んだHexデータ
+
+        読み込んだHexDataを格納しています. ここにデータを格納する関数は'ReadHexData'です.
+        このデータを読み込んでoptibootにデータを送信する関数は'SendData'です.
+        この配列のデータサイズはhexDataBufSizeです.
+        
+
+
+# [[fileEnded]]fileEnded
+    
+
+    # 説明
+        HexFile読み取り位置状態を格納しています
+
+        HexFile読み取り位置状態を格納しています。
+        ファイルの最後に到達したときこの変数を'true'にする関数は'ReadHexData', 'ReadHexVal'です.
+        この変数を確認してスケッチの送信を止める関数は'SketchWrite'です。
+        この変数を'false'にする関数は'SketchLoad'です。
+
+
+
+# [[sketchName]]sketchName
+    
+
+    # 説明
+        ロードしたHexFile名を格納しています
+
+        ロードしたHexFile名を格納しています. 
+        関数'SketcLoad'を実行したとき―スケッチをロードしたとき―この文字列にファイル名が格納されます.
+        関数'SketchReload'を実行したとき―スケッチをリロードするとき―にこの文字列が参照されます.
+        
+
+
+# [[sendDataSize]]sendDataSize
+    
+
+    # 説明
+        一回でoptibootに送るデータサイズが定義されています
+
+        一回でoptibootに送るデータサイズが定義―ヘッダファイル上部で定義―されています。
+        よく使われるデータの送信サイズは128です. 
+        optibootにプログラムを送信するとき、プログラムデータ(HexData)を128個ずつわけて送信しています.
+        
+        
+# [[hexDataBufSize]]hexDataBufSize
+    
+
+    # 説明
+        配列'hexData'のサイズが定義されています
+
+        配列'hexData'のサイズが定義―ヘッダファイル上部で定義―されています.
+        この値を大きくするとたくさんのHexDataを保存できますが、
+        スケッチをoptibootに送信するときいずれにしても分けて送信しているのであまり効果はないでしょう.
+        16が一番良い値です;一レコードあたりHexDataは16こあるからです.
+

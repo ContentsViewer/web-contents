@@ -1,0 +1,54 @@
+<Header>
+    <Parent> ArduinOS
+    <Title> 準備
+    <CreatedAt> 2017-7-11
+    <Tags> 
+    <Summary>
+        OSを作成するにあたっての準備を行います.
+        
+        
+    </Summary>
+</Header>
+# 用意するもの
+    # ボード: ArduinoUno もしくは ArudinoMega
+        今回のOSは以下の対応表にあるAVRマイコンが用いられているボードならば対応できますが,
+        説明としてこれら二つに限らせてもらいます. ArduinoUno が使用しているマイコンは,
+        ATmega328, ArduinoMegaが使用しているマイコンはATmega2560です.
+    
+        OSが対応するAVRマイコンは次のとおりです.
+    
+    
+        * ATmega128
+        * ATmega8
+        * ATmega168 / 328 / 1280 / 2560
+        * ATmega645
+        * ATtiny24 / 44 / 84
+    
+    # ArduinoIDE
+        ArduinoIDEは[Arduino-Home](https://www.arduino.cc/)
+        からダウンロードできます. 動作確認済みのバージョンはArduino 1.8.3です.
+
+# 作業フォルダ
+    OS作成では, ソースファイルおよびヘッダファイルを作成します.
+    また, もともとありますArduinoのコアファイルもOS用に変更していきます.
+    ここでは, これらファイルを作成するための作業フォルダの準備を行います.
+
+    # Arduinoコアフォルダのコピー＆ペースト
+        インストールしたArduinoIDEフォルダから以下のフォルダをコピーし,
+        好きな場所にペーストしてください. このフォルダが作業フォルダになります.
+        ArduinoIDEの場所は通常"C:\Program Files (x86)\"下にあります.
+
+
+        ```cpp
+            (ArduinoIDEが存在するディレクトリへのパス)/Arduino/hardware/arduino/avr/cores/arduino
+        ```
+        
+    # ペーストしたコアフォルダ(以下から作業フォルダ)の名前を変更してください.
+        ペーストしたコアフォルダ名を"arduino.ArduinOS"に変更してください.
+        "ArduinOS"の部分はあなたが付けたいOS名前でも問題ありません.
+        ただし, 以下から表示される文字列"ArduinOS"をすべて新しい名前に読み替えてください.
+        以下から便宜上のため, OSの名前をArduinOSにします.
+
+    # 作業フォルダ内に"ArduinOS"フォルダを作成して下さい
+        ArduinOSフォルダ内に新しく作成するファイルが入ります.
+

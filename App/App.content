@@ -1,0 +1,14 @@
+<Header>
+    <Parent> ../Root
+    <Title> アプリケーション一覧
+    <CreatedAt> 2018-8-30
+    <Tags> 
+    <Summary>
+        ここでは, 筆者が作成したアプリケーションを挙げていきます.
+        
+    </Summary>
+    <Child> GameList/GameList
+    <Child> BrowserGames/BrowserGames
+    <Child> Othello/Othello
+    <Child> TwitterBot/TwitterBot
+</Header>

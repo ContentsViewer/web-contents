@@ -1,0 +1,11 @@
+<Header>
+    <Parent> DebugPage
+    <Title> ここにはタイトルを書きます
+    <CreatedAt> 2016-12-8
+    <Tags> 
+    <Summary>
+        ここには, このコンテンツの概要を書きます.
+    </Summary>
+</Header>
+
+ここには, このコンテンツ自身の内容を書きます.

@@ -1,0 +1,19 @@
+<Header>
+    <Parent> ArduinOS
+    <Title> 参考文献
+    <CreatedAt> 2017-7-11
+    <Tags> 
+    <Summary>
+        ここでは, 筆者が参考にしたページ, 資料の一覧が書かれます.
+    </Summary>
+</Header>
+
+# 参考文献
+    * <cite>Arduino. <a href="https://github.com/arduino/Arduino/wiki/Build-Process" target="_blank">Build Process - arduino</a>(accessed 2017/9/6)</cite>
+    * <cite>Atmel. <a href="http://www.atmel.com/Images/Atmel-42735-8-bit-AVR-Microcontroller-ATmega328-328P_Datasheet.pdf" target="_blank">ATmega328/P DATASHEET COMPLETE</a>(accessed 2017/9/3) </cite>
+    * <cite>FreeRTOS. <a href="http://www.freertos.org/index.html" target="_blank">FreeRTOS</a>(accessed 2017/9/3)</cite>
+    * <cite>近藤嘉雪. (2014). 定本 Cプログラマのためのアルゴリズムとデータ構造</cite>
+    * <cite>橋本洋志, 松永俊雄, 小林裕之, 天野直紀. (2014). 図解コンピュータ概論「ハードウェア」(改定3版)</cite>
+    * <cite>渡波郁. (2015). CPUの創り方</cite>
+
+

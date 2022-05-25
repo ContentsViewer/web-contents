@@ -1,0 +1,220 @@
+<Header>
+    <Parent> GLCDController
+    <Title> GLCDControllerの使い方
+    <CreatedAt> 2016-12-8
+    <Tags> 
+    <Summary>
+        GLCDControllerの基本的な使い方を説明します.
+        説明項目は以下のとおりです.
+        
+        * GLCDControllerのしくみ
+        * ピン設定とGLCDControllerの開始
+        * 文字の表示
+        * 画像の表示
+        
+        
+    </Summary>
+</Header>
+# GLCDControllerのしくみ
+    ![GLCDControllerのしくみ](./Images/GLCDController/Img1.png)
+    
+    # Canvasについて
+        GLCDController自体が2Dグラフィックを操作するのではありません.
+        GLCDControllerのメンバ変数であるCanvasが2Dグラフィックを担当します.
+        GLCDControllerはあくまでCanvasの内容をグラフィック液晶に反映するのみです.
+        Canvasの使い方に関しては[Canvasの使い方](./CanvasUsage)を参照してください.
+    
+    # Drawについて
+        Drawとはディスプレイに描画する前の描画空間Canvasをディスプレイに描画する関数です.
+        けれども、Drawが実行されたからといって必ずしもディスプレイを描画するとは限りません.
+        
+        Drawは前回描画時の情報とこれから描画情報を比べて情報が異なるときのみ描画を行います。
+        これはすなわち何も描画内容が変更されなかった場合はディスプレに書き込みを行わないことになります。
+        ArduinoのLoop関数内でこの処理に時間をとられません。
+        また画面の更新速度の面で比較的効率が良くなります。
+
+# ピン設定とGLCDControllerの開始
+    Arudinoとグラフィック液晶間のピン設定をし、GLCDControlllerを開始します。\
+    SetUp関数内でピンの設定、GLCDControllerの開始を行います\
+    
+    ```cpp
+        #include "GLCDController.h"
+        GLCDController glcdCtrl;
+        
+        void setup() {
+        //ピン設定
+            GLCDController::Param param;
+            param.pinRS = 13;
+            param.pinRW = 12;
+            param.pinE = 11;
+            param.pinCS1 = 14;
+            param.pinCS2 = 15;
+            param.pinRST = 2;
+            param.sizeX = 128;
+            param.sizeY = 64;
+        
+            //グラフィックディスプレイを使う前に必ずする
+            glcdCtrl.Begin(param);
+        }
+    ```
+
+    DBピンは固定されています.
+    以下の対応表を参照してください.
+
+    |[ピン対応表]
+    | グラフィック液晶 | Arduino |
+    |----------------|---------|
+    | DB0 | DP2 |
+    | DB1 | DP3 |
+    | DB2 | DP4 |
+    | DB3 | DP5 |
+    | DB4 | DP6 |
+    | DB5 | DP7 |
+    | DB6 | DP8 |
+    | DB7 | DP9 |
+
+
+    上に書かれているピンとグラフィック液晶のピンの対応は以下の通りです
+
+    pinsDB: DB<br />
+    pinRS: D/I<br />
+    pinRW: R/W<br />
+    pinE: E<br />
+    pinCS1: CS1<br />
+    pinCS2: CS2<br />
+    pinRST: RES<br />
+
+
+    例えば
+
+    param.pinE = 11;
+
+    これはディスプレイのEピンとArudinoの11番ピンを接続することを意味します.
+
+
+# 文字の表示
+    ここではグラフィック液晶に"Hello World!"を描画してみます.
+    Canvasに"Hello World!"を書き込み, それをGLCDControllerがグラフィック液晶に描画する流れになります.
+    Canvasに文字を書き込むことに関しての詳しい情報は
+    [Canvasの使い方](./CanvasUsage)を参照してください.
+    
+    ```cpp
+        #include "GLCDController.h"
+        GLCDController glcdCtrl;
+        
+        void setup() {
+            //ピン設定
+            GLCDController::Param param;
+            param.pinRS = 13;
+            param.pinRW = 12;
+            param.pinE = 11;
+            param.pinCS1 = 14;
+            param.pinCS2 = 15;
+            param.pinRST = 2;
+            param.sizeX = 128;
+            param.sizeY = 64;
+        
+            //グラフィックディスプレイを使う前に必ずする
+            glcdCtrl.Begin(param);
+        }
+        
+        void loop() {
+            //色を黒に
+            glcdCtrl.canvas.color = true;
+        
+            //場所を左上に
+            glcdCtrl.canvas.Pos(0,0);
+        
+            //文字を書く
+            glcdCtrl.canvas.Mes("Hello World!");
+        
+            glcdCtrl.Draw();		//*3_0
+            
+            while(1);
+        }
+    ```
+
+    # 説明
+        # *3_0
+            Canvasの内容をグラフィック液晶に描画します.
+            
+            ここまでのすべての描画関数はキャンバス画面に描画していました.なので,関数"Draw"を実行する前まではグラフィック液晶には何も描かれてはいません.
+            関数"Draw"を実行することでグラフィック液晶に表示されます.
+            
+            "Draw"でまとめて描画できるので画面のちらつきがおさえられたり,描画速度が速くなったりします.
+
+# 画像の表示
+    ここではこの画像を表示してみましょう!
+
+    ![ミク画像](CURRENT_DIR/Images/GLCDController/Img2.png)
+    
+    # 画像データの準備
+        画像データの準備に関しては
+        [Canvasに画像を描く](./CanvasUsage)
+        を参照してください.
+    
+    # 画像を表示する
+        さっそくミクを表示してみましょう
+
+        画像表示でよく使うコマンドは`Celput`です。
+
+
+        画像ミクと文字"Miku,Miku"が点滅します。
+
+        
+        ```cpp
+            #include "GLCDController.h"
+            GLCDController glcdCtrl;
+            
+            void setup() {
+                //ピン設定
+                GLCDController::Param param;
+                param.pinRS = 13;
+                param.pinRW = 12;
+                param.pinE = 11;
+                param.pinCS1 = 14;
+                param.pinCS2 = 15;
+                param.pinRST = 2;
+                param.sizeX = 128;
+                param.sizeY = 64;
+            
+                //グラフィックディスプレイを使う前に必ずする
+                glcdCtrl.Begin(param);
+            }
+            
+            void loop() {
+                //色を黒に指定
+                glcdCtrl.canvas.color = true;
+            
+                //描画ポジションを(0,0)に指定
+                glcdCtrl.canvas.Pos(0, 0); 
+            
+                //画像ファイル「miku」 を描画
+                glcdCtrl.canvas.Celput(miku);  
+            
+                //文字「Miku,Miku」を描画
+                glcdCtrl.canvas.Mes("Miku,Miku");  
+            
+                //キャンバスをグラフィック液晶に描画
+                glcdCtrl.Draw();  
+            
+                delay(2000);
+            
+                //色を白に指定
+                glcdCtrl.canvas.color = false;  
+            
+                //描画ポジションを(0,0)に指定
+                glcdCtrl.canvas.Pos(0, 0); 
+            
+                //画像ファイル「miku」 を白で描画; mikuを消去
+                glcdCtrl.canvas.Celput(miku);  
+            
+                //文字「Miku,Miku」を白で描画; 文字を消去
+                glcdCtrl.canvas.Mes("Miku,Miku");  
+            
+                //Scr画面をグラフィック液晶に描画; mikuと文字が消去された
+                glcdCtrl.Draw();  
+            
+                delay(1000);
+            }
+        ```

@@ -1,0 +1,35 @@
+<Header>
+    <Parent> LanguagePackManager
+    <Title> LanguagePackManagerの導入方法
+    <CreatedAt> 2016-12-8
+    <Tags> 
+    <Summary>
+        LanguagePackManagerの導入方法を説明します.
+        説明項目は以下のとおりです.
+        
+        * ダウンロード
+        * Unityにインポート
+        
+        
+    </Summary>
+</Header>
+# ダウンロード
+    下記からダウンロードできます.
+
+    <!--[Unity-LanguagePackManager](https://github.com/ContentsViewer/Unity-LanguagePackManager/)-->
+    <https://github.com/ContentsViewer/Unity-BasicAssets/tree/master/LanguagePackManager>
+
+# Unityにインポートします
+    # Unityを起動
+        ![Unity起動](CURRENT_DIR/Images/LanguagePackManager/Img0.png)
+    
+    # Unityプロジェクト画面内にダウンロードした'LanguagePackManager.cs'をドラックアンドドロップ
+
+    # 新しくGameObjectを作成します
+        GameObjectの名前は'LanguagePackManager'です
+
+        ![空オブジェクトの作成](CURRENT_DIR/Images/LanguagePackManager/Img1.png)
+
+    # 'LanguagePackManager'をAddComponent
+        ![AddComponent](CURRENT_DIR/Images/LanguagePackManager/Img2.png)
+

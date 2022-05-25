@@ -1,0 +1,94 @@
+<Header>
+    <Parent> MediaPlayer
+    <Title> MediaPlayerの使い方
+    <CreatedAt> 2016-12-8
+    <Tags> 
+    <Summary>
+        ここでは, MediaPlayerの基本的な使い方を説明します.
+        説明項目は以下のとおりです.
+        
+        * 音楽ファイルを準備する
+        * ピン接続
+        * 音楽を再生する
+        
+    </Summary>
+</Header>
+# 音楽ファイルを準備する
+    # 概要
+        ここでは, 音楽ファイルの準備について説明します.
+    
+    # 音楽ファイルについて
+        対応する音楽ファイルは以下のようになっています.
+        
+        * 対応ファイル形式: Wave
+        * サンプリング周波数: 32KHz, 16KHz, 8KHz
+        * 量子化精度: 8bit
+
+    # 変換方法
+        変換ソフトを用いて変換してください. \
+        おすすめは,[えこでこツール(accessed: 12.2.2016)](https://ja.osdn.net/projects/ecodecotool/)
+        です.
+
+    # SDカードに音楽ファイルをコピー
+        変換した音楽ファイルをSDカードにコピーします. \
+        この時rootフォルダーに入れる必要があります. \
+        ファイル名は'8文字 + 3文字'である必要があります. \
+        例: (wrong): 「inuboku.wav」; (correct): 「inubok.wav」
+
+# ピン接続
+    コントローラーと音楽再生モジュール, 音楽再生モジュールとSDカードをそれぞれ接続. \
+    各種接続方法は[MediaPlayerの導入方法](./IntroductionMediaPlayer)
+    を参照してください.
+
+
+# 音楽再生
+    # 概要
+        ここでは実際に音楽を再生します. 音楽ファイル名は'Test.wav'とします.
+
+    # プログラム作成
+        以下のプログラムを作成します.
+
+        プログラム開始二秒後に, 音楽ファイル'Test.wav'が再生されます.<br />
+        10秒後自動で停止して, プログラムを終了します.
+        
+        ```cpp
+            #include "MediaPlayerController.h"
+            MediaPlayerController mediaPlayerCtrl;
+            void setup() {
+                //設定; DP12をstopPinに設定; DP13をstatePinに設定
+                mediaPlayerCtrl.Begin(12, 13);
+            }
+            void loop() {
+                //2秒待機
+                delay(2000);
+                //音楽ファイル読み込み*1
+                mediaPlayerCtrl.Load("Test.wav", 0);
+            
+                //再生*2
+                mediaPlayerCtrl.Play();
+            
+                //10秒待機
+                delay(10000);
+            
+                //停止*3
+                mediaPlayerCtrl.Stop();
+            
+                //プログラム停止
+                while(true);
+            }
+        ```
+        
+        # 説明
+            # *1
+                音楽ファイルを読み込みます. \
+                一般に音楽ファイルを読み込んでから再生します. \
+                第二引数で0と指定すると, 通常再生モードになります.
+                そのほかのモードについては,
+                [MediaPlayerの関数, 変数一覧](./ReferenceMediaPlayer)
+                を参照してください.
+
+            # *2
+                音楽ファイルを再生します.
+
+            # *3
+                音楽ファイルを停止します.

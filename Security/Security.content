@@ -1,0 +1,10 @@
+<Header>
+    <Parent> ../Root
+    <Title> セキュリティ
+    <CreatedAt> 2019-11-23
+    <Tags> 
+    <Summary>
+        インターネットでのセキュリティ技術について
+    </Summary>
+    <Child> DigestSessionAuthentication/DigestSessionAuthentication
+</Header>

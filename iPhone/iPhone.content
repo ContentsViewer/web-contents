@@ -1,0 +1,12 @@
+<Header>
+    <Parent> ../Root
+    <Title> iPhone
+    <CreatedAt> 2019-08-31
+    <Tags> 
+    <Summary>
+        ここには，iPhoneに関することが書かれます．
+        
+    </Summary>
+    <Child> MultipleAlarm/MultipleAlarm
+    <Child> TempFileShare/TempFileShare
+</Header>

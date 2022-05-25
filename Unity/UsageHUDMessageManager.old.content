@@ -1,0 +1,151 @@
+<Header>
+    <Parent> HUDMessageManager
+    <Title> HUDMessageManagerの使い方
+    <CreatedAt> 2016-12-8
+    <Tags> 
+    <Summary>
+        ここでは, HUDMessageManagerの基本的な使い方を説明します.
+        説明項目は以下のとおりです.
+        
+        * パラメータの説明
+        * 使ってみる
+        * 対応文字列
+        
+        
+    </Summary>
+</Header>
+# パラメータの説明
+    # defaultDisplayTime
+        Message表示時に自動で表示を自動で消すデフォルト時間
+
+    # defaultEntranceTime
+        FadeでMessageを表示するときのfade時間
+
+    # defaultExitTime
+        FadeでMessageを消すときのfade時間
+
+# とりあえず使ってみる
+    # 概要
+        ここでは実際にHUD_MessageManagerを使ってみます。
+        HUD_MessageManagerの仕組みから細かい設定方法を説明してから使用例を挙げてもよかったのですが、
+        実際にうごかしたほうがおもしろいと思うのでいきなり使ってみます。まず使用手順を挙げ、そしてその説明をしていきます。
+
+    # 使用手順
+        # HUD_MessageManagerを導入してください
+            導入手順は[HUDMessageManagerの導入方法](CURRENT_CONTENT_DIR/IntroductionHUDMessageManager)
+            をご覧ください
+
+        # 新しくGameObjectを追加して以下のスクリプトをアタッチします
+            <pre class="brush: csharp;">
+using UnityEngine;
+using System.Collections;
+public class Test : MonoBehaviour
+{
+    int messageID = 0;
+    void Start()
+    {
+        //*1
+        messageID = HUD_MessageManager.instance.SetSubtitleBottomKeepID("SubtitleBottom");
+    }
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            //*2
+            HUD_MessageManager.instance.ShowAlert("HelloWorld");
+        }
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            //*3
+            HUD_MessageManager.instance.ShowMemoBottomRight("MemoBottomRight");
+        }
+        if (Input.GetKey(KeyCode.T))
+        {
+            //*4
+            HUD_MessageManager.instance.ShowDontOverride(messageID);
+        }
+        if (Input.GetKey(KeyCode.Y))
+        {
+            //*5
+            HUD_MessageManager.instance.Exit(messageID);
+        }
+    }
+}
+            </pre>
+
+        # 動作確認
+            Eキーを押すと画面中央に"HelloWorld"が表示されます<br />
+            Rキーを押すと画面右下に"MemoDownRight"が表示されます<br />
+            Tキーを押すと画面下に"SubtitleDown"が表示されます<br />
+            Yキーを押すと画面下に表示されている"SubtitleDown"が消えます
+
+
+            Eキーを連打するとその分"HellowWorld"が複数表示されます。これはRキーでも同じことが言えます。
+            一方、Tキーを連打しても複数表示されることはありません。
+
+            ![実行画面](CURRENT_DIR/Images/HUDMessageManager/Img13.png)
+
+
+        # 説明
+            # *1
+                ここでは、HUD_MessageManagerにメッセージを登録しています。
+                文字列は"SubtitleDown",表示位置はDown―オブジェクト名でいうと"DownText"です―で登録されます。
+                ここでHUD_MessageManagerはIDを返します。メッセージ一つに一つのIDが割り当てられます
+
+
+                またここでHUD_MessageManagerにこの設定したメッセージのIDを破棄しないことも伝えています。
+                デフォルトではメッセージの表示が終了するのと同時にそのメッセージに関連付けられたIDも破棄されます。
+                IDを保持することでそのメッセージを再設定することなく再表示することができます。
+
+
+            # *2
+                ここで、HUD_MessageManagerに表示場所Center、表示文字列"HelloWorld"、モードはタイマーのメッセージを表示するように命令しています。
+                "Alert"というのは基本表示場所が中央で表示は自動的に消えることだと覚えておいてください。
+
+                このメッセージもほかのメッセージと同じようにIDが振り分けられますが表示が終わると自動でIDは破棄されます。
+
+            # *3
+                ここで、HUD_MessageManagerに表示場所DownRight、表示文字列"MemoDownRight"、モードはタイマーのメッセージを表示するように命令しています。
+                "MemoDownRight"というのは基本表示場所が右下で表示は自動的に消えることだと覚えておいてください。
+
+                このメッセージもほかのメッセージと同じようにIDが振り分けられますが表示が終わると自動でIDは破棄されます。
+
+            # *4
+                ここで、HUD_MessageManagerにIDがmessageIDであるメッセージを表示するように命令しています。
+                このmessegeIDは*1で設定したメッセージに関連付けられたIDです。
+
+                またこのときHUD_MessageManagerに伝えているのは、すでにメッセージが表示されているときはメッセージを開始しないということです。
+                "DontOverride"がついている関数は基本そういう仕様だと思ってください。
+
+            # *5
+                ここで、HUD_MessageManagerにIDがmessageIDであるメッセージを消すように命令しています。
+                またこのときメッセージが消されたとしてもこのメッセージのIDが破棄されることはありません。
+                というのも*1でそういう設定をしたからです。
+
+# 対応文字列
+    # 基本
+        HUD_MessageManagerで基本の文字列は表示できます。それだけでなくUnityのリッチテキストにも対応しています。
+        unityのリッチテキストの詳しい説明は[Unity-RichText](http://docs.unity3d.com/ja/current/Manual/StyledText.html)をご覧ください。
+    
+    # 注意すること
+        一つだけ注意してほしいことがあります。それは"&lt;color&gt;"タグです。
+        リッチテキストで文字列の色を指定するとき通常こうします。
+
+
+        <pre class="brush: csharp;">
+&lt;color=#0000ffff&gt;Blue&lt;/color&gt;
+        </pre>
+
+        
+        もちろんこれをHUD_MessageManagerで表示することはできますがフェード処理はされません。というのも透明度設定が上書きされてしまっているからです。
+        HUD_MessageManagerでのフェード処理において、HUD_MessageManagerは表示したい文字列を透明度設定されたカラータグではさんでいます。
+        その表示文字列内に透明度設定されたカラータグがあると、その透明度に設定が上書きされHUD_MessageManagerのフェード処理は無視されてしまいます。
+
+        カラーを指定してフェードもさせたい文字列がある場合、このように書いてください。もちろんHUD_MessageManagerだけの話です。
+        
+        <pre class="brush: csharp;">
+&lt;color=#0000ff{a}&gt;Blue&lt;/color&gt;
+        </pre>
+        
+        透明度の設定部分を{a}にしてください。色指定はいつものようにしてください。
+        HUD_MessageManagerは{a}の部分をフェード時の透明度値に置き換えます。

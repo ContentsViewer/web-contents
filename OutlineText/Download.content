@@ -1,0 +1,97 @@
+<Header>
+    <Parent> OutlineText
+    <Title> ダウンロード
+    <CreatedAt> 2018-9-19
+    <Tags> ダウンロード
+    <Summary>
+        
+        ここでは, OutlineTextのダウンロードリンクを示します.
+        
+        
+        
+        
+    </Summary>
+</Header>
+# ダウンロード
+_________________________________________________________________
+    以下のページからダウンロード可能です.
+    
+    <https://github.com/ContentsViewer/ContentsPlanet/blob/master/Module/OutlineText.php>
+    
+    [::NOTE]
+    ========
+        OutlineTextは, [ContentsPlanet(コンテンツ管理システム)](ROOT_URI/Master/ContentsPlanet/ContentsPlanet)
+        に導入され, 更新はContentsPlanetプロジェクト内で行われることになりました.
+    ========
+    <!--
+    [Github-OutlineText](https://github.com/ContentsViewer/OutlineText)
+
+    php7 で動作確認済み
+    -->
+    <!--
+    [::WARNING]
+    =================================
+        
+        現在, このライブラリは[ウェブコンテンツ管理システム(CollabCMS)](ROOT_URI/Master/CollabCMS/CollabCMS)に導入され,
+        更新はCollabCMSプロジェクト内で行われることになりました.
+        最新版の取得は, [CollabCMSダウンロードページ](ROOT_URI/Master/CollabCMS/Download)から
+        行ってくださいm(. .)m.
+        
+        CollabCMSは, OutlineTextに標準対応しています.
+    
+    ================================
+    -->
+
+
+# 使い方
+_________________________________________________________________
+
+    # phpを実行できる環境(xamppなど)を用意し, ダウンロードしたフォルダの中身をそのまま`htdocs`に入れる.
+    # `sample.content`にいろいろ書いてみる.
+    # ブラウザで`index.php`にアクセスし結果を見る
+        
+        `index.php`
+
+        ```xml
+            <!DOCTYPE html>
+            <html lang="ja">
+        
+            <head>
+                <meta charset="UTF-8" />
+                <link rel="stylesheet" href="OutlineTextStandardStyle.css" />
+            </head>
+        
+        
+            <body>
+        
+            <?php
+                include "OutlineText.php";
+        
+                OutlineText\Parser::Init();
+        
+                $text = htmlspecialchars (file_get_contents("Sample.content"));
+        
+                echo "<pre>";
+                echo $text;
+                echo "</pre>";
+        
+                echo OutlineText\Parser::Parse($text);
+            ?>
+        
+            </body>
+            </html>
+        ```
+
+
+
+# 対応文字コード
+_________________________________________________________________
+    |[対応文字コード]
+    |--------||---------------------|
+    | 文字コード || BOMなしUTF-8     |
+    | 改行コード || LFのみ           |
+<!--
+# 今後実装?予定
+_________________________________________________________________
+    
+-->

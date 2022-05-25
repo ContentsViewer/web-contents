@@ -1,0 +1,73 @@
+<Header>
+    <Parent> PHP
+    <Title> PHPでC#のような処理時間計測ライブラリ
+    <CreatedAt> 2018-10-19
+    <Tags> PHP, ライブラリ, ダウンロード
+    <Summary>
+        C#には, 処理時間計測をするのにStopwatchクラスがあります^[C#-Stopwatch].
+        PHPでもC#のような処理時間計測を実現するためのライブラリを実装しました.
+        
+        作りは単純で, ソースもそれほど難しくはありません. 
+        厳密な計測を想定していませんが, 簡単に計測を行いたい方などに最適です.
+        
+        
+        
+        
+    </Summary>
+</Header>
+# ダウンロード
+______________________________________________
+    
+    Stopwatchは, 以下のページからダウンロード可能です.
+    
+    <https://github.com/ContentsViewer/ContentsPlanet/blob/master/Module/Stopwatch.php>
+
+    [::NOTE]
+    ========
+        Stopwatch は, [ContentsPlanet(コンテンツ管理システム)](ROOT_URI/Master/ContentsPlanet/ContentsPlanet)
+        に導入され, メンテナンスは ContentsPlanet プロジェクト内で行われることになりました.
+    ========
+    
+# 使い方
+______________________________________________
+    基本的な使い方は, C#でのStopwatch Classと同じです^[C#-Stopwatch].
+    
+    ```php
+    
+        require_once "Stopwatch.php";
+        
+        
+        $sw = new Stopwatch();
+        
+        $sw->Start();
+        
+        // 計測したい処理...
+        
+        $sw->Stop();
+        
+        echo  $sw->ElapsedString();
+    
+    
+    
+    ```
+    
+# 関数一覧
+_______________________________________________
+    
+    |[関数一覧]
+    |-----------------||-------------------------------------------------------------------------|
+    | Start()         || 経過時間の計測を開始または再開します.                                   |
+    | Stop()          || 経過時間の計測を停止します.                                             |
+    | Reset()         || 経過時間の計測を停止して, 経過時間をゼロにリセットします.               |
+    | Restart()       || 計測を停止し, 経過時間をゼロにリセットして, 経過時間の計測を開始します. |
+    | IsRunning()     || 計測中かどうか                                                          |
+    | Elapsed()       || 経過時間(秒)                                                            |
+    | ElapsedString() || 経過時間(秒)の文字列                                                    |
+    
+
+
+
+-------------------------------------------------
+[C#-Stopwatch]: [Microsoft .NET Stopwatch class](https://docs.microsoft.com/ja-jp/dotnet/api/system.diagnostics.stopwatch?redirectedfrom=MSDN&view=netframework-4.7.2)
+
+

@@ -1,0 +1,12 @@
+<Header>
+    <Parent> ../Root
+    <Title> 文章
+    <CreatedAt> 2018-4-1
+    <Tags> 
+    <Summary>
+        ここでは, 文章について書かれます.
+        
+    </Summary>
+    <Child> WritingProtocol
+    <Child> WritingMethod/WritingMethod
+</Header>

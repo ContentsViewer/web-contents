@@ -1,0 +1,357 @@
+<Header>
+    <Parent> String
+    <Title> Stringの関数一覧
+    <CreatedAt> 2016-3-3
+    <Tags> 
+    <Summary>
+        Stringが持つ関数は以下のとおりです.
+        
+        |---------------------------||----------------------------------------------------|
+        | [String](#String)         || コンストラクタ                                      |
+        | [Length](#Length)         || 文字の長さ-バイト数-                                  |
+        | [operator=](#operator=)   || 代入演算子                                           |
+        | [operator[]](#operator[]) || 添え字演算子                                          |
+        | [operator+](#operator+)   || 文字列結合                                           |
+        | [operator+=](#operator+=) || 文字列結合                                           |
+        | [CopyFrom](#CopyFrom)     || 指定されたStringからコピー                           |
+        | [CharArray](#CharArray)   || String内部Char配列の先頭アドレス                     |
+        | [IndexOf](#IndexOf)       || 指定した文字列の位置                                 |
+        | [Contains](#Contains)     || 指定した文字列が含まれるか                           |
+        | [Equals](#Equals)         || 指定した文字列と等しいか                             |
+        | [Insert](#Insert)         || 文字列挿入                                           |
+        | [Replace](#Replace)       || 文字列置き換え                                       |
+        | [Split](#Split)           || 文字列分割                                           |
+        | [Substring](#Substring)   || 部分文字列を取得                                     |
+        | [ToUpper](#ToUpper)       || すべて大文字に -英語のみ対応-                          |
+        | [ToLower](#ToLower)       || すべて小文字に -英語のみ対応-                         |
+        | [Concat](#Concat)         || 文字列結合                                           |
+        | [GetLine](#GetLine)       || ストリームから文字列取得                             |
+        | [Copy](#Copy)             || 文字列コピー                                         |
+        
+        筆者がこのStringを作る際,
+        [C#のStringリファレンス(accessed: 3.3.2017)](https://msdn.microsoft.com/ja-jp/library/system.string.aspx)
+        を参考にしました. 関数名はほとんど一緒にしてあります.
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+    </Summary>
+</Header>
+# [[String]]String
+    String()<br/>
+    String(char *chars)
+
+    # パラメータ
+        |--------||------------|
+        | chars     || 設定したい文字列 |
+
+    # 説明
+        コンストラクタ―です.
+
+# [[Length]]Length
+    int Length()
+
+    # 返り値
+        文字列の長さ(バイト数)
+
+    # 説明
+        文字列の長さ(バイト数)を返します. NULL文字は含みません.
+
+
+# [[operator=]]operator=
+    String& operator=(char *rChars)<br/>
+    String& operator=(const String &rStr)<br/>
+    String& operator=(String&& rStr)
+
+    # パラメータ
+        |--------||------------|
+        | rChars     || 代入したい文字列 |
+        | rStr       || 代入したい文字列 |
+
+    # 返り値
+        このインスタンスの参照アドレス
+
+    # 説明
+        指定された文字列をこのインスタンスに代入します.
+
+
+# [[ operator[] ]] operator[]
+    char operator[int index]
+
+    # パラメータ
+        |--------||------------|
+        | index     || 取得したい文字の位置 |
+
+    # 返り値
+        取得した文字
+
+    # 説明
+        指定された位置にある文字を取得します. 文字数を超えてもしくは0を下回ってアクセスしてはいけません.
+        これは読み取り専用です. 文字を変更することはできません.
+
+
+# [[operator+]]operator+
+    String operator+(String &rStr)<br/>
+    String operator+(char *rChars)
+
+    # パラメータ
+        |--------||------------|
+        | rChars     || 連結する文字列 |
+        | rStr       || 連結する文字列 |
+
+    # 返り値
+        連結した文字列
+
+    # 説明
+        このインスタンスと引数を連結し, その文字列を返します
+
+
+# [[operator+=]]operator+=
+    String& operator+=(String &rStr)<br/>
+    String& operator+=(char *rChars)
+
+    # パラメータ
+        |--------||------------|
+        | rChars     || 連結する文字列 |
+        | rStr       || 連結する文字列 |
+
+    # 返り値
+        このインスタンスの参照アドレス
+
+    # 説明
+        このインスタンスに引数を付け加えます.
+
+
+# [[CopyFrom]]CopyFrom
+    void CopyFrom(const String &from)
+
+    # パラメータ
+        |--------||------------|
+        | from     || コピー元 |
+
+
+    # 説明
+        指定されたStringからコピーします. 一般の代入演算子で使用されます.
+
+
+# [[CharArray]]CharArray
+    char* CharArray()
+
+    # 返り値
+        String内部のChar配列のアドレス
+
+    # 説明
+        String内部のChar配列のアドレスを返します.
+        C/C++言語で用意されている関数との互換性を高めます.
+
+
+
+# [[IndexOf]]IndexOf
+    int IndexOf(String &pattern, int startIndex, int count)
+
+    # パラメータ
+        |--------||------------|
+        | pattern     || シークする文字列 |
+        | startIndex || 検索が開始さる位置 |
+        | count || 検査する文字列の数 |
+
+    # 返り値
+        指定された文字列の位置
+
+
+    # 説明
+        指定された文字列の位置を返します. 見つからなかった場合は-1を返します.
+
+
+
+# [[Contains]]Contains
+    bool Contains(String &value)
+
+    # パラメータ
+        |--------||------------|
+        | value     || シークする文字列 |
+
+    # 返り値
+        存在するときtrue. そのほかはfalse
+
+
+    # 説明
+        指定された文字列が存在するか判定します.
+
+
+
+# [[Equals]]Equals
+    bool Equals(String &value)
+
+    # パラメータ
+        |--------||------------|
+        | value     || このインスタンスと比較する文字列 |
+
+    # 返り値
+        等しいときtrue. そのほかはfalse
+
+
+    # 説明
+        指定された文字列と等しいか判定します.
+
+
+# [[Insert]]Insert
+    String Insert(int startIndex, String &value)<br/>
+    String Insert(int startIndex, char *chars)
+
+    # パラメータ
+        |--------||------------|
+        | startIndex     || 挿入したい箇所 |
+        | value || 挿入する文字列 |
+        | chars || 挿入する文字列 |
+
+    # 返り値
+        挿入したあとの文字列
+
+
+    # 説明
+        このインスタンス内の指定したインデックス位置に指定した文字列を挿入した文字列を返します.
+
+
+# [[Replace]]Replace
+    String Replace(char *oldValue, char *newValue)<br/>
+    String Replace(String &oldValue, String &newValue)
+
+    # パラメータ
+        |--------||------------|
+        | oldValue     || 置換される文字列 |
+        | newValue || 出現するすべての oldValue を置換する文字列 |
+
+    # 返り値
+        置き換えられたあとの文字列
+
+
+    # 説明
+        文字列を置き換えます.
+
+
+
+# [[Split]]Split
+    List<String> Split(List<String> separator)
+
+    # パラメータ
+        |--------||------------|
+        | separator     || この文字列から部分文字を取り出すために区切り文字として使用する文字列配列 |
+
+    # 返り値
+        区切られた各文字列の配列
+
+
+    # 説明
+        この文字列を区切り文字によって分割します. 
+        これに関する詳細は[Splitについて](CURRENT_CONTENT_DIR/StringUsage#Split)を参照してください.
+
+
+
+
+# [[Substring]]Substring
+    String Substring(int startIndex, int length)
+
+    # パラメータ
+        |--------||------------|
+        | startIndex     || このインスタンス内の部分文字列の 0 から始まる開始文字位置 |
+        | length || 部分文字列の文字数 |
+
+
+    # 返り値
+        取得した文字列
+
+
+    # 説明
+        この文字列から部分文字列を取得します.
+
+
+
+# [[ToUpper]]ToUpper
+    String ToUpper()
+
+    # 返り値
+        変換した文字列
+
+
+    # 説明
+        この文字列のコピーを大文字に変換して返します.
+
+# [[ToLower]]ToLower
+    String ToLower()
+
+    # 返り値
+        変換した文字列
+
+
+    # 説明
+        この文字列のコピーを小文字に変換して返します.
+
+
+
+# [[Concat]]Concat
+    static String Concat(String &str0, String &str1)
+
+    # パラメータ
+        |--------||------------|
+        | str0     || 連結する最初の文字列 |
+        | str1 || 連結する2番目の文字列 |
+
+
+    # 返り値
+        str0 と str1 の連結
+
+
+    # 説明
+        指定した 2 つの String インスタンスを連結します.
+
+
+
+# [[GetLine]]GetLine
+    static String GetLine()<br/>
+    static String GetLine(FILE *fp)
+
+    # パラメータ
+        |--------||------------|
+        | fp     || 取得したいストリームポインタ(ファイルポインタ) |
+
+
+    # 返り値
+        取得した文字列
+
+
+    # 説明
+        指定したストリームから文字列を取得します. 改行コードまで文字を読み込みます.
+        引数に何も指定しなかった場合, 読み込み対象はキーボードになります.
+        これに関する詳細は, [GetLineについて](CURRENT_CONTENT_DIR/StringUsage#GetLine)を参照してください.
+
+
+# [[Copy]]Copy
+    static String Copy(String &str)
+
+    # パラメータ
+        |--------||------------|
+        | str     || コピー元 |
+
+
+    # 返り値
+        複製した文字列
+
+
+    # 説明
+        指定した文字列を複製します.
+
+
+
+
+
+
+
+
+

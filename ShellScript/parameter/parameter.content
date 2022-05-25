@@ -1,0 +1,171 @@
+<Header>
+    <Parent> ../ShellScript
+    <Title> パラメータ
+    <CreatedAt> 2020-05-20
+    <Tags> 
+    <Summary>
+        シェル上では//シェル変数//によって変数を扱えます.
+        さらにシェル変数以外に, //位置パラメータ//や//特殊パラメータ//と呼ばれる,
+        一種の変数が存在する^[book-ref].
+        シェル変数, 位置パラメータ, 特殊パラメータをまとめて//パラメータ//といいます^[book-ref].
+        
+    </Summary>
+</Header>
+# 位置パラメータ
+    # `$1`, `$2`, `$3`, ...
+        シェルスクリプトやシェル関数の引数を参照する.
+        
+        paramtest:
+            ```bash
+                #!/bin/sh
+                
+                echo "$1"
+                echo "$2"
+                echo "$3"
+            ```
+        
+        位置パラメータの表示テスト:
+            ```bash
+                $ ./paramtest one two three
+                one
+                two
+                three
+            ```
+        
+        |[動作対応状況]
+        |--------------|---|
+        | Linux (bash) | ✔ |
+        | FreeBSD (sh) | ✔ |
+        | Solaris (sh) | ✔ |
+        | BusyBox (sh) | ✔ |
+
+# 特殊パラメータ
+    # `$0`
+        起動されたシェルスクリプト名(第0引数)を参照する.
+        
+        ```bash
+            echo "$0" # シェルスクリプト名(第0引数)を表示する
+        ```
+        
+        |[動作対応状況]
+        |--------------|---|
+        | Linux (bash) | ✔ |
+        | FreeBSD (sh) | ✔ |
+        | Solaris (sh) | ✔ |
+        | BusyBox (sh) | ✔ |
+        
+    # `$@`
+        シェルスクリプトやシャル関数の引数をそのまま引き継ぐ.
+        
+        ```bash
+            mycommand "$@"  # 引数すべてをそのまま引き継いでmycommandを起動
+        ```
+        
+        |[動作対応状況]
+        |--------------|---|
+        | Linux (bash) | ✔ |
+        | FreeBSD (sh) | ✔ |
+        | Solaris (sh) | ✔ |
+        | BusyBox (sh) | ✔ |
+        
+    # `$*`
+        シェルスクリプトやシェル関数の引数すべてを1つに連結して参照する.
+        
+        ```bash
+            echo "$*"  # すべての引数を1つに連結して表示する
+        ```
+    
+        |[動作対応状況]
+        |--------------|---|
+        | Linux (bash) | ✔ |
+        | FreeBSD (sh) | ✔ |
+        | Solaris (sh) | ✔ |
+        | BusyBox (sh) | ✔ |
+        
+    # `$#`
+        シャルスクリプトやシェル関数の引数の個数を参照する.
+        
+        |[動作対応状況]
+        |--------------|---|
+        | Linux (bash) | ✔ |
+        | FreeBSD (sh) | ✔ |
+        | Solaris (sh) | ✔ |
+        | BusyBox (sh) | ✔ |
+        
+    # `$?`
+        直前のリストの終了ステータスを参照する.
+        
+        |[動作対応状況]
+        |--------------|---|
+        | Linux (bash) | ✔ |
+        | FreeBSD (sh) | ✔ |
+        | Solaris (sh) | ✔ |
+        | BusyBox (sh) | ✔ |
+        
+    # `$!`
+        もっとも新しくバックグラウンドで起動したコマンドのプロセスIDを参照する.
+        
+        ```bash
+            sleep 10 & # 適当なコマンドをバックグラウンドで起動
+            echo $!    # そのコマンドのプロセスIDを表示する
+        ```
+        
+        |[動作対応状況]
+        |--------------|---|
+        | Linux (bash) | ✔ |
+        | FreeBSD (sh) | ✔ |
+        | Solaris (sh) | ✔ |
+        | BusyBox (sh) | ✔ |
+        
+    # `$$`
+        シェル自身のプロセスIDを参照する.
+        
+        |[動作対応状況]
+        |--------------|---|
+        | Linux (bash) | ✔ |
+        | FreeBSD (sh) | ✔ |
+        | Solaris (sh) | ✔ |
+        | BusyBox (sh) | ✔ |
+        
+    # `$-`
+        現在のシェルに設定されているオプションフラグを参照する.
+        
+        
+        |[動作対応状況]
+        |--------------|---|
+        | Linux (bash) | ✔ |
+        | FreeBSD (sh) | ✔ |
+        | Solaris (sh) | ✔ |
+        | BusyBox (sh) | ✔ |
+        
+    # `$_`
+        直前に実行したコマンドの最後の引数を参照する.
+        
+        ```bash
+            ls -l /some/dir
+            cd $_           # /some/dirディレクトリに移動
+        ```
+        
+        |[動作対応状況]
+        |--------------|---|
+        | Linux (bash) | ✔ |
+        | FreeBSD (sh) | ✔ |
+        | Solaris (sh) | ❌ |
+        | BusyBox (sh) | ✔ |
+    
+# Internal Variables^[internal-variables]
+    # PPID
+        現プロセスの親プロセスのプロセスID
+        
+        親プロセスが先に死ぬと子プロセスはinitプロセスの養子になるというのはunixの仕様です^[child-process].
+        つまり, 親が先に死ぬと, その子プロセスの$PPIDは, 1になります(initプロセスIDは1^[init-id]).
+        
+
+# 参考文献
+    [book-ref]: 山森丈範. [改訂第3版]シェルスクリプト基本リファレンス. 2017
+    [child-process]: "[親プロセスが終了するとそのプロセスから呼ばれた子プロセスも停止する？](https://japan.zdnet.com/article/20365855/)". \
+        ZDNet. accessed 2020-5-20
+    [internal-variables]: "[9.1. Internal Variables](http://tldp.org/LDP/abs/html/internalvariables.html)". \
+        Advanced Bash-Scripting Guide. accessed 2020-5-20
+    [init-id]: "[Init](https://ja.wikipedia.org/wiki/Init)". Wikipedia. accessed 2020-05-20
+    

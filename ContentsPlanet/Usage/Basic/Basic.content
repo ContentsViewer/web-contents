@@ -1,0 +1,98 @@
+<Header>
+    <Parent> ../Usage
+    <Title> 基本的な使い方
+    <CreatedAt> 2020-08-31
+    <Tags> 
+    <Summary>
+        本CMSの基本的な使い方
+        
+        編集や, ファイル, ディレクトリ操作など
+        
+    </Summary>
+</Header>
+# コンテンツの編集(本CMSを利用)
+    ページ右上にある`編集`から行います.
+    
+    ユーザ名とパスワードの設定を行っていない場合は, 
+    [../../Install/Install]からユーザ設定を行います.
+
+
+    
+# ディレクトリ, ファイルの操作(本CMSを利用)
+
+    ページ右上のヘッダ展開ボタンを押し, ログインアイコンをクリック, ログイン
+    
+    Contents欄から, 希望するディレクトリに行く
+    
+    # ファイルの追加
+        ファイル名前欄に希望のファイル名を入力し, 横の「+」ボタンをクリック
+    
+    # ファイルの一括アップロード
+        「ファイルをドラック&ドロップ」欄にアップしたいファイルをドラック&ドロップ
+        
+    # ディレクトリの追加
+        ディレクトリ名前欄に希望のディレクトリ名を入力し, 横の「+」ボタンをクリック
+    
+    # 削除
+        削除したいファイル/ディレクトリ横の「x」ボタンをクリック
+    
+    # 名前変更
+        変更したい名前を入力して, 「Rename」をクリック
+    
+    # 移動
+        移動先のパスを相対パスで入力して, 「Rename」をクリック
+        
+        ex)
+            + Contents
+                + DirA
+                    + file.content <- これを
+                + DirB
+                    + <- ここに置きたい
+                
+            ファイル名を「file.content」 -> 「../DirB/file.content」と入力して,
+            「Rename」をクリック
+
+# ファイル編集, 操作(他アプリケーション)
+    Gitや, Google Drive を利用したファイル編集と操作
+    
+    
+    `ContentsPlanet.php`->`USER_TABLE`で指定するユーザ設定内の`enableRemoteEdit`を`true`にし,
+    `remoteURL`に, 編集先のURLを入力します.
+    
+    ex) githubを使うとき
+    ```php
+        define('USER_TABLE', [
+            'master' => [
+                'hashedPassword' => '',
+                'digest' => '',
+                'contentsFolder' => './Master/Contents',
+                'isPublic' => true,
+                'enableRemoteEdit' => true,
+                'remoteURL' => 'https://github.com/ContentsViewer/CMS-Contents/blob/master/{CONTENT_PATH}',
+                'notifyingList'    => [
+                    // ['type' => 'mail', 'destination' => 'your.mail@address'],
+                ]
+            ],
+        ]);
+    ```
+    
+    `enableRemoteEdit`を`true`をすることで, 本CMSでファイルの編集, 操作を行う代わりに,
+    `remoteURL`先のアプリケーションへ任せます.
+    
+    `Edit`リンクをクリックすると, `remoteURL`の`{CONTENT_PATH}`を編集ファイルのパスに差し替え, 
+    リンク先のアプリケーションへリダイレクトします. 
+    
+    何らかの方法で, リモート先のコンテンツとCMS側のコンテンツを同期する必要があります.
+    
+    Github, Gitlab:
+        同期方法:
+            フックによるリポジトリ同期(Auto pull)
+    
+    GoogleDrive:
+        同期方法:
+            rclone などの同期アプリケーションの利用
+        
+        remote URL のリンク:
+            google Drive では, URL内にパスの情報が無く, ハッシュ値になります.
+            なので, パスからハッシュ値へ変換する処理が必要ですが,
+            Google App Script で対応可能です.

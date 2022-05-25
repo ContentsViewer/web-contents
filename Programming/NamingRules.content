@@ -1,0 +1,28 @@
+<Header>
+    <Parent> Programming
+    <Title> プログラミング言語の命名規則まとめ
+    <CreatedAt> 2018/12/06
+    <Tags> 編集中
+    <Summary>
+        
+        
+        
+        
+    </Summary>
+</Header>
+# 表
+    
+    | 種類             || C#     | C++/C               | PHP    | Python      | Java   | JavaScript | Shell       |
+    |------------------||--------|---------------------|--------|-------------|--------|------------|-------------|
+    | クラス           || Pascal |                     | Pascal | Pascal      | Pascal | Pascal     |             |
+    | 関数             || Pascal |                     |        | lower_snake | camel  | camel      | lower_snake |
+    | メンバ変数       || Pascal |                     | camel  | lower_snake | camel  | camel      |             |
+    | ローカル変数     || camel  |                     | camel  | lower_snake | camel  | camel      | 全て小文字  |
+    | 名前空間         || Pascal |                     | Pascal | 全て小文字  |        |            |             |
+    | 定数             || Pascal |                     | SNAKE  | SNAKE       | SNAKE  | SNAKE      | SNAKE       |
+    | 列挙定数         || Pascal |                     |        |             |        |            |             |
+    | インターフェース || 'I' + Pascal |               |        |             |        |            |             |
+    
+    
+
+

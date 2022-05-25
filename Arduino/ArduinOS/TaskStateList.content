@@ -1,0 +1,57 @@
+<Header>
+    <Parent> TaskScheduler
+    <Title> 状態リスト
+    <CreatedAt> 2017-7-11
+    <Tags> 編集中
+    <Summary>
+        それぞれのタスクにはそのタスクの状態というものがあります.
+        今回のOSでは, このタスクの状態を状態リストを用いて判別することにします.
+        以下から, タスク状態の種類, 状態リストの構造, リストを用いたタスク状態の切り替え方法を詳しく見ていきます.
+        
+        
+    </Summary>
+</Header>
+# タスク状態の種類
+    タスクの状態には以下の種類があります.
+
+    * Running
+    * Ready
+    * PendingReady
+    * Blocked
+    * Suspended
+    * WaitingTermination(Deleted)
+
+    # Running
+        プログラムが実行されている状態です.
+        CPUのリソースを使用しています.
+
+    # Ready
+        Running状態に選ばれるのを待機している状態です.
+
+    # PendingReady
+        Ready状態になるのを一時保留にされている状態です.
+        これは, スケジューラが停止状態のときにあるタスクをSuspended解除, Blocked解除したときに起こります.
+
+    # Blocked
+        待たされている状態, あるいは, あるイベントを持って待たされている状態です.
+        この状態では, 待機時間を指定することができます.
+        待機時間を超えるとReady状態へ遷移します.
+
+    # Suspended
+        Blocked状態と同じく待たされている状態ですが, これはTaskResume()関数を呼ばれるまで,
+        Ready状態へ遷移しません.
+
+    # WaitingTermination
+        削除されるのを待機している状態です.
+        削除関数TaskDelete()を実行しても, 指定されたタスクはすぐには消されず,
+        優先度の高いタスクの処理が終わってから削除処理が行われます.
+
+    ![状態遷移図](CURRENT_DIR/Images/StateTransition.png)
+
+# リスト構造
+
+# タスク状態の切り替え方法
+
+
+
+

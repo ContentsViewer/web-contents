@@ -1,0 +1,23 @@
+<Header>
+    <Parent> TerminalPro4
+    <Title> ダウンロードページ
+    <CreatedAt> 2017-5-4
+    <Tags> 
+    <Summary>
+        TerminalPro4開発セットをダウンロードすることができます.        
+        TerminalPro4用サンプルアプリケーション, TerminalPro用Bootプログラムなどが含まれます.
+        
+        <h4>注意</h4>
+        <p class="FirstParagraph">
+            一部のサンプルプログラムは音楽ファイルを使用します.
+            音楽ファイルが存在しないときプログラムは正しく動作しません.
+            ただ, 筆者は著作権の問題より音楽ファイルをアップロードすることができません.
+            各音楽ファイルを用意していただく必要があります.
+        </p>
+    </Summary>
+</Header>
+
+下記のページよりダウンロードしてください.<br />
+[TerminalPro4](https://github.com/ContentsViewer/Arduino-TerminalPro4)
+
+

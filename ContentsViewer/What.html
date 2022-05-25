@@ -1,0 +1,122 @@
+﻿<CDB_Parent>
+    ContentsViewer.html
+</CDB_Parent>
+<CDB_CreatedAt>2016/12/8</CDB_CreatedAt>
+<CDB_Title>
+    ContentsViewerとは
+</CDB_Title>
+
+<CDB_Abstract>
+    ここではContentsViewerの仕組みを説明します.
+    <div name="IndexField"></div>
+    <script>
+        IndexField("IndexField",
+			"Index",
+			[
+				{ name: "<a href='#全体像'>全体像</a>" },
+                { name: "<a href='#ContentFile'>ContentFileについて</a>" },
+				{ name: "<a href='#デザイン変更'>デザインの変更について</a>" }
+			]);
+    </script>
+</CDB_Abstract>
+
+<ul class="SectionList">
+    <li>
+        <h2 class="Section"><a name="全体像">全体像</a></h2>
+        <p class="FirstParagraph">
+            ContentsViewerを知るためにいは, その周りにある物を知っていただく必要があります.
+            下図がContentsViewerを取り巻く全体像です.
+        </p>
+        <p class="ResizeImage">
+            <img src="Imgs/ContentsViewer/img4.png" />
+        </p>
+        <ul>
+            <li>
+                <h3 class="SubSection">作成者:</h3>
+                <p class="FirstParagraph">
+                    作成者とは,　文字通りコンテンツを作成する人です.
+                    作成者は, コンテンツを作成しそれをデータベース内に置きます.
+                    作成者は, 基本としてコンテンツを書くだけでよいですが,
+                    ページ全体のデザインを変更する際には, ContentsViewerに変更を加える必要があります.
+                    この時, JavaScript, PHP, CSS, htmlに関する知識が必要です.
+                </p>
+            </li>
+            <li>
+                <h3 class="SubSection">ContentsDataBase:</h3>
+                <p class="FirstParagraph">
+                    ContentsDataBaseとは, ContensFileを管理するものです.
+                    管理する情報について詳しく説明すると, コンテンツ間の関係情報, コンテンツの最終更新日情報, コンテンツそのものの情報などです.
+                    あくまでコンテンツの情報のみ扱います.
+                    ContentsDataBaseは, サーバー内部での情報のやり取りはもちろん外部との通信も行うことができます
+                    (外部との通信ではAjaxを使用してDataBaseにPOST送信をする必要があります).
+                </p>
+            </li>
+            <li>
+                <h3 class="SubSection">ContentsViewer:</h3>
+                <p class="FirstParagraph">
+                    ContentsViewerはContentsDataBaseと通信を行い, 送られたコンテンツ情報をWebPageにします.
+                    ここで, WebPageのデザインが決まります.
+                </p>
+            </li>
+        </ul>
+        <p>
+            このように, コンテンツの情報のみを扱うもの―ContentsDataBase―とコンテンツの情報を並べるもの―ContentsViewer―を分離しています.
+            こうすることで, 作成者は改良するべき場所がわかりやすくなります.
+            例えば, 情報の扱い方に関して何か改良したい場合, 改良するべきモジュールはContentsDataBaseであり,
+            デザインを変更したい場合, 変更するモジュールはContentsViewerです.
+        </p>
+    </li>
+
+    <li>
+        <h2 class="Section"><a name="ContentFile">ContentFileについて</a></h2>
+        <p class="FirstParagraph">
+            ContentFileの書式についてですが, htmlのようなものです. 段落ではpタグを使い, タイトルにはh2を使います.
+            htmlのbody要素内を書くのに似ています.
+        </p>
+        <p>
+            htmlと違う点はコンテンツのタイトルタグ, 概要タグ, 親コンテンツへのパスタグ, 子コンテンツへのパスタグが用意されている点です.
+            このタグに基づき, ContentsDataBaseは情報を整理します.
+        </p>
+        <p>
+            以下にサンプルを示します.
+        </p>
+        <pre class="brush: xml;">
+&lt;CDB_CreatedAt&gt;
+	ここにはこのコンテンツの作成日時を書きます
+&lt;/CDB_CreatedAt&gt;
+&lt;CDB_Parent&gt;
+	ここには親のコンテンツへの相対パスを書きます.
+&lt;/CDB_Parent&gt;
+&lt;CDB_Title&gt;
+	ここにはタイトルを書きます
+&lt;/CDB_Title&gt;
+&lt;CDB_Abstract&gt;
+	ここにはこのコンテンツに関する概要を書きます
+&lt;/CDB_Abstract&gt;
+&lt;CDB_Children&gt;
+    &lt;CDB_Child&gt;ここには子コンテンツへの相対パスを書きます&lt;/CDB_Child&gt;
+&lt;/CDB_Children&gt;
+ここにはこのコンテンツ自身の内容を書きます
+</pre>
+    </li>
+    <li>
+        <h2 class="Section"><a name="デザイン変更">デザインの変更について</a></h2>
+        <p class="FirstParagraph">
+            デザインの変更をする場合, ContentsViewerを変更する必要があります.
+            以下にその概略図を示します.
+        </p>
+        <p class="ResizeImage">
+            <img src="Imgs/ContentsViewer/img5.png" />
+        </p>
+        <p>
+            上図のようにContentsViewerはphp, css, javaScriptによって成り立っているため,
+            デザインを作成する際にはこれらすべてのファイルを作成する必要があります.
+            これらプログラミング言語に関する知識が必要です.
+        </p>
+        <p>
+            プログラミング言語の知識は必要ですが, かなりデザインの自由度は高いです.
+            ContentsViewerは元からある程度作られたものではなく, 作成者が作ったものがContentsViewerそのものです.
+            作成者が作りたいデザインそのものが出来上がることでしょう.
+        </p>
+    </li>
+</ul>

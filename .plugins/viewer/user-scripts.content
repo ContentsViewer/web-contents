@@ -1,0 +1,288 @@
+<Header>
+    <Parent> 
+    <Title> user-scripts
+    <CreatedAt> 2022-05-06
+    <Tags> noindex
+    <Summary>
+        
+    </Summary>
+</Header>
+```html
+    <!--<link rel="stylesheet" href="{PLUGIN_URI}/" media="print" onload="this.media='all'; this.onload=null;">-->
+    
+    <script src="{CURRENT_USER_ROOT_URI}/:scripts/viewer/user-scripts/js" defer></script>
+  
+    <!--<script>console.log('[viewer.html] loaded')</script>-->
+  
+```
+
+```
+console.log('[viewer.js] loaded');
+```
+
+# 文献ホバールック
+    機能:
+        * 文献参照リンク上でマウスをホバーすると, 参照先のテキストを表示する
+        
+    ```js
+        (function() {'use strict';
+        
+        var refs = document.querySelectorAll('#content-body sup.reference>a, #content-summary sup.reference>a')
+        
+        refs.forEach(ref => {
+            if (!ref.hasAttribute('href')) {
+                return
+            }
+
+            try {
+                let note = 
+                    document
+                    .getElementById(ref.getAttribute('href').slice(1))
+                    .querySelector('span.reference-text')
+
+                ref.setAttribute('title', note.textContent)
+            }
+            catch(error) {
+                console.error(error)
+            }
+        })
+
+        }());
+    
+    ```
+
+
+# 自動テーマ切り替え
+    機能:
+        * ユーザーの現在時刻が, `daytime`内ならライトテーマ, それ以外の場合はダークテーマを適用する
+        * ユーザーが手動でテーマを切り替えた場合, そこから6時間は自動切換えしない
+    
+    ```js
+        // Enable if ThemeChanger exists.
+        if (ThemeChanger) {
+        (function () { 'use strict';
+        
+        
+        var daytime = [7.0, 22.0]
+        
+        function nowIsDaytime() {
+            let date = new Date()
+            let nowClock = date.getHours() + date.getMinutes() / 60.0
+            return (daytime[0] <= nowClock && nowClock <= daytime[1])
+        }
+        
+        
+        function isDisabledAutoSwitching() {
+            let data = ThemeChanger.getCookieData()
+            if(data.is_disabled_auto_switching_theme) return true
+
+            return false
+        }
+        
+        
+        function disableAutoSwitching() {
+            // Disable the auto switching for an 6 hour.
+            document.cookie = "is_disabled_auto_switching_theme=yes; path=/; max-age=21600";
+        }
+
+
+        function switchTheme() {
+            if(nowIsDaytime()) {
+                // in the daytime
+                if(ThemeChanger.getCurrentTheme() === 'dark' && !isDisabledAutoSwitching()) {
+                    ThemeChanger.clearTheme()
+                    ThemeChanger.changeTheme()
+                }
+            }
+            else {
+                // in the nighttime
+                if(ThemeChanger.getCurrentTheme() === false && !isDisabledAutoSwitching()) {
+                    ThemeChanger.setTheme('dark')
+                    ThemeChanger.changeTheme()
+                }
+            }
+        }
+        
+        // First, switch theme.
+        switchTheme()
+        
+        // Then, register callback.
+        ThemeChanger.onChangeThemeCallbacks.push(() => {
+            // Disable auto-switching if the user switches themes after auto-switching.
+            disableAutoSwitching()
+        })
+        
+        
+        }());
+        }
+    ```
+
+
+# ページタブに「印刷」タブを追加
+    
+    ```
+        var tabs = document.querySelector('#page-tabs div.vector-tabs.right ul');
+        if(tabs) {
+            var li = document.createElement('li');
+            var a = document.createElement('a');
+            a.href="javascript:void(0)"
+            a.onclick = function(){window.print();return false;}
+            a.textContent = "Print";
+            li.appendChild(a);
+            tabs.appendChild(li);
+        }
+    ```
+    
+# 左カラムに画像付きメインサイトリンク追加
+    `{画像パス}`に, メインサイトロゴ画像を入れてみよう!
+    `{サイトURL}`に, メインサイトのURLを入れてみよう!
+    
+    ```
+        var div = document.createElement('div');
+        var a = document.createElement('a');
+        var img = document.createElement('img');
+        a.href="https://www-arl.sys.es.osaka-u.ac.jp/site/"
+        div.style.textAlign = "center";
+        img.style.width = "80%";
+        img.style.maxHeight = "50px";
+        img.style.objectFit = "contain";
+        img.src = "/wiki/ARL/.plugins/images/logo.png";
+        a.appendChild(img);
+        div.appendChild(a);
+        
+        var leftColumn = document.getElementById('left-column');
+        var leftColumnResponsive = document.getElementById('left-column-responsive');
+        if(leftColumn) {
+            leftColumn.prepend(div);
+            div = div.cloneNode(true);
+        }
+        if(leftColumnResponsive) {
+            leftColumnResponsive.prepend(div);
+        }
+    ```
+# 自動テーマ切り替え
+    日の出, 日の入りの時間に合わせて, テーマをライトモードとダークモードに切り替えます.
+    
+    日の出日の入りの時間は, 下記のサイトを参考にしました.
+        * [日の出・日の入時刻の年間変化](http://k-ichikawa.blog.enjoy.jp/etc/HP/js/sunRise/srs.html)
+    
+    ```
+        if(ThemeChanger) {
+            var ThemeAutoSwitcher = {}
+            
+            ThemeAutoSwitcher.tableOfSunriseSunsetTime = [
+                [7.0, 17.0], // Jan
+                [6.5, 17.5], // Feb
+                [6.0, 18.0], // Mar
+                [5.5, 18.5], // Apr
+                [5.0, 19.0], // May
+                [5.0, 19.0], // Jun
+                [5.0, 19.0], // Jul
+                [5.5, 18.5], // Aug
+                [5.5, 18.0], // Sep
+                [6.0, 17.0], // Oct
+                [6.5, 17.0], // Nov
+                [7.0, 17.0]  // Dec
+            ];
+            
+            ThemeAutoSwitcher.switchTheme = function() {
+    
+                if(this.nowIsDaytime()) {
+                    // in the daytime
+                    if(ThemeChanger.getCurrentTheme() === 'dark' && !this.isDisabledAutoSwitching()) {
+                        ThemeChanger.clearTheme()
+                        ThemeChanger.changeTheme()
+                    }
+                }
+                else {
+                    // in the nighttime
+                    if(ThemeChanger.getCurrentTheme() === false && !this.isDisabledAutoSwitching()) {
+                        ThemeChanger.setTheme('dark')
+                        ThemeChanger.changeTheme()
+                    }
+                }
+            }
+            
+            ThemeAutoSwitcher.nowIsDaytime = function() {
+                let date = new Date()
+                let nowClock = date.getHours() + date.getMinutes() / 60.0;
+                let thisMonthSunriseSunset = this.tableOfSunriseSunsetTime[date.getMonth()]
+                return (thisMonthSunriseSunset[0] < nowClock && nowClock < thisMonthSunriseSunset[1])
+            }
+            
+            ThemeAutoSwitcher.isDisabledAutoSwitching = function() {
+                let data = ThemeChanger.getCookieData()
+                if(data.is_disabled_auto_switching_theme) return true
+    
+                return false
+            }
+            
+            ThemeAutoSwitcher.disableAutoSwitching = function() {
+                document.cookie = "is_disabled_auto_switching_theme=yes; path=/; max-age=21600";
+            }
+            
+            ThemeAutoSwitcher.onChangeThemeCallback = function() {
+                // If the user switch the theme after auto switching, disable the auto switching for an 6 hour.
+                ThemeAutoSwitcher.disableAutoSwitching()
+            }
+            
+            ThemeAutoSwitcher.switchTheme()
+            ThemeChanger.onChangeThemeCallbacks.push(ThemeAutoSwitcher.onChangeThemeCallback)
+        }
+        
+    ```
+    
+# 背景カスタマイズ
+    `{画像パス}`に好きな画像を入れてみよう!
+    
+    ```
+        <style>
+        body::before {
+            content:"";
+            opacity: 0.2;
+            display:block;
+            position:fixed;
+            top:0;
+            left:0;
+            z-index:-1;
+            width:100%;
+            height:100vh;
+            background-size: cover;
+            /*background-size: contain;*/
+            background-position: center;
+            background-repeat: no-repeat;
+            background-image: url("{CURRENT_USER_ROOT_URI}/.plugins/images/miku-1.jpg");
+        }
+        [theme='dark'] body::before {
+            background-image: url("{CURRENT_USER_ROOT_URI}/.plugins/images/miku-2.jpg");
+        }
+        html {
+            --main-bg-color: rgba(255, 255, 255, 0.7);
+        }
+        html[theme="dark"] {
+            --main-bg-color: rgba(31, 31, 31, 0.7);
+        }
+        /*#main {*/
+        /*    background-color: rgba(255, 255, 255, 0.7);*/
+        /*}*/
+        /*[theme="dark"] #main {*/
+        /*    background-color: rgba(31, 31, 31, 0.7);*/
+        /*}*/
+        /*#right-column {*/
+        /*    background-color: transparent;*/
+        /*}*/
+        /*#left-column {*/
+        /*    background-color: transparent;*/
+        /*}*/
+        </style>
+    ```
+    
+    [画像フォルダ](CURRENT_DIR/images)
+    
+    画像一覧:
+        初音ミク(白):
+            [/wiki/ARL/.plugins/images/miku-1.jpg](CURRENT_DIR/images/miku-1.jpg)
+        初音ミク(黒):
+            [/wiki/ARL/.plugins/images/miku-2.jpg](CURRENT_DIR/images/miku-2.jpg)
+    
+    

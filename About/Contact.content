@@ -1,0 +1,53 @@
+<Header>
+    <Parent> About
+    <Title> お問い合わせ
+    <CreatedAt> 2016-12-8
+    <Tags> お問い合わせ
+    <Summary>
+        このWebPageに関して何かありましたら下の問い合わせフォームよりお知らせください.
+        
+        
+    </Summary>
+</Header>
+
+<form method="POST" action="/Service/mail-service.php" name="form" onsubmit="return CheckForm()">
+    <input type="hidden" name="subject" value="Message from a site visitor " />
+    <input type="hidden" name="returnTo" value="/Master/About/Thanks" />
+    <input type="hidden" name="destination" value="master" />
+    
+    お名前:<input type="text" name="name" /><br />
+    Email :<input type="email" name="email" /><br />
+    <textarea type="text"  rows="10" name="message" style="width:100%;height:100%"></textarea>
+    <button type="submit">Submit</button>
+</form>
+
+<script>
+    function CheckForm() {
+        if (document.form.name.value == "") {
+            alert("お名前が入力されていません.");
+            return false;
+        }
+        // if (!document.form.email.value.match(/^[A-Za-z0-9]+[\w-]+@[\w\.-]+\.\w{2,}$/)) { // a.b@mail.jp がはじかれる
+        // if (!document.form.email.value.match(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/)) {
+        if (document.form.email.value == "") { // Note-2022-01-10: 最近のブラウザはパターンチェックしてくれるので, 自前でやらないことにした.
+            alert("e-mailアドレスをご確認ください。");
+            return false;
+        }
+        if (document.form.message.value == "") {
+            alert("本文がありません.");
+            return false;
+        }
+        
+        var otp = document.getElementsByName('otp').item(0).content;
+        var input=document.createElement('input');
+        input.name ='otp'; input.type='hidden'; input.value=otp;
+        document.form.appendChild(input);
+        
+        var contentPath = document.getElementsByName('content-path').item(0).content;
+        input=document.createElement('input');
+        input.name='contentPath'; input.type='hidden'; input.value=contentPath;
+        document.form.appendChild(input);
+        
+        return true;
+    }
+</script>

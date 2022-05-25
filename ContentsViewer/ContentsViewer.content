@@ -1,0 +1,38 @@
+<Header>
+    <Parent> ../Root
+    <Title> ContentsViewer
+    <CreatedAt> 2016-12-8
+    <Tags> Web
+    <Summary>
+        ![ContentsViewer](CURRENT_DIR/Images/Logo.png)
+        
+        自身が作成したもの, 見つけたものを公開する方法の一つに, インターネットを利用したWebPageの公開があります.
+        この方法は他の方法(本の出版など)と比べ低コストで行うことが可能です. 
+        これは, 無料のレンタルサーバ, ページ編集ソフトなどのおかげです.
+        
+        ContentsViewerはページ編集ソフトの一種です.
+        詳しく言うと, WebPageに関する機能を持つモジュールの集合です.
+        ソフトの作りを簡単にして, カスタマイズ-デザイン, コンテンツ管理法, コンテンツ記法など- を簡単にできるように
+        という目的で開発しました.
+        
+        ContentsViewerがどのようなものであるか知りたい方はこのWebPageを参考にしてください.
+        このウェブページはすべてContentsViewerによって表示されています.
+        
+        [このシステムは古いです! :: WARNING]
+        ===================================
+        
+            このシステムは, アップグレードされ, [CollabCMS](./../CollabCMS/CollabCMS)
+            となりました. このシステムが持つモジュールは分離され, ContentsViewerはCollabCMSの
+            モジュールの一部となりました.
+        
+        ===================================
+        
+        
+        
+        
+        
+    </Summary>
+    <Child> DownLoadPage
+    <Child> UpdateList
+    <Child> DebugPage
+</Header>

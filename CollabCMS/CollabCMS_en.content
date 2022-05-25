@@ -1,0 +1,18 @@
+<Header>
+    <Parent> ../Root_en
+    <Title> CollabCMS
+    <CreatedAt> 2020-05-06
+    <Tags> CMS, Web, editing
+    <Summary>
+        ![CollabCMS](CURRENT_DIR/Images/Logo.png)
+        
+        CollabCMS is the __truely file based Contents Management System__ by which
+        __you can take various approach to the contents__.
+        
+        In Many CMS (whether Flat-file or Database), 
+        you can only edit contents through the CMS.
+        
+        
+        
+    </Summary>
+</Header>

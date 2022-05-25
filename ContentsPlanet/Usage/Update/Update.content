@@ -1,0 +1,123 @@
+<Header>
+    <Parent> ../Usage
+    <Title> アップデート方法
+    <CreatedAt> 2020-08-31
+    <Tags> 
+    <Summary>
+        本CMSのアップデート方法について
+    </Summary>
+</Header>
+# 使用しているバージョンを確認
+    現在使用しているバージョンを確認します.
+    
+    本CMSのコンテンツ表示ページ下部にバージョンが書かれています.
+    
+    ex):
+        ```
+            Powered by ContentsPlanet 2020.08.31 © 2016-2020 ContentsPlanet Development Team
+        ```
+        
+        上の例の場合, バージョンは, `2020.08.31`です.
+
+# アップデートしたいバージョンを確認
+    以下のページから, 現在リリースされているバージョンを確認します.
+    
+    * [../../ChangeLog/ChangeLog]
+    * [Githubのリリース一覧](https://github.com/ContentsViewer/ContentsPlanet/releases)
+    
+    バージョン名は, 日付になっています^[注.calver].
+    
+    一覧から, アップデートしたいバージョンを確認します.
+    
+
+# アップデート
+    アップデート方法は, 導入時にGitを用いたか, FTPなどで直接ファイルをアップデートしたかで, 
+    異なります.
+    
+    # Git を用いた方法
+        # 1.サーバにsshログイン
+
+        # 2.コマンド
+            本CMSが存在するディレクトリに移動します.
+
+            ```bash
+                cd ~/www/wiki
+            ```
+
+            最新版を取得します．
+            ```bash
+                git fetch
+            ```
+            
+            アップデートしたいバージョンとマージします.
+            ```bash
+                git merge <version-tag-name>
+            ```
+            
+            `version-tag-name`は, 各バージョンと紐づいているタグ名です.
+            [Githubのリリースページ](https://github.com/ContentsViewer/ContentsPlanet/releases)
+            や, `git tag`コマンドで確認できます.
+            
+            競合が発生した場合は, 解決してください.
+        
+    # ファイルを直接アップロードした場合
+        # 1.フォルダを置き換えます
+            # 通常
+                何もカスタマイズしていないときは, 以下のフォルダ, ファイル//以外//を置き換えます.
+                
+                + ContentsPlanet
+                    + Cache
+                    + Home
+                    + `ContentsPlanet.php`
+                
+                最後にシステム設定ファイル`ContentsPlanet.php`を, 最新版と差分を確認しつつ統合します.
+            
+            # カスタマイズした場合
+                //通常//と同様に, アップデート対象のフォルダを置き換えますが,
+                カスタマイズしたファイル以外を置き換え, カスタマイズしたものは, 差分を確認しつつ統合します.
+                
+                カスタマイズされうるファイルとして以下があります.
+                
+                + ContentsPlanet
+                    + Client
+                        + Common
+                            + `CommonHead.html`
+                            + `EndpointCommonHead.html`
+                    + `ContentsPlanet.php`
+                
+
+# アップデート後のトラブル
+    アップデート後に何かトラブルが起きたとき, 多くは古いキャッシュやメタデータの互換性が問題です.
+    
+    以下のファイルを削除してください.
+    
+    + ContentsPlanet
+        + `.htaccess` <- 削除(カスタマイズしている場合は バックアップ -> 削除 -> 自動生成 -> 書き換え)
+        + Cache
+            + `.htaccess` **これは消さない** キャッシュファイルが第三者に見られる可能性があります.
+            + `~.cache` <- 削除
+        + Home
+            + Master
+                + Contents
+                + `.metadata~` <- 削除
+                + `.index~` <- 削除
+            + <他ユーザ>
+                + Contents
+                + `.metadata~` <- 削除
+                + `.index~` <- 削除
+        + Frontend
+        + Module
+        + ...
+
+    [Cache ファイルについて]
+    ========
+        Cache ファイルには, コンテンツのパース結果や, メタ情報, のほかに, //変更履歴//も含まれています.
+        
+        変更履歴を残したい場合は, `history-`から始まるキャッシュファイルは残しておきます.
+    ========
+    
+    `ContentsPlanet/.htaccess`を削除した場合, 再度`.htaccess`を自動生成する必要があるので,
+    システムルートディレクトリにアクセスします.
+
+# 注釈
+    [注.calver]: ["Calendar Versioning"](https://calver.org/). CalVer. accessed at 2020-08-31.

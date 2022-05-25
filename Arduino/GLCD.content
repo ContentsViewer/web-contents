@@ -1,0 +1,15 @@
+<Header>
+    <Parent> Arduino
+    <Title> グラフィック液晶
+    <CreatedAt> 2016-12-8
+    <Tags> 
+    <Summary>
+        グラフィック液晶に関する情報をあつかいます.
+        扱うグラフィック液晶は'SG12864ASLB-GB'です.
+        
+        ![グラフィック液晶外観](CURRENT_DIR/Images/GLCDController/Img10.png)
+        
+    </Summary>
+    <Child> UsageGLCD
+    <Child> GLCDController
+</Header>

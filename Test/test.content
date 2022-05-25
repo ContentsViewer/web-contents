@@ -1,0 +1,67 @@
+<Header>
+    <Parent> ../Root
+    <Title> Test
+    <CreatedAt> 2018/10/07
+    <Tags> noindex
+    <Summary>
+        本稿では, **げるばな**について述べたいと思う
+        
+    </Summary>
+    <Child> ../../Debugger/Contents/Root
+    <Child> ChildA
+    <Child> ChildB
+    <Child> ChildC
+</Header>
+`TEST`:
+    HOGE
+
+`DESUDESU`:
+    DESUDESU
+
+TEST
+
+* item 1
+    項目
+    
+    1. 順序
+        テスト
+    2. 順序
+        てすと
+* item 2
+
+---
+
+1. level 0
+    + root
+        + file
+        
+2. level 1
+
+本稿ではa
+ aa、a a
+
+[/../../Debugger/Contents/Root]
+ aa^_^a a
+について述べたいと思う
+
+[TEST](ROOT_URI/Master/CollabCMS)
+
+<iframe style="display: block; margin: auto;" width="560" height="315" src="https://www.youtube.com/embed/tnDslEYOtGY" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
+</iframe>
+
+
+
+1. クライアントは, 認証が必要なページにアクセスする.
+2. Webサーバは, 401 "Unauthorized" ステータスとともに,  \
+    `authentication realm`, ランダムな文字列`nonce`を返す.
+3. (ブラウザにユーザ名とパスワードの情報が無いとき)\
+    ブラウザは, ユーザに`authentication realm`を提示し, ユーザ名とパスワードの入力を求める.\
+    ここで, ユーザはキャンセルできる.
+    
+4. クライアントは, レスポンスコードを含めた認証ヘッダを加えて同じリクエストをWebサーバに送る.
+5. Webサーバは認証を認め, ページを返す. もしユーザ名, パスワードが異なる場合, \
+    サーバは401を返し, クライアントは, 再びユーザに入力を求める.
+
+特徴:
+    * 資格情報のやり取りでユーザ名とパスワードはハッシュ化される(平文ではない)
+    * 一度認証されると, ブラウザは自動で認証ヘッダを送信するため, ログアウト機能はない^[digest-logout]

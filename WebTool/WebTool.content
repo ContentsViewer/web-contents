@@ -1,0 +1,11 @@
+<Header>
+    <Parent> ../Root
+    <Title> Webツール
+    <CreatedAt> 2019-12-10
+    <Tags> 
+    <Summary>
+        Web(ブラウザ)上で動く各種ツール
+    </Summary>
+    <Child> TranslatePreprocessor/TranslatePreprocessor
+    <Child> QR-UniversalScanner/app
+</Header>

@@ -1,0 +1,126 @@
+<Header>
+    <Parent> EventController
+    <Title> EventControllerの関数, 変数一覧
+    <CreatedAt> 2016-12-8
+    <Tags> 
+    <Summary>
+        |[関数]
+        |----------------||--------------------------------------------|
+        | [ResetTrigger](#ResetTrigger) || TriggerをResetします |
+        | [GetBool](#GetBool)			|| 指定したbool型Parameterの値を取得 |
+        | [GetInteger](#GetInteger)		|| 指定したint型Parameterの値を取得 |
+        | [GetFloat](#GetFloat)			|| 指定したfloat型Parameterの値を取得 |
+        | [SetTrigger](#SetTrigger)		|| Triggerを引きます				|
+        | [SetBool](#SetBool)			|| 指定したbool型Parameterを設定	|
+        | [SetInteger](#SetInteger)     || 指定したint型Parameterを設定 |
+        | [SetFloat](#SetFloat)         || 指定したfloat型Parameterを設定   |
+        
+    </Summary>
+</Header>
+# [[ResetTrigger]]ResetTrigger
+    public void ResetTrigger(string name)
+
+    # パラメータ
+        |-------||------------------------------|
+        | name || ResetしたいTrigger名  |
+
+    # 説明
+        TriggerをResetします
+
+
+# [[GetBool]]GetBool
+    public bool GetBool(string name)
+
+    # パラメータ
+        |-------||------------------------------|
+        | name || 取得したいbool型Parameter名  |
+
+    # 返り値
+        指定したbool型Parameterの返り値
+
+    # 説明
+        指定したbool型Parameterの値を取得します
+
+
+
+# [[GetInteger]]GetInteger
+    public int GetInteger(string name)
+
+    # パラメータ
+        |-------||------------------------------|
+        | name || 取得したいint型Parameter名  |
+
+    # 返り値
+        指定したint型Parameterの返り値
+
+    # 説明
+        指定したint型Parameterの値を取得します
+
+
+
+# [[GetFloat]]GetFloat
+    public float GetFloat(string name)
+
+    # パラメータ
+        |-------||------------------------------|
+        | name || 取得したいfloat型Parameter名  |
+
+    # 返り値
+        指定したfloat型Parameterの返り値
+
+    # 説明
+        指定したfloat型Parameterの値を取得します
+
+
+
+# [[SetTrigger]]SetTrigger
+    public void SetTrigger(string name)
+
+    # パラメータ
+        |-------||------------------------------|
+        | name || 引きたいTrigger名  |
+
+
+    # 説明
+        Triggerを引きます
+
+
+
+# [[SetBool]]SetBool
+    public void SetBool(string name, bool value)
+
+    # パラメータ
+        |-------||------------------------------|
+        | name || 設定したいbool型Paramete名  |
+        | value || 設定したいbool値 |
+
+
+    # 説明
+        指定したbool型Parameterを設定します
+
+
+# [[SetInteger]]SetInteger
+    public void SetInteger(string name, int value)
+
+    # パラメータ
+        |-------||------------------------------|
+        | name || 設定したいint型Paramete名  |
+        | value || 設定したいint値 |
+
+
+    # 説明
+        指定したint型Parameterを設定します
+
+
+# [[SetFloat]]SetFloat
+    public void SetFloat(string name, float value)
+
+    # パラメータ
+        |-------||------------------------------|
+        | name || 設定したいfloat型Paramete名  |
+        | value || 設定したいfloat値 |
+
+
+    # 説明
+        指定したfloat型Parameterを設定します
+

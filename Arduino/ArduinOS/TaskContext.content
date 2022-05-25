@@ -1,0 +1,289 @@
+<Header>
+    <Parent> TaskScheduler
+    <Title> コンテキスト
+    <CreatedAt> 2017-8-28
+    <Tags> OS, アセンブリ
+    <Summary>
+        タスクの切り替えをする際, その時のCPUの状態を保存する必要があります.
+        このCPUの状態をコンテキストと呼びます.
+        あるタスクから離れるときはコンテキストの保存を行い,
+        あるタスクに復帰するときはコンテキストの復帰を行います.
+        
+        
+        ここでは, コンテキストに関する詳しい説明とコンテキストの保存と復帰の方法について説明します.
+        
+        
+    </Summary>
+</Header>
+# コンテキストとは
+    コンテキストとは, 今現在のCPUの状態を意味します.
+    CPUの状態には, プログラムカウンタ, スタックポインタ, 汎用レジスタの内容が含まれます.
+    また今回使用するAVRマイコンではこのほかにステータスレジスタ(SREG)があります.
+
+    CPUを取り巻く全体像は次のようになっています.
+
+    ![CPUを取り巻く全体像](CURRENT_DIR/Images/CPU.png)
+
+
+    __プログラムカウンタは現在実行中のプログラムコードの番地を保存しています.__
+    プログラマーがプログラムしたコードはこのプログラムコード領域に書き込まれ,
+    上から順番に実行しています. 一つの命令を終えるとプログラムカウンタが持つ
+    メモリ番地が一つ進みます.
+
+    
+    __スタックポインタとは, スタックの先頭アドレス(スタックの一番上のアドレス)を保持します.__
+    命令実行部はこのスタックポインタを参照してスタックから要素を取り出す, 積むといった
+    操作を行います.
+
+    
+    __汎用レジスタとは, データを一時的に保存しておく領域です.__
+    RAMからの読み書き速度と比べて, レジスタの読み書き速度は高速です.
+    汎用レジスタの使われ方ですが, RAM上のデータを汎用レジスタ上に持ってきて,
+    レジスタ上でデータの処理を行いIOポート, RAMに処理後のデータ書き込むといった
+    方法がよくとられます. CPUの作業台のようなものです.
+    
+    __ステータスレジスタとは, 演算装置(ALU)―CPUで算術計算が行われるところ―の計算結果の情報を含んでいます.__
+    計算過程の繰り上がり情報, マイナスかどうかの情報などが含まれます.
+
+# コンテキストの保存
+    コンテキストは次の情報を含んでいます.
+    
+    * プログラムカウンタ
+    * スタックポインタ
+    * 汎用レジスタ
+    * ステータスレジスタ
+    
+    この中で, 実際に我々が保存するのは次の三つです.
+
+    * スタックポインタ
+    * 汎用レジスタ
+    * ステータスレジスタ
+    
+    プログラムカウンタの値を保存しない理由は, この値はすでにスタック上に保存されているからです.
+    このことについては, 後の手動によるタスク切り替え方法で詳しく述べます.
+    
+    コンテキストを保存するコードは以下のようになります.
+    
+
+    ```cpp
+        
+        // 汎用レジスタの保存, スタックポインタをTCBに保存
+        //
+        // まずやることはフラグの保存(ステータスレジスタの保存)そのあと割り込み停止である.
+        //
+        // Macro to save all the general purpose registers, the save the stack pointer into the TCB.
+        // 
+        // The first thing we do is save the flags then disable interrupts.
+        // This is to guard our stack against having a contex switch interrupt after we have already
+        // pushed the resisters onto the stack - causing the 32 registers to be on the stack twice.
+        //
+        // r1 is set to zero as the compiler expects it to be thus, 
+        // however some of the math routines make use of r1.
+        //
+        // The interupts will have been disabled during the call to PortSaveContext()
+        // so we need not worry about reading/writing to the stack pointer.
+        // 
+        // *** Memo ***************************************************
+        // x: Xレジスタ(R26 : R27)
+        // R26: Xレジスタ下位バイト
+        // R27: Xレジスタ上位バイト
+        // R28: Yレジスタ下位バイト
+        // R29: Yレジスタ上位バイト
+        // R30: Zレジスタ下位バイト
+        // R31: Zレジスタ上位バイト
+        // SP_H: スタックポインタ上位バイト(0x3e)
+        // SP_L: スタックポインタ下位バイト(0x3d)
+        // SREG: ステータスレジスタ
+        // ************************************************************
+        inline void PortSaveContext(void);
+        inline void PortSaveContext(void)
+        {
+            asm volatile(
+                "push   r0                          \n\t"
+                "in     r0, __SREG__                \n\t"
+                "cli                                \n\t"
+                "push   r0                          \n\t"
+                );
+        
+        #if defined(__AVR_HAVE_RAMPZ__)
+            // have RAMPZ Extended Z-pointer Register for ELPM/SPM
+            // the uC have extend program memory
+            // 0x3b --> RAMPZ
+            // 0x3c --> EIND
+            //
+            // RAMPZレジスタ, EINDレジスタを持つCPUには, これらレジスタの値も保存する.
+            //
+            // memo:
+            //  AVRマイコンでは, 年々メモリの容量が増加しており, アドレス16ビットではメモリすべてのアドレス
+            //  を示すことができなくなってきた. このような問題に対処するため,
+            //  Zレジスタを拡張するRAMPZ, EINDレジスタが導入された.
+            asm volatile(
+                "in     r0, 0x3b                    \n\t"
+                "push   r0                          \n\t"
+                "in     r0, 0x3c                    \n\t"
+                "push   r0                          \n\t"
+                );
+        #endif
+            asm volatile(
+                "push   r1                          \n\t"
+                "clr    r1                          \n\t"
+                "push   r2                          \n\t"
+                "push   r3                          \n\t"
+                "push   r4                          \n\t"
+                "push   r5                          \n\t"
+                "push   r6                          \n\t"
+                "push   r7                          \n\t"
+                "push   r8                          \n\t"
+                "push   r9                          \n\t"
+                "push   r10                         \n\t"
+                "push   r11                         \n\t"
+                "push   r12                         \n\t"
+                "push   r13                         \n\t"
+                "push   r14                         \n\t"
+                "push   r15                         \n\t"
+                "push   r16                         \n\t"
+                "push   r17                         \n\t"
+                "push   r18                         \n\t"
+                "push   r19                         \n\t"
+                "push   r20                         \n\t"
+                "push   r21                         \n\t"
+                "push   r22                         \n\t"
+                "push   r23                         \n\t"
+                "push   r24                         \n\t"
+                "push   r25                         \n\t"
+                "push   r26                         \n\t"
+                "push   r27                         \n\t"
+                "push   r28                         \n\t"
+                "push   r29                         \n\t"
+                "push   r30                         \n\t"
+                "push   r31                         \n\t"
+                "lds    r26, currentTCB             \n\t"
+                "lds    r27, currentTCB + 1         \n\t"
+                "in     r0, 0x3d                    \n\t"
+                "st     x+, r0                      \n\t"
+                "in     r0, 0x3e                    \n\t"
+                "st     x+, r0                      \n\t"
+                );
+        
+        }
+    ```
+    
+    流れとしては次のようになっています.
+
+    * R0(レジスタ0)をスタックに保存(以下から保存はスタックへの保存)
+    * ステータスレジスタを保存
+    * 割り込み停止
+    * RAMPZ, EINDレジスタを持つCPUのみこれらを保存
+    * R1からR31まで順に保存
+    * スタックポインタの値をcurrentTCBのメンバー変数topOfStackに保存
+
+    
+    currentTCBがさすアドレスはtopOfStackのアドレスです.
+    というのも, TCBの上部にtopOfStackを持ってきていたからです.
+    (topOfStackをTCBの上部に持ってきていた理由はこのためです.)
+
+    [アセンブラ]
+    ======================================================================
+    
+        コード上にアセンブラが出ましたので補足します.
+        
+        | 命令コード | オペランド | 説明 | 命令 |
+        |-----------|-----------|------|-----|
+        | PUSH      | Rr        |レジスタの値をスタックへ保存       | STACK←Rr |
+        | POP       | Rd        | レジスタの値をスタックから取り出す | Rd←STACK |
+        | IN        | Rd, A     | IO領域からレジスタへ入力          | Rd←I/O(A) |
+        | OUT       | A, Rr     | IO領域へ出力                     | I/O(A)←Rr |
+        | CLI       |           | 全割り込み停止                  | I←0        |
+        | CLR       | Rd        | レジスタ消去                    | Rd←Rd xor Rd |
+        | LDS       | Rd, k     | 直接アドレス指定でSRAMからレジスタへロード | Rd←(k) |
+        | ST        | X+, Rr    | 間接アドレス指定で保存, 後置インクリメント | (X)←Rr, X←X + 1 |
+        | LD        | Rd, X+    | 間接アドレス指定でロード, 後置インクリメント | Rd←(X), X←X + 1 |
+
+    =======================================================================
+    
+# コンテキストの復帰
+    それでは, コンテキストの復帰を行います.
+    コンテキストの保存と逆の手順でスタックから読み出すことで復帰できます.
+    手順は次のようになります.
+    
+    * スタックポインタの値をcurrentTCBのメンバー変数topOfStackから読み出し設定
+    * R31からR1の順でスタックから取り出し(以下取り出しはスタックからの取り出し)設定
+    * EIND, RAMPZレジスタを持つCPUのみこれらを取り出し設定
+    * ステータスレジスタを取り出し設定
+    * R0を取り出し設定
+    
+    コンテキスト復帰のコードは以下のようになります.
+
+
+    ```cpp
+        
+        // PortSaveContext()と逆のことをする.
+        // 割り込みはPortSaveContext()で停止済み.
+        //
+        // Opposite to PortSaveContext().
+        // Interrupts will have been disabled during the context save so we can write to the stack pointer.
+        inline void PortRestoreContext(void);
+        inline void PortRestoreContext(void)
+        {
+            asm volatile(
+                "lds    r26, currentTCB             \n\t"
+                "lds    r27, currentTCB + 1         \n\t"
+                "ld     r28, x+                     \n\t"
+                "out    __SP_L__, r28               \n\t"
+                "ld     r29, x+                     \n\t"
+                "out    __SP_H__, r29               \n\t"
+                "pop    r31                         \n\t"
+                "pop    r30                         \n\t"
+                "pop    r29                         \n\t"
+                "pop    r28                         \n\t"
+                "pop    r27                         \n\t"
+                "pop    r26                         \n\t"
+                "pop    r25                         \n\t"
+                "pop    r24                         \n\t"
+                "pop    r23                         \n\t"
+                "pop    r22                         \n\t"
+                "pop    r21                         \n\t"
+                "pop    r20                         \n\t"
+                "pop    r19                         \n\t"
+                "pop    r18                         \n\t"
+                "pop    r17                         \n\t"
+                "pop    r16                         \n\t"
+                "pop    r15                         \n\t"
+                "pop    r14                         \n\t"
+                "pop    r13                         \n\t"
+                "pop    r12                         \n\t"
+                "pop    r11                         \n\t"
+                "pop    r10                         \n\t"
+                "pop    r9                          \n\t"
+                "pop    r8                          \n\t"
+                "pop    r7                          \n\t"
+                "pop    r6                          \n\t"
+                "pop    r5                          \n\t"
+                "pop    r4                          \n\t"
+                "pop    r3                          \n\t"
+                "pop    r2                          \n\t"
+                "pop    r1                          \n\t"
+                "pop    r0                          \n\t"
+                );
+        
+        #if defined(__AVR_HAVE_RAMPZ__)
+            // have RAMPZ Extended Z-pointer Register for ELPM/SPM
+            // the uC have extend program memory
+            // 0x3b --> RAMPZ
+            // 0x3c --> EIND
+            asm volatile(
+                "out    0x3c, r0                    \n\t"
+                "pop    r0                          \n\t"
+                "out    0x3b, r0                    \n\t"
+                "pop    r0                          \n\t"
+                );
+        #endif
+        
+            asm volatile(
+                "out    __SREG__, r0                \n\t"
+                "pop    r0                          \n\t"
+                );
+        }
+
+    ```
+

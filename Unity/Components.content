@@ -1,0 +1,17 @@
+<Header>
+    <Parent> Unity
+    <Title> Componentの紹介
+    <CreatedAt> 2016-12-8
+    <Tags> 
+    <Summary>
+        Unityを用いてゲームを作りやすくするものの一つにComponentがあります.
+        
+        このページではComponentを紹介していきます.
+        ここで紹介するComponentはゲームを作るときに役に立つものです.
+        
+    </Summary>
+    <Child> CameraController
+    <Child> EventController
+    <Child> LanguagePackManager
+    <Child> HUDMessageManager
+</Header>

@@ -1,0 +1,10 @@
+<Header>
+    <Parent> ../Programming
+    <Title> OpenCV
+    <CreatedAt> 2019-06-19
+    <Tags> 
+    <Summary>
+        
+    </Summary>
+    <Child> StereoCamera
+</Header>

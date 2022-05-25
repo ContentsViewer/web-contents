@@ -1,0 +1,18 @@
+<Header>
+    <Parent> ../Root
+    <Title> Arduino
+    <CreatedAt> 2016-12-8
+    <Tags> Arduino
+    <Summary>
+        このページではArduinoをもちいた電子回路,プログラムなどに関する情報を扱います.
+    </Summary>
+    <Child> GLCD
+    <Child> ControllerRoot
+    <Child> MediaPlayer
+    <Child> SketchWriteWithoutComputer
+    <Child> MelodyPlayer
+    <Child> Canvas
+    <Child> Works/Works
+    <Child> ArduinOS/ArduinOS
+    <Child> Troubleshooting/Troubleshooting
+</Header>

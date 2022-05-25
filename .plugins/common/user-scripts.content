@@ -1,0 +1,27 @@
+<Header>
+    <Parent> 
+    <Title> user-scripts
+    <CreatedAt> 2022-05-07
+    <Tags> noindex
+    <Summary>
+        
+    </Summary>
+</Header>
+
+```
+    <script>console.log('[common.html] loaded')</script>
+```
+
+# Google Analytics
+    ```html
+        <!-- Global site tag (gtag.js) - Google Analytics -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=UA-82386354-3"></script>
+        <script>
+          window.dataLayer = window.dataLayer || [];
+          function gtag() { dataLayer.push(arguments); }
+          gtag('js', new Date());
+        
+          gtag('config', 'UA-82386354-3');
+        </script>
+    ```
+

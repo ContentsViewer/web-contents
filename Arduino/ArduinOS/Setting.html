@@ -1,0 +1,134 @@
+﻿<CDB_Parent>
+    Structure.html
+</CDB_Parent>
+<CDB_CreatedAt>2017/7/11</CDB_CreatedAt>
+<CDB_Title>OSの設定</CDB_Title>
+<CDB_Abstract>
+    <p>
+        ここでは, OSの設定方法について説明します.
+    </p>
+
+    <p>
+        設定ファイルは, ArduinOSConfig.hです. このファイル内にOSの設定を書きます.
+        また, 設定ではハードウェアの基本構成に加え, 各機能の有効化, システムフックを行うか, などといった設定を行えます.
+    </p>
+</CDB_Abstract>
+
+<ul class="SectionList">
+    <li>
+        <h2 class="Section">設定方法</h2>
+        <p class="FirstParagraph">
+            各設定項目に対して, 一つの設定マクロが割り当てられています.
+            例えば, ヒープ領域のサイズの設定マクロは, CONFIG_TOTAL_HEAP_SIZEであるなどです.
+            この設定マクロに値を定義することで設定を行うことができます.
+            例えば, ヒープ領域のサイズを500byteに設定したいときは, 以下のように記述します.
+        </p>
+
+        <pre class="brush: cpp;">
+#define CONFIG_TOTAL_HEAP_SIZE ((size_t) (500))
+</pre>
+    </li>
+
+    <li>
+        <h2 class="Section">設定項目</h2>
+        <p class="FirstParagraph">
+            設定できる項目は以下のとおりです. ※の項目は必ず設定しなければなりません.
+        </p>
+
+        <ul>
+            <li>プリエンプション機能を持たせるか(*)</li>
+            <li>アイドルタスク実行時のシステムフックを利用するか(*)</li>
+            <li>システム時間更新時のシステムフックを利用するか(*)</li>
+            <li>システム時間の上限を16bitにするか(*)</li>
+            <li>最小のスタックサイズ(*)</li>
+            <li>ヒープ領域のサイズ(*)</li>
+            <li>システム割り込み周期(*)</li>
+            <li>タスク削除(Delete)機能を持たせるか(*)</li>
+            <li>タスク停止(Suspend)機能を持たせるか(*)</li>
+            <li>指定時間までのタスク待機(DelayUntil)機能を持たせるか(*)</li>
+            <li>指定時間の間タスク待機(Delay)機能を持たせるか(*)</li>
+            <li>メモリ確保失敗時のシステムフックを利用するか</li>
+            <li>ミューテックスを使用するか</li>
+            <li>優先度の数</li>
+            <li>アイドルタスク内でタスク切り替えを行うか</li>
+            <li>タスクの名前の最大文字数</li>
+            <li>スタックオーバーフローを確認するか</li>
+            <li>タスクの状態を取得する(TaskGetState)機能を持たせるか</li>
+            <li>スケジューラの状態を取得する(TaskGetSchedulerState)機能を持たせるか</li>
+            <li>現在実行中のタスクハンドルを取得できるようにするか</li>
+            <li>割り込み関数内でのタスク再開(TaskResumeFromISR)機能を持たせるか</li>
+        </ul>
+
+        <p>
+            ここから, 各設定項目について説明していきます.
+        </p>
+        <ul class="SectionList">
+            <li>
+                <h3 class="SubSection">プリエンプション機能を持たせるか(*)</h3>
+                
+            </li>
+            <li>
+                <h3 class="SubSection">アイドルタスク実行時のシステムフックを利用するか(*)</h3>
+            </li>
+            <li>
+                <h3 class="SubSection">システム時間更新時のシステムフックを利用するか(*)</h3>
+            </li>
+            <li>
+                <h3 class="SubSection">システム時間の上限を16bitにするか(*)</h3>
+            </li>
+            <li>
+                <h3 class="SubSection">最小のスタックサイズ(*)</h3>
+            </li>
+            <li>
+                <h3 class="SubSection">ヒープ領域のサイズ(*)</h3>
+            </li>
+            <li>
+                <h3 class="SubSection">システム割り込み周期(*)</h3>
+            </li>
+            <li>
+                <h3 class="SubSection">タスク削除(Delete)機能を持たせるか(*)</h3>
+            </li>
+            <li>
+                <h3 class="SubSection">タスク停止(Suspend)機能を持たせるか(*)</h3>
+            </li>
+            <li>
+                <h3 class="SubSection">指定時間までのタスク待機(DelayUntil)機能を持たせるか(*)</h3>
+            </li>
+            <li>
+                <h3 class="SubSection">指定時間の間タスク待機(Delay)機能を持たせるか(*)</h3>
+            </li>
+            <li>
+                <h3 class="SubSection">メモリ確保失敗時のシステムフックを利用するか</h3>
+            </li>
+            <li>
+                <h3 class="SubSection">ミューテックスを使用するか</h3>
+            </li>
+            <li>
+                <h3 class="SubSection">優先度の数</h3>
+            </li>
+            <li>
+                <h3 class="SubSection">アイドルタスク内でタスク切り替えを行うか</h3>
+            </li>
+            <li>
+                <h3 class="SubSection">タスクの名前の最大文字数</h3>
+            </li>
+            <li>
+                <h3 class="SubSection">スタックオーバーフローを確認するか</h3>
+            </li>
+            <li>
+                <h3 class="SubSection">タスクの状態を取得する(TaskGetState)機能を持たせるか</h3>
+            </li>
+            <li>
+                <h3 class="SubSection">スケジューラの状態を取得する(TaskGetSchedulerState)機能を持たせるか</h3>
+            </li>
+            <li>
+                <h3 class="SubSection">現在実行中のタスクハンドルを取得できるようにするか</h3>
+            </li>
+            <li>
+                <h3 class="SubSection">割り込み関数内でのタスク再開(TaskResumeFromISR)機能を持たせるか</h3>
+            </li>
+        </ul>
+    </li>
+</ul>
+
+

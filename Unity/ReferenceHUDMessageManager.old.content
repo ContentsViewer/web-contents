@@ -1,0 +1,419 @@
+<Header>
+    <Parent> HUDMessageManager
+    <Title> HUDMessageManager関数一覧
+    <CreatedAt> 2016-12-8
+    <Tags> 
+    <Summary>
+        |[関数]
+        |---------------||----------------------------------------|
+        | [Set](#Set)   || メッセージを設定                         |
+        | [SetAlert](#SetAlert) || Alertメッセージを設定            |
+        | [SetAlertKeepID](#SetAlertKeepID) || Alertメッセージを設定,IDを保持 |
+        | [SetSubtitleTop](#SetSubtitleTop) || SubtitleTopメッセージを設定   |
+        | [SetSubtitleTopKeepID](#SetSubtitleTopKeepID) || SubtitleTopメッセージを設定,IDを保持 |
+        | [SetSubtitleTopTimer](#SetSubtitleTopTimer)   || SubtitleTopメッセージを設定,タイマーモード |
+        | [SetSubtitleTopTimerKeepID](#SetSubtitleTopTimerKeepID) || SubtitleTopメッセージを設定,IDを保持,タイマーモード |
+        | [SetSubtitleBottom](#SetSubtitleBottom)                 || SubtitleBottomメッセージを設定                     |
+        | [SetSubtitleBottomKeepID](#SetSubtitleBottomKeepID)     || SubtitleBottomメッセージを設定,IDを保持            |
+        | [SetSubtitleBottomTimer](#SetSubtitleBottomTimer)       || SubtitleBottomメッセージを設定,タイマーモード       |
+        | [SetSubtitleBottomTimerKeepID](#SetSubtitleBottomTimerKeepID) || SubtitleBottomメッセージを設定,IDを保持,タイマーモード   |
+        | [SetMemoTopLeft](#SetMemoTopLeft)                             || MemoTopLeftメッセージを設定                          |
+        | [SetMemoTopLeftKeepID](#SetMemoTopLeftKeepID)                 || MemoTopLeftメッセージを設定,IDを保持                 |
+        | [SetMemoBottomRight](#SetMemoBottomRight)                     || MemoBottomRightメッセージを設定                      |
+        | [SetMemoBottomRightKeepID](#SetMemoBottomRightKeepID)         || MemoBottomRightメッセージを設定,IDを保持             |
+        | [Show](#Show)                                                 || メッセージを開始                                     |
+        | [ShowDontOverride](#ShowDontOverride)                         || メッセージを開始,命令を上書きしない                      |
+        | [ShowAlert](#ShowAlert)                                       || Alertメッセージを開始                                   |
+        | [ShowSubtitleTopTimer](#ShowSubtitleTopTimer)                 || SubtitleTopTimerメッセージを開始                         |
+        | [ShowSubtitleBottomTimer](#ShowSubtitleBottomTimer)           || SubtitleBottomTimerメッセージを開始                      |
+        | [ShowMemoTopLeft](#ShowMemoTopLeft)                           || MemoTopLeftメッセージを開始                              |
+        | [ShowMemoBottomRight](#ShowMemoBottomRight)                   || MemoBottomRightメッセージを開始                          |
+        | [Exit](#Exit)                                                 || メッセージを終了する                                     |
+        | [CheckID](#CheckID)                                           || 指定したメッセージIDが使用されているか確認                   |
+        
+        
+        
+    </Summary>
+</Header>
+
+# [[Set]]Set
+    public int Set(string text, MESSAGE_TYPE type, MESSAGE_MODE mode, Param messageParam)
+
+    # パラメータ
+        |------||-------------|
+        | text || 表示したい文字列 |
+        | type || メッセージを表示したい場所 |
+        | mode || 表示モード |
+        | messageParam || メッセージの詳細設定 |
+
+    # 返り値
+        メッセージID
+
+    # 説明
+        メッセージを設定します。
+        メッセージを設定する関数の中ではこの関数が最ももとになる関数です。
+
+
+
+# [[SetAlert]]SetAlert
+    public int SetAlert(string text, float time)<br/>
+    public int SetAlert(string text)
+
+    # パラメータ
+        |------||-------------|
+        | text || 表示したい文字列 |
+        | time || 表示時間 |
+        | keepID || 表示後IDを破棄するかどうか |
+
+    # 返り値
+        メッセージID
+
+    # 説明
+        Alertメッセージを設定します。
+        表示場所はCENTER,モードはタイマーです。
+        
+
+# [[SetAlertKeepID]]SetAlertKeepID
+    public int SetAlertKeepID(string text, float time)<br/>
+    public int SetAlertKeepID(string text)
+
+    # パラメータ
+        |------||-------------|
+        | text || 表示したい文字列 |
+        | time || 表示時間 |
+
+    # 返り値
+        メッセージID
+
+    # 説明
+        Alertメッセージを設定します。
+        表示場所はCENTER,モードはタイマーです。
+        IDは保持されます。
+
+
+# [[SetSubtitleTop]]SetSubtitleTop
+    public int SetSubtitleTop(string text, bool keepID)<br/>
+    public int SetSubtitleTop(string text)
+
+    # パラメータ
+        |------||-------------|
+        | text || 表示したい文字列 |
+        | keepID || 表示後IDを破棄するかどうか |
+
+    # 返り値
+        メッセージID
+
+    # 説明
+        SubtitleTopメッセージを設定します。
+        表示場所はTOP,モードはノーマルです。
+
+
+
+# [[SetSubtitleTopKeepID]]SetSubtitleTopKeepID
+    public int SetSubtitleTopKeepID(string text)
+
+    # パラメータ
+        |------||-------------|
+        | text || 表示したい文字列 |
+
+    # 返り値
+        メッセージID
+
+    # 説明
+        SubtitleTopメッセージを設定します。
+        表示場所はTOP,モードはノーマルです。
+        IDは保持されます。
+
+
+
+# [[SetSubtitleTopTimer]]SetSubtitleTopTimer
+    public int SetSubtitleTopTimer(string text, float time, bool keepID)<br/>
+    public int SetSubtitleTopTimer(string text, float time)
+
+    # パラメータ
+        |------||-------------|
+        | text || 表示したい文字列 |
+        | time || 表示時間 |
+        | keepID || 表示後IDを破棄するかどうか |
+
+    # 返り値
+        メッセージID
+
+    # 説明
+        SubtitleTopメッセージを設定します。
+        表示場所はTOP,モードはタイマーです。
+
+
+# [[SetSubtitleTopTimerKeepID]]SetSubtitleTopTimerKeepID
+    public int SetSubtitleTopTimerKeepID(string text, float time)
+
+    # パラメータ
+        |------||-------------|
+        | text || 表示したい文字列 |
+        | time || 表示時間 |
+
+    # 返り値
+        メッセージID
+
+    # 説明
+        SubtitleTopメッセージを設定します。
+        表示場所はTOP,モードはタイマーです。IDは保持されます。
+
+
+# [[SetSubtitleBottom]]SetSubtitleBottom
+    public int SetSubtitleBottom(string text, bool keepID)<br/>
+    public int SetSubtitleBottom(string text)
+
+    # パラメータ
+        |------||-------------|
+        | text || 表示したい文字列 |
+        | keepID || 表示後IDを破棄するかどうか |
+
+    # 返り値
+        メッセージID
+
+    # 説明
+        SubtitleBottomメッセージを設定します。
+        表示場所はBottom,モードはノーマルです。
+        
+
+
+# [[SetSubtitleBottomKeepID]]SetSubtitleBottomKeepID
+    public int SetSubtitleBottomKeepID(string text)
+
+    # パラメータ
+        |------||-------------|
+        | text || 表示したい文字列 |
+
+    # 返り値
+        メッセージID
+
+    # 説明
+        SubtitleBottomメッセージを設定します。
+        表示場所はBottom,モードはノーマルです。IDは保持されます。
+        
+
+# [[SetSubtitleBottomTimer]]SetSubtitleBottomTimer
+    public int SetSubtitleBottomTimer(string text, float time, bool keepID)<br/>
+    public int SetSubtitleBottomTimer(string text, float time)
+
+    # パラメータ
+        |------||-------------|
+        | text || 表示したい文字列 |
+        | time || 表示時間 |
+        | keepID || 表示後IDを破棄するかどうか |
+
+    # 返り値
+        メッセージID
+
+    # 説明
+        SubtitleBottomメッセージを設定します。
+        表示場所はBOTTOM,モードはタイマーです。
+
+
+# [[SetSubtitleBottomTimerKeepID]]SetSubtitleBottomTimerKeepID
+    public int SetSubtitleBottomTimerKeepID(string text, float time)
+
+    # パラメータ
+        |------||-------------|
+        | text || 表示したい文字列 |
+        | time || 表示時間 |
+
+    # 返り値
+        メッセージID
+
+    # 説明
+        SubtitleBottomメッセージを設定します。
+        表示場所はBOTTOM,モードはタイマーです。IDは保持されます。
+
+
+# [[SetMemoTopLeft]]SetMemoTopLeft
+    public int SetMemoTopLeft(string text, float time, bool keepID)<br/>
+    public int SetMemoTopLeft(string text, float time)<br/>
+    public int SetMemoTopLeft(string text)
+
+    # パラメータ
+        |------||-------------|
+        | text || 表示したい文字列 |
+        | time || 表示時間 |
+        | keepID || 表示後IDを破棄するかどうか |
+
+    # 返り値
+        メッセージID
+
+    # 説明
+        MemoTopLeftメッセージを設定します。
+        表示場所はTOP_LEFT,モードはタイマーです。
+
+
+# [[SetMemoTopLeftKeepID]]SetMemoTopLeftKeepID
+    public int SetMemoTopLeftKeepID(string text, float time)<br/>
+    public int SetMemoTopLeftKeepID(string text)
+
+    # パラメータ
+        |------||-------------|
+        | text || 表示したい文字列 |
+        | time || 表示時間 |
+
+    # 返り値
+        メッセージID
+
+    # 説明
+        MemoTopLeftメッセージを設定します。
+        表示場所はTOP_LEFT,モードはタイマーです。
+        IDは保持されます。
+
+
+# [[SetMemoBottomRight]]SetMemoBottomRight
+    public int SetMemoBottomRight(string text, float time, bool keepID)<br/>
+    public int SetMemoBottomRight(string text, float time)<br/>
+    public int SetMemoBottomRight(string text)
+
+    # パラメータ
+        |------||-------------|
+        | text || 表示したい文字列 |
+        | time || 表示時間 |
+        | keepID || 表示後IDを破棄するかどうか |
+
+    # 返り値
+        メッセージID
+
+    # 説明
+        MemoBottomRightメッセージを設定します。
+        表示場所はBOTTOM_RIGHT,モードはタイマーです。
+
+
+# [[SetMemoBottomRightKeepID]]SetMemoBottomRightKeepID
+    public int SetMemoBottomRightKeepID(string text, float time)<br/>
+    public int SetMemoBottomRightKeepID(string text)
+
+    # パラメータ
+        |------||-------------|
+        | text || 表示したい文字列 |
+        | time || 表示時間 |
+
+    # 返り値
+        メッセージID
+
+    # 説明
+        MemoBottomRightメッセージを設定します。
+        表示場所はBOTTOM_RIGHT,モードはタイマーです。
+        IDは保持されます。
+
+
+# [[Show]]Show
+    public void Show(int id)
+
+    # パラメータ
+        |------||-------------|
+        | id || 表示したいメッセージのID |
+
+    # 説明
+        メッセージを開始します。
+
+
+# [[ShowDontOverride]]ShowDontOverride
+    public void ShowDontOverride(int id)
+
+    # パラメータ
+        |------||-------------|
+        | id || 表示したいメッセージのID |
+
+    # 説明
+        メッセージを開始します。
+        命令は上書きされません。
+
+
+# [[ShowAlert]]ShowAlert
+    public int ShowAlert(string text, float time)<br/>
+    public int ShowAlert(string text)
+
+    # パラメータ
+        |------||-------------|
+        | text || 表示したい文字列 |
+        | time || 表示時間 |
+
+    # 説明
+        Alertメッセージを表示します。
+        表示場所はCENTER,モードはタイマーです。
+
+
+# [[ShowSubtitleTopTimer]]ShowSubtitleTopTimer
+    public int ShowSubtitleTopTimer(string text, float time)
+
+    # パラメータ
+        |------||-------------|
+        | text || 表示したい文字列 |
+        | time || 表示時間 |
+
+    # 説明
+        SubtitleTopメッセージを表示します。
+        表示場所はTOP,モードはタイマーです。
+
+
+# [[ShowSubtitleBottomTimer]]ShowSubtitleBottomTimer
+    public int ShowSubtitleBottomTimer(string text, float time)
+
+    # パラメータ
+        |------||-------------|
+        | text || 表示したい文字列 |
+        | time || 表示時間 |
+
+    # 説明
+        SubtitleBottomメッセージを表示します。
+        表示場所はBOTTOM,モードはタイマーです。
+
+
+# [[ShowMemoTopLeft]]ShowMemoTopLeft
+    public int ShowMemoTopLeft(string text, float time)
+
+    # パラメータ
+        |------||-------------|
+        | text || 表示したい文字列 |
+        | time || 表示時間 |
+
+    # 説明
+        MemoTopLeftメッセージを表示します。
+        表示場所はTOP_LEFT,モードはタイマーです。
+
+
+# [[ShowMemoBottomRight]]ShowMemoBottomRight
+    public int ShowMemoBottomRight(string text, float time)<br/>
+    public int ShowMemoBottomRight(string text)
+
+    # パラメータ
+        |------||-------------|
+        | text || 表示したい文字列 |
+        | time || 表示時間 |
+
+    # 説明
+        MemoBottomRightメッセージを表示します。
+        表示場所はBOTTOM_RIGHT,モードはタイマーです。
+
+
+
+# [[Exit]]Exit
+    public void Exit(int id)
+
+    # パラメータ
+        |------||-------------|
+        | id || 終了したいメッセージのID |
+
+    # 説明
+        メッセージを終了します。
+
+
+
+# [[CheckID]]CheckID
+    public bool CheckID(int id)
+
+    # パラメータ
+        |------||-------------|
+        | id || 終了したいメッセージのID |
+
+    # 返り値
+        使用されているときtrue, そのほかはfalse.
+
+    # 説明
+        メッセージIDが使用されているか確認します。
+

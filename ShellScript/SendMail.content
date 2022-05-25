@@ -1,0 +1,168 @@
+<Header>
+    <Parent> ShellScript
+    <Title> gmailを経由してsendmailでメール送信
+    <CreatedAt> 2018-11-26
+    <Tags> ShellScript, メール送信
+    <Summary>
+        
+        
+        ここでは, `sendmail`コマンドを利用した, メール送信の方法について説明する.
+        通常, 25番ポートに対するメール送信には制限があるため, gmailを利用して,
+        サブミッションポートでのメール送信を行った.
+        
+        
+        
+        
+        
+        
+        
+        
+    </Summary>
+</Header>
+# 背景と問題
+____________________
+    ubuntuなどのターミナル上でメールを送信する際, よく使うコマンドとして`sendmail`があります.
+    `sendmail`は, メール転送エージェント(MTA: Mail Transfer Agent)と呼ばれるもので,
+    ネットワーク上でメールを転送また配送するソフトウェアです^[mta-url-1].
+    `sendmail`は標準でメールを送信する際, 送信先のメールサーバのポート25へメールを送ります.
+    
+    ですが, このように直接送信先サーバのポート25に接続することは, 外向き25番ポートのブロック機能(OP25B)の対象になり,
+    正常に送ることができません. OP25Bとは, TCPの宛先が25番になっているISP外への接続をブロックする機能です^[op25b-url-1].
+    
+    
+    そこで, ここではサブミッションポートを使用して目的のメールサーバへ送信を行います.
+    つまり, 通常の25番ポートを使用するのではなく, サブミッションポート(587番)を使用してメールを送信します.
+    また, 送信元が送信先に信頼される, 送信履歴が残る点からgmailを経由して送ります.
+    
+    
+# 解決
+___________________
+    # gmailの設定
+        # googleアカウントを作成します
+        
+        # アプリケーションパスワードの生成
+            [アカウントページ](https://myaccount.google.com/)->"ログインとセキュリティ"->パスワードとログイン方法
+            ->二段階認証プロセス と行き, 二段階認証を有効にします^[gaccount-setting-url-1]. 
+            
+            [もし二段階認証を有効にしないと]
+            =======
+                二段階認証を使用しない, つまりgoogleアカウントのパスワードをそのまま後述するアカウント認証ファイルで使用すると,
+                googleから"重大なセキュリティ通知"としてブロックされます.
+            =======
+            
+            再度"パスワードとログイン方法"へ行き, "アプリパスワード"からパスワードを生成します.
+            生成したパスワードは記録しておきます.
+            
+    # sendmailの設定^[conf-setting-url-1]
+        ubuntuを想定しています.
+        
+        # `sendmail`のインストール
+            ```bash
+                sudo apt install sendmail
+            ```
+            
+        # gmailアカウント認証ファイルの作成
+            ```bash
+                sudo mkdir /etc/mail/authinfo/
+                cd /etc/mail/authinfo/
+                sudo touch gmail-auth
+            ```
+            
+            `gmail-auth`に以下を書きます.
+            
+            ```bash
+                AuthInfo: "U:root" "I:YOUR GMAIL EMAIL ADDRESS" "P:YOUR PASSWORD"
+            ```
+            
+            "YOUR GMAIL EMAIL ADDRESS"には, gmailのアカウント(メールアドレス)を,
+            "YOUR PASSWORD"には, 生成したアプリパスワードに置き換えます.
+            
+            最後に, ハッシュマップを作成します.
+            
+            ```bash
+                sudo makemap hash gmail-auth < gmail-auth
+            ```
+            
+        # 設定ファイルの変更と反映
+            # ディレクトリの移動
+                ```bash
+                    cd /etc/mail
+                ```
+                
+            [変更の前にバックアップを::CAUTION]
+            ============================
+                以下から設定ファイルを変更していきますが, 前の状態に戻せるように,
+                バックアップを取ることをお勧めします.
+                
+                ```bash
+                    sudo cp sendmail.mc sendmail.mc.1 
+                
+                ```
+            ============================
+            
+            # 変更
+                以下のコードを`sendmail.mc`にある**一番初めにでるMAILER definitionの行の上**に加えます.
+                
+                ```bash
+                    define(`SMART_HOST',`[smtp.gmail.com]')dnl
+                    define(`RELAY_MAILER_ARGS', `TCP $h 587')dnl
+                    define(`ESMTP_MAILER_ARGS', `TCP $h 587')dnl
+                    define(`confAUTH_OPTIONS', `A p')dnl
+                    TRUST_AUTH_MECH(`EXTERNAL DIGEST-MD5 CRAM-MD5 LOGIN PLAIN')dnl
+                    define(`confAUTH_MECHANISMS', `EXTERNAL GSSAPI DIGEST-MD5 CRAM-MD5 LOGIN PLAIN')dnl
+                    FEATURE(`authinfo',`hash -o /etc/mail/authinfo/gmail-auth.db')dnl
+                ```
+                
+            # 反映
+                以上の設定を反映します.
+                
+                ```bash
+                    sudo make -C /etc/mail
+                ```
+                
+                sendmailサービスをリロードします.
+                
+                ```bash
+                    sudo /etc/init.d/sendmail reload
+                ```
+                
+                ここで, グーグルアカウントのページからアプリパスワードの紐づけがされているようでしたら問題ないでしょう.
+                
+    # 確認
+        以下のコマンドで動作を確認します.
+        問題なければ, 終わりです.
+        
+        ```bash
+            sendmail "送り先のメールアドレス"
+        ```
+        
+        上のコマンド実行後, 本文を入力. 
+        
+        ```bash
+            Subject: Hello
+            
+            Hello there!
+            .
+        
+        ```
+        
+        `sendmail`のログは, `/var/log/maillog`で確認できます.
+        無ければ, `/var/log/`以下から"mail"を含むファイルを検索してください.
+        
+    
+
+# 参考文献
+_____________________
+    [mta-url-1]: [MTA 【 Mail Transfer Agent 】(accessed: 2018/11/26)](http://e-words.jp/w/MTA.html)
+    [op25b-url-1]: [スパム・メールの送信を制限するOutbound Port 25 Blockingとは (accessed: 2018/11/26)](http://www.atmarkit.co.jp/fwin2k/win2ktips/797op25b/op25b.html)
+    [conf-setting-url-1]: [Configuring Gmail as a Sendmail email relay(accessed: 2018/11/26)](https://linuxconfig.org/configuring-gmail-as-sendmail-email-relay)
+    [gaccount-setting-url-1]: [sendmailコマンドのsmtpサーバの設定 (accessed: 2018/11/26)](http://blue-red.ddo.jp/~ao/wiki/wiki.cgi?page=sendmail%A5%B3%A5%DE%A5%F3%A5%C9%A4%CEsmtp%A5%B5%A1%BC%A5%D0%A4%CE%C0%DF%C4%EA)
+
+
+
+
+
+
+
+
+

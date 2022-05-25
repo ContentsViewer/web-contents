@@ -1,0 +1,254 @@
+<Header>
+    <Parent> ../ContentsPlanet
+    <Title> 更新履歴
+    <CreatedAt> 2018-10-07
+    <Tags> CMS
+    <Summary>
+        本CMSの更新履歴が書かれます.
+    </Summary>
+</Header>
+# 2021/8/31
+__________
+    このリリースで, タグマップページ, コンテンツ編集ページのデザインを大きく変更しました.
+    タグによるコンテンツのまとめ方を改善し, より明確でシンプルにコンテンツの一覧を提示しました.
+    ページの読み込み方法を見直し, より早くページが表示されるようにしました.
+    データベース周りの設計を見直し, モジュールを分離し, シングルトンからマルチインスタンスベースの設計にしました.
+    また, 細かなバグの修正とデザインの変更を行いました.
+    
+    Changes:
+        ContentsPlanet:
+            * 最近の更新に含まないコントロールタグ`noindex-latest`を, `noindex-recent`に変更
+            * システム設定内に, php 設定オプション`mbstring.internal_encoding`, `default_charset`を含めた
+                * デフォルトの文字コードを`UTF-8`に設定
+            * alert表示の頻度を下げた
+            * https通信の場合, cookie にsecure 属性を付与
+            * htaccessファイルの更新を, 設定内容に変更がある場合のみ行うようにした
+
+        tag-viewer:
+            * タグリストのデザインを変更
+            * タグカードリストのデザインを変更
+            * タグメインページの構成を変更
+                * 主要タグリストを先頭に移動
+            * 提案コンテンツとタグ付けコンテンツを分けず, 同じグループに含めた
+            * 提案コンテンツのカード右下に提案を示すアイコンを追加
+            * ページ生成時間の計測とログ機能の追加
+            * 同じコンテンツを持つタグを一つのグループにしてコンテンツの一覧を表示した
+                * 異なるタグで同じコンテンツが表示され, 情報が冗長になるのを防いだ
+        
+        directory-viewer:
+            * 画像を遅延読み込みするよう変更
+            
+        viewer:
+            * コンテンツ公開日と更新日のデザインを変更
+            * 目次の折りたたみボタンのアクセシビリティの改善
+            * 左右コンテンツリンクタイトルの文字制限を無くした
+            * フッター周りのHTML構造の変更
+            * 要約要素と本文要素間の分割線を無くした
+            * ファーストコンテンツフルペイント(FCP)時間の短縮
+                * スタイルシートの分割と事前読み込み
+                * プラグインコードの遅延読み込み
+                
+        error-page:
+            * ファーストコンテンツフルペイント(FCP)時間の短縮
+            
+        login:
+            * ログインページのデザインを修正
+
+        content-editor:
+            * レイアウトの変更
+            * デザインの変更
+
+        preview:
+            * APIへの入力をコンテンツフォーマットのテキストに変更
+
+        content-database-edit-service:
+            * `contents-database-edit-service`から`content-database-edit-service`へ名前変更
+            * 差分編集画面のデザインを変更
+            * APIの仕様変更
+                * `SaveContent`
+                    * 入力をコンテンツフォーマットのテキストに変更
+
+        related-search-service:
+            * ページ生成時間の計測とログ機能の追加
+            * 同じコンテンツを持つタグを一つのグループにしてコンテンツの一覧を表示した
+
+        ContentDatabase:
+            * ContentsDatabase から ContentDatabase へ名前変更
+            * データベースをインスタンス化できるようにした
+                * 実行時, 同時に複数のデータベースを持てるようになった
+            * コンテンツフォーマットのテキストをパースする機能の追加
+
+        ContentDatabaseContext:
+            * ContentsDatabaseManager から分離
+            * データベース区分ごとの管理を行う
+                * ユーザ, レイヤーごとのデータベース, タグマップ, インデックスへのアクセスを行う
+                * 区分を超えた変更&情報取得は行えない
+
+        ContentDatabaseControls:
+            * ContentsDatabaseManager から分離
+            * 区分に関係なくデータベースに対する変更や情報取得のメソッドを提供する
+
+        SeachEngine:
+            * インデックスをインスタンス化できるようにした
+                * 実行時, 同時に複数のインデックスを持てるようになり, \
+                    各インデックスに対して検索と登録を行えるようになった
+
+        ContentsViewerUtils:
+            * 名前空間`ContentsViewerUtils`を持たせた
+
+        OutlineText:
+            * MathJax のバージョンを2から3へアップデート
+            * img タグに`loading=lazy`を設定
+                * 画像の遅延ロードをデフォルトで指定
+            * パース出力のHtml要素を`outlinetext-parser-output`クラスで囲った
+            * `dl`要素のスタイルを追加
+            * SyntaxHighlighter の非同期読み込み
+            * MathJaxの変換適用範囲をOutlineTextパース出力のみに限定
+            * ダークモードに合ったスタイルの調整
+                * コードブロック
+                * 数式リンク
+            * 文献ハイライトのスタイルを変更
+
+        ContentsViewer:
+            * Chromium 77 以上のバージョンに対応
+                * オプショナルチェイニング(optional chaining)演算子 `?.`の使用を避けた
+            * 使用していないコードを削除
+            
+        Splitter:
+            * Chromium 77 以上のバージョンに対応
+                * オプショナルチェイニング(optional chaining)演算子 `?.`の使用を避けた
+            * 要素内で画面分割を行えるようになった
+                * 以前のバージョンでは, ウィンドウ画面全体のみでしか画面分割を行えなかった
+
+
+    Bug Fixes:
+        tag-viewer:
+            * ナビゲーションセクション内リストの間違ったHTMLフォーマットを修正
+        
+        directory-viewer:
+            * ナビゲーションセクション内リストの間違ったHTMLフォーマットを修正
+            
+        contents-viewer:
+            * 構造化データ内の誤った日時フォーマット(ISO-8601)を修正
+
+        note-viewer:
+            * ディレクトリへの誤ったリンクを修正
+
+        history-viewer:
+            * ディレクトリへの誤ったリンクを修正
+
+        related-search-service:
+            * 対象のコンテンツに関するキャッシュを作成する前に関連コンテンツを探すとヌルアクセスする問題を修正
+
+        OutlineText:
+            * リスト, 定義リスト直後のコードブロックまたはタグブロックが, \
+                正しいアウトラインレベルに位置しない問題を修正
+
+        ContentsViewer:
+            * アウトラインタグ要素をホバーしたとき一部アニメーションが動作しない問題を修正
+            * 兄弟コンテンツボタンが見切れている問題を修正
+            * Firefox ブラウザで印刷時にレイアウトが崩れる問題を修正
+            * 目次部分で数式のエスケープ文字が残る問題を修正
+
+        Splitter:
+            * スライドバーをドラックするたびに, スライドバーのz-indexが増えていく問題の修正
+
+# 2021/4/30
+__________
+    Changes:
+        ContentsViewer:
+            * 関数群を名前空間`ContentsViewer`内に移動
+            * コンテンツの評価が高い場合でも, メッセージを送信できるようにした
+            * 目次で, 少なくても先頭5セクションタイトルを表示
+
+    Bug Fixes:
+        ContentsViewer:
+            * 目次内で数式でないものが誤って数式に変換される問題を修正
+
+        Splitter:
+            * スライドバーを, document要素以外(例えば, iframe)上で移動できない問題を修正
+
+        contents-viewer:
+            * ナビゲーションセクション内リストの間違ったHTMLフォーマットを修正
+
+# 2020/8/31
+__________
+
+    前バージョンから引き継ぎリリース
+
+    前バージョンの更新履歴は, [/CollabCMS/ChangeLog]
+    をご覧ください.
+
+    本リリースから, システム名を`CollabCMS`から`ContentsPlanet`へ変更しました.
+
+    Features:
+        ContentsPlanet:
+            * サンプルコンテンツの追加
+
+        PluginLoader:
+            * プラグイン読み込み機能の追加
+
+        plugin:
+            * プラグインサーバーの追加
+
+        viewer:
+            * OGP (Open Graph Protocol) の対応
+
+        contents-viewer:
+            * Article 構造化データに対応
+
+        ContentsHistory:
+            * コンテンツ変更履歴の管理機能の追加
+
+        history-viewer:
+            * 変更履歴の表示機能の追加
+
+        Client:
+            * パッケージの管理にnpm (Node Package Manager) を使用
+
+    Changes:
+        ContentsPlanet:
+            * システム名を`CollabCMS`から`ContentsPlanet`へ変更
+
+        ContentTextParser:
+            * コンテンツリンクを`[]`で囲むよう変更
+
+        ContentsViewer:
+            * 印刷時を除き, コードブロック内のコードを折り返さないよう変更
+
+        OutlineText:
+            * 文献ハイライトのスタイルを変更
+
+        Localization:
+            * 一部翻訳を修正. `access privilege` -> `access rights`
+
+        CacheManager:
+            * GCのパフォーマンスを改善
+
+        ace:
+            * `ver1.4.1` -> `ver1.4.12`へアップデート
+
+        ace-diff:
+            * `ver2.0.0` -> `ver3.0.3`へアップデート
+
+        syntaxhighlighter:
+            * コードブロック内のスタイル(フォントサイズ, 行間)を修正
+
+    Bug Fixes:
+        ContentsPlanet:
+            * `.gitignore`の間違った書き方を修正
+            * メタデータとインデックスの更新タイミングに関する問題を修正
+
+        tag-viewer:
+            * タグマップに関するセキュリティの問題を修正.
+                存在しないlayer名をURLで指定されたときに, その名前でタグマップファイルが生成される問題
+
+        contents-viewer:
+            * `Root_{layer}`のコンテンツファイルで最近の更新と, タグリストが表示されない問題の修正
+
+        OutlineText:
+            * 文献リストとセクションの文法の競合を修正.
+                セクション内に文献リストがある場合, セクションを抜けたタイミングで文献リストが生成される(セクション内に文献リストが生成されない)問題
+
+            * 定義リスト文法の誤ったパースの修正
+                定義リストアイテム間に空行が無い場合, リストアイテム内のブロック要素パーサが, リストアイテムを出たことを認識できない問題

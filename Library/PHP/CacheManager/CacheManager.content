@@ -1,0 +1,74 @@
+<Header>
+    <Parent> ../PHP
+    <Title> PHPでキャッシュ管理 CacheManager
+    <CreatedAt> 2020-05-06
+    <Tags> ライブラリ, PHP, キャッシュ, ダウンロード
+    <Summary>
+        PHPで, キャッシュを管理するライブラリ
+    </Summary>
+</Header>
+# はじめに
+    PHPでアプリケーションを作成するとき, データを一時的に保存したい時があります.
+    例えば, 重いテキストの変換処理を毎アクセス時にするよりは, 
+    はじめの一回だけ処理を行い, 結果をキャッシュに保存し, 以降のアクセスでは, 
+    キャッシュを利用する方が, 早くレスポンスを返すことができます.
+    
+    本稿では, //キャッシュ管理をするCacheManager//を紹介します.
+    
+# 使い方
+    まず, スクリプト上部で`CacheManager.php`を読み込みます.
+    
+    ```php
+        require_once "CacheManager.php";
+    ```
+    
+    キャッシュを作成し, キャッシュに接続します. 
+    
+    
+    ```php
+        $cache = new Cache;
+        $cache->Connect('temp');
+    ```
+    
+    キャッシュの内容を取ってきます. 
+    同時に, 他のスクリプトがキャッシュに対して書きこみして, 
+    ファイルが破損しないように, ロックするのがおすすめです.
+    
+    ```php
+        $cache->Lock(LOCK_SH);
+        $cache->Fetch();
+        $cache->Unlock();
+    ```
+    
+    そのあと, キャッシュに対して読み書きを行います.
+    
+    ```php
+        $navigator = $cache->data['navigator'];
+        $cache->data['text'] = parse();
+    ```
+    
+    変更を反映します.
+    ここでも同時にほかのスクリプトが, 同じファイルを読み書きして,
+    ファイルが破損しないように, ロックするのがおすすめです.
+    
+    ```php
+        $cache->Lock(LOCK_EX);
+        $cache->Apply();
+        $cache->Unlock();
+    ```
+    
+    最後に, キャッシュの接続を解除します.
+    
+    ```php
+        $cache->Disconnect();
+    ```
+
+# ダウンロード
+    <https://github.com/ContentsViewer/ContentsPlanet/blob/master/Module/CacheManager.php>
+    
+    [::NOTE]
+    =======
+        CacheManagerは, [ContentsPlanet(コンテンツ管理システム)](ROOT_URI/Master/ContentsPlanet/ContentsPlanet)
+        に導入され, メンテナンスは ContentsPlanet プロジェクト内で行われることになりました.
+    =======
+    

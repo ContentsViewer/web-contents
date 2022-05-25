@@ -1,0 +1,32 @@
+<Header>
+    <Parent> Components
+    <Title> 言語パック管理'LanguagePackManager'の紹介
+    <CreatedAt> 2016-12-8
+    <Tags> ライブラリ, C#, 言語パック
+    <Summary>
+        
+        
+        LanguagePackManagerとは言語パックを管理するものです.
+        もちろんですがUnity上で動作します.<br />
+        これを使うと以下のことができます.
+        
+        * 言語パックの管理
+        * 各シーンでのアンロードとロード
+        
+        言語パックといいながらファイル形式はテキスト形式です. 言語関係の編集が簡単になります. <br />
+        また言語パックを各シーンでアンロードされるのでロードした言語パックが残り続けることがありません.
+        これはすなわち使っていないメモリを開放します.
+        
+        LanguagePackManagerを改良、強化、何でもしてください(;´∀｀)
+        
+        [::WARNING]
+        ============
+            このページで書かれている書かれている内容が実際のスクリプトと異なる可能性があります.
+            
+            このページの内容は2016年に執筆されています.
+        ============
+    </Summary>
+    <Child> IntroductionLanguagePackManager
+    <Child> UsageLanguagePackManager
+    <Child> ReferenceLanguagePackManager
+</Header>

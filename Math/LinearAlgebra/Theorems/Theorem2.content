@@ -1,0 +1,459 @@
+<Header>
+    <Parent> Theorems
+    <Title> 定理集2
+    <CreatedAt> 2018-12-12
+    <Tags> 行列, 定理
+    <Summary>
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+    </Summary>
+</Header>
+# ランクが1
+    $rank(A)=1$のとき, $A^2=\alpha A$を満たすスカラ$\alpha$はただ一つ存在する.
+    
+    $\alpha \neq 1$ならば, $I-A$は正則である.
+    
+    ----------------------------------------------------------------------------
+    
+    $rank(A)=1$より, $A=ab^H$
+    
+    ```math
+        $$
+            \begin{split}
+            A^2 &= (ab^H)(ab^H) \\
+                &= (b^H a)ab^H \\
+                &= \alpha A \quad(\alpha=(b^H a)とおく)
+            \end{split}
+        $$
+    ```
+    
+    # $\alpha$の一意性について
+      $A^2=\beta A$が存在するとする.($\alpha \neq \beta$)
+      
+      ```math
+        $$
+            \begin{split}
+            \alpha A &= \beta A \\
+            (\alpha - \beta)A &= 0 \\
+            \alpha &= \beta \quad (A \neq 0 より(rank A = 1より))
+            \end{split}
+        $$
+      ```
+      
+      これは, $\alpha \neq \beta$に反す.
+      
+      よって, $\beta$なし. $\alpha$は一意
+    
+    # $\alpha \neq 1$ならば...
+        $I-A$が正則でないとする.
+        
+        ```math
+            $$
+                \begin{split}
+                (I-A)x &= 0 \quad(x \neq 0) \\
+                Ax &= x \quad(x \neq 0 より)
+                \end{split}
+            $$
+        ```
+        
+        ```math
+            $$
+                \begin{split}
+                x &= Ax \\
+                &= AAx \\
+                &= A^2 x \\
+                &= \alpha Ax \\
+                (\alpha - 1)x &= 0 \\
+                \alpha &= 1 \quad(x \neq 0より)
+                \end{split}
+            $$
+        ```
+        
+        ```math
+            $$
+                \begin{split}
+                \lnot (I-Aが正則) &\to \alpha=1 \\
+                \alpha \neq 1 &\to I-Aが正則
+                \end{split}
+            $$
+        ```
+    
+    [ランクの定義8つ(引用) ^[rank-url]]
+    =================
+        # $A$の正則(行列式が0でない)な小行列でサイズが最大なもののサイズ.
+            
+            ex)
+                ```math
+                    $$
+                        A=\left(\begin{array}{cccc}
+                        1 & 2 & 0 & 1 \\
+                        2 & 4 & 1 & 3 \\
+                        0 & 0 & 3 & 3 
+                        \end{array}\right)
+                    $$
+                ```
+                
+                について, 2x2の部分行列の1つ$\left(\begin{array}{cc}2 & 0 \\ 4 & 1\end{array}\right)$
+                は正則であるが, 3x3は非正則.
+                
+                よって, $rank(A)=2$
+                
+        # $A$の一次独立な行ベクトルの最大本数
+        
+        # $A$の一次独立な列ベクトルの最大本数
+        
+        # 階段系にした時に0でない成分が残る行
+            
+            ```math
+                $$
+                    \left(\begin{array}{cccccc}
+                    1        & *      & \ldots &   &   & \Huge{*} \\
+                             &        & 1 & * & \ldots &          \\
+                             &        &   & 1 & * & \ldots         \\
+                    \Huge{0} &        &   &   &   &          \end{array}\right)
+                $$
+            ```
+        
+        # ランク標準形にした時に1が並ぶ数
+            
+            $A$に$ST$
+            
+            $SAT=\left(\begin{array}{cc}I & 0 \\ 0 & 0 \end{array}\right)$
+    
+        # $dim(Im(A))=rank(A)$
+        
+        # $A$の0でない特異値の数($AA^Tの0でない固有値の数)
+        
+        # 以下の条件を満たす最小の$r$
+        
+            $2r$本の縦ベクトルが存在して$u_1, u_2, \cdots , u_r, v_1, v_2, \cdots , v_r$
+            
+            $A=\sum_{k=1}^r u_k v_k^T$ と書ける.
+        
+    =================
+    
+    [行列の正則性5つ(引用) ^[seisoku-url]]
+    ===================================
+        # $AB=BA=I$となる行列$B$が存在する
+        
+        # $det(A) \neq 0$
+            
+            $AB=I$のとき
+            
+            ```math
+                $$
+                    \begin{split}
+                    |AB| &= I \\
+                    &= 1 \\
+                    |AB| &= |A||B|
+                    \end{split}
+                $$
+            ```
+            
+            よって, $|A| \neq 0$
+        # $rank(A)=n$
+            行列式が0でない$S, T$
+            
+            ```math
+                $$
+                    \begin{split}
+                    SAT=\left(\begin{array}{cc}I & 0 \\ 0 & 0\end{array}\right) \\
+                    |SAT| &= \left|\begin{array}{cc}I & 0 \\ 0 & 0\end{array}\right| \\
+                    |S||A||T| &= \left|\begin{array}{cc}I & 0 \\ 0 & 0\end{array}\right|
+                    \end{split}
+                $$
+            ```
+            
+            $|A| \neq 0$より, $rank(A) = n$
+            
+            $rank(A)=n$より, $|A| \neq 0$
+            
+        # $Ker(A) = \{0\}$
+            $rank(A)=n-dim(Ker(A))$ (次元定理)
+            
+            $rank(A)=n$のとき, $dim(Ker(A)=0$
+    
+        # 全ての$A$の固有値が0でない
+            $A$の固有値$\lambda_1, \cdots, \lambda_n$とすると,
+            
+            $det(A) = \lambda_1 \cdot \lambda_2 \cdots \lambda_n$
+            
+            $det(A) \neq 0$のとき, $\lambda_1, \cdots, \lambda_n$で0はない.
+            
+    ===================================
+
+# $AB$と$BA$の固有値
+    $A,B(n \times n)$のとき, $AB$と$BA$は同一の固有値を持つ.
+    
+    ----------------------------------------------------------------------------
+    
+    ```math
+        $$
+            \begin{split}
+            ABx &= \lambda x \quad (x \neq 0) \\
+            BABx &= \lambda Bx \\
+            BAy &= \lambda y
+            \end{split}
+        $$
+    ```
+
+# 交代行列の固有値
+    交代行列$(A^H = -A)or(A^T = -A)$の固有値は0あるいは, 純虚数である.
+    
+    ----------------------------------------------------------------------------
+    
+    ```math
+        $$
+            \begin{split}
+            Ax &= \lambda x \\
+            x^H Ax &= \lambda x^H x \\
+            &= \lambda \quad(x^H x=1)
+            \end{split}
+        $$
+    ```
+    
+    両辺にエルミート共役をとって,
+    
+    ```math
+        $$
+            \begin{split}
+            (x^H Ax)^H &= (\lambda)^H \\
+            x^H A^H x &= \overline{\lambda} \\
+            -x^H Ax &= \overline{\lambda}
+            \end{split}
+        $$
+    ```
+    
+    よって,
+    
+    ```math
+        $$
+            \lambda = - \overline{\lambda}
+        $$
+    ```
+    
+    よって, $\lambda$は純虚数.
+    
+    実行列の場合は, 固有値0
+    
+    [純虚数]
+    =======
+        ```math
+            $$
+                \begin{split}
+                a + bi &= -(a - bi) \\
+                &= -a + bi \\
+                a &= 0
+                \end{split}
+            $$
+        ```
+    =======
+    
+# 実行列の対称化
+    実行列$A$が対称でなくても, 2次形式で$x^TAx$で$A$を対称行列$(A + A^T)/2$に置き換えても,
+    その値は変わらない.
+    
+    ----------------------------------------------------------------------------
+    
+    $x^TAx=\alpha$とする.
+    
+    ```math
+        $$
+            \left\{\begin{array}{l}
+                (x^T Ax)^T = x^T A^T x \\
+                (x^T Ax)^T = \alpha
+            \end{array}\right.
+        $$
+    ```
+    
+    より, $x^T A^T x = \alpha$
+    
+    ```math
+        $$
+            \begin{split}
+            x^TAx + x^T A^T x &= 2\alpha \\
+            x^T(A+A^T)x &= 2\alpha \\
+            x^T(\frac{A+A^T}{2})x &= \alpha
+            \end{split}
+        $$
+    ```
+    
+# 対称行列の対角化
+    $A$が対称行列ならば, 直交行列$P$で対角化可能
+    
+    $P^{-1}AP=\Sigma, A=P\Sigma P^{-1}$とおける.
+    
+    このとき, 2次形式は直交変換$y=P^Tx$によって, 次の書き換え可能.
+    
+    ```math
+        $$x^TAx = x^T(P\Sigma P^T)x = x^TP\Sigma P^T x = y^T \Sigma y= \sum_i \lambda_i y_i^2$$
+    ```
+    
+    $A$が対称行列のとき固有値はすべて実数.
+    
+    ```math
+        $$Aが正定 \equiv x^TAx>0 \equiv \lambda_i>0$$
+    ```
+    
+    ----------------------------------------------------------------------------
+    
+# エルミート行列の対角化
+    $A$がエルミート行列ならば, ユニタリ行列$U$で対角化可能
+    
+    $A=U\Sigma U^{H}$とおける.
+    
+    このとき, 2次形式は直交変換$y=U^Hx$によって, 次の書き換え可能. $\lambda_i$は実数($A$がエルミート行列より).
+    
+    ```math
+        $$x^HAx = x^H(U\Sigma U^H)x = y^H \Sigma y= \sum_i \lambda_i |y_i|^2$$
+    ```
+    
+    ----------------------------------------------------------------------------
+    
+# 二次形式
+    $x^H x = c$とする. 二次形式$x^H A x$について.
+    
+    ```math
+        $$
+            \lambda_min(A) \leq \frac{x^H A x}{c} \leq \lambda_max(A)
+        $$
+    ```
+    
+    ----------------------------------------------------------------------------
+    
+    ```math
+        $$
+            \begin{split}
+            f &= x^H A x \\
+            &= \sum_i \lambda_i |y_i|^2 \quad (y=U^H x) \\
+            &= \lambda_1 |y_1|^2 + \lambda_2 |y_2|^2 + \cdots + \lambda_n |y_n|^2
+            \end{split}
+        $$
+    ```
+    
+    ```math
+        $$
+            \begin{split}
+            y^H y &= \left(\begin{array}{cccc}\overline{y_1} & \overline{y_2} & \cdots & \overline{y_n}\end{array}\right) \left(\begin{array}{c}
+            y_1 \\
+            \vdots \\
+            y_n
+            \end{array}\right) \\
+            &= (U^H x)^H U^H x \\
+            &= x^H U U^H x \\
+            &= x^H x \\
+            &= c \quad(x^H x = c)
+            \end{split}
+        $$
+    ```
+    
+    $\lambda_1 \leq \lambda_2 \leq \cdots \leq \lambda_n$とすると,
+    
+    ```math
+        $$
+            \begin{split}
+            f-c\lambda_1 &= \lambda_1 |y_1|^2 + \lambda_2 |y_2|^2 + \cdots + \lambda_n |y_n|^2 - \lambda_1(|y_1|^2 + \cdots + |y_n|^2) \\
+            &= (\lambda_2 - \lambda_1)|y_2|^2 + \cdots + (\lambda_n - \lambda_1)|y_n|^2 \\
+            &\geq 0 \quad((\lambda_2 - \lambda_1), (\lambda_n - \lambda_1) \geq 0より)
+            \end{split}
+        $$
+    ```
+    
+    ```math
+        $$
+            \begin{split}
+            f-c\lambda_n &= (\lambda_1 - \lambda_n)|y_1|^2 + (\lambda_2 - \lambda_n)|y_2|^2 + \cdots + (\lambda_{n-1} - \lambda_n)|y_{n-1}|^2 \\
+            &\leq 0
+            \end{split}
+        $$
+    ```
+
+# 準対称正定行列
+    $A:(n \times n)$, $B: (n \times n)$が準対称正定行列
+    
+    (1) $\lambda_{min}(A) \lambda_{max}(B) \leq \lambda_{min}(A) trB$
+    
+    (2) $\lambda_{min}(A) trB \leq tr(AB) \leq \lambda_{max}(A) trB$
+    
+    ----------------------------------------------------------------------------
+    
+    (1)
+        $$trB = \lambda_1 + \cdots + \lambda_n$$
+        
+        $$\lambda_1 \cdots \lambda_n \geq 0 \quad (準正定行列)$$
+        
+        $$\lambda_{max} \leq trB$$
+        
+    (2)
+        $A$は対称行列より, $A=P\Sigma P^T$ ($P$は直交行列)
+        
+        $$tr(AB)=tr(P\Sigma P^T B) = tr(\Sigma P^T B P)$$
+        
+        $P=(x_1 \cdots x_n)$とすると, ($P^TBP$の$i,j$要素を$x_i^T B x_j$とする.)
+    
+        ```math
+            $$
+                \begin{split}
+                tr\left(\left(\begin{array}{ccc}
+                \lambda_1 &        &           \\
+                          & \ddots &           \\
+                          &        & \lambda_n 
+                \end{array}\right)(x_i^T B x_j)\right) &= \sum_{i=1}^n \lambda_i x_i^T B x_i \\
+                &= \lambda_1 x_1^T B x_1 + \lambda_2 x_2^T B x_2 + \cdots + \lambda_n x_n^T B x_n
+                \end{split}
+            $$
+        ```
+        
+        $x_i^T B x_i \geq 0$なので, ($B$は準正定)
+        
+        ```math
+            $$
+                \begin{split}
+                \sum_{i=1}^n \lambda_{min} x_i^T B x_i &\leq tr(AB) &\leq \sum_{i=1}^n \lambda_{max}x_i^T B x_i \\
+                \lambda_{min} trB &\leq tr(AB) &\leq \lambda_{max} trB
+                \end{split}
+            $$
+        ```
+        
+        [::NOTE]
+        ========
+            $\sum_{i=1}^n x_i^T B x_i$は, $P^T BP$の対角成分の和.
+            
+            ```math
+                $$
+                    \begin{split}
+                    x_1^T B x_1 + x_2^T B x_2 + \cdots + x_n^T B x_n &= tr\left(\left(\begin{array}{c}
+                    x_1^T \\
+                    \vdots \\
+                    x_n^T
+                    \end{array}\right)B(\begin{array}{ccc}x_1 & \cdots & x_n\end{array})\right) \\
+                    &= tr(P^T B P) \\
+                    &= tr(B P P^T) \\
+                    &= trB
+                    \end{split}
+                $$
+            ```
+        ========
+        
+--------------------------------------------------------------------------------
+
+[rank-url]: [高校数学の美しい物語. 行列のランクの意味（８通りの同値な定義）(accessed: 2018/12/13)](https://mathtrain.jp/matrixrank)
+[seisoku-url]: [高校数学の美しい物語. 行列が正則であることの同値な条件と証明 (accessed: 2018/12/13)](https://mathtrain.jp/seisokumatrix)
+
+
+
+
+
+
+
+

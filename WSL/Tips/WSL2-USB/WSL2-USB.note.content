@@ -1,0 +1,29 @@
+<Header>
+    <Parent> 
+    <Title> 
+    <CreatedAt> 2020-10-10
+    <Tags> 
+    <Summary>
+        
+    </Summary>
+</Header>
+# 2020-10-10
+    Ubuntu 20.04 の環境を調査する。
+    
+    >>>
+        Ubuntu 20.04ですとカーネルのバージョンがGitHub上にないのと、/proc/config.gzもないためカーネルのカスタムできませんでした。。。
+
+        * Ubuntu 20.04 / WSL2
+            
+            ```
+                $ uname -a
+                Linux pj2020dev 4.4.0-18362-Microsoft #1049-Microsoft Thu Aug 14 12:01:00 PST 2020 x86_64 x86_64 x86_64 GNU/Linux
+            ```
+            
+        * Ubuntu 18.04 / WSL2
+            
+            ```
+                $ uname -a
+                Linux pj2020dev 4.19.128-microsoft-standard #1 SMP Tue Jun 23 12:58:10 UTC 2020 x86_64 x86_64 x86_64 GNU/Linux WSL2
+            ```
+    >>>

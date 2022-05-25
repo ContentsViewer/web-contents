@@ -1,0 +1,182 @@
+<Header>
+    <Parent> List
+    <Title> Listの使い方
+    <CreatedAt> 2016-2-8
+    <Tags> 
+    <Summary>
+        ここでは, Listの基本的な使い方を説明します.
+        各説明項目は以下のとおりです.
+        
+        * 使用例
+        * C#との相違点
+        * Sortについて
+        
+    </Summary>
+</Header>
+# 使用例
+    ここでは, 作成したlistに0~1023まで数値を代入して結果を表示してみたいと思います.
+
+    ```cpp
+        #include "List.h"
+        #include <stdio.h>
+        int main()
+        {
+            //インスタンス生成
+            //容量は500に設定
+            List<int> list(500);
+            
+            for(int i = 0; i < 1024; i++)
+            {
+                //追加
+                //容量を超えると自動で確保される
+                list.Add(i);
+            }
+            //結果表示
+            //0~1023が表示される
+            for(int i = 0; i < list.Count(); i++)
+            {
+                printf("%d\n", list[i]);
+            }
+            return 0;
+        }
+    ```
+
+# C#との相違点
+    このListはC#のListと一部異なるところがあります.
+    C#とC++は言語が違うからです.
+    以下にその違いを書いていきます.
+
+    # インスタンス生成
+        まず, 実際にスクリプトを見てみます.
+
+        C#の場合:
+
+        ```csharp
+            List<int> list = new List<int>();
+        ```
+
+        C++の場合:
+
+        ```cpp
+            //ヒープ領域に確保する場合
+            List<int> *listA = new List<int>();
+            //スタック領域に確保する場合
+            List<int> listB();
+        ```
+
+        C#では参照型オブジェクトの実体を作るには必ずnewしなければいけませんが,
+        C++はそうするとは限りません.
+
+    # 参照と値
+        まず, 実際にスクリプトを見てみます. 代入を考えます.
+
+        C#の場合:
+
+        ```csharp
+            //参照がコピーされます
+            listA = listB;
+        ```
+
+        C++の場合:
+
+        ```cpp
+            //値がコピーされます
+            listA = listB
+        ```
+
+        上のコードは文字として一緒ですが, 動作が異なります.
+        C#は参照がコピーされますが, C++は値がコピーされます.
+        これは, C++とC#の仕様が異なるためです.
+        C#において, クラスの変数には参照値―メモリアドレス値(Cでいうとポインタ)―が格納されます.
+        この場合C++の方が処理に時間がかかることになります.
+
+
+# [[Sort]]Sortについて
+    Sort関数を使う際, 順序比較のための関数'Comparison'を用意する必要があります.
+    このComparisonは次の形式を満たす必要があります.
+
+    ```cpp
+                    
+        //Comparisonについて:
+        //  返り値:
+        //      0より小さい:
+        //          並び替え順序においてAはBの前
+        //
+        //      0:
+        //          並び替え順序においてAとBは同じ位置
+        //
+        //      0より大きい:
+        //          並び替え順序においてAはBの後ろ
+        int(*comparison)(TYPE, TYPE);
+    ```
+
+    実際にint型のための比較関数は以下のようになるでしょう.
+
+    ```cpp
+        int compare(int a, int b)
+        {
+            return a - b;
+        }
+    ```
+
+    これらを踏まえ簡単なサンプルを示します.
+
+
+    ```cpp
+        #include "List.h"
+        #include <iostream>
+        using namespace std;
+        int compare(int a, int b)
+        {
+            return a - b;
+        }
+        int main()
+        {
+            List<int>list;
+            list.Add(3);
+            list.Add(6);
+            list.Add(7);
+            list.Add(9);
+            list.Add(-1);
+            list.Add(-1);
+            list.Add(-4); 
+            list.Add(2424);
+            list.Add(7676);
+            list.Add(23);
+            for (int i = 0; i < list.Count(); i++)
+            {
+                std::cout << list[i] << "\n";
+            }
+            std::cout << "***並び替え後\n";
+            list.Sort(compare);
+            for (int i = 0; i < list.Count(); i++)
+            {
+                std::cout << list[i] << "\n";
+            }
+            return 0;
+        }
+        /*
+        実行結果
+        3
+        6
+        7
+        9
+        -1
+        -1
+        -4
+        2424
+        7676
+        23
+        ***並び替え後
+        -4
+        -1
+        -1
+        3
+        6
+        7
+        9
+        23
+        2424
+        7676
+        */
+    ```

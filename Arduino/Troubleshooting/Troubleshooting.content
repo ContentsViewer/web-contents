@@ -1,0 +1,10 @@
+<Header>
+    <Parent> ../Arduino
+    <Title> トラブルシューティング
+    <CreatedAt> 2020-07-14
+    <Tags> トラブルシューティング
+    <Summary>
+        
+    </Summary>
+    <Child> serial-python-corruption/serial-python-corruption
+</Header>

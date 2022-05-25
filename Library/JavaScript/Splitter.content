@@ -1,0 +1,141 @@
+<Header>
+    <Parent> JavaScript
+    <Title> 画面分割ライブラリ Splitter
+    <CreatedAt> 2018-10-09
+    <Tags> JavaScript, ライブラリ, ダウンロード
+    <Summary>
+        多くの編集ソフトには, 一つの画面を分割する機能があります.
+        一つの画面を分割することで, 同じ画面で複数の作業を行うことができます.
+        
+        Splitterは, ウェブブラウザ上で動作する画面分割ライブラリです.
+        分割境界にあるスライドバーを動かすことで領域のサイズを調節できます.
+        
+        
+    </Summary>
+</Header>
+# サンプル
+_______________________________________
+    [サンプルページ](ROOT_URI/Client/Splitter/example.html)
+
+# 使い方
+_______________________________________
+    # 要素の用意
+        ```xml
+            <!DOCTYPE html>
+            <html lang="ja">
+            
+            <head>
+                <style type="text/css" media="screen">
+                    html, body {
+                        height: 100%;
+                        margin: 0;
+                        padding: 0;
+                        overflow: hidden;
+                    }
+                    
+                    .area{
+                        position: absolute;
+                        box-sizing: border-box;
+                        border: 1px solid #dee2e6;
+                        margin: 0;
+                        padding: 0;
+                        overflow: hidden;
+                    }
+                </style>
+            </head>
+            
+            <body>
+            
+                <div id='area-a' class='area'><h1>AreaA</h1></div>
+                <div id='area-b' class='area'><h1>AreaB</h1></div>
+                <div id='area-C' class='area'><h1>AreaC</h1></div>
+                
+            </body>
+            
+            
+            
+            </html>
+        ```
+    
+    # スクリプトインポート
+        ```xml
+            <script src="Splitter.js" type="text/javascript" charset="utf-8"></script>
+        ```
+        
+    # 要素を取得
+        ```xml
+            var areaA = document.getElementById('area-a');
+            var areaB = document.getElementById('area-b');
+            var areaC = document.getElementById('area-c');
+        ```
+    
+    # 要素Aと要素Bを垂直分割
+        ```xml
+        
+            var splitter = new Splitter(Splitter.Direction.Vertical, areaA, areaB);
+        ```
+        
+        ![AとBを垂直分割](CURRENT_DIR/Images/Splitter/splitA.png)
+        
+        第4引数で分割パーセントとリサイズ時のコールバック関数を登録できます.
+        
+        [第4引数, options]
+        ================================
+            
+            ```xml
+                options: {
+                    'percent': 50,
+                    'onResizeElementACallbackFunc' : null,
+                    'onResizeElementBCallbackFunc' : null
+                }
+            ```
+            
+            # percent
+                分割パーセント(0 ~ 100)
+                
+            # onResizeElementACallbackFunc
+                要素Aに対するリサイズ時のコールバック関数
+                
+            # onResizeElementBCallbackFunc
+                要素Bに対するリサイズ時のコールバック関数
+        
+        ================================
+        
+    # 要素A側で水平分割
+        ```xml
+            splitter.Split(Splitter.Side.A, Splitter.Direction.Horizontal, areaC);
+        ```
+        
+        ![AとCを水平分割](CURRENT_DIR/Images/Splitter/splitB.png)
+        
+
+# ダウンロード
+______________________________________
+    
+    以下のページからダウンロード可能です.
+    
+    <https://github.com/ContentsViewer/ContentsPlanet/tree/master/Client/Splitter>
+
+    [::NOTE]
+    ========
+        Splitter は, [ContentsPlanet(コンテンツ管理システム)](ROOT_URI/Master/ContentsPlanet/ContentsPlanet)
+        に導入され, メンテナンスは ContentsPlanet プロジェクト内で行われることになりました.
+    ========
+    
+# バージョン履歴
+    2021-08-31:
+        Changes:
+            * Chromium 77 以上のバージョンに対応
+                * オプショナルチェイニング(optional chaining)演算子 `?.`の使用を避けた
+            * 要素内で画面分割を行えるようになった
+                * 以前のバージョンでは, ウィンドウ画面全体のみでしか画面分割を行えなかった
+        
+        Bug Fixes:
+            * ドラックするたびに, スライドバーのz-indexが増えていく問題の修正
+        
+    2021-04-30:
+        Bug Fixes:
+            * スライドバーを, document要素以外(例えば, iframe)上で移動できない問題を修正
+    
+    2018-10-09:
+        * 初期リリース

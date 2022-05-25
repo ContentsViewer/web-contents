@@ -1,0 +1,401 @@
+<Header>
+    <Parent> ../Cpp
+    <Title> C++でUnicode文字列(UTF-8, UTF-16, UTF-32)を扱うライブラリ
+    <CreatedAt> 2021-03-30
+    <Tags> ライブラリ, Cpp
+    <Summary>
+        
+        本稿では, C++でバージョンに左右されずに文字を扱うために, 
+        以下の機能を持つライブラリを紹介します.
+        
+        * 型依存しないUTF-8, UTF-16, UTF-32間の相互変換
+        * UTF-8, UTF-16文字(コードポイント)ごとのイテレート
+        * 標準イテレータを使ったイテレート
+        * 型依存しないイテレータの対応
+    </Summary>
+</Header>
+# はじめに
+    多言語に対応したアプリを開発する際, 多言語に対応した文字コードを使用する必要があります.
+    多く使用されている文字コードにUnicode規格であるUTF-8があります^[w3techs-usage-statistics].
+    2021年4月でのW3Techsの調査によると, 対象がWebサイトでありますが, 
+    Webサイトで用いられる文字エンコーディングで, 
+    Unicode規格であるUTF-8が全体の96.7%を占めています^[w3techs-usage-statistics].
+    
+    C++では, 文字の扱い方がバージョンごとに様々です. 
+    文字の扱いに関する仕様変更をバージョンごとにまとめたものを以下に示します.
+    
+    C++11:
+        * 文字列クラス^[cpprefjp-basic_string]
+            * ASCII等の1バイト文字, UTF-8等のマルチバイト文字を扱う`char`型文字列である`string`
+            * 16ビット長の`wchar_t`型文字列である`wstring`
+            * 16ビット長の`char16_t`型文字列である`u16string`
+            * 32ビット長の`char32_t`型文字列である`u32string`
+    
+    C++17:
+        * 所有権を持たず文字列を参照する文字列クラス`string_view`の追加^[cpprefjp-string_view]
+
+        * codecvt
+            * UTF-8への文字コード変換`codecvt_utf8`の非推奨^[cpprefjp-codecvt_utf8]
+            * UTF-16への文字コード変換`codecvt_utf16`の非推奨^[cpprefjp-codecvt_utf16]
+            * UTF-8とUTF-16間での文字コード変換`codecvt_utf8_utf16`の非推奨^[cpprefjp-codecvt_utf8_utf16]
+    
+    C++20:
+        * UTF-8エンコーディングされた文字の型としてchar8_tを追加^[cpprefjp-char8_t]
+        * UTF-8を対象にした`u8string`の追加^[cpprefjp-char8_t]
+        * UTF-8を対象にした`u8string_view`の追加^[cpprefjp-char8_t]
+        * 文字型`char16_t`と`char32_t`の文字・文字列リテラルの文字コードが, UTF-16とUTF-32であることが規定^[cpprefjp-char16t_char32t]
+        
+    
+    本稿では, C++でバージョンに左右されずに文字を扱うために, 
+    以下の機能を持つライブラリを紹介します.
+    
+    * 型依存しないUTF-8, UTF-16, UTF-32間の相互変換
+    * UTF-8, UTF-16文字(コードポイント)ごとのイテレート
+    * 標準イテレータを使ったイテレート
+    * 型依存しないイテレータの対応
+    
+    //型に依存せずUTF-8, UTF-16, UTF-32間を相互変換することができます.//
+    `string`型や`u8string`型の基になっている`basic_string`型の規格に合った文字列すべてに対応しています.
+    新しい文字列型が出ても, `basic_string`型を基にしている限り新しく変換関数を実装する必要はありません.
+    変換前と後の文字列型も決まっていないため, 直接望んだ型から型へ変換できます.
+    例えば, `string`型や`u8string`型UTF-8文字列を`string`型や`u16string`型や`wsring`型のUTF-16文字列に直接変換できます.
+    
+    
+    //UTF-8, UTF-16文字(コードポイント)ごとにイテレートできます.//
+    標準の文字列イテレータは, 固定バイトごとしかイテレートできません.
+    例えば, `u8string`型のイテレータは, 1バイトごとにしかイテレートできず, 
+    1~4バイト可変長であるUTF-8文字を一文字ごと正しくイテレートすることができません.
+    本ライブラリを使うことで, 可変長である文字を正しくイテレートできます.
+    
+    
+    //各コードポイントごとのイテレートに特別なイテレータを使用せず標準イテレータを使用します.//
+    標準イテレータを使用することで, 標準文字クラスが提供する便利関数と連携することができます.
+    例えば, 標準文字クラスにある`find`関数である文字を検索し, 先頭のコードユニットを指しているイテレータを取得後, 
+    本ライブラリでそのイテレータから一文字分コードユニットをイテレートするといったことができます.
+    
+    
+    //イテレート関数に渡されるイテレータは, イテレートのサイズに依存し型に依存しません.//
+    例えば, UTF-8文字をイテレートする場合, イテレートサイズが1バイトである, `u8string`型, `string`型に対応しています.
+    新しい型が出ても, このサイズが同じである限り, 新しくイテレート関数を実装する必要はありません.
+    
+
+# 導入方法
+    以下のフォルダをダウンロードし, プロジェクトに含めてください.
+    
+    * ["nodec". GitHub.](https://github.com/ContentsViewer/nodec/tree/main/nodec)
+    
+    `unicode`ライブラリのみインストールしたい場合は, 
+    以下のファイルとそれに付随するファイル(インクルードしているファイル)を, 
+    プロジェクトに含めてください.
+    
+    * ["include/nodec/unicode.hpp". GitHub.](https://github.com/ContentsViewer/nodec/blob/main/nodec/include/nodec/unicode.hpp)
+    * ["src/nodec/unicode.cpp". GitHub](https://github.com/ContentsViewer/nodec/blob/main/nodec/src/nodec/unicode.cpp)
+    
+    [::Note]
+    =======
+        本ライブラリは, nodecプロジェクト([/nodec/nodec])に導入され, 
+        メンテナンスは, このプロジェクト下で行われることになりました.
+    =======
+    
+# 使い方
+    # UTF-8, UTF-16, UTF-32ファイルの読み込みと書き込み
+        UTFテキストファイルの読み込みと書き込みは, 標準ファイル入出力クラス(`ifstream`, `ofstream`)によって行えます. 
+        注意することとして, テキストファイルとしてではなくバイナリファイルとしてファイルを開きます.
+        テキストファイルとして開くと, 予期しないテキスト変換が行われる可能性があります^[stack-overflow-difference-binary-and-text]^[cpp-reference-fopen].
+        
+        
+        [テキストモードとバイナリモードの違い]
+        ==========================================
+            テキストモードとバイナリモードの基本的な違いに, 
+            テキストファイルでの様々な文字変換があります^[cpp-reference-fopen]. 
+            例えば, テキストモードで`\r\n`は, `\n`に変換されますが, 
+            バイナリモードでは, そういった変換は行われません^[codeing-unit-file-io].
+        
+        ==========================================
+        
+        # 読み込み
+            ファイルをバイナリモードで開き, `string`型文字列に格納します.
+            ```cpp
+                std::string readfile(const std::string& path) {
+                    std::ifstream stream(path, std::ios::binary);
+                    std::stringstream buffer;
+                    buffer << stream.rdbuf();
+                    return buffer.str();
+                }
+            ```
+            
+            # 例
+                UTFテキストファイルを用意します. 例では, UTF-8ファイルを用意します.
+                
+                `hello_world.utf8`:
+                    ```
+                        Hello, ワールド! 🎉
+                    ```
+                
+                読み込みます.
+                ```cpp
+                    auto utf8 = readfile("hello_world.utf8");
+                ```
+            
+        # 書き込み
+            `string`型文字列をファイルにバイナリモードで書き込みます.
+            
+            ```cpp
+                void writefile(const std::string& path, const std::string& string) {
+                    std::ofstream stream(path, std::ios::binary);
+                    stream.write(string.data(), string.size());
+                }
+            ```
+            
+            # 例
+                ソースファイルでUTF-8文字列を用意します^[注.source-utf8].
+                
+                ```cpp
+                    std::string utf8("Hello, ワールド! 🎉");
+                ```
+                
+                ファイルに書き込みます.
+                
+                ```cpp
+                    writefile("out.utf8", utf8);
+                ```
+                
+    # UTF-8, UTF-16, UTF-32の相互変換
+        # UTF-8 < = > UTF-32
+            ```cpp
+                out_utf32 = unicode::utf8to32<std::string>(utf8);
+                assert(unicode::utf32to8<std::string>(out_utf32) == utf8);
+            ```
+        
+        # UTF-16 < = > UTF-32
+            ```cpp
+                out_utf16 = unicode::utf32to16<std::string>(out_utf32);
+                assert(unicode::utf16to32<std::string>(out_utf16) == out_utf32);
+            ```
+        
+        # UTF-16 < = > UTF-8
+            ```cpp
+                assert(unicode::utf16to8<std::string>(out_utf16) == utf8);
+                assert(unicode::utf8to16<std::string>(utf8) == out_utf16);
+            ```
+        
+    
+    # UTF-8, UTF-16, UTF-32文字列の各文字(コードポイント)ごとのイテレート
+        # UTF-8文字列のイテレート
+            `iterate_utf8`関数を使用します.
+            
+            ```cpp
+                /**
+                * @param iter
+                *   Iterator with an iterate size of 1 byte.
+                *   After function execution, this iterator points to the first code unit of the next code point.
+                * 
+                * @param end
+                *   The end iterator of the string.
+                * 
+                * @param strict
+                *   If enabled, raise an exception when an illegal character is found.
+                * 
+                * @return code point
+                */
+                template<typename Iter8>
+                uint32_t iterate_utf8(Iter8& iter, const Iter8& end, bool strict = true);
+            ```
+            
+            # 例
+                ```cpp
+                    // UTF-8文字列を用意
+                    std::string utf8("Hello, ワールド! 🎉");
+                    {
+                        // 結果出力のためのログ用意
+                        logging::InfoStream info(__FILE__, __LINE__);
+                        
+                        for (auto iter = utf8.begin(); iter != utf8.end(); ) {
+                            // 一文字分進め, そのコードポイントを出力
+                            info << std::hex << unicode::iterate_utf8(iter, utf8.end()) << " ";
+                        }
+                    }
+                ```
+                
+                出力:
+                    ```
+                        INFO   : 48 65 6c 6c 6f 2c 20 30ef 30fc 30eb 30c9 21 20 1f389
+                    ```
+                    
+        # UTF-16文字列のイテレート
+            `iterate_utf16(iter, end)`関数を使用します.
+            
+            ```cpp
+                /**
+                * @param iter
+                *   Iterator with an iterate size of 2 bytes.
+                *   After function execution, this iterator points to the first code unit of the next code point.
+                *
+                * @param end
+                *   The end iterator of the string.
+                *
+                * @param strict
+                *   If enabled, raise an exception when an illegal character is found.
+                *
+                * @return code point
+                */
+                template<typename Iter16>
+                uint32_t iterate_utf16(Iter16& iter, const Iter16& end, bool strict = true);
+            ```
+            
+            # 例
+                ```cpp
+                    // UTF-8文字列を用意
+                    std::string utf8("Hello, ワールド! 🎉");
+                    
+                    // UTF-16文字列に変換. `wstring`型に格納
+                    auto utf16 = unicode::utf8to16<std::wstring>(utf8);
+                    {
+                        // 結果出力のためのログ用意
+                        logging::InfoStream info(__FILE__, __LINE__);
+                        
+                        for (auto iter = utf16.begin(); iter != utf16.end();) {
+                            // 一文字分進め, そのコードポイントを出力
+                            info << std::hex << unicode::iterate_utf16(iter, utf16.end()) << " ";
+                        }
+                    }
+                ```
+                
+                結果:
+                    ```
+                        INFO   : 48 65 6c 6c 6f 2c 20 30ef 30fc 30eb 30c9 21 20 1f389
+                    ```
+        # UTF-32文字列のイテレート
+            UTF-32文字列は, 一文字当たり4バイトの固定長のため, 標準イテレータでそのままイテレートします.
+            
+            # 例
+                ```cpp
+                    // UTF-8文字列を用意
+                    std::string utf8("Hello, ワールド! 🎉");
+                    
+                    // UTF-32文字列に変換. `u32string`型に格納
+                    auto utf32 = unicode::utf8to32<std::u32string>(utf8);
+                    {
+                        // 結果出力のためのログ用意
+                        logging::InfoStream info(__FILE__, __LINE__);
+                        
+                        // そのままイテレート
+                        for (auto c : utf32) {
+                            info << std::hex << c << " ";
+                        }
+                    }
+                ```
+                
+                結果:
+                    ```
+                        INFO   : 48 65 6c 6c 6f 2c 20 30ef 30fc 30eb 30c9 21 20 1f389
+                    ```
+    
+    # UTF-8文字置き換え
+        本ライブラリでは, イテレート機能に独自のイテレータを使用せず, 標準のイテレータを使用しているため,
+        標準クラスの機能と連携できます. 
+        ここでは, `string`型文字列クラスに用意されている`find`と`replace`を使用して文字の置き換えをしてみます.
+        
+        # 例
+            文字列に含まれている`🎉`を`🍣`に置き換える.
+            
+            ```cpp
+                // UTF-8文字列を用意
+                std::string utf8("Hello, ワールド! 🎉");
+                
+                // 変換前のコードポイントを見る
+                {
+                    logging::InfoStream info(__FILE__, __LINE__);
+                    for (auto iter = utf8.cbegin(); iter != utf8.cend(); ) {
+                        info << std::hex << unicode::iterate_utf8(iter, utf8.cend()) << " ";
+                    }
+                }
+                
+                // 変換する
+                {
+                    // 検索する
+                    auto pos = utf8.find("🎉");
+                    if (pos != utf8.npos) {
+                        // 見つけた場合
+                        logging::InfoStream(__FILE__, __LINE__) << "Find tada!";
+                        
+                        // 見つけた場所のイテレータを取得
+                        auto begin = utf8.begin() + pos;
+                        auto iter = begin;
+                        
+                        // 1コードユニット分イテレータを進める
+                        unicode::iterate_utf8(iter, utf8.end());
+                        
+                        // "tada!"のコードユニット数を見る
+                        logging::InfoStream(__FILE__, __LINE__) << "tada size = " << iter - begin << " bytes";
+                        logging::InfoStream(__FILE__, __LINE__) << "Replace tada with sushi.";
+                        
+                        // begin~iter間の文字"tada!"を"sushi"に置き換える
+                        utf8.replace(begin, iter, "🍣");
+                    }
+                }
+                
+                // 変換後のコードポイントを見る
+                {
+                    logging::InfoStream info(__FILE__, __LINE__);
+                    for (auto iter = utf8.cbegin(); iter != utf8.cend(); ) {
+                        info << std::hex << unicode::iterate_utf8(iter, utf8.cend()) << " ";
+                    }
+                }
+            ```
+            
+            結果:
+                ```
+                    INFO   : 48 65 6c 6c 6f 2c 20 30ef 30fc 30eb 30c9 21 20 1f389
+                    
+                    INFO   : Find tada!
+                    
+                    INFO   : tada size = 4 bytes
+                    
+                    INFO   : Replace tada with sushi.
+                    
+                    INFO   : 48 65 6c 6c 6f 2c 20 30ef 30fc 30eb 30c9 21 20 1f363
+                ```
+# 仕組み
+    UTF-8, UTF-16, UTF-32の相互変換の方法は, 以下のページで解説しています.
+    
+    * [/Programming/unicode-utf-conversion/unicode-utf-conversion]
+    
+# 注釈
+    [注.source-utf8]: ソースコードをUTF-8で保存し, コンパイラに認識させる必要があります.    
+
+# 参考文献
+    [w3techs-usage-statistics]: ["Usage statistics of character encodings for websites"](https://w3techs.com/technologies/overview/character_encoding). \
+        W3Techs. accessed at 2021-04-05.
+    
+    [cpprefjp-basic_string]: ["basic_string"](https://cpprefjp.github.io/reference/string/basic_string.html). \
+        cpprefjp. accessed at 2021-05-10.
+        
+    [cpprefjp-char16t_char32t]: ["char16_tとchar32_tの文字・文字列リテラルを、文字コードUTF-16/32に規定"](https://cpprefjp.github.io/lang/cpp20/make_char16t_char32t_string_literals_be_utf16_32.html). \
+        cpprefjp. accessed at 2021-05-10.
+    
+    [cpprefjp-codecvt_utf8]: ["codecvt_utf8"](https://cpprefjp.github.io/reference/codecvt/codecvt_utf8.html). \
+        cpprefjp. accessed at 2021-05-10.
+    
+    [cpprefjp-codecvt_utf16]: ["codecvt_utf16"](https://cpprefjp.github.io/reference/codecvt/codecvt_utf16.html). \
+        cpprefjp. accessed at 2021-05-10.
+        
+    [cpprefjp-codecvt_utf8_utf16]: ["codecvt_utf8_utf16"](https://cpprefjp.github.io/reference/codecvt/codecvt_utf8_utf16.html). \
+        cpprefjp. accessed at 2021-05-10.
+        
+    [cpprefjp-char8_t]: ["UTF-8エンコーディングされた文字の型としてchar8_tを追加"](https://cpprefjp.github.io/lang/cpp20/char8_t.html). \
+        cpprefjp. accessed at 2021-05-10.
+        
+    [cpprefjp-string_view]: ["string_view"](https://cpprefjp.github.io/reference/string_view.html). \
+        cpprefjp. accessed at 2021-05-10.
+        
+    [codeing-unit-file-io]: ["File IO in C++ (text and binary files)"](https://www.codingunit.com/cplusplus-tutorial-file-io-in-cplusplus-text-and-binary-files#:~:text=The%20basic%20difference%20between%20text,the%20files%20in%20text%20mode.&text=or-,ofstream,out.). \
+        CodeingUnit. accessed at 2021-05-11.
+        
+    [cpp-reference-fopen]: ["fopen"](http://www.cplusplus.com/reference/cstdio/fopen/). \
+        C++ Reference. accessed at 2021-05-11.
+        
+    
+    [stack-overflow-difference-binary-and-text]: ["Difference between opening a file in binary vs text [duplicate]"](https://stackoverflow.com/questions/20863959/difference-between-opening-a-file-in-binary-vs-text). \
+        stack overflow. accessed at 2021-05-11.
+    

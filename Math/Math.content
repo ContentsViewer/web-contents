@@ -1,0 +1,10 @@
+<Header>
+    <Parent> ../Root
+    <Title> 数学
+    <CreatedAt> 2019-04-26
+    <Tags> 数学
+    <Summary>
+        ここには, 数学に関することが書かれます.
+    </Summary>
+    <Child> LinearAlgebra/LinearAlgebra
+</Header>

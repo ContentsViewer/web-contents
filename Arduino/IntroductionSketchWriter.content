@@ -1,0 +1,64 @@
+<Header>
+    <Parent> SketchWriter
+    <Title> SketchWriterの導入方法
+    <CreatedAt> 2016-12-8
+    <Tags> 
+    <Summary>
+        SketchWriterの導入方法を説明します.
+        説明項目は以下のとおりです.
+        
+        * ダウンロード
+        * ファイルの説明
+        * SDカード、操作したいArduinoと接続
+        * インクルード, SketchWriterを開始
+        
+    </Summary>
+</Header>
+
+# ダウンロード
+    下記からダウンロードしてください
+
+    [Arduino-SketchWriter](https://github.com/ContentsViewer/Arduino-SketchWriter/)
+    
+# ファイルの説明
+    # SketchWriter.h
+        SketchWriter本体です。
+
+    # stk500.h
+        optibootに送るコマンドが定義されているヘッダファイルです。
+
+    # SketchWriterTest.ino
+        SketchWriter動作テスト用プログラムです。
+
+    # Blink.hex
+        スケッチ"Blink"―LEDが点滅するプログラム―が書かれたHexファイルです。
+        
+# SDカード、操作したいArduinoと接続
+
+    SDカードのCSピンとつなぐArduinoのピンは下記で設定します。<br />
+    SketchWriter側のArduinoのRXピンと書き込みたいArduino側のTXピンを接続してください。<br />
+    SketchWriter側のArduinoのTXピンと書き込みたいArduino側のRXピンを接続してください。<br />
+    SketchWriter側のArduinoの任意のピンと書き込みたいArduino側のResetピンを接続してください。任意のピンは下記で設定します。
+        
+
+# インクルード, SketchWriterを開始
+    "SketchWriter.h"をIncludeする前に"SD.h", "SPI.h"をIncludeする必要があります。
+        
+    <pre class="brush: cpp;">
+#include &lt;SD.h&gt;
+#include &lt;SPI.h&gt;
+#include "SketchWriter.h"
+
+SketchWriter sketchWriter;
+
+void setup(){
+
+    //書き込みたいArduinoにReset信号を送るためのピンを設定
+    sketchWriter.SetResetPin(6);
+
+    //SDカードのCSピンを10番ピンに接続することを宣言そして開始
+    sketchWriter.Begin(10);
+
+}
+    </pre>
+

@@ -1,0 +1,11 @@
+<Header>
+    <Parent> ../Library
+    <Title> JavaScript
+    <CreatedAt> 2018-10-09
+    <Tags> 
+    <Summary>
+        このページは筆者が作成したJavaScriptのライブラリが公開されます.
+        
+    </Summary>
+    <Child> Splitter
+</Header>

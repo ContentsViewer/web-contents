@@ -1,0 +1,10 @@
+<Header>
+    <Parent> ../CollabCMS
+    <Title> 仕組み
+    <CreatedAt> 2019-11-23
+    <Tags> 
+    <Summary>
+        CollabCMSの仕組みについて
+    </Summary>
+    <Child> Component
+</Header>

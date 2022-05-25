@@ -1,0 +1,148 @@
+<Header>
+    <Parent> MelodyPlayer
+    <Title> MelodyPlayerの使い方
+    <CreatedAt> 2017-3-3
+    <Tags> 
+    <Summary>
+        ここでは, MelodyPlayerの基本的な使い方を説明します.
+        説明項目は以下のとおりです.
+        
+        * 再生
+        * メロディーの追加方法
+        
+    </Summary>
+</Header>
+
+# 再生
+    ここでは実際にメロディーを鳴らせてみたいと思います.
+
+    圧電スピーカ―を13番ピンに接続し, 以下のプログラムをArduinoに書き込んでください.
+
+    <pre class="brush: cpp;">
+#include "MelodyPlayer.h"
+void setup(){
+    //ピン13を音声出力ピンに設定
+    MelodyPlayer::Begin(13);
+}
+void loop(){
+    //*1
+    MelodyPlayer::Play(startA, MelodyPlayer::PLAY_MODE::NORMAL);
+    while(1);
+}
+    </pre>
+    「タラリラリー」という音が鳴るはずです.
+    
+    このようにメロディーを鳴らせたい時は"Play"関数を使います.
+
+    # 説明
+        # *1
+            引数に"startA"とありますが, これは既に定義されているメロディーです.
+            ヘッダファイル"Melody.h"に"startA"が定義されています.
+
+
+            余談ですが, "startA"の他にいくつかのメロディーも既に定義されています.
+            その中に, メロディー名"melody"がありますがこれは「がっこう〇らし」のメロディーです. 
+            上のサンプルのPlay関数内にある"startA"を"melody"とすると「がっこう〇らし」のメロディーが流れます.
+            このメロディーは原曲をプログラム―まだ出来の悪いメロディー抽出プログラム―で作成したので少し聞きずらいと思います.
+
+# メロディーの追加方法
+    メロディーはヘッダファイル"Melody.h"で定義します. 
+    メロディーの定義方法の書式は以下の通りです.
+
+
+    <pre class="brush: cpp;">
+static const uint16_t "メロディー名"[] PROGMEM =
+{
+//ここにメロディーの内容を書く.
+//周波数, 時間(ミリ秒),
+//周波数, 時間(ミリ秒)
+//....
+//と記述していく
+};
+    </pre>
+
+    実際に音階のメロディー"ドレミファソラシド"を作成しましょう.
+
+    # メロディー名の宣言, 定義
+        メロディー名は"scale"とします. 
+        以下のコードを"Melody.h"内に記述して下さい.
+
+        <pre class="brush: cpp;">
+static const uint16_t scale[] PROGMEM =
+{
+};
+        </pre>
+
+    # "ド"を1秒鳴らす
+        "ド"の周波数は"262Hz"です. また, 1秒は1000ミリ秒です.
+        よって, 以下のようになります.
+
+        <pre class="brush: cpp;">
+static const uint16_t scale[] PROGMEM =
+{
+    262, 1000
+};
+        </pre>
+
+        ここで, 262と記述しましたが, 実はPitches.hで各音の周波数が定義されています.
+        以下のように記述することができます.
+
+        <pre class="brush: cpp;">
+static const uint16_t scale[] PROGMEM =
+{
+    NOTE_C4, 1000
+};
+        </pre>
+
+        こちらの方がどのような音が鳴るのかわかりやすくなります.
+
+    # "レ"を1秒鳴らす
+        同様にしてこのようになるでしょう.
+
+        <pre class="brush: cpp;">
+static const uint16_t scale[] PROGMEM =
+{
+    NOTE_C4, 1000,
+    NOTE_D4, 1000
+};
+        </pre>
+
+    # 繰り返し
+        上の作業を繰り返すと最終的に以下のようになります.
+
+        <pre class="brush: cpp;">
+static const uint16_t scale[] PROGMEM ={
+  NOTE_C4, 1000,
+  NOTE_D4, 1000,
+  NOTE_E4, 1000,
+  NOTE_F4, 1000,
+  NOTE_G4, 1000,
+  NOTE_A4, 1000,
+  NOTE_B4, 1000,
+  NOTE_C5, 1000
+};
+        </pre>
+
+        これで, 音階のメロディーが作成できました.
+
+
+    上で作成したメロディーをなしてみましょう.
+    以下のプログラムをArduinoに書き込んでください.
+    音階のメロディーが鳴るはずです.
+
+    <pre class="brush: cpp;">
+#include "MelodyPlayer.h"
+void setup(){
+    //ピン13を音声出力ピンに設定
+    MelodyPlayer::Begin(13);
+}
+void loop(){
+    MelodyPlayer::Play(scale, MelodyPlayer::PLAY_MODE::NORMAL);
+    while(1);
+}
+    </pre>
+
+    最後に, 使わないメロディーは削除するかコメントアウトすることをお勧めします.
+    メロディーはマイコンのフラッシュメモリ領域を使用します.
+    多くのメロディーを定義したり, かなり長いメロディーを定義したりすると
+    フラッシュメモリ領域を圧迫しマイコンの動作が不安定になる可能性があります.

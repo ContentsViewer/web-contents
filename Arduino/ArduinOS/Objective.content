@@ -1,0 +1,160 @@
+<Header>
+    <Parent> ArduinOS
+    <Title> 目標と使い方
+    <CreatedAt> 2017-8-28
+    <Tags> 
+    <Summary>
+        OSを作成するにあたって, まずこのOSの使い方を説明します.
+        (まず, 使い方を説明することでOS完成のイメージをつかむことができます.)
+        
+        
+    </Summary>
+</Header>
+# コード
+    OSが完成したとしまして, 実際にOSを使用したプログラムを書くときはこのようになるでしょう.
+    注意ですが, このプログラムはOSのソースコードというのではなくOSを使用したプログラムコードです.
+    ArduinoIDEで作成するスケッチのことです.
+
+    ```cpp
+        // タスクの宣言
+        DeclareTaskLoop(BlinkTask);
+        DeclareTaskLoop(ButtonChecker);
+        
+        
+        void setup() {
+          // ピン設定
+          pinMode(13, OUTPUT);
+          pinMode(12, OUTPUT);
+          pinMode(2, INPUT);
+        
+          // タスクの作成
+          CreateTaskLoop(BlinkTask, LOW_PRIORITY);
+          CreateTaskLoop(ButtonChecker, HIGH_PRIORITY);
+        }
+        
+        void loop() {
+        
+        }
+        
+        // LEDを点滅させるタスク
+        TaskLoop(BlinkTask) {
+          digitalWrite(13, HIGH);
+          delay(1000);
+          digitalWrite(13, LOW);
+          delay(1000);
+        }
+        
+        // ボタン入力を検知するタスク
+        TaskLoop(ButtonChecker) {
+          // 2番ピンがLOWのとき, ボタンが押されたことにする
+          if (!digitalRead(2)) {
+            digitalWrite(12, HIGH);
+          }
+          else{
+            digitalWrite(12, LOW);
+          }
+          DelayWithBlocked(50);
+        }
+
+    ```
+
+    ![回路図](CURRENT_DIR/Images/ObjectiveCircuitA.png)
+
+
+    上のプログラムの動作についてですが,
+    13番ピンに接続されたLEDが1秒ごとに常に点滅します.
+    2番ピンに接続されたボタンを押すと, 12番ピンに接続されたLEDが点灯し,
+    離すと消灯します.
+
+    
+    上のプログラムには以下の二つのタスクが同時に動いています.
+
+    * LEDを点滅させるタスク
+    * ボタン入力を検知するタスク
+
+    
+    タスク処理の書き方ですが, 次のようにします.
+
+    # コード上部でタスクの宣言
+        ```cpp
+            DeclareTaskLoop(タスク名)
+        ```
+
+
+    # タスク処理の実装
+        ```cpp
+            TaskLoop(タスク名){
+              // 処理
+            }
+        ```
+
+    # タスクの作成
+        ```cpp
+            CreateTaskLoop(タスク名, 優先度)
+        ```
+
+    タスクの宣言では, コード上部で行うことによってほかのタスク内でその宣言されたタスク
+    に対して処理を行えるようになります. 処理というのは, タスクの一時停止, 作成, 削除, 再開などを含みます.
+    もし, 宣言を行わなかった場合, TaskLoop()で実装するまでにそのタスク名に対して処理を行おうとする際,
+    定義されていないという理由でコンパイルエラーになるでしょう.
+
+
+
+    タスク処理の実装では, 実際に行わせたい処理をここに書くことになります.
+    ここに書かれた処理はループされます.
+
+
+
+    タスクの作成をすることで, タスクはメモリ上に実体化し動作します.
+    作成されるまではタスクが動くことはありません.
+    作成の際, 優先度を指定します. 優先度が高いタスクが優先的に処理され,
+    低いタスクは高いタスクの処理が終わるまで処理されません.
+
+
+
+    上のプログラムの二つのタスクの関係ですが, ボタン入力を検知するタスクの方が
+    優先度が高いので, 優先的に実行されています. それでも, 点滅タスクが動作している理由としては,
+    検知タスク内にあるDelayWithBlocked()によって休止しているときに点滅タスクが動いているからです.
+    もし仮に下のように検知タスクのコードを書き換えると, 点滅タスクは実行されません.
+
+
+    ```cpp
+        // ボタン入力を検知するタスク
+        TaskLoop(ButtonChecker) {
+          // 2番ピンがLOWのとき, ボタンが押されたことにする
+          if (!digitalRead(2)) {
+            digitalWrite(12, HIGH);
+          }
+          else{
+            digitalWrite(12, LOW);
+          }
+          //DelayWithBlocked(50);
+        }
+
+    ```
+
+    また, DelayWithBlocked()関数の代わりに, delay()関数を使用しても点滅タスクは実行されないことに注意してください.
+    delay()関数は, 関数内で指定する時間までwhileによって待機しています. これでは, タスクが停止しているとは,
+    OSは判断せず, 実行中であると解釈します. タスク自体を停止させ, 他タスクに処理を回したいときは, DelayWithBlocked()関数を使用します.
+    すなわち, 以下のコードでも点滅タスクは実行されません.
+
+
+    ```cpp
+        // ボタン入力を検知するタスク
+        TaskLoop(ButtonChecker) {
+          // 2番ピンがLOWのとき, ボタンが押されたことにする
+          if (!digitalRead(2)) {
+            digitalWrite(12, HIGH);
+          }
+          else{
+            digitalWrite(12, LOW);
+          }
+          delay(50);
+        }
+
+    ```
+
+# それでは, 作成に入ります
+    それでは, 上のようなコードで動作するようなOSを作成していきます.
+
+

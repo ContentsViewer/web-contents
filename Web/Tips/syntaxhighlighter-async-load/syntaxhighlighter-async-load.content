@@ -1,0 +1,208 @@
+<Header>
+    <Parent> ../Tips
+    <Title> SyntaxHighlighter の非同期読み込み
+    <CreatedAt> 2021-08-09
+    <Tags> JavaScript, 非同期処理
+    <Summary>
+        本稿では, コードをハイライトするライブラリ//SyntaxHighlighter//の//非同期読み込み方法//について説明します. 
+    </Summary>
+</Header>
+
+# SyntaxHighlighter について
+    SyntaxHighlighter は, Webサイト上でコードをハイライトするためのライブラリです.
+
+    * ["syntaxhighlighter"](https://github.com/syntaxhighlighter/syntaxhighlighter). GitHub. Accessed at 2021.08.09.
+
+    SyntaxHighlighterは, バージョン`2.1.364`が2009年にリリースされていることから, 古くからあるライブラリです.
+
+# 環境
+    本稿で対象にしている SyntaxHighlighter のバージョンは, `3.0.83`です.
+
+
+# 従来の読み込み方法
+    従来の読み込み方法は以下の通りでした.
+
+
+    ```html
+        <head>
+          <script type="text/javascript" src="syntaxhighlighter/scripts/shCore.js"></script>
+          <script type="text/javascript" src="syntaxhighlighter/scripts/shAutoloader.js"></script>
+          <link type="text/css" rel="stylesheet" href="syntaxhighlighter/styles/shCoreDefault.css">
+        </head>
+        <body>
+          ...
+          
+          <script>
+            SyntaxHighlighter.autoloader(
+              'applescript            syntaxhighlighter/scripts/shBrushAppleScript.js',
+              'actionscript3 as3      syntaxhighlighter/scripts/shBrushAS3.js'        ,
+              'bash shell             syntaxhighlighter/scripts/shBrushBash.js'       ,
+              'coldfusion cf          syntaxhighlighter/scripts/shBrushColdFusion.js' ,
+              'cpp c                  syntaxhighlighter/scripts/shBrushCpp.js'        ,
+              'c# c-sharp csharp      syntaxhighlighter/scripts/shBrushCSharp.js'     ,
+              'css                    syntaxhighlighter/scripts/shBrushCss.js'        ,
+              'delphi pascal          syntaxhighlighter/scripts/shBrushDelphi.js'     ,
+              'diff patch pas         syntaxhighlighter/scripts/shBrushDiff.js'       ,
+              'erl erlang             syntaxhighlighter/scripts/shBrushErlang.js'     ,
+              'groovy                 syntaxhighlighter/scripts/shBrushGroovy.js'     ,
+              'java                   syntaxhighlighter/scripts/shBrushJava.js'       ,
+              'jfx javafx             syntaxhighlighter/scripts/shBrushJavaFX.js'     ,
+              'js jscript javascript  syntaxhighlighter/scripts/shBrushJScript.js'    ,
+              'perl pl                syntaxhighlighter/scripts/shBrushPerl.js'       ,
+              'php                    syntaxhighlighter/scripts/shBrushPhp.js'        ,
+              'text plain             syntaxhighlighter/scripts/shBrushPlain.js'      ,
+              'ps powershell          syntaxhighlighter/scripts/shBrushPowerShell.js' ,
+              'py python              syntaxhighlighter/scripts/shBrushPython.js'     ,
+              'ruby rails ror rb      syntaxhighlighter/scripts/shBrushRuby.js'       ,
+              'sass scss              syntaxhighlighter/scripts/shBrushSass.js'       ,
+              'scala                  syntaxhighlighter/scripts/shBrushScala.js'      ,
+              'sql                    syntaxhighlighter/scripts/shBrushSql.js'        ,
+              'vb vbnet               syntaxhighlighter/scripts/shBrushVb.js'         ,
+              'xml xhtml xslt html    syntaxhighlighter/scripts/shBrushXml.js'
+            );
+            SyntaxHighlighter.all();
+          </script>
+        </body>
+    ```
+
+    スクリプト`shCore.js`, `shAutoloader.js`, スタイル`shCoreDefault.css`を順に読み込み,
+    ハイライトの定義ファイルを自動で読み込む機能を設定しています.
+
+    この方法には問題があり, 上の処理の間Webページのレンダリングが妨げられます.
+    ブラウザはデフォルトで, HTMLの解析中にスクリプトがあると, HTMLの解析を一時停止し, スクリプトの読み込みと実行を行います^[BlockingJS-googledev].
+    外部スクリプトの場合はリソースがダウンロードされるのを待つ必要もありますが, 
+    その際リソースのダウンロードによってネットワーク ラウンド トリップが発生し,
+    ページが最初に表示されるまでの時間が長くなる可能性があります^[BlockingJS-googledev].
+
+
+# 非同期読み込み方法
+    SyntaxHighlighter を非同期に読み込む方法を説明します.
+    この方法は, MathJaxの非同期読み込み方法に基づいています.
+    
+    * ["Configuring and Loading MathJax"](http://docs.mathjax.org/en/latest/web/configuration.html#configuring-and-loading-in-one-script). MathJax. accessed at 2021.08.10.
+    
+
+    まず, 以下のファイルを用意します.
+
+    `load-syntaxhighlighter.js`:
+        ```js
+            ;(function () {
+              const sh = window.SyntaxHighlighter
+            
+              if (!sh || !sh.src) {
+                return
+              }
+            
+              const { src } = sh
+            
+              const process = async () => {
+                const waitDOMLoaded = () =>
+                  new Promise(resolve => {
+                    document.readyState !== "loading" ? resolve() : document.addEventListener("DOMContentLoaded", resolve)
+                  })
+            
+                const loadScript = src => {
+                  return new Promise((resolve, reject) => {
+                    const script = document.createElement("script")
+                    script.src = src
+                    script.async = true
+                    script.onload = resolve
+                    script.onerror = reject
+                    document.head.appendChild(script)
+                  })
+                }
+            
+                const loadStyle = src => {
+                  return new Promise((resolve, reject) => {
+                    const style = document.createElement("link")
+                    style.rel = "preload"
+                    style.type = "text/css"
+                    style.as = "style"
+                    style.href = src
+                    style.onload = () => {
+                      style.rel = "stylesheet"
+                      resolve()
+                    }
+                    style.onerror = reject
+                    document.head.appendChild(style)
+                  })
+                }
+            
+                try {
+                  loadStyle(`${src}/styles/shCoreDefault.css`)
+                  await loadScript(`${src}/scripts/shCore.js`)
+                  await loadScript(`${src}/scripts/shAutoloader.js`)
+                  await waitDOMLoaded()
+            
+                  SyntaxHighlighter.autoloader(
+                    `applescript           ${src}/scripts/shBrushAppleScript.js`,
+                    `actionscript3 as3     ${src}/scripts/shBrushAS3.js`,
+                    `bash shell            ${src}/scripts/shBrushBash.js`,
+                    `coldfusion cf         ${src}/scripts/shBrushColdFusion.js`,
+                    `cpp c                 ${src}/scripts/shBrushCpp.js`,
+                    `c# c-sharp csharp     ${src}/scripts/shBrushCSharp.js`,
+                    `css                   ${src}/scripts/shBrushCss.js`,
+                    `delphi pascal         ${src}/scripts/shBrushDelphi.js`,
+                    `diff patch pas        ${src}/scripts/shBrushDiff.js`,
+                    `erl erlang            ${src}/scripts/shBrushErlang.js`,
+                    `groovy                ${src}/scripts/shBrushGroovy.js`,
+                    `java                  ${src}/scripts/shBrushJava.js`,
+                    `jfx javafx            ${src}/scripts/shBrushJavaFX.js`,
+                    `js jscript javascript ${src}/scripts/shBrushJScript.js`,
+                    `perl pl               ${src}/scripts/shBrushPerl.js`,
+                    `php                   ${src}/scripts/shBrushPhp.js`,
+                    `text plain            ${src}/scripts/shBrushPlain.js`,
+                    `ps powershell         ${src}/scripts/shBrushPowerShell.js`,
+                    `py python             ${src}/scripts/shBrushPython.js`,
+                    `ruby rails ror rb     ${src}/scripts/shBrushRuby.js`,
+                    `sass scss             ${src}/scripts/shBrushSass.js`,
+                    `scala                 ${src}/scripts/shBrushScala.js`,
+                    `sql                   ${src}/scripts/shBrushSql.js`,
+                    `vb vbnet              ${src}/scripts/shBrushVb.js`,
+                    `xml xhtml xslt html   ${src}/scripts/shBrushXml.js`
+                  )
+                  SyntaxHighlighter.all()
+                } catch (error) {
+                  console.error(error)
+                }
+              }
+            
+              process()
+            })()
+        ```
+
+        `shCoreDefault.css`を非同期に読み込みながら, `shCore.js`, `shAutoloader.js`を順番に読み込み, DOMが読み込まれるのを待ってから, 
+        `autoloader`を開始しています.
+
+
+    次に, `<head>`タグ内で, SyntaxHighlighterのディレクトリ場所を設定をした後, 
+    上のファイルを非同期で読み込みます.
+
+    ```html
+        <head>
+          <script>
+            SyntaxHighlighter = {
+              src: "path/to/syntaxhighlighter"
+            }
+          </script>
+          <script src="path/to/load-syntaxhighlighter.js" async></script>
+        </head>
+    ```
+
+    以上で, レンダリングを妨げずにコードがハイライトされます.
+
+# 今後
+    本稿で, SyntaxHighlighter の非同期読み込みについて説明しましたが, 
+    今後 SyntaxHighlighter は使われなくなると思います.
+    2021-08-09現在, SyntaxHighlighter の[GitHubページ](https://github.com/syntaxhighlighter/syntaxhighlighter)を見ると, 
+    最終更新日が2017年8月あたりで止まっています. 
+    また, 公式サイトであった`alexgorbatchev.com/SyntaxHighlighter`のリンクが切れています.
+
+    SyntaxHighlighterから乗り換える先となるライブラリを以下に挙げておきます.
+
+    * ["highlight.js"](https://highlightjs.org/). accessed at 2021-08-09
+    * ["Prism"](https://prismjs.com/). accessed at 2021-08-09
+
+# 参考文献
+    [BlockingJS-googledev]: ["レンダリングを妨げる JavaScript を削除する"](https://developers.google.com/speed/docs/insights/BlockingJS?hl=ja). Google Developers. accessed at 2021-08-09.
+

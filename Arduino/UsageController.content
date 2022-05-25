@@ -1,0 +1,101 @@
+<Header>
+    <Parent> Controller
+    <Title> Controllerの使い方
+    <CreatedAt> 2016-12-8
+    <Tags> 
+    <Summary>
+        ここでは, Controllerの基本的な説明を行います.
+        説明項目は以下のとおりです.
+        
+        * ボタン数,ピン設定
+        * ボタン番号設定
+        * スイッチ情報の読み込み
+        
+        
+    </Summary>
+</Header>
+# ボタン数,ピン設定
+    Controller使用前にボタン数とスイッチ情報入力ピンを設定する必要があります。
+    設定には関数"Begin"を使用します。
+        
+        
+    # Begin
+        Begin(byte pin, byte numSW, byte mode)
+
+        # パラメータ
+            |--------||-------------------|
+            | pin    || コントローラからの信号を入力するピン |
+            | numSW  || コントローラに設置されたボタン数 |
+            | mode   || アナログ入力で使われる基準電圧設定 |
+
+        # 説明
+            Controllerを開始します. Controllerを使用する前に一回実行する必要があります.
+
+
+# ボタン番号設定
+    ボタン番号とは各ボタンに割り振られている固有の番号です。
+    各ボタンの番号の調べる時に使うコマンドは"Read"です。
+    シリアル通信でコマンド"Read"の値をパソコンで見てください。
+
+
+    ```cpp
+        #include "Controller.h"
+        Controller ctrl;
+        void setup() {
+            Serial.begin(19200);
+            
+            ctrl.Begin(0, 4, DEFAULT);
+        }
+        void loop() {
+            Serial.println(ctrl.Read());
+        }
+    ```
+
+    ここではボタン数を4つにしています。
+
+
+    6つあるボタンのうち1つだけ押してください。
+    するとシリアルモニターに番号が表示されます。
+    この番号が押した番号の固有番号です。
+    固有番号は2のべき乗になっています。
+
+# スイッチ情報の読み込み
+
+    スイッチ情報読み込みでよく使う関数は"Stick"です。
+    以下ではこの関数を用いた例を示します。
+
+    # ボタン検出
+    ```cpp
+        #include "Controller.h"
+        //各ボタンの設定
+        #define UP_BUTTON 8
+        #define RIGHT_BUTTON 4
+        #define DOWN_BUTTON 2
+        #define LEFT_BUTTON 1
+        Controller ctrl;
+        void setup() {
+          Serial.begin(19200);
+          ctrl.Begin(0, 4, DEFAULT);
+        }
+        void loop() {
+          
+          byte a;
+          
+          ctrl.Stick(&a, RIGHT_BUTTON + LEFT_BUTTON + UP_BUTTON + DOWN_BUTTON);
+          if (a & RIGHT_BUTTON) {
+            Serial.println("RIGHT_BUTTON");
+          }
+          
+          if (a & LEFT_BUTTON) {
+            Serial.println("LEFT_BUTTON");
+          }
+          
+          if (a & UP_BUTTON) {
+            Serial.println("UP_BUTTON");
+          }
+          
+          if (a & DOWN_BUTTON) {
+            Serial.println("DOWN_BUTTON");
+          }
+        }
+    ```

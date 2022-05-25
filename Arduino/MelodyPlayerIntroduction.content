@@ -1,0 +1,47 @@
+<Header>
+    <Parent> MelodyPlayer
+    <Title> MelodyPlayerの導入方法
+    <CreatedAt> 2017-3-3
+    <Tags> 
+    <Summary>
+        MelodyPlayerの導入方法を説明します.
+        説明項目は以下のとおりです.
+        
+        * ダウンロード
+        * ファイルの説明
+        * インクルード
+        * ピン接続
+    </Summary>
+</Header>
+# ダウンロード
+    下記からダウンロードしてください.
+
+    [Arduino-MelodyPlayer](https://github.com/ContentsViewer/Arduino-MelodyPlayer/)
+
+# ファイル説明
+    # Melody.h
+        メロディーの定義ファイル
+
+    # MelodyPlayer.h
+        MelodyPlayer本体
+
+    # Pitches.h
+        ピッチのマクロ定義
+
+# インクルード
+
+    ```cpp
+            
+        #include "MelodyPlayer.h"
+        void setup(){
+            //ピン13を音声出力ピンに設定
+            MelodyPlayer::Begin(13);
+        }
+    ```
+
+
+    "Pitches.h", "Melody.h", "MelodyPlayer.h"は必ず同じディレクトリ内に入れてください.
+
+# ピン接続
+
+    圧電スピーカ―と音声出力ピンを接続してください.

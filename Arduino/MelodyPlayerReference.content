@@ -1,0 +1,77 @@
+<Header>
+    <Parent> MelodyPlayer
+    <Title> MelodyPlayerの関数一覧
+    <CreatedAt> 2017-3-3
+    <Tags> 
+    <Summary>
+        |[関数]
+        |-----------------||-----------------------------------------|
+        | [Begin](#Begin) || MelodyPlayerの開始                       |
+        | [End](#End)     || MelodyPlayerの終了                       |
+        | [Play](#Play)   || メロディー再生                           |
+        | [Stop](#Stop)   || メロディー停止                           |
+        | [IsPlaying](#IsPlaying) || 再生中かどうか                   |
+        
+        |[Enum]
+        |-------------------------||-------------------------------|
+        | [PLAY_MODE](#PLAY_MODE) || プレイモード                   |
+        
+        
+    </Summary>
+</Header>
+# [[Begin]]Begin
+    static void Begin(unsigned char speakerPin)
+
+    # パラメータ
+        |-------||--------------|
+        | speakerPin || 音声出力ピン |
+
+    # 説明
+        MelodyPlayerを開始します.
+
+
+# [[End]]End
+    static void End()
+
+    # 説明
+        MelodyPlayerを終了します.
+
+
+# [[Play]]Play
+    static void Play(const uint16_t(&melody)[SIZE], PLAY_MODE mode)
+
+    # パラメータ
+        |-------||--------------|
+        | melody || メロディー名 |
+        | mode || プレイモード |
+
+    # 説明
+        メロディーを再生します.
+
+
+# [[Stop]]Stop
+    static void Stop()
+
+    # 説明
+        メロディーを停止します.
+
+# [[IsPlaying]]IsPlaying
+    static bool IsPlaying()
+
+    # 返り値
+        trueのとき, 再生中.
+        そのほかは, false
+
+    # 説明
+        現在再生中かどうか
+
+# [[PLAY_MODE]]PLAY_MODE
+    # 変数
+        |-------||---------------|
+        | NORMAL || 通常再生 |
+        | LOOP || ループ再生 |
+        | WAIT || 再生待機 |
+
+    # 説明
+        再生待機とは, メロディーが鳴り終わるまでメインプログラムを停止させることです.
+

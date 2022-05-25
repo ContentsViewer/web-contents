@@ -1,0 +1,11 @@
+<Header>
+    <Parent> Structure
+    <Title> C言語
+    <CreatedAt> 2018-10-21
+    <Tags> 
+    <Summary>
+        ここでは, C言語に関する詳細を説明します.
+        
+    </Summary>
+    <Child> define
+</Header>

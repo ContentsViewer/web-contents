@@ -1,0 +1,32 @@
+<Header>
+    <Parent> Arduino
+    <Title> Arduinoでメロディーを鳴らす
+    <CreatedAt> 2017-3-3
+    <Tags> 音楽再生, ライブラリ
+    <Summary>
+        Arduinoで何か作品を作っているとき, その作品に音を鳴らせたい時があります.
+        本格的に音楽を鳴らすのではなく, 効果音としてちょこっと入れたいという意味です.
+        例えば, 簡単な早押しゲームを作るとして, ボタンを押したときの効果音を入れたいという時です.
+        ですが, この効果音を入れたいために別のArduinoを用意するのはコストの点で好ましくありません.
+        -オーディオプレイヤーのように音楽を鳴らしたい時は[./MediaPlayer]を参照してください.-
+        
+        ここで, このMelodyPlayerがあります.
+        このMelodyPlayerは新たにArduinoを用意する必要はありません.
+        また, 音楽再生処理はバックグラウンドで行っているためメインプログラムに何も影響を与えません.
+        メロディーを流しながら何か他の処理―LED点灯, ボタン入力など―をすることができます.
+        あなたがすでに書いたスケッチのコードに一行"Play('Melody名')"と入れるだけでメロディーが再生されます.
+        
+        MelodyPlayerができるのは以下の通りです.
+        
+        * インクルードするだけで簡単にメロディー再生
+        * 簡単にメロディーを追加
+        
+        ただしMelodyPlayerはピン3,9,10,11のPWM出力を妨げます.
+        
+        
+        
+    </Summary>
+    <Child> MelodyPlayerIntroduction
+    <Child> MelodyPlayerUsage
+    <Child> MelodyPlayerReference
+</Header>

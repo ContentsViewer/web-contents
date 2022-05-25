@@ -1,0 +1,229 @@
+<Header>
+    <Parent> EventController
+    <Title> EventControllerの使い方
+    <CreatedAt> 2016-12-8
+    <Tags> 
+    <Summary>
+        ここでは, EventControllerの基本的な使い方を説明します.
+        説明項目は以下のとおりです.
+        
+        * 用語
+        * EventClipとは
+        * 外部スクリプトによるParameter設定と取得
+        * 実際に使ってみる
+        * 応用例
+        
+        
+        
+    </Summary>
+</Header>
+# 用語
+    # EventNode
+        各状態のこと<br />
+        NodeにEventClipを登録することができる
+
+    # EventClip
+        実際にEventを実行するもの
+
+    # EventController
+        各EventNodeへの遷移をコントロールするもの
+
+    # Transition
+        あるEventNodeから別のEventNodeに移ること
+
+    # Layer
+        EventNodeとTransitionを含んだ一つの集まり<br />
+        LayerごとにEventNodeは独立に遷移する
+
+
+    # Conditions
+        EventNode遷移条件
+
+    # Junction
+        遷移の出入り口
+
+    # Parameter
+        EventControllerが持つ変数<br />
+        この変数を用いてEventControllerを操作する事ができる
+
+        # Int
+            整数型
+
+        # float
+            小数型
+
+        # bool
+            bool型
+
+        # Trigger
+            遷移すると消費される(trueがfalseになる)bool<br />
+            Triggerが消費されるタイミングはすべてのレイヤーの処理が終わった後です.
+
+# EventClipとは
+    # 概要
+        EventClipとは, 実際にEventを行うコンポーネントです.
+        ここでは, このEventClipについての説明をします.
+
+    # 継承
+        EventClipは必ずBaseEventClipを継承しなければいけません.
+        BaseEventClipには, Eventに関する手続き―StartEvent, OnEvent, EndEvent―が宣言されています.
+        必ず, 派生先でこれらの関数を定義しなければなりません.
+
+    # StartEvent
+        この関数―StartEvent―はEvent開始時に一回呼び出されます.
+        他のEventNodeから遷移してきたとき,
+        遷移先のEventNodeで登録されているEventClip内のStartEventが一回実行されます.
+        この関数にはEvent実行の際の初期設定などを行うとよいでしょう.
+
+    # EndEvent
+        この関数―EndEvent―はEvent終了時に一回呼び出されます.
+        他のEventNodeに遷移するとき,
+        遷移前のEventNodeで登録されているEventClip内のEndEventが一回実行されます.
+        この関数にはEvent終了の手続きなどを行うとよいでしょう.
+
+    # OnEvent
+        この関数―OnEvent―はEvent実行中常に呼び出されます.
+        この関数の呼び出されるタイミングはUnityのUpdate関数と同じです.
+        この関数内に実際に実行するEventの処理を書きます.
+
+# 外部スクリプトによるParameter設定と取得
+    EventControllerを使用していくとEventControllerが使用するParameterを設定したいもしくは取得したい場合があります.
+    例を挙げると, あるEventを実行したときEventController内のbool値'EventStarted'をtrueにしたい,
+    あるスクリプトでEventControllerが持つbool値―鍵を持っているかどうかのbool値―を取得したいなどです.
+
+    EventControllerは外部スクリプトによるParameterの設定, 取得に対応しています.EventControllerが用意しているGet, Set関数を使用してください.
+    詳しくは[EventController関数一覧](CURRENT_DIR/ReferenceEventController)をご覧ください.
+
+# 実際に使ってみる
+    # 概要
+        ここではEventControllerの使用例を挙げたいと思います.
+        二つのイベントを作成し実際に遷移させてみましょう.
+
+    # 手順
+        # 新しくGameObject'EventCtrl'を作成し, 'EventController'をAddComponent
+
+        # 二つのEventClipを作成します
+            以下のファイルを作成してください.
+
+            # EventA
+                <pre class="brush: csharp;">
+using UnityEngine;
+using System.Collections;
+using System;
+public class EventA : BaseEventClip
+{
+    public override void StartEvent()
+    {
+        Debug.Log("[EventA] StartEvent");
+    }
+    public override void EndEvent()
+    {
+        Debug.Log("[EventA] EndEvent");
+    }
+    public override void OnEvent()
+    {
+        Debug.Log("[EventA] OnEvent");
+    }
+}
+                </pre>
+
+            # EventB
+                <pre class="brush: csharp;">
+using UnityEngine;
+using System.Collections;
+public class EventB : BaseEventClip
+{
+    public override void StartEvent()
+    {
+        Debug.Log("[EventB] StartEvent");
+    }
+    public override void EndEvent()
+    {
+        Debug.Log("[EventB] EndEvent");
+    }
+    public override void OnEvent()
+    {
+        Debug.Log("[EventB] OnEvent");
+    }
+}
+                </pre>
+
+        # 上で作成したEventをGameObjectとしてScene上に配置します
+            GameObject'EventA', 'EventB'を作成し,
+            それぞれに上で作成したEventClip'EventA', 'EventB'をAddComponent.
+
+            ![イベント登録](CURRENT_DIR/Images/EventController/Img4.png)
+
+        # GameObject'EventCtrl'を選択し, EventControllerEditorを開きます.
+            # Layerを追加し, 新しく作成したLayerを選択します.
+                デフォルトで, 新しく作成したLayer名は'BaseLayer'になります
+
+                ![Layer追加](CURRENT_DIR/Images/EventController/Img7.png)
+
+            # パラメータとしてTrigger を作成します
+                ここではトリガーの名前をNextにします
+
+                ![トリガーの作成](CURRENT_DIR/Images/EventController/Img10.png)
+
+            # ２つのEventNodeを作成します
+                Editor 内Create ボタンを2回押すと２つのEventNodeが作成されます.
+                名前はEventA, EventBとします
+
+                ![EventNode作成](CURRENT_DIR/Images/EventController/Img11.png)
+
+            # EventNode'EventA,EventB'それぞれにEventClip'EventA' 'EventB'を登録します
+                ![Event登録](CURRENT_DIR/Images/EventController/Img12.png)
+
+            # EventNode'EventA'上で右クリック、'NewExit' をクリック
+
+            # EventNode'EventB'上で右クリック、 'NewEntrance' をクリック
+
+            # EventAとEventBを線で結ぶ
+                どちらかのJunction を右クリック、make transition, もう片方のJunction に線をつなぐ。<br />
+                キャンセルしたい時は右クリックします。
+
+                ![Eventをつなぐ](CURRENT_DIR/Images/EventController/Img13.png)
+
+            # どちらかのJunction をクリックしConditions にNextを追加
+                これでNextというTriggerが引かれるとEvenAからEventBに遷移することになります.
+
+                ![トリガーの設定](CURRENT_DIR/Images/EventController/Img14.png)
+
+            # EventNode'EventA'上で右クリック、SetAsEntry をクリック
+                これでGame起動時にEventAから始まることになります
+
+                ![SetAsEntry設定](CURRENT_DIR/Images/EventController/Img15.png)
+
+            # Gameを開始
+                DebugLog 欄にEventAのStartEventが一回実行されそれ以降EventAのOnEventが実行されている事がわかります。
+
+                ![DebugLog欄](CURRENT_DIR/Images/EventController/Img16.png)
+
+                ![Console欄](CURRENT_DIR/Images/EventController/Img17.png)
+
+            # Editor上でNextをクリックしましょう
+                DebugLog 欄にEventAのEndEvent, EventBのStartEvent が一回実行されそれ以降EventBのOnEventが実行されている事がわかります。
+                
+                ![DebugLog欄](CURRENT_DIR/Images/EventController/Img18.png)
+
+                ![Console欄](CURRENT_DIR/Images/EventController/Img19.png)
+
+
+# 応用例
+    このEvnentControllerを最大限に活用すると次のようなことができます.
+
+    # CheckPoint形式でのSaveの実現
+        ![CheckPoint形式でのSaveの実現](CURRENT_DIR/Images/EventController/Img8.png)
+
+        各Eventの本体であるEventClipにはEvent開始と終了の手続きが設定できるため,
+        どのようなタイミングでEventが実行されてもEventは正常に動きます.
+        つまりCheckPointの値に従ってあるEvent―その前に複数のEventがあっても―に直接飛んでもそのEventは正常に動きます.
+        (ただし, どのタイミングでもEventが動くようにStartEvent関数を実装する必要があります)
+
+    # QuickTimeEventの実現
+        ![QuickTimeEventの実現](CURRENT_DIR/Images/EventController/Img9.png)
+
+        Gameによくある要素としてQuickTimeEvent―あるキーを連打してEventを達成するもの―がありますが,
+        これもEventControllerを使えば実現可能です. キーの要求を一つのEventと考え, 成功した場合と失敗した場合のためのTriggerを作ると
+        QuickTimeEventの大まかな仕組みを実現してしまいます.
+

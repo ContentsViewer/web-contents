@@ -1,0 +1,18 @@
+<Header>
+    <Parent> ../App
+    <Title> TwitterBot
+    <CreatedAt> 2017-3-20
+    <Tags> ボット
+    <Summary>
+        ここには, TwitterBotに関することが書かれます.
+        
+        筆者が現在作成中のTwitterボットは以下のリンクから
+        [BOTのたまり場](https://twitter.com/INUIMAJI_TENSHI)
+        
+        目的は以下のとおりです.
+        * 誰もが簡単にTwitterBOTを導入できるような枠組みを提案すること
+        * 自然な会話ができること
+        * 自動で学習すること
+    </Summary>
+    <Child> UpdateList
+</Header>

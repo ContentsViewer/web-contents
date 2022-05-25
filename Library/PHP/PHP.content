@@ -1,0 +1,18 @@
+<Header>
+    <Parent> ../Library
+    <Title> PHPライブラリ
+    <CreatedAt> 2018-4-4
+    <Tags> 
+    <Summary>
+        
+        このページは筆者が作成したPHPのライブラリが公開されます.
+        
+        
+        
+    </Summary>
+    <Child> Debug
+    <Child> CacheManager/CacheManager
+    <Child> Localization/Localization
+    <Child> SearchEngine/SearchEngine
+    <Child> Stopwatch
+</Header>

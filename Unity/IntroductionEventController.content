@@ -1,0 +1,34 @@
+<Header>
+    <Parent> EventController
+    <Title> EventControllerの導入方法
+    <CreatedAt> 2016-12-8
+    <Tags> 
+    <Summary>
+        EventControllerの導入方法を説明します.
+        説明項目は以下のとおりです.
+        
+        * ダウンロード
+        * Unityにインポート
+        
+        
+    </Summary>
+</Header>
+# ダウンロード
+    下記からダウンロードできます.
+
+    <!--[Unity-EventController](https://github.com/ContentsViewer/Unity-EventController/)-->
+    
+    <https://github.com/ContentsViewer/Unity-BasicAssets/tree/master/EventController>
+
+# Unityにインポートします
+    # Unityを起動
+        ![Unity起動](CURRENT_DIR/Images/EventController/Img2.png)
+    
+    # Unityプロジェクト画面内にダウンロードしたフォルダをドラックアンドドロップ
+
+    # Menuバーに'EventControllerEditor'が表示されているか確認
+
+        ![Editor追加](CURRENT_DIR/Images/EventController/Img3.png)
+
+        表示されない場合は'Editor'フォルダ内に'EventControllerEditor.cs'が入っているか確認してください.
+

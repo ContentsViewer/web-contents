@@ -1,0 +1,153 @@
+<Header>
+    <Parent> CLanguage
+    <Title> マクロの機能
+    <CreatedAt> 2018-10-21
+    <Tags> C言語
+    <Summary>
+        C言語には, マクロと呼ばれるものがあります.
+        マクロとは, コンパイル前にある規則に従って文字を置き換える機能を持ちます^[url-1].
+        
+        ここでは, マクロの詳しい機能の説明を行います.
+        
+        
+    </Summary>
+</Header>
+# マクロの種類
+___________________________________________________________
+    マクロには, オブジェクト形式のマクロと関数形式のマクロの二種類があります^[url-1]^[url-2].
+    
+    # オブジェクト形式
+        
+        ```c
+            #define 文字列1 文字列2
+        ```
+        
+        このように指定することで, `文字列1`は`文字列2`に置き換えられます.
+        
+        以下がその例です.
+        
+        ```c
+            #define PortBaseType char
+            
+            #define IDLE_TASK_PRIORITY ((unsigned PortBaseType) 0U)
+            
+            #define LOW_PRIORITY (IDLE_TASK_PRIORITY)
+            
+            int main(){
+                PortBaseType priority = LOW_PRIORITY;
+                
+                return 0;
+            }
+        ```
+        
+        上は以下のように展開されます.
+        
+        ```c
+            
+            int main(){
+             char priority = (((unsigned char) 0U));
+            
+                    return 0;
+            }
+        
+        ```
+        
+        
+        
+    # 関数形式マクロ
+        
+        ```c
+            #define マクロ名(引数) 置き換えられる処理
+        ```
+        
+        このようにすることで, `マクロ名`が`置き換えられる処理`に置き換わります.
+
+        以下がその例です.
+        
+        ```c
+            #define DeclareTaskLoop(name)  extern TaskHandle name;
+        
+        ```
+        
+            ある場所で`DeclareTaskLoop(TaskA)`とすると, 次のように展開されます.
+            
+        ```c
+            extern TaskHandle TaskA;
+        
+        ```
+        
+# 複数行にわたる場合
+___________________________________________
+    マクロを定義するとき, 一行で収まらないときがあります.
+    その場合, 改行したい場所でバックスラッシュ`\`を書くことで行替えが可能です.
+    
+    以下がその例です.
+    
+    ```c
+        #define SuspendTask(name)                         \
+            if((name) != NULL)                            \
+            {                                             \
+                TaskSuspend(name);                        \
+            }
+
+    ```
+    
+# 引数を文字列として置き換えたい
+__________________________________________
+    引数部はそのまま置き換えられます. 例えば次のようなことです.
+    
+    ```c
+        #define Macro(param) Func(param)
+    
+    ```
+    
+    このマクロを定義し, `Macro(ABCDE)`とすると次のように展開されます.
+    
+    ```c
+        Func(ABCDE)
+    
+    ```
+    
+    ここで, ABCDEを文字列として扱いたい場合があります.
+    その場合, 処理部での引数の前に`#`を付けると, 文字列となります.
+    
+    以下がその例です.
+    
+    ```c
+        #define Macro(param) Func(#param)
+    ```
+    
+    先ほどの例で, 次のように置き換わります.
+    
+    ```c
+        Func("ABCDE")
+    ```
+    
+# 引数とマクロ内の文字を連結させたい
+___________________________________________
+
+    引数部とマクロ定義内の文字を連結させたい時があります.
+    例えば, 引数でタスク名(Blink)をもらい, 置き換え部で`Blink_Task`としたい時です.
+    
+    その場合, 連結間に`##`を挟むことで連結できます.
+    
+    以下がその例です.
+    
+    ```c
+        #define CreateTaskLoop(name, priority)                                                              \
+                                                                                                            \
+            TaskCreate(name##_Task, (signed PortChar*) #name, CONFIG_MINIMAL_STACK_SIZE, NULL, priority, &name);\
+
+    ```
+    
+    ある場所で`CreateTask(TaskA)`とすると次のように置き換わります.
+    
+    ```c
+        TaskCreate(TaskA_Task, (signed PortChar*) "TaskA", CONFIG_MINIMAL_STACK_SIZE, NULL, 0, &TaskA);
+    
+    ```
+
+-----------------------------------------------------------
+[url-1]: [C言語のマクロの基本について](http://www.c-lang.org/detail/macro_basic.html)(accessed: 2018/10/21)
+[url-2]: [関数形式マクロ](https://programming-place.net/ProgrammingPlacePlus/c/028.html)(accessed: 2018/10/21)
+

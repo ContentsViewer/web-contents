@@ -1,0 +1,41 @@
+<Header>
+    <Parent> Components
+    <Title> イベント制御'EventController'の紹介
+    <CreatedAt> 2016-12-8
+    <Tags> ライブラリ, C#
+    <Summary>
+        ![EventControllerEditor画面](CURRENT_DIR/Images/EventController/Img1.png)
+        
+        
+        Gameは必ずイベントを含みます. イベントがないGameはほとんどないでしょう.
+        
+        イベント製作時によくあるのが, イベント管理のしにくさと, Debugのしにくさです.
+        イベントを作っていくとどのイベントがどのイベントにどうつながるのかが重要ですが,
+        大量のイベントを作るとどんなイベントがどれほどあるのかが把握しにくくなります.
+        特にスクリプトでイベントを製作している場合はそうでしょう.
+        Debugのしにくさとして, ある特定のイベントをDebugする際そのイベントに到達するのに時間がかかります.
+        そのイベントの前にn個のイベントがあり, そのイベントに対するフラグがm個あり, またそのイベントに到達するのにt時間かかるとするならば,
+        そのイベントのDebugに要する時間は $n \times m \times t$ となります.(n = 6; m = 3; t = 5分とするとDebug時間は90分になります. 非常に長いです)
+        
+        上のような問題を解決するために, 'EventController'を紹介します. EventControllerができるのは次の通りです.
+        
+        * Eventの遷移, 登録を直感的に行えるEditor
+        * Game中現在実行しているEventをお知らせ
+        * パラメータのアクセスは外部スクリプトでも可能
+        * Game実行中パラメータの値はEditor上でも設定可能
+        
+        EventControllerを改良、強化、何でもしてください(;´∀｀)
+        
+        
+        [::WARNING]
+        ============
+            このページで書かれている書かれている内容が実際のスクリプトと異なる可能性があります.
+            
+            このページの内容は2016年に執筆されています.
+        ============
+        
+    </Summary>
+    <Child> IntroductionEventController
+    <Child> UsageEventController
+    <Child> ReferenceEventController
+</Header>

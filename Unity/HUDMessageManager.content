@@ -1,0 +1,115 @@
+<Header>
+    <Parent> Components
+    <Title> HUDMessageManager UI表示のためのコンポーネント
+    <CreatedAt> 2018-8-30
+    <Tags> ライブラリ, UI表示, C#
+    <Summary>
+        Unityでゲーム制作もしくはツール制作においてちょっとしたUIを表示したい時があります.
+        HUDMessageManagerはその時のために製作されたものです.
+        
+        HUDMessageManagerはちょっとしたUIの表示に最適です.
+        特徴は以下のとおりです.
+        
+        * 固定されないUIの表示場所
+        * フェードイン, フェードアウトエフェクト
+        * 表示時間設定
+        
+        <!--このコンポーネントは前身の[HUDMessageManager](CURRENT_DIR/HUDMessageManager)の改良版です.-->
+        
+        Unity 2018.2.5f1で動作確認済みです.
+        
+    </Summary>
+</Header>
+
+[::WARNING]
+============
+    このページで書かれている書かれている内容が実際のスクリプトと異なる可能性があります.
+    
+    もともと, このコンポーネントは`UIMessageManager`でしたが, `HUDMesageManager`に改名されています
+============
+
+# ダウンロード
+_______________________________________
+    <!--[github](https://github.com/ContentsViewer/Unity-UIMessageManager)でダウンロード可能です.-->
+    
+    <https://github.com/ContentsViewer/Unity-BasicAssets/tree/master/UI/HUDMessageManager>
+    
+# 使い方
+_______________________________________
+    # インポート
+        ダウンロードページからダウンロードしたスクリプトをUnityにインポートします.
+        `UIMessageManager`というフォルダをそのままUnityEditorにドラック&ドロップします.
+
+    # CanvasにUIMessageManagerコンポーネントを追加
+        ![CanvasにUIMessageManagerコンポーネントを追加](CURRENT_DIR/Images/UIMessageManager/canvas.png)
+
+    # Textを追加
+        ここでは, CenterとRightを用意してみましょう.
+        またそれぞれに対して, `UIMessageArea`をAddComponentします.
+
+        
+        ![CenterText](CURRENT_DIR/Images/UIMessageManager/center.png)
+
+        
+        ![RightText](CURRENT_DIR/Images/UIMessageManager/right.png)
+
+        このように, 表示したいTextコンポーネントを持つゲームオブジェクトに`UIMessageArea`をAddComponentします.
+        `UIMessageArea`で設定した内容はそこに表示されるメッセージに反映されます.
+
+
+    # 表示用のスクリプトを用意
+
+        ```csharp
+            using System.Collections;
+            using System.Collections.Generic;
+            using UnityEngine;
+            
+            using UIMessageManagement;
+            
+            
+            public class Test : MonoBehaviour
+            {
+                // Messageの作成
+                Message message = new Message("dont override.", "Right");
+            
+            
+                void Start()
+                {
+            
+                }
+            
+                void Update()
+                {
+                    if (Input.GetKeyDown(KeyCode.A))
+                    {
+                        UIMessageManager.Instance.ShowMessage(new Message("Hello world!", "Center"));
+                    }
+            
+                    if (Input.GetKey(KeyCode.S))
+                    {
+                        UIMessageManager.Instance.ShowMessageDontOverride(message);
+                    }
+            
+                }
+            }
+        ```
+
+        `ShowMessage`でMessageを表示します.
+
+
+        `ShowMessageDontOverride`が呼び出されたときに, 画面にそのメッセージが残っている場合は,
+        重複して同一のメッセージを表示しません. メッセージが同じという判断はメッセージのインスタンスで行います.
+        メッセージのインスタンスが異なるときは, 同一のメッセージと判断できません. 
+        そのため, あらかじめメッセージをループ外で作成しています.
+
+    # 実行
+        ![実行画面](CURRENT_DIR/Images/UIMessageManager/exec.png)
+
+        * `A`キーを押すと`Hello world!!`が表示されます. 連打するとその分表示されます.
+        * `S`キーを押すと`dont override`が表示されます. 連打しても一つしか表示されません.
+
+    # その他
+        * 文字の色は, Textコンポーネントの色と連動しています.
+        
+
+

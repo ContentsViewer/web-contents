@@ -1,0 +1,70 @@
+<Header>
+    <Parent> MediaPlayer
+    <Title> MediaPlayerの関数, 変数一覧
+    <CreatedAt> 2016-12-8
+    <Tags> 
+    <Summary>
+        |[関数]
+        |---------------------||--------------------------|
+        | [Begin](#Begin)     || MediaPlayerControllerの開始 |
+        | [Stop](#Stop)       || 音楽停止 |
+        | [Load](#Load)       || 音楽ファイルロード |
+        | [Play](#Play)       || 音楽再生 |
+        
+        
+        |[Enum]
+        |-------------------------||-------------------------------|
+        | [PLAY_MODE](#PLAY_MODE) || プレイモード                   |
+        
+        
+    </Summary>
+</Header>
+# [[Begin]]Begin
+    void Begin(byte stopPin, byte statePin)
+
+    # パラメータ
+        |----||--------|
+        | stopPin || MediaPlayerにサウンド停止命令を送るピン |
+        | statePin || MediaPlayerから送られてくるサウンド再生状態を取得するピン |
+
+    # 説明
+        MediaPlayerControllerを開始します.
+        MediaPlayerControllerを使用する前に一回実行する必要があります.
+
+# [[Stop]]Stop
+    void Stop()
+
+    # 説明
+        音楽を停止します.
+
+
+# [[Load]]Load
+    void Load(char *waveFileName, PLAY_MODE mode)
+
+    # パラメータ
+        |----||--------|
+        | waveFileName || 音楽ファイル名 |
+        | mode || 再生モード |
+
+    # 説明
+        音楽ファイルをロードします.
+        一般に音楽ファイルをロードしてから再生します.
+
+
+# [[Play]]Play
+    void Play()
+
+    # 説明
+        音楽を再生します.
+
+
+# [[PLAY_MODE]]PLAY_MODE
+    # 変数
+        |-------||---------------|
+        | NORMAL || 通常再生 |
+        | LOOP || ループ再生 |
+        | WAIT || 再生待機 |
+
+    # 説明
+        再生待機とは, メロディーが鳴り終わるまでメインプログラムを停止させることです.
+

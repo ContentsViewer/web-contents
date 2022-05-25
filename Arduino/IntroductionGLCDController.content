@@ -1,0 +1,68 @@
+<Header>
+    <Parent> GLCDController
+    <Title> GLCDControllerの導入方法
+    <CreatedAt> 2016-12-8
+    <Tags> 
+    <Summary>
+        ここでは, GLCDControllerの導入方法を説明します.
+        説明項目は以下のとおりです.
+        
+        * ダウンロード
+        * ファイルの説明
+        * インクルード
+        
+    </Summary>
+</Header>
+# ダウンロード
+    下記からダウンロードできます.
+
+    [Arduino-GLCDController](https://github.com/ContentsViewer/Arduino-GLCDController/)
+
+# ファイルの説明
+    # Canvas.h
+        2Dグラフィック操作ライブラリです.
+
+    # CanvasWithUpdateFlag.h
+        Canvas拡張
+        画面更新速度を速めるため, 画面の更新フラグを用意しています.
+
+    # Font.h
+        フォントデータが保存されています.
+
+    # Images.h
+        画像を使用するときに使用します.
+
+    # GLCDController.h
+        GLCDController本体です.
+
+    # GLCDControllerTest.ino
+        GLCDController動作テスト用プログラムです.
+        
+# インクルード
+    プログラムファイル内で'GLCDController.h'をインクルード
+
+    ```cpp
+        #include "GLCDController.h"
+        
+        GLCDController glcdCtrl;
+        
+        void setup(){
+          GLCDController::Param param;
+          param.pinRS = 13;
+          param.pinRW = 12;
+          param.pinE = 11;
+          param.pinCS1 = 14;
+          param.pinCS2 = 15;
+          param.pinRST = 10;
+        
+          param.sizeX = 128;
+          param.sizeY = 64;
+          
+          //グラフィックディスプレイを使う前に必ずする
+          glcdCtrl.Begin(param);
+        }
+        
+        
+        void loop() {
+        }
+    ```

@@ -1,0 +1,10 @@
+<Header>
+    <Parent> ../OutlineText
+    <Title> 仕組み
+    <CreatedAt> 2019-11-23
+    <Tags> 
+    <Summary>
+        OutlineTextの仕組み
+    </Summary>
+    <Child> Parser
+</Header>

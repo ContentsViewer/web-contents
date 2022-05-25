@@ -1,0 +1,33 @@
+<Header>
+    <Parent> Cpp
+    <Title> C++でC#のようなStringを使いたい
+    <CreatedAt> 2016-3-3
+    <Tags> ライブラリ, 文字列処理, Cpp
+    <Summary>
+        C#からC++に入った人もいるでしょう.
+        その時C#で大変よく使っていたStringが恋しい場合があります.
+        C++を書きつつC#を感じたい時があります.
+        
+        上の問題を解決する方法でここで紹介するStringがあります.
+        このStringで用意されている関数名はほぼC#と一致します.
+        
+        C#で非常に便利だったSplit関数も用意されています.
+        
+        また, 文字列探索において一番高速とされるBM法を用いています.
+        
+        Stringを強化, 改良何でもしてください. ( ｀ー´)ノ
+        
+        <h2>注意:</h2>
+        <p class="FirstParagraph">
+            C#のStringを使ったことがない方は, これをお勧めすることはできません.
+            これと同様かそれ以上の機能を持つC++のstringをお使いください.
+            C++ですでに用意されています.
+        </p>
+        
+    </Summary>
+    <Child> StringIntroduction
+    <Child> StringUsage
+    <Child> StringReference
+</Header>
+
+

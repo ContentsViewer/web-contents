@@ -1,0 +1,17 @@
+<Header>
+    <Parent> ../Root
+    <Title> ShellScript
+    <CreatedAt> 2019-04-26
+    <Tags> ShellScript
+    <Summary>
+        ここでは, プログラミング言語'ShellScript'について書かれます.
+    </Summary>
+    <Child> Setup
+    <Child> Snippet/Snippet
+    <Child> parameter/parameter
+    <Child> ANSI-Codes/ANSI-Codes
+    <Child> SendMail
+    <Child> Library/Library
+    <Child> Apps/Apps
+    <Child> Books/Books
+</Header>

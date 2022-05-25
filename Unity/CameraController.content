@@ -1,0 +1,31 @@
+<Header>
+    <Parent> Components
+    <Title> カメラ制御'CameraController'の紹介
+    <CreatedAt> 2016-12-8
+    <Tags> ライブラリ, C#
+    <Summary>
+        
+        
+        CameraControllerとはCameraを制御するものです。これは次のことができます。
+        
+        * 一人称,三人称カメラの切り替え
+        * カメラ移動の線形補間,曲線補間
+        * コライダーを自動で避けるAutoAvoidCollider機能
+        * 任意の場所にカメラ位置を設定可能
+        * 任意の方向にカメラを向けることが可能
+        
+        上の機能が一つのカメラで実現できるためカメラ管理がしやすくなります。
+        
+        CameraControllerを改良、強化、何でもしてください(;´∀｀)
+        
+        [::WARNING]
+        ============
+            このページで書かれている書かれている内容が実際のスクリプトと異なる可能性があります.
+            
+            このページの内容は2016年に執筆されています.
+        ============
+    </Summary>
+    <Child> IntroductionCameraController
+    <Child> UsageCameraController
+    <Child> ReferenceCameraController
+</Header>

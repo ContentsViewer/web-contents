@@ -1,0 +1,239 @@
+<Header>
+    <Parent> List
+    <Title> Listの関数一覧
+    <CreatedAt> 2018-12-15
+    <Tags> 
+    <Summary>
+        Listが持つ関数は以下のとおりです.
+        
+        |-------------------||---------------------------------------------------------|
+        | [List](#List)     || コンストラクタ                                           |
+        | [Count](#Count)   || 要素数を取得                                              |
+        | [Capacity](#Capacity) || 容量を取得                                           |
+        | [SetCapacity](#SetCapacity) || 容量を設定                                     |
+        | [Array](#Array)             || 内部配列先頭アドレス取得                        |
+        | [Add](#Add)                 || List末尾に要素追加                             |
+        | [Insert](#Insert)           || 指定した位置に要素挿入                          |
+        | [IndexOf](#IndexOf)         || 指定されたオブジェクトの位置                     |
+        | [LastIndexOf](#LastIndexOf) || 最後から検索して最初に見つかったオブジェクトの位置 |
+        | [CopyTo](#CopyTo)           || 配列にコピー                                    |
+        | [RemoveAt](#RemoveAt)       || 指定した位置を削除                              |
+        | [Clear](#Clear)             || 要素をゼロ                                     |
+        | [Sort](#Sort)               || 並び替え                                       |
+        | [Trim](#Trim)               || 容量を要素数に設定                              |
+        | [CopyFrom](#CopyFrom)       || 指定されたListからコピー                        |
+        | [MoveFrom](#MoveFrom)       || 指定された配列そのものをListに差し替え           |
+        
+        筆者がこのListを作る際, [C#のListリファレンス(accessed: 2.1.2017)](https://msdn.microsoft.com/ja-jp/library/6sh2ey19.aspx)
+        を参考にしました. 関数名はほとんど同じにしています.
+        
+        
+        
+    </Summary>
+</Header>
+# [[List]]List
+    List() <br/>
+    List(int capacity)
+
+    # パラメータ
+
+        |------||---------|
+        | capacity || 設定したい容量数 |
+
+    # 説明
+        コンストラクタです. 容量を設定することができます.
+        要素数がかなり必要なことを知っている場合は, ここで多めに容量を設定することで処理速度が速くなる可能性があります.
+
+
+# [[Count]]Count
+    int Count() 
+
+    # 返り値
+        要素数
+
+    # 説明
+        要素数を取得します. カッコを忘れないように注意してください.
+
+
+# [[Capacity]]Capacity
+    int Capacity() 
+
+    # 返り値
+        容量数
+
+    # 説明
+        容量数を取得します. カッコを忘れないように注意してください.
+            
+
+# [[SetCapacity]]SetCapacity
+    void SetCapacity(int capacity)
+
+    # パラメータ
+        |------||---------|
+        | capacity || 設定したい容量数 |
+
+    # 説明
+        容量数を設定します. 現在の要素数を下回ってはいけません.
+
+
+# [[Array]]Array
+    TYPE* Array()
+
+    # 返り値
+        内部配列のポインタ
+
+    # 説明
+        内部配列のポインタを返します. C/C++言語で用意されている関数との互換性を高めます.
+
+
+# [[Add]]Add
+    void Add(TYPE item)
+
+    # パラメータ
+        |------||---------|
+        | item || 追加したい要素 |
+
+    # 説明
+        Listの末尾に要素を追加します.
+
+
+# [[Insert]]Insert
+    void Insert(int index, TYPE item)
+
+    # パラメータ
+        |------||---------|
+        | index || 挿入したい場所 |
+        | item || 挿入したい要素 |
+
+    # 説明
+        指定した位置に要素を挿入します.
+
+
+# [[IndexOf]]IndexOf
+    int IndexOf(TYPE item)
+
+    # パラメータ
+        |------||---------|
+        | item || 検索したいしたいオブジェクト |
+
+    # 返り値
+        最初に見つかったオブジェクトのインデックスを返します.
+        見つからない場合は-1を返します.
+
+    # 説明
+        item 全体を対象に List<T> を検索し、見つかった場合は、
+        インデックス番号の最も小さい要素の 0 から始まるインデックス番号、それ以外の場合は –1.
+
+
+# [[LastIndexOf]]LastIndexOf
+    int LastIndexOf(TYPE item)
+
+    # パラメータ
+        |------||---------|
+        | item || 検索したいしたいオブジェクト |
+
+    # 返り値
+        最後に見つかったオブジェクトのインデックスを返します.
+        見つからない場合は-1を返します.
+
+    # 説明
+        item 全体を対象に List<T> を検索し、
+        見つかった場合は、インデックス番号の最も大きい要素の 0 から始まるインデックス番号、それ以外の場合は –1.
+
+
+# [[CopyTo]]CopyTo
+    void CopyTo(int index, TYPE *array, int arrayIndex, int count)
+
+    # パラメータ
+        |------||---------|
+        | index || Listのコピー開始位置 |
+        | array || コピー先配列ポインタ |
+        | arrayIndex || コピーを始める位置 |
+        | count || コピー数 |
+
+    # 説明
+        配列にコピーします. あらかじめ配列用のメモリを確保する必要があります.
+
+
+# [[RemoveAt]]RemoveAt
+    void RemoveAt(int index)
+
+    # パラメータ
+        |------||---------|
+        | index || 削除したい場所 |
+
+    # 説明
+        指定された位置の要素を削除します.
+
+
+# [[Remove]]Remove
+    void Remove(TYPE item)
+
+    # パラメータ
+        |------||---------|
+        | item || 削除したいアイテム |
+
+    # 返り値
+        成功した場合は, true. 失敗したときは, false.
+
+    # 説明
+        指定されたオブジェクトを削除します.
+        Listの先頭から検索し初めに見つかった要素を削除します.
+
+
+# [[Clear]]Clear
+    void Clear()
+
+    # 説明
+        要素数をゼロにします.
+
+
+# [[Sort]]Sort
+    void Sort(int(*comparison)(TYPE, TYPE))
+
+    # パラメータ
+        |------||---------|
+        | comparison || 比較のための関数 |
+
+    # 説明
+        List内を並び替えます. Comparisonについての詳しい説明は
+        [Sortについて](CURRENT_CONTENT_DIR/ListUsage#Sort)を参考にしてください
+
+
+
+# [[Trim]]Trim
+    void Trim()
+
+    # 説明
+        容量を要素数に設定します. 使われていないメモリが解放されます.
+
+
+
+# [[CopyFrom]]CopyFrom
+    void CopyFrom(const List &from)
+
+    # パラメータ
+        |------||---------|
+        | from || コピー元 |
+
+    # 説明
+        指定されたListからコピーします. 一般の代入演算子で使用されます.
+
+
+
+
+# [[MoveFrom]]MoveFrom
+    void MoveFrom(TYPE *from, int size)
+
+    # パラメータ
+        |------||---------|
+        | from || コピー元の配列 |
+        | size || 配列のサイズ |
+
+    # 説明
+        指定された配列をListの内部配列に持っていきます.
+        sizeは必ず確保されているメモリ数に設定してください.
+        確保された配列があるスコープ内でnewされた場合, そのスコープ外に処理が出るとその配列のメモリが解放されてしまいます.
+        それ以降, listは正しく動作しません.
+        使用は推奨されません. これは一部の処理を高速化するためにあるものです.
+

@@ -1,0 +1,157 @@
+<Header>
+    <Parent> ArduinOS
+    <Title> ファイル構成
+    <CreatedAt> 2017-7-11
+    <Tags> 
+    <Summary>
+        ここでは, 今回のOS製作で新しく作られるファイルの説明を行います.
+    </Summary>
+</Header>
+
+# 作成するファイル
+    今回のOSで作成するファイルの一覧は次のとおりです.
+    これらファイルはすべて作業フォルダ内の"ArduinOS"フォルダに作成します.
+
+    * ArduinOS.h
+    * ProjDefs.h
+    * ArduinOSConfig.h
+    * ArduinOSConfig328P.h
+    * ArduinOSConfig2560.h
+    * Portable.h
+    * PortMacro.h
+    * Port.c
+    * Task.h
+    * Task.c
+    * List.h
+    * List.c
+    * Semaphore.h
+    * Queue.h
+    * Queue.c
+    * Heap4.c
+    * StackMacros.h
+
+
+    以下から, これらファイルの簡単な説明をしていきます.
+
+    # ArduinOS.h
+        OSのメインヘッダです.
+        これをインクルードすることで, OSのすべての機能が使用できます.
+
+    # ProjDefs.h
+        共通してある関数の戻り値, タスクコードの型が定義されています.
+
+    # ArduinOSConfig.h
+        OSの設定ファイルです.
+        マイコン全般に関する設定がされています.
+        ここから, 各マイコンごとの設定ファイルへ分岐します.
+
+    # ArduinOSConfig328P.h
+        ATmega328P用の設定ファイルです.
+
+    # ArduinOSConfig2560.h
+        ATmega2560用の設定ファイルです.
+
+    # Portable.h
+        メモリ管理に関する関数が宣言されています.
+        メモリの管理方法, マイコンの構造の違いをここで吸収します
+        (ただ今回扱うマイコンはAVRマイコン一種のみなのであまり効果はありませんが, 今後のためになるかもしれません).
+
+    # PortMacro.h
+        各種型の定義, OSのコア部分が使用する関数が宣言されています.
+        マイコンの構造の違いをここで吸収します
+        (ただ今回扱うマイコンはAVRマイコン一種のみなのであまり効果はありませんが, 今後のためになるかもしれません).
+
+    # Port.c
+        PortMacro.hで宣言されているOSコア部分の関数をここで定義します.
+        このファイルはAVRマイコン専用です.
+
+    # Task.h / Task.c
+        タスク管理の宣言とその定義がされています.
+
+    # List.h / List.c
+        タスクの状態リストで使用するための連結リストの宣言とその定義がされています.
+
+    # Semaphore.h
+        セマフォ, ミューテックスの関数が実装されています.
+        内部ではQueueの機能を使用しています.
+
+    # Queue.h / Queue.c
+        セマフォ, ミューテックスで使用するための待ち行列の宣言と定義がされています.
+
+    # Heap4.c
+        Portable.hで宣言されているメモリ管理に関する関数の定義がされています.
+
+    # StackMacros.h
+        スタックオーバーフロー検知のための関数が実装されています.
+
+# Include関係
+    各ファイルの関係を明らかにするためIncludeの関係を示します.
+    示し方として, コンパイルされるファイル(cファイル, cppファイル)を根とした木構造で示していきます.
+
+    [コンパイル]
+    =============================================================================
+
+        ArduinoIDEにおいて, コンパイラはスケッチファイル(.ino)の他に,
+        コアフォルダ(通常ならばcores/arduino, 今回のOS製作ではcores/arduino.MageOSになります)
+        内にあるcファイルもしくはcppファイルをそれぞれコンパイルします.
+    
+    =============================================================================
+
+    # main.cpp
+        + main.cpp
+            + Arduino.h
+                + ArduinOS.h
+                    + ProjDefs.h
+                    + ArduinOSConfig.h
+                        + ArduinOSConfig328P.h
+                        + ArduinOSConfig2560.h
+                    + Portable.h
+                        + PortMacro.h
+                    + Task.h
+                        + Portable.h
+                            + (略)
+                        + List.h
+                    + Semaphore.h
+                        + Queue.h
+
+
+    # Heap4.c
+        + Heap4.c
+            + ArduinOS.h
+                + (略)
+            + Task.h
+                + (略)
+
+
+    # Task.c
+        + Task.c
+            + ArduinOS.h
+                + (略)
+            + Task.h
+                + (略)
+            + StackMacros.h
+
+
+
+    # List.c
+        + List.c
+            + ArduinOS.h
+                + (略)
+            + List.h
+
+    # Port.c
+        + Port.c
+            + ArduinOS.h
+                + (略)
+            + Task.h
+                + (略)
+            + wiring-private.h: これはすでに作業用フォルダにあるはずです.
+
+
+    # Queue.c
+        + Queue.c
+            + ArduinOS.h
+                + (略)
+            + Task.h
+                + (略)
+            + Queue.h

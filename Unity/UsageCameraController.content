@@ -1,0 +1,157 @@
+<Header>
+    <Parent> CameraController
+    <Title> CameraControllerの使い方
+    <CreatedAt> 2016-12-8
+    <Tags> 
+    <Summary>
+        ここでは, CameraControllerの基本的な使い方を説明します.
+        説明項目は以下のとおりです.
+        
+        * パラメータの説明
+        * タイプの説明
+        
+        
+    </Summary>
+</Header>
+# パラメータの説明
+    ![パラメータ](CURRENT_DIR/Images/CameraController/Img3.png)
+
+    # attacheObjectPlayer
+        一人称モード(PlayerMode)のときに参照されるオブジェクト名です。
+
+    # attacheObjectObserver
+        三人称モード(ObserverMode)のときに参照されるオブジェクト名です。
+
+    # layerMaskCollider
+        コライダー判定で使われます。<br/>
+        ここでチェックをつけたレイヤーのコライダーが検知されます。チェックをしなかったものは無視されます。
+
+    # distanceFromCollider
+        コライダーに衝突したときコライダーととる距離です。小さすぎると壁を抜ける可能性があります。
+
+    # escapeFromTrap
+        本来の位置と現在の位置の最大距離。<br/>
+        本来の位置と現在の位置の距離がこの値を上回るとカメラは強制的に壁抜けをして本来の位置に戻ります。
+        壁と壁の隙間に挟まってカメラが本来の位置に帰れなくなったときなどに有効です。
+
+    # autoAvoidCollider
+        チェックをつけるとカメラは自動でコライダーを避けます。
+
+    # positionType
+        カメラの位置設定
+
+        # PLAYER
+            AttacheObjectPlayerで設定されたGameObjectの位置にカメラが移動します。
+
+        # OBSERVER
+            AttacheObjectObserverで設定されたGameObjectの位置にカメラが移動します。
+
+        # STATION
+            StationObjectで設定されたGameObjectの位置にカメラが移動します。
+
+        # CUSTUM
+            CameraPositionで設定された位置にカメラが移動します。
+ 
+    # rotationType
+        カメラの方向設定
+
+        # PLAYER
+            AttacheObjectPlayerで設定されたGameObjectのforward方向にカメラが向きます。
+
+        # OBSERVER
+            AttacheObjectObserverで設定されたGameObjectのforward方向にカメラが向きます。
+
+        # STATION
+            StationObjectで設定されたGameObjectのforward方向にカメラが向きます。
+        
+        # CUSTUM
+            CameraPositionで設定された方向にカメラが向きます。
+
+        # GAZE
+            TargetGameObjectGazeで設定されたGameObjectの方向にカメラが向きます。
+
+    # homingTypePosition
+        カメラの位置移動の際の補間設定
+
+        # DIRECT
+            カメラが現在の位置からある位置へ移動するとき直接その位置へ移動します。
+
+        # LERP
+            カメラが現在の位置からある位置へ移動するときその間が線形補完されます。
+        
+        # SLERP
+            カメラが現在の位置からある位置へ移動するときその間が曲線補完されます。
+
+    # homingTypeRotation
+        カメラの方向移動の際の補間設定
+
+        # DIRECT
+            カメラが現在の方向からある方向へ向くとき直接その方向へ向きます。
+
+        # LERP
+            カメラが現在の方向からある方向へ向くときその間が線形補完されます。
+
+        # SLERP
+            カメラが現在の方向からある方向へ向くときその間が曲線補完されます。
+
+    # homingPosition
+        HomingTypePositionでLERP,SLERPが設定されているときに参照される補間値です。<br/>
+        この値が大きいほど迅速に指定した位置にカメラが移動します。
+
+    # homingRotation
+        HomingTypeDirectionでLERP,SLERPが設定されているときに参照される補間値です。<br/>
+        この値が大きいほど迅速に指定した方向にカメラが向きます。
+
+    # station
+        StationModeのときに参照されるGameObject。
+
+    # target
+        AutoAvoidColliderが有効のときに参照されるGameObjet。<br/>
+        このGameObjectがカメラの視野に入るようにカメラが移動します。
+
+    # gazeAt
+        GazeModeのときに参照されるGameObject。
+
+    # cameraRoatation
+        CustumModeのときに参照される方向ベクトル。
+
+    # cameraPosition
+        CustumModeのときに参照される位置ベクトル。
+
+# タイプの説明
+
+    # 概要
+        ここではこのCameraFollowで使われているタイプ―PLAYER, OBSERVER, STATIONなど―を説明します.
+        主にどういうときに使うのかを説明します. 用途に分けて説明します.
+
+    # 一人称ゲーム
+        * positionType = PLAYER
+        * rotationType = PLAYER
+
+        FPSなどにむいています.<br />
+        キャラクターの目の位置に新しくGameObjectを作成しその名前を'attacheObjectPlayer'に入力してください.
+
+    # 三人称ゲーム(Playerに追従)
+        * positionType = OBSERVER
+        * rotationType = OBSERVER
+
+        
+        主人公がゲーム画面に映るようなゲームにむいています.<br />
+        キャラクターのGameObjectの下にCameraPoint―カメラの位置―としてGameObjectを作成しその名前を'attacheObjectObserver'に入力してください.
+
+    # 三人称ゲーム(定点カメラ)
+        * positionType = STATION
+        * rotationType = STATION; GAZE
+        
+        定点カメラを用いたゲーム―初代バイオハザードのようなゲーム―で使用するとよいでしょう. <br />
+        カメラを設置したい位置にあたしくGameObjectを作成し'station'に登録してください.<br />
+        rotationTypeをGAZEに設定しGazeAtにPlayerを設定すると, 常にPlayerを向くようにカメラが回転します.
+        主人公の位置に基づいて定点カメラを切り替えるためのスクリプトを新たに作成する必要があります.
+    
+    # アニメーション
+        * positionType = STATION
+        * rotationType = STATION
+        
+        ゲーム中でイベントが開始した際のカメラワークで使用するとよいでしょう.<br />
+        UnityのAnimationを用いてあるGameObjectを移動させ, そのObjectをStationに設定します.<br />
+        こうすることでイベント実行時カメラはそのObjectの動きに従います.

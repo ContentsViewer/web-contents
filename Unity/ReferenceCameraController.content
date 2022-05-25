@@ -1,0 +1,23 @@
+<Header>
+    <Parent> CameraController
+    <Title> CameraController関数一覧
+    <CreatedAt> 2016-12-8
+    <Tags> 
+    <Summary>
+        |[関数]
+        |---------||-------------------------|
+        | [SetCamera](#SetCamera) || カメラのパラメータ設定 |
+        
+        
+        
+    </Summary>
+</Header>
+# [[SetCamera]]SetCamera
+    public void SetCamera(Param cameraPara)
+
+    # パラメータ
+        |------||------------|
+        | cameraPara || カメラのパラメータ |
+
+    # 説明
+        カメラのパラメータを設定します

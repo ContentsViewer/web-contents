@@ -1,0 +1,10 @@
+<Header>
+    <Parent> ../Root
+    <Title> WSL
+    <CreatedAt> 2020-08-15
+    <Tags> WSL, Linux, Windows
+    <Summary>
+        このセクションでは, Windows Subsystem for Linux について書かれます   
+    </Summary>
+    <Child> Tips/Tips
+</Header>

@@ -1,0 +1,65 @@
+<Header>
+    <Parent> Scripting
+    <Title> Port.c
+    <CreatedAt> 2020-05-25
+    <Tags> C言語, 編集中
+    <Summary>
+        PortMacro.hで宣言されているOSコア部分の関数をここで定義します. 
+        このファイルはAVRマイコン専用です.
+        
+    </Summary>
+</Header>
+# 機能
+
+# include 関係
+    + Port.c
+        + ArduinOS.h
+            + (略)
+        + Task.h
+            + (略)
+        + wiring-private.h
+
+# スクリプトQA
+    
+    # `__attribute__((__always_inline__))`
+        コンパイラにインライン関数であることを強制する.
+        
+        対象箇所:
+            ```c
+                inline void PortSaveContext(void) __attribute__((__always_inline__));
+                
+                // ...
+                
+                inline void PortRestoreContext(void) __attribute__((__always_inline__));
+            ```
+        
+        参考:
+            "[6.45 An Inline Function is As Fast As a Macro](http://gcc.gnu.org/onlinedocs/gcc/Inline.html)". \
+            Using the GNU Compiler Collection (GCC). accessed at 2020-05-25
+            
+        
+    # `__attribute__((naked))`
+        コンパイラにアセンブリが含まれた関数であることを伝える.
+        
+        対象箇所:
+            ```c
+                void PortYield(void) __attribute__((naked));
+                
+                // ...
+                
+                void PortYieldFromTick(void) __attribute__((naked));
+            ```
+        
+        
+        参考:
+            "[__attribute__((naked)) function attribute](http://www.keil.com/support/man/docs/armclang_ref/armclang_ref_jhg1476893564298.htm)". \
+            armKEIL. accessed at 2020-05-25
+
+# 参照
+    # コンテキスト
+        
+        * [../TaskContext]
+    
+    # システム割込み
+    
+        * [../TaskTick]

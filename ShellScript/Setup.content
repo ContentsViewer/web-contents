@@ -1,0 +1,144 @@
+<Header>
+    <Parent> ShellScript
+    <Title> Shell環境セットアップ(WSL含む)
+    <CreatedAt> 2019-06-25
+    <Tags> WSL
+    <Summary>
+        shell環境における開発をするためには,まずその開発環境を整える必要があります.
+        本稿では,開発環境を整えるスクリプトを公開します.
+        
+        本稿で上げるスクリプトは,WSL(Windows Subsystem For Linux)上でのセットアップにも対応させています.
+        
+        
+    </Summary>
+</Header>
+
+# ねらい
+    * Shellはどこでもある
+    * 環境の構築に時間をとられたくない
+    * きちんと入れて,後々エラー出したくない
+    
+# 手順
+_____________
+    Github: <https://github.com/ContentsViewer/sh-setup>
+    
+    ```shell
+        # ダウンロード
+        $ git clone https://github.com/ContentsViewer/sh-setup.git
+        
+        # フォルダ移動
+        $ cd sh-setup
+        
+        # 実行権限の付与
+        $ chmod 755 setup.sh
+        
+        # セットアップ開始!
+        $ ./setup.sh
+    ```
+    
+    WSLでのセットアップでは,引数`--wsl`を加えます.
+    
+    ```bash
+        $ ./setup.sh --wsl
+    ```
+
+    [WSL2でGUIを利用する場合]
+    =============
+        本setup完了後, `bashrc`に書かれている以下の内容を,
+        
+        ```shell
+
+            # xfce4 setting. written by setup.sh
+            export DISPLAY=:0.0 # if you use wsl1, activate this line.
+            # export DISPLAY=$(cat /etc/resolv.conf | grep nameserver | awk '{print $2}'):0.0 # if you use wsl2, activate this line.
+            export LIBGL_ALWAYS_INDIRECT=0
+        
+        ```
+        
+        このように書き換えてください.
+        
+    
+        ```shell
+
+            # xfce4 setting. written by setup.sh
+            # export DISPLAY=:0.0 # if you use wsl1, activate this line.
+            export DISPLAY=$(cat /etc/resolv.conf | grep nameserver | awk '{print $2}'):0.0 # if you use wsl2, activate this line.
+            export LIBGL_ALWAYS_INDIRECT=0
+        
+        ```
+        
+        ここの自動化は, まだできていません...
+    =============
+    
+# セットアップでくわえられるもの
+______________
+    本セットアップで追加される機能は以下のとおりです.
+    
+    # build-essential
+    # vim
+    # git
+    # tree
+    # tmux
+        同時に,`.tmux.conf`にも追加設定を行います.
+        追加設定されるのは以下のとおりです.
+        
+        * マウス操作
+        * スクロール
+
+    # htop
+    # fzf
+    # python-dev
+    # pyenv
+    <!--
+        pyenv を使わないと, pythonのバージョン管理ができないが, 
+        pyenv を入れることによるエラーの対処がめんどくさい.
+    -->
+    # pip
+    # pipenv
+    <!--# trash-cli-->
+    # zsh
+        本セットアップでは,シェルをbashからzshには変更しません.
+        
+        以下のコマンドを打つことで,zshを起動できます.
+        
+        ```bash
+            zsh
+        ```
+    
+    ---
+    
+    以下からは`wsl`オプションを追加したときに追加されます.
+    
+    # xfce4-termianl
+    # xfce4
+        wslでのGUI環境が導入されます.
+        ただし,windowsがわにXクライアントを別にインストールする必要があります.
+        よく使われるものに'VcXsrv','X410'があります.
+        
+        GUI環境の起動は,ターミナル上に以下のコマンドを打つと起動します.
+        
+        ```bash
+            startxfce4
+        ```
+    # font
+        windows側のフォントをlinux側にインストールします.
+        
+    # fcitx
+        GUI環境上での日本語入力を可能にします．
+        
+        # 手順
+            1. Fcitxを起動します．
+                GUI画面右上から`Applications` -> `System` -> `Fcitx`と順にクリックします．
+            
+            2. Fcitx の入力方法にMozcを加えます．
+                1. GUI画面右上から`Applications` -> `Settings` -> `Fcitx Configuration` と順にクリックします．
+                
+                2. 左下の「+」ボタンをクリック
+                    ![入力方法の追加](CURRENT_DIR/Images/fcitx-add-mozc.jpg)
+                
+                3. 検索欄に「mozc」を入力し，「OK」をクリック
+                    ![mozcの追加](CURRENT_DIR/Images/input-mozc.jpg)
+            
+            3. `CTRL + SPACE`で入力が切り替わります．
+    
+

@@ -1,0 +1,50 @@
+<Header>
+    <Parent> Controller
+    <Title> Controllerの導入方法
+    <CreatedAt> 2016-12-8
+    <Tags> 
+    <Summary>
+        Controllerの導入方法を説明します.
+        説明項目は以下のとおりです.
+        
+        * ダウンロード
+        * ファイルの説明
+        * インクルード
+        * コントローラの使用開始
+        
+    </Summary>
+</Header>
+
+# ダウンロード
+    下記からダウンロードが可能です.
+
+    [Arduino-Controller](https://github.com/ContentsViewer/Arduino-Controller/)
+    
+# ファイルの説明
+    # Controller.h
+        Controller本体です.
+
+    # ControllerTest.ino
+        Controller動作テスト用プログラムです.
+        
+# コントローラの使用開始
+    コントローラの機能を使用する前に, Begin関数を呼ぶ必要があります.
+    
+    <pre class="brush: cpp;">
+#include "Controller.h"
+
+Controller ctrl;
+
+void setup() {
+
+  ctrl.Begin(0, 4, DEFAULT);
+}
+
+void loop() {
+
+}
+	</pre>
+    
+    ここでctrl.Begin(0, 4, DEFAULT)というのは、
+    4つのスイッチ情報を0番ピンで取得し、アナログの基準電圧設定をDEFAULTにするという意味です。
+    

@@ -1,0 +1,10 @@
+<Header>
+    <Parent> ../ROS2
+    <Title> Tips
+    <CreatedAt> 2020-08-30
+    <Tags> 
+    <Summary>
+        豆知識
+    </Summary>
+    <Child> with-pipenv/with-pipenv
+</Header>

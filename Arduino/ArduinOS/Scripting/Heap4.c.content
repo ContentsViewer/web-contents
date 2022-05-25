@@ -1,0 +1,26 @@
+<Header>
+    <Parent> Scripting
+    <Title> Heap4.c
+    <CreatedAt> 2020-05-26
+    <Tags> 編集中
+    <Summary>
+        各タスクごとに割り当てられるメモリの管理
+        
+    </Summary>
+</Header>
+# 機能
+    各タスクごとに割り当てられるメモリを管理します.
+    
+# include関係
+    # Heap4.c
+        + Heap4.c
+            + ArduinOS.h
+                + (略)
+            + Task.h
+                + (略)
+
+# スクリプトQA
+
+# 参照
+    # メモリ管理
+        * [../MemoryManagement]

@@ -1,0 +1,90 @@
+<Header>
+    <Parent> ../App
+    <Title> 製作ゲーム一覧
+    <CreatedAt> 2019-04-09
+    <Tags> ゲーム, 製作
+    <Summary>
+        私が製作に携わったゲームを紹介します.
+    </Summary>
+</Header>
+# Prototype-CUBE
+    
+    ![](CURRENT_DIR/Images/Prototype-CUBE.jpg)
+    
+    内容: 
+        弾と剣を駆使してステージの奥に突き進む.
+        3D弾幕アクションゲーム.
+        
+        
+    販売URL: 
+        [Steam](https://store.steampowered.com/app/1065930/PrototypeCUBE/)
+        
+    リリース日: 
+        2019/5/22
+    
+    対応ハード: 
+        * Windows7 以上
+        
+    開発プラットフォーム:
+        * Unity
+        
+    感想:
+        シェーダを頑張った.
+        
+        
+# PhotismAR
+
+    ![](CURRENT_DIR/Images/PhotismAR.jpg)
+    
+    内容:
+        Apple のAR機能を使った, 体験型ARホラーゲーム
+        
+    販売URL:
+        [Apple Store](https://itunes.apple.com/jp/app/photism-ar/id1390934937?mt=8)
+        
+    リリース日:
+        2018/5/1
+        
+    対応ハード:
+        * iOS 11.3以降
+        
+    開発プラットフォーム:
+        * Unity
+    
+    感想:
+        AR技術に触れられた.
+        
+        まだ垂直平面認識が公式で実装されていないときに, 実装した.
+        
+        
+
+# カンソク者
+    ![](CURRENT_DIR/Images/Observer.jpg)
+
+    内容:
+        Unityちゃんが主体だが視点は別のTPSホラーゲーム
+        
+    販売URL:
+        [DLsite](https://www.dlsite.com/maniax/work/=/product_id/RJ183331.html)
+        
+    リリース日:
+        2016/8/20
+        
+    対応ハード:
+        * windows7
+        
+    開発プラットフォーム:
+        * Unity
+        
+    感想:
+        初Unity, 初C#.
+        
+        ゲーム作りでオブジェクト指向プログラミングの勉強になった.
+        
+        このゲームで実際に使用されたコンポーネント
+        
+        * [CameraController](ROOT_URI/Master/Unity/CameraController)
+        * [EventController](ROOT_URI/Master/Unity/EventController)
+        * [LanguagePackManager](ROOT_URI/Master/Unity/LanguagePackManager)
+        * [HUDMessageManager](ROOT_URI/Master/Unity/HUDMessageManager)
+        

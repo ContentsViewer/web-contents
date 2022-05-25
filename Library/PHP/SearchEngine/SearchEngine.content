@@ -1,0 +1,108 @@
+<Header>
+    <Parent> ../PHP
+    <Title> PHPで動くあいまい検索エンジン
+    <CreatedAt> 2020-05-06
+    <Tags> 検索エンジン, あいまい検索, PHP, ライブラリ, ダウンロード
+    <Summary>
+        データベースを使わないで, あいまい検索を実現するPHPライブラリ
+    </Summary>
+</Header>
+# はじめに
+    PHPでアプリケーションを作成しているとき, 特に文章の管理や表示を扱うアプリケーションでは,
+    文章の検索機能が欲しくなります. また, ユーザは検索したいキーワードがあいまいで, 
+    完全一致でヒットすることはまれだと思われます.
+    
+    本稿では, //PHPで動作するあいまい検索エンジン//を紹介します.
+    
+    実装にあたり, 以下のページを参考にしました.
+    
+    * [検索エンジンはいかにして動くのか？. 技術評論社. (accessed: 2020-5-6)](https://gihyo.jp/dev/serial/01/search-engine/0001)
+    
+    また本エンジンは, データベース(MySQLなど)を使用しません.
+
+
+# 使い方
+    検索エンジンでは, Indexに登録する//Indexer//と, 
+    Indexからqueryに基づいて検索する//Searcher//で構成されています^[mechanism].
+    
+    Indexに登録する方法と, 検索する方法を説明します.
+    
+    # Indexに登録する方法
+        `SearchEngine.php`を読み込みます.
+        
+        ```php
+            require_once("SearchEngine.php");
+        ```
+        
+        indexファイルを読み込みます.
+        
+        ```php
+            $index = new SearchEngine\Index();
+            $index = $index->Load('.index');
+        ```
+        
+        indexに登録します. 
+        第一引数は, 対象のインデックス. 
+        第二引数は, id. 
+        第三引数は, 検索対象文字列です.
+        
+        ```php
+            SearchEngine\Indexer::RegistIndex($index, 'tokyo-weather', '東京の天気');
+        ```
+        
+        indexファイルに変更を反映します.
+        
+        ```php
+            $index->Apply('.index');
+        ```
+        
+    # 検索する方法
+        `SearchEngine.php`を読み込みます.
+        
+        ```php
+            require_once("SearchEngine.php");
+        ```
+        
+        indexファイルを読み込みます.
+        
+        ```php
+            $index = new SearchEngine\Index();
+            $index = $index->Load('.index');
+        ```
+        
+        検索します.
+        
+        ```php
+            $suggestions = SearchEngine\Searcher::Search($index, '東京 天気');
+        ```
+        
+        `$suggestions`は, ヒットしたidとそのスコアが格納されています.
+        
+        ```php
+            [
+                ['id' => 'tokyo-weather', 'score' => 0.8],
+                ...
+            ]
+        ```
+        
+        
+# ダウンロード
+    以下の二つのファイルを同じディレクトリに置いてください.
+    
+    * <https://github.com/ContentsViewer/ContentsPlanet/blob/master/Module/SearchEngine.php>
+    * <https://github.com/ContentsViewer/ContentsPlanet/blob/master/Module/BinarySearch.php>
+    
+    [::NOTE]
+    =======
+        SearchEngineは, [ContentsPlanet(コンテンツ管理システム)](ROOT_URI/Master/ContentsPlanet/ContentsPlanet)
+        に導入され, メンテナンスは ContentsPlanet プロジェクト内で行われることになりました.
+    =======
+
+# 使用例
+    本モジュール"SearchEngine"の使用例は, 本ウェブページを参考にしてください.
+    本ウェブページの検索機能に, "SearchEngine"が使用されています.
+    
+    <a style="flex-basis: 30%;" href="javascript:void(0);" onclick="ContentsViewer.onClickSearchButton('PHP あいまいな検索')">検索してみる</a>
+    
+# 参考文献
+    [mechanism]: [第2回　検索エンジンを形作るもの.技術評論社. (accessed: 2020-5-6)](https://gihyo.jp/dev/serial/01/search-engine/0002)

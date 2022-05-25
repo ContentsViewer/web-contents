@@ -1,0 +1,20 @@
+<Header>
+    <Parent> 
+    <Title> user-scripts
+    <CreatedAt> 2022-05-06
+    <Tags> noindex
+    <Summary>
+        
+    </Summary>
+</Header>
+
+```
+    <script>console.log('[contents-viewer.html] loaded')</script>
+```
+
+
+# Google AdSense
+    ```html
+        <!-- Google AdSense -->
+        <script data-ad-client="ca-pub-4174744670853084" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    ```

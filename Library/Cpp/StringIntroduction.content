@@ -1,0 +1,34 @@
+<Header>
+    <Parent> String
+    <Title> Stringの導入方法
+    <CreatedAt> 2016-3-3
+    <Tags> ダウンロード
+    <Summary>
+        ここでは, Stringの導入方法を説明します.
+        説明項目は以下のとおりです.
+        
+        * ダウンロード
+        * インクルード
+        
+        
+    </Summary>
+</Header>
+# ダウンロード
+    下記からダウンロードしてください.<br />
+    <a href="https://github.com/ContentsViewer/Library-Cpp-String/">Library-Cpp-String</a>
+
+    このStringは内部でListを使っています. Stringを導入すると同時にListの機能も使うことができます.
+    ListとはC++でC#のようなListを実現するためのライブラリです.
+    詳しくは[List](CURRENT_CONTENT_DIR/List)を参照してください.
+
+# インクルード
+    'String.h'をインクルードします.
+    ```cpp
+        #include "String.h"
+        int main()
+        {
+            String str = "Test";
+            return 0;
+        }
+    ```
+

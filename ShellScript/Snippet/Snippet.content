@@ -1,0 +1,258 @@
+<Header>
+    <Parent> ../ShellScript
+    <Title> スニペット
+    <CreatedAt> 2018-10-25
+    <Tags> スニペット
+    <Summary>
+        
+        ShellScriptでよく使いそうな処理をまとめてみました.
+        
+        <!--読者は, __ShellScriptを使い始めたての人__を想定しています(筆者がそうです).-->
+        
+        備忘録を兼ねています.
+        
+        主に, 文献^[book1]^[book2]を参考にしました.
+        
+        
+    </Summary>
+</Header>
+# 環境変数$PATHの後にパス追加
+    ```bash
+        export PATH="$PATH:追加したいパスA:追加したいパスB"
+    ```
+
+# $PATH変数の前にパス追加
+    ```bash
+        PATH="pathA:pathB${PATH+:}${PATH-}"
+    
+    ```
+    
+    `${PATH+:}`: `$PATH`が定義されていたら`:`
+    
+    `${PATH-}`: `$PATH`が定義されていたら`$PATH`
+    
+    [シェル変数の展開書式^[book1]]
+    ================================
+    
+        `${var}`の動作についての補足.
+        
+        基本以下の条件が当てはまらないときは, `$var`が読まれる.
+        
+        | 書式 | 条件と動作 |
+        |------|------------|
+        | `${var-word}` | 変数`$var`が未定義の場合, 文字列"word"が読みだされる. |
+        | `${var:-word}` | 変数`$var`が未定義か空文字の場合, 文字列"word"が読みだされる. |
+        | `${var+word}` | 変数`$var`が定義されている場合, 文字列"word"が読みだされる. |
+        | `${var:+word}` | 変数`$var`が定義されている(空文字でない)場合, 文字列"word"が読みだされる. |
+    
+    ================================
+    
+    
+    
+# シェルスクリプトの前に書く, 環境設定
+___________________________________________
+
+    ```bash
+        set -u
+        export LC_ALL=C
+        type Command >/dev/null 2>&1 && type getconf >/dev/null 2>&1 &&
+        export PATH="$(command -p getconf PATH)${PATH+:}${PATH-}"
+        export UNIX_STD=2003  # to make HP-UX conform to POSIX
+
+    ```
+    
+    
+    
+
+# 引数がなければ即終了
+___________________________________________
+    
+    ```bash
+        case $# in 0) exit 1;;esac
+    
+    ```
+    
+    `#`は引数の数
+    
+
+# コマンド名を取得する
+___________________________________________
+    
+    ```bash
+        ${0##*/}
+    ```
+    
+    `$0`はコマンドパス
+    
+    コマンドパスから前から検索をかけて最後にある`/`まで切り落とされる.
+    
+
+# コマンドのヘルプオプションがあるか?
+___________________________________________
+
+    ```bash
+        case "${1:-}" in
+          --help|--version|-h) print_usage_and_exit;;
+        esac
+    
+    ```
+    
+    `$1`は, 引数1つ目.
+    
+
+# ファイルを開く(ファイルの末尾に改行がないとき, 改行させる)
+___________________________________________
+    
+    ```bash
+        
+        grep '' ${file:+"$file"} 
+        
+    ```
+    
+    `$file`にはファイルパスを設定する
+    
+
+# エラーメッセージと終了値を引数に持つ終了関数
+__________________________________________
+
+    ```bash
+        # === FUNC: error exit with message and return code ====================
+        # arg    : $1=ret; $2=message
+        # ret    : return code
+        # stderr : message
+        error_exit() {
+          ${2+:} false && echo "${0##*/}: $2" 1>&2
+          exit $1
+        }
+    
+    ```
+    
+    `${2+:}`は, 二つ目の引数が定義されているとき`:`を呼ぶ.
+    
+    `false`のときは, `&&`以降のコードは読まれないが,
+    `: false`のときは, 実行される.
+    
+    
+
+# コマンドの使い方を表示して終了
+____________________________________________
+
+    ```bash
+        usage="
+        Usage: ${0##*/} [options]
+        
+        Options:
+         -h, --help  display this help and exit
+        
+        Version:
+         1.0.0
+        "
+        
+        print_usage_and_exit () {
+          echo "$usage" 1>&2
+          exit 1
+        }
+    
+    ```
+
+# コマンドのオプションごとの処理
+___________________________________________
+    
+    ```bash
+            
+        opta=0
+        optb=0
+        optc=0
+        
+        while [ $# -gt 0 ]; do
+          case $1 in
+            --a) opta=1; shift; continue;;
+            --b) optb=1; shift; continue;;
+            --c) optc=1; shift; continue;;
+            --help|--version|-h) print_usage_and_exit;;
+                *) print_usage_and_exit;;
+          esac
+        done
+
+
+        case $opta in
+          0) : ;;
+          1) echo オプションAの処理
+        esac
+        
+        case $optb in
+          0) : ;;
+          1) echo オプションAの処理
+        esac
+        
+        case $optc in
+          0) : ;;
+          1) echo オプションAの処理
+        esac
+    ```
+
+
+# コマンドを用いたファイル追記
+___________________________________________________
+
+    ```bash
+    
+        cat >> ~/.bashrc <<EOF
+        # .bashrcに追加書き込みたいことを書く
+        # ...
+        
+        EOF
+    
+    
+    ```
+
+# `pkill`, `pgrep`などのコマンドで渡すための, ttyを取得する
+____________________
+    ttyの確認によく使われるコマンド`tty`がありますが,
+    出力は, `/dev/pts/0`や`/dev/tty2`であり, `pkill``pgrep`の`-t`オプションで渡す
+    ttyの値は, 先頭の`/dev/`を取り除いた値で, 適していません.
+    
+    以下のスニペットで, 先頭の`/dev/`を取り除いた, 
+     `pkill`, `pgrep`の`-t`オプションで渡せるttyの値を取得します.
+    
+    ```bash
+        current_tty=$(ps -p $$ | tail -n 1 | awk '{ print $2 }')
+    ```
+    
+    `awk`を使わないならば, 
+    ```bash
+        current_tty=$(
+          ps -p $$ | tail -n 1 | (
+            set $(cat)
+            printf "$2"
+          )
+        )
+    ```
+    
+    だが, `ps`コマンドのTTYの列が, 数字のみの場合(FreeBSD 9.1-RELEASE-p24)があったので, 
+    もしかしたら, 以下の方がいいかも.
+    
+    ```bash
+        current_tty=$(tty | sed -e "s:/dev/::")
+    ```
+    
+    参考:
+        * ["How to get the tty in which bash is running?". Stack Exchange. accessed at 2020-5-28](https://unix.stackexchange.com/questions/270272/how-to-get-the-tty-in-which-bash-is-running)
+    
+# 参照文献
+__________________________________________________
+
+    [book1]: 松浦智之. Windows/Mac/UNIXすべてで20年動くプログラムはどう書くべきか. 2016
+    [book2]: 山森丈範. [改訂第3版]シェルスクリプト基本リファレンス. 2017
+
+
+
+
+
+
+
+
+
+
+
+

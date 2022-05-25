@@ -1,0 +1,124 @@
+<Header>
+    <Parent> SketchWriter
+    <Title> SketchWriterの使い方
+    <CreatedAt> 2016-12-8
+    <Tags> 
+    <Summary>
+        ここでは, SketchWriterの基本的な使い方を説明します.
+        説明項目は以下のとおりです.
+        
+        * SketchWriterのしくみ
+        * HexFileの入手
+        * スケッチの送信
+        
+        
+    </Summary>
+</Header>
+# SketchWriterのしくみ
+    緑色字：変数 \
+    黄色字: 関数 \
+
+    ![SketchWriterのしくみ](CURRENT_DIR/Images/SketchWriter/Img6.png)
+
+# HexFileの入手
+
+    ここでは、HexFileを入手する方法を説明します。
+    HexFileを手に入れるには設定をする必要があります。
+
+    # ArduinoIDEの上のバー"ツール"→"ボード"→"Arduino UNO"を選択
+        optibootが書き込まれているArduinoを選ぶ必要があります。ここではArduinoUNOにしました。
+    
+    # ArduinoIDEの上のバー"ファイル"→"環境設定"→"preferences.txt"をクリック→"preferences.txt"を開く
+        これはより詳しい設定をする場合に使用します。
+
+    # ArduinoIDEを閉じる
+        これをしないと設定が変更されません。
+    
+    # "preferences.txt"の末尾に次の一行を追加
+
+        ```cpp
+            build.path=C:\Users\UserName\Documents\WorkSpace\Arduino\temp
+        ```
+
+        "="以下の絶対パスは各自で設定してください。
+
+    # スケッチを開く→コンパイルボタンをおす
+        これで上で設定したディレクトリにHexFileが作成されます。
+
+
+# スケッチの送信
+    それではさっそくスケッチをパソコンを使わずに書き込んでみましょう！
+
+    ArduinoIDEにあるスケッチの例"Blink"をHexFileにしてSDカードに保存します。そのHexFileを用いてArduinoでArduinoにスケッチ"Blink"を書き込んでみます。
+
+    # 手順
+        ここからはスケッチを書き込むほうのArduinoをArduinoA, スケッチを書き込まれるほうのArduinoをArduinoBとします。
+        
+        # スケッチBlink"―LEDが点滅するプログラム―をHexFileにします
+
+        # ArduinoAとArudinoBを接続します
+
+        # ArduinoAとSDカードを接続します
+
+        # ArduinoAにプログラムを書き込みます
+            以下のプログラムをArduinoAに書き込んでください。ここはさすがにパソコンを使います
+
+            ```cpp
+                #include &lt;SD.h&gt;
+                #include &lt;SPI.h&gt;
+                #include "SketchWriter.h"
+                
+                //インスタンス生成
+                SketchWriter sketchWriter;
+                
+                void setup() {
+                    //SketchWriterを開始します*7_1
+                    sketchWriter.Begin(10);
+                    sketchWriter.SetResetPin(6);
+                    
+                    //HexFileをロードします*7_2
+                    sketchWriter.SketchLoad("Blink.hex");
+                }
+                void loop() {
+                    //10秒待機
+                    delay(10000);
+                    
+                    //ArduinoBにリセットをかけます; optibootが起動します.
+                    sketchWriter.ResetArduino(6);
+                    
+                    //optibootが起動しているか確認します.*7_3
+                    sketchWriter.GetSync();
+                    
+                    //読み込んだHexFileのデータをoptibootに送信します; スケッチが書き込まれます.
+                    sketchWriter.SketchWrite();
+                    
+                    //optibootにプログラムを実行するよう命令します.
+                    sketchWriter.AppStart();
+                    
+                    //開いていたHexFileを閉じます.*7_4
+                    sketchWriter.SketchClose();
+                    
+                    while(1);
+                }
+            ```
+
+            # 説明
+
+                # *7_1
+                    ここでは,SDカードのチップセレクトピンを10番ピンに設定,
+                    ArduinoBにリセット信号を送信するピンを6番ピンに設定しています.
+                    ArduinoBのリセットピンとこのピンをつなぐことになります.
+
+                # *7_2
+                    ファイル名は6文字+"."+3文字である必要があります;SDライブラリの仕様上.
+                    詳しくは"Arduino日本語リファレンス"を参照してください.
+
+                # *7_3
+                    ArduinoBにリセットをかけた後に一回実行するとよいでしょう.
+                    optibootが起動していない―命令を受け付けていない―ときにHexFileのデータを送ることはできません.
+                
+                # *7_4
+                    開いていたHexFileを閉じたあと別のHexFileを開くことができます.
+
+        # Arduino_Aにプログラム書き込みその十秒後Arduino_Bにスケッチ"Blink"が書き込まれます
+

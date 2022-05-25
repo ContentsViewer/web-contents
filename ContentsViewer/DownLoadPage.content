@@ -1,0 +1,23 @@
+<Header>
+    <Parent> ContentsViewer
+    <Title> ダウンロードページ
+    <CreatedAt> 2016-12-8
+    <Tags> 
+    <Summary>
+        ContentsViewerのダウンロードページです.
+        
+        
+        [このシステムは古いです! :: WARNING]
+        ===================================
+        
+            このシステムは, アップグレードされ, [CollabCMS](ROOT_URI/Master/CollabCMS/CollabCMS)
+            となりました. このシステムが持つモジュールは分離され, ContentsViewerはCollabCMSの
+            モジュールの一部となりました.
+        
+        ===================================
+        
+        
+    </Summary>
+</Header>
+[ContentsViewer](https://github.com/ContentsViewer/ContentsViewer/)
+

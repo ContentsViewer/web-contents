@@ -1,0 +1,9 @@
+<Header>
+    <Parent> ../Circuit
+    <Title> 電源
+    <CreatedAt> 2021-10-02
+    <Tags>
+    <Summary>
+        電子回路において、必要な電源知識
+    </Summary>
+</Header>

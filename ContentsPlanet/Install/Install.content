@@ -1,0 +1,190 @@
+<Header>
+    <Parent> ../ContentsPlanet
+    <Title> 導入方法
+    <CreatedAt> 2018-10-12
+    <Tags> Web, CMS
+    <Summary>
+        ここでは, 本CMSの導入方法を説明します.
+        
+        
+        すぐに使用したい方は, 項目の[はじめる](#Start)をご覧ください.
+        
+    </Summary>
+</Header>
+# [[Start]]はじめる
+____________
+    # サーバに ContentsPlanet フォルダを置く
+        [../Download/Download]から, ダウンロードした ContentsPlanet
+        フォルダをサーバに置きます. ルートディレクトリでなくても問題ありません.
+        
+        sshでログインしている場合は, おきたいフォルダに`cd`で移動後, 以下のコマンドで
+        ダウンロード可能です.
+        
+        ```bash
+            git clone https://github.com/ContentsViewer/ContentsPlanet.git
+        ```
+        
+    # `ContentsPlanet/`にアクセスする
+        ContentsPlanet フォルダを配置後, すでにアクセス可能です.
+        
+        [アクセスできない場合]
+        ====
+            以下の項目を確認してください.
+            
+            * お使いのWebサーバソフトウェアは, Appacheである
+            * php7.xに対応している
+            
+            以上を満たしていないウェブサーバには, 残念ながら本CMSは対応しておりません.
+        ====
+        
+    # アクセスしたページにある`セットアップガイド`リンクをクリックし, ユーザ設定を行う.
+        `セットアップガイド`リンクが見つからない場合は, URL欄から`ContentsPlanet/Setup`にアクセスしてください.
+        
+    # 注意点
+        [:: WARNING]
+        ====
+        
+            この項目に書かれていることを誤ると, エラーになる可能性があります.
+            
+        ====
+        
+        # Masterユーザは必要です
+            本CMSでは, 少なくともMasterユーザが必要になります(Masterといってもユーザ名まで'master'にする必要はありません).
+            
+            Masterユーザとは, `Home/Master`ディレクトリを所有するユーザを指します.
+            
+        # 各ユーザは, `Contents`フォルダ, `Contents/Root.content`ファイルを持つ必要があります.
+            これらファイルとフォルダは, 各ユーザフォルダに存在しておく必要があります.
+            
+    # 設定項目
+        # Tipsデータ
+            `Home/Master/Contents/Tips.content`には, ファイル管理ページに表示されるTipsのデータ
+            が記述されています. 追加したい内容を下の行に追加することができます.
+            
+        # Messagesデータ
+            `Home/{UserName}/Contents/Messages.content`には, ウェブページの上部にポップアップされる
+            訪問者に対するメッセージデータが記述されています.
+            追加したい内容を最下行に追加することができます.
+            行頭に`//`を書くことで, そのメッセージは無効になります.
+            
+# ファイル構成
+_________________________________________
+
+    
+    + __ContentsPlanet__
+        + __.htaccess__: アクセスファイル(自動生成される)
+        + __CollabCMS.php__: システム設定ファイル
+        + __index.php__: ページ窓口
+        + __LICENSE__: ライセンス
+        + __OutputLog.txt__: ログファイル(自動生成)
+        + __README.md__: 説明ファイル
+        + __Cache__: キャッシュフォルダ
+            + __.htaccess__: アクセスファイル
+        + __Client__: クライアントサイドファイルフォルダ
+            + __ace__: エディタ
+            + __ace-diff__: ファイル差分表示/マージライブラリ
+            + __Common__: 共通フォルダ
+            + __ContentsViewer__: コンテンツ表示用ライブラリ
+            + __FileManager__: ファイル管理ライブラリ
+            + __OutlineText__: 文章構成補助ライブラリ, スタイルシート
+            + __Space-RUN__: ゲーム
+            + __Splitter__: 画面分割ライブラリ
+            + __syntaxhighlighter__: コード表記ライブラリ
+            + __ThemeChanger__: テーマ切り替え
+        + __Frontend__: フロントエンド群
+            + __400.php__: 400ページ
+            + __403.php__: 403ページ
+            + __404.php__: 404ページ
+            + __500.php__: 500ページ
+            + __content-editor.php__: コンテンツ編集ページ
+            + __contents-viewer.php__: コンテンツ表示ページ
+            + __directory-viewer.php__: ディレクトリ表示ページ
+            + __error-page.php__: 基本エラーページ
+            + __error-page-setup.php__: エラーページセットアップ
+            + __file-manager.php__: ファイル管理
+            + __file-server.php__: ファイルサーバ
+            + __login.php__: ログインページ
+            + __logout.php__: ログアウトページ
+            + __note-viewer.php__: ノート表示ページ
+            + __plaintext.php__: プレインテキスト表示ページ
+            + __preview.php__: プレビューページ
+            + __setup.php__: セットアップページ
+            + __tag-viewer.php__: タグ表示ページ
+            + __viewer.php__: ビューページ
+        + __Home__: ユーザデータ保存フォルダ 
+            + __Master__: デフォルト管理ユーザー
+                + __Contents__: コンテンツファイル保存フォルダ
+                    + __Root.content__: 根となるコンテンツ
+                    + __Tips.content__: Tipデータコンテンツ
+                    + __Messages.content__: ウェブメッセージコンテンツ
+                + __.index__: インデックス(自動生成)
+                + __.metadata__: メタデータ(自動生成)
+        + __Module__: サーバサイドライブラリ
+            + __Authenticator.php__: ユーザ権限管理
+            + __BinarySearch.php__: 二分探索機
+            + __CacheManager.php__: キャッシュ管理
+            + __ContentsDatabase.php__: コンテンツの保存と読み込み
+            + __ContentsDatabaseManager.php__: コンテンツデータベース全体にかかわる情報保持
+            + __ContentsViewerUtil.php__: コンテンツ表示関数群
+            + __Debug.php__: デバッグ表示ライブラリ
+            + __Localization.php__: ローカリゼーション管理ライブラリ
+            + __OutlineText.php__: 文章構成補助ライブラリ
+            + __SearchEngine.php__: 検索エンジン
+            + __ServiceUtils.php__: サービスで使用する補助関数
+            + __Stopwatch.php__: 処理速度計測ライブラリ
+            + __Utils.php__: 共通補助関数
+        + __Service__: サーバサイドサービス
+            + __contents-database-edit-service.php__: コンテンツ情報編集サービス
+            + __contents-search-service.php__: コンテンツ検索サービス
+            + __file-management-service.php__: ファイル, フォルダ管理サービス
+            + __mail-service.php__: メール送信サービス
+            + __outlinetext-decode-service.php__: OutlineText変換サービス
+            + __related-search-service.php__: 関連コンテンツ提示サービス
+
+
+# ユーザの追加
+_________________________________________
+
+    
+    # ユーザフォルダ作成
+        1. `Home/{ユーザ名}`を作成.
+        2. `Home/{ユーザ名}/Contents`を作成
+        3. `Home/{ユーザ名}/Contents/Root.content`を作成
+        
+    # ユーザテーブルにユーザ追加
+        
+        `ContentsPlanet.php`のファイル内の`USER_TABLE`に
+        上に書かれているほかのユーザと同じように情報を記述します.
+        
+        `contentsFolder`は上で作成した`./{ユーザ名}/Contents`を入力します.
+        
+        
+        ```php
+            
+            define('USER_TABLE', [
+                'master' => [
+                    'hashedPassword' => '',
+                    'digest' => '',
+                    'contentsFolder' => './Master/Contents',
+                    'isPublic' => true,
+                    'enableRemoteEdit' => false,
+                    'remoteURL' => '',
+                ],
+                'ユーザ名' => [
+                    'hashedPassword' => '',
+                    'digest' => '',
+                    'contentsFolder' => 'コンテンツパス',
+                    'isPublic' => true,
+                    'enableRemoteEdit' => false,
+                    'remoteURL' => '',
+                ],
+            ]);
+        
+        ```
+    
+    # パスワードと権限の設定
+        `Frontend/setup.php`にある`$username`には`master`を, 
+        `$password`にあなたの設定したいパスワードを書きます.
+        
+        初回起動時にMasterユーザの設定をしたのと同じように, パスワードとアクセス権の設定を行います.
+        

@@ -1,0 +1,299 @@
+<Header>
+    <Parent> ../Install
+    <Title> フローチャートで進む, NVIDIA GPU ドライバ, CUDA, cuDNN, tensorflow のインストール方法
+    <CreatedAt> 2020-08-18
+    <Tags> NVIDIA, GPU, CUDA, cuDNN, tensorflow, ドライバ, Ubuntu, フローチャート
+    <Summary>
+        公式リファレンスを参考しつつ, 
+        Ubuntu 上にNVIDIA GPU ドライバ, CUDA, cuDNNを入れて, tensorflow をGPUで動かす方法を, フローチャートで進めます.
+    </Summary>
+</Header>
+
+# はじめに
+    tensorflow で, NVIDIA GPU での計算を有効にするためには, 各種ドライバやライブラリが必要です^[tf-install-gpu].
+    その際に, tensorflowのバージョンにあった, ライブラリをインストール必要があります^[tf-install-source].
+    
+    すでに, インターネット上では「Ubuntu にGPUドライバを入れ, tensorflowをGPUで動かす方法」に関する情報がたくさんあります^[qitta-1]^[qitta-2]^[qitta-3]^[qitta-4]^[codelab]が,
+    載せられているコードが古いもの(tensorflowの更新頻度が高いのも一因)であったり, 覚書やメモのようであったり, 
+    失敗して入れ直すときの手順がまとまっていなかったりと, 整理されていません.
+    
+    
+    本稿では, ライブラリの更新があっても, 公式のリファレンスをさかのぼって, 手順がわかるように, 
+    Ubuntu 上にNVIDIA GPU ドライバや各種ライブラリをインストールし, 
+    tensorflowでGPUを使用できる手順をフローチャートのように説明します.
+    また, もし失敗したときの手順も説明します.
+
+# 環境
+    筆者の環境は次のとおりです.
+    
+    Ubuntu:
+        Ubuntu 20.04.1 LTS
+        
+    GPU:
+        NVIDIA GTX950M
+        
+    Python環境:
+        pyenv + pipenv
+
+# [[check-driver]] GPUドライバの確認
+    NVIDIA Driver を入れる前に, すでに入っているか確認します.
+    
+    Terminal を開いて, 次のコマンドを入力します.
+    
+    ```shell
+        $ nvidia-smi
+    ```
+    
+    # -> コマンドが見つからない
+        ドライバが入っていません.
+        
+        次の項目[ドライバのインストール](#install-driver)を行います.
+    
+    # -> `NVIDIA-SMI has failed because it couldn't communicate with the NVIDIA driver. Make sure that the latest NVIDIA driver is installed and running."`と表示される.
+        正しく入っていないので, 入れ直します.
+        
+        [GPUドライバ&CUDAのアンインストール](#uninstall-driver-cuda)を行います.
+    
+    # -> 表が出た
+        正しく認識しています.
+        
+        次に, [Tensorflowのバーション確認](#check-tf-version)を行います.
+
+# [[uninstall-driver-cuda]] GPUドライバ&CUDAのアンインストール
+    もう一度入れ直すために, 一度消します.
+    
+    Terminal を開いて, 次のコマンドを入力します.
+    
+    ```shell
+        $ sudo apt-get purge 'nvidia-*'
+        $ sudo apt-get purge 'cuda-*'
+    ```
+    
+    [`apt-get remove` と `apt-get purge` の違い]
+    =========================
+        `apt-get --help`を実行してみると, 
+        
+        `apt-get remove`:
+            パッケージを削除する
+        `apt-get purge`:
+            設定ファイルまで含めてパッケージを削除する
+        
+    =========================
+    
+    必要なくなったパッケージを削除します.
+    ```shell
+        $ sudo apt autoremove
+    ```
+    
+    CUDAをインストールしている場合:
+        CUDAをインストールしたときの逆の手順で, ファイルを削除していきます.
+        
+        * [CUDAダウンロードページ](https://developer.nvidia.com/cuda-toolkit-archive). NVIDIA. accessedd at 2020-08-19.
+        
+        例えば, もしあなたが, このようにインストールしたとすると(Installer Type: deb(local) を選択),
+        ```shell
+            $ wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2004/x86_64/cuda-ubuntu2004.pin
+            $ sudo mv cuda-ubuntu2004.pin /etc/apt/preferences.d/cuda-repository-pin-600
+            $ wget https://developer.download.nvidia.com/compute/cuda/11.0.3/local_installers/cuda-repo-ubuntu2004-11-0-local_11.0.3-450.51.06-1_amd64.deb
+            $ sudo dpkg -i cuda-repo-ubuntu2004-11-0-local_11.0.3-450.51.06-1_amd64.deb
+            $ sudo apt-key add /var/cuda-repo-ubuntu2004-11-0-local/7fa2af80.pub
+            $ sudo apt-get update
+            $ sudo apt-get -y install cuda
+        ```
+        1~2行目の
+        ```shell
+            $ wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2004/x86_64/cuda-ubuntu2004.pin
+            $ sudo mv cuda-ubuntu2004.pin /etc/apt/preferences.d/cuda-repository-pin-600
+        ```
+        に注目して, `/etc/apt/preferences.d/cuda-repository-pin-600` を消しに行きます.
+        
+        それ以降の処理は, 先の`apt-get purge`で消えているはずです^[注.not-sure].
+    
+    一応, パッケージを update & upgrade しておきます.
+    ```shell
+        $ sudo apt update
+        $ sudo apt upgrade
+    ```
+    次に, [GPUドライバのインストール](#install-driver) を行います.
+    
+# [[install-driver]] GPUドライバのインストール
+    GPUドライバのインストール方法は, やりやすいものとして２つあります.
+    
+    Ubuntuの「ソフトウェアとアップデート」->「追加のドライバ」からインストール:
+        「アクティビティ」から「ソフトウェアとアップデート」を検索します.
+        
+        「ソフトウェアとアップデート」のタブから「追加のドライバ」を選択します.
+        
+        ![「ソフトウェアとアップデート」->「追加のドライバ」](CURRENT_DIR/Images/add-hardware.jpg)
+        
+        ドライバを選択して, インストールします.
+        
+    aptでインストール:
+        aptリポジトリにNVIDIA GPU Driverリポジトリを追加する. 
+        ```shell
+            $ sudo add-apt-repository ppa:graphics-drivers/ppa
+            $ sudo apt update
+        ```
+        
+        インストール推奨Driverを確認
+        ```shell
+            $ ubuntu-drivers devices
+        ```
+        
+        推奨Driverをインストール
+        ```shell
+            sudo apt install nvidia-driver-450
+        ```
+        
+        参考ページ:
+            ["Nvidia GPU driverの再インストール方法"](https://qiita.com/muramasa2/items/47b337b6e0e808d8a719). Qitta. accessed at 2020-08-19.
+    
+    # -> パスワードの設定を求められた
+        セキュアブートが有効になっているときに, 表示されます.
+        パスワードを設定し覚えておきます.
+        
+        なぜ設定するのかも, そこに書いてあると思うので読んでおきましょう^[注.please-read].
+    
+    再起動します.
+    
+    # -> 青い画面(Perform MOK management)が出た.
+        セキュアブートが有効なときに表示されます.
+        
+        おそらく, 選択されている「Continue boot」//ではなく//, 
+        その下にある, 「Enroll MOK」を選択し, 先で設定したパスワードを入力します.
+        
+        参考ページ:
+            ["Ubuntu に NVIDIA のドライバをインストール （Enroll MOK に注意）"](https://qiita.com/junkoda/items/0c58e0c996b56b773d50). Qitta. accessed at 2020-08-19.
+        
+        # -> 正しいパスワードを入れているはずなのに, はじかれる
+            パスワードに記号が含まれていませんか? 例えば, アンダースコア`_`.
+            
+            日本語配列キーボードが英字配列と認識されているかもしれません.
+            アンダースコア`_`のところを, `shift` + `=`(`0`のとなり)で入力してみてください.
+        
+    次に, [GPUドライバの確認](#check-driver)を行います.
+    
+# [[check-tf-version]] Tensorflow のバージョン確認
+    後の手順で, CUDAのインストールを行いますが, tensorflowのバージョンにあった, CUDA及びcuDNNバージョンを選択する必要があります.
+    
+    * ["テスト済みのビルド構成"](https://www.tensorflow.org/install/source#tested_build_configurations). Tensorflow. accessed at 2020-08-19.
+    
+    # -> Tensorflow が入っていない.
+        インストールしてください.
+        
+        * ["TensorFlow 2 をインストールする"](https://www.tensorflow.org/install). Tensorflow. accessed at 2020-08-19.
+        
+        `pipenv`を使っている方は, このようになるでしょう(`pipenv`の詳しい説明は, 各自調べてください).
+        ```shell
+            $ pipenv install tensorflow
+        ```
+    
+    Tensorflowのバージョンを確認します.
+    各自のPythonパッケージ管理方法に合わせて確認してください.
+    `pipenv`の場合, このようになるでしょう.
+    
+    ```shell
+        $ pipenv graph
+    ```
+    
+    バージョン確認後, [CUDAのインストール](#install-cuda)を行います.
+
+# [[install-cuda]] CUDAのインストール
+    CUDAダウンロードページに従って, CUDAをインストールします.
+    
+    * [CUDAダウンロードページ](https://developer.nvidia.com/cuda-toolkit-archive). NVIDIA. accessedd at 2020-08-19.
+    
+    CUDAのバージョンは, 
+    [テスト済みのビルド構成](https://www.tensorflow.org/install/source#tested_build_configurations) に従います.
+    
+    * ["テスト済みのビルド構成"](https://www.tensorflow.org/install/source#tested_build_configurations). Tensorflow. accessed at 2020-08-19.
+    
+    インストール完了後, cudaのバージョンを確認します.
+    
+    ```shell
+        cat /usr/local/cuda/version.txt
+    ```
+    
+    # -> インストールされたバージョンが, 入れようとしたものと異なる.
+        詳しい原因はわかりませんが, 
+        
+        一度, [GPUドライバ&CUDAのアンインストール](#uninstall-driver-cuda)からもう一度フローチャートを進み, 
+        CUDAインストールの最後の手順にあると思われる(今後の更新で無いかもしれない)次のコマンド
+        
+        ```shell
+            sudo apt-get -y install cuda
+        ```
+        
+        の代わりに, 次のコマンドを試します. `cuda-10-1`のところは, 適宜変えてください(`cuda-10-2`等). 
+        
+        ```shell
+            sudo apt-get -y install cuda-10-1
+        ```
+        
+        参考ページ:
+            ["Installing CUDA 10.1 on Ubuntu 20.04"](https://medium.com/@stephengregory_69986/installing-cuda-10-1-on-ubuntu-20-04-e562a5e724a0). Stephen Gregory. accessed at 2020-08-19.
+    
+    次に, [cuDNNのインストール](#install-cuDNN)を行います.
+
+# [[install-cuDNN]] cuDNNのインストール
+    cuDNNダウンロードページに行きます.
+    
+    * ["cuDNN Download"](https://developer.nvidia.com/rdp/cudnn-download). NVIDIA. accessedd at 2020-08-19.
+    
+    # -> ログインを求められた.
+        cuDNNのダウンロードには, NVIDIAアカウントが必要です.
+        登録して, ログインしましょう.
+    
+    
+    CUDA同様に, tensorflowのバージョンに合わせて, cuDNNのバージョンを選択します.
+    (CUDAのバージョンに合わせて, cuDNNを選択してもいいと思います.)
+    
+    下記の公式リファレンスに従って, cuDNNをダウンロード&インストールします.
+    
+    * ["Installing From A Debian File"](https://docs.nvidia.com/deeplearning/cudnn/install-guide/index.html#installlinux-deb). NVIDIA. accessed at 2020-08-19.
+    
+    [あともう少しです!]
+    ========
+        ＼(^o^)／
+    ========
+
+    次に, [TensorflowがGPUを認識しているか確認](#check-tf-using-gpu)します.
+
+# [[check-tf-using-gpu]] TensorflowがGPUを認識しているか確認
+    各自, パッケージ管理方法に合わせてpythonインタプリタを起動します.
+    
+    ```shell
+        $ python
+    ```
+    
+    次の二行を入力します.
+    
+    ```python
+        >>> from tensorflow.python.client import device_lib
+        >>> device_lib.list_local_devices()
+    ```
+    
+    出力されたメッセージ内に, `device_type:GPU` があると, 認識しています!
+    
+    お疲れ様でした.
+    
+    # -> 無い...
+        * nvidia driver を認識していますか?
+            -> [GPUドライバの確認](#check-driver) を行う.
+        * tensorflowのバージョンとCUDA, cuDNNのバージョンが合っていますか?
+            -> [Tensorflow のバージョン確認](#check-tf-version) を行う.
+    
+    
+# 注釈
+    [注.not-sure]: 自信ない... (^^ゞ
+    [注.please-read]:  そこに方法が書いてあったのに, 読んでなくて時間をとかした.
+    
+# 参考文献
+    [tf-install-gpu]:    ["GPU support"](https://www.tensorflow.org/install/gpu). TensorFlow. accessed at 2020-08-19.
+    [tf-install-source]: ["Build from source"](https://www.tensorflow.org/install/source). TensorFlow. accessed at 2020-08-19.
+    
+    [qitta-1]: ["GPU付きのTensorflowをUbuntu18.04に入れる"](https://qiita.com/python_walker/items/d599aeeea673bf89b7cb). Qitta. accessed at 2020-08-19.
+    [qitta-2]: ["ubuntu18.04でTensorFlow-gpuを動かす"](https://qiita.com/sho8e69/items/66c1662c49ac89a024be). Qitta. accessed at 2020-08-19.
+    [qitta-3]: ["Ubuntu18.04にCUDA・cuDNN・tensorflow-gpuをインストールする"](https://qiita.com/kyagoshi/items/8c492682c3e45bf0b768). Qitta. accessed at 2020-08-19.
+    [qitta-4]: ["Ubuntu18.04にNVIDIAとCUDAを入れ直すことに"](https://qiita.com/Yoshitaka_Youtuber/items/bd8edcb36396df878641). Qitta. accessed at 2020-08-19.
+    [codelab]: ["Ubuntu 18.04 でCUDA, Cudnn, Tensorflow GPU のインストール"](https://codelabo.com/posts/20200229081221/). CodeLab. accessed at 2020-08-19.

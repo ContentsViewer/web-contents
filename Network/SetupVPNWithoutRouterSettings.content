@@ -1,0 +1,127 @@
+<Header>
+    <Parent> Network
+    <Title> ルータの設定を変更できない環境でVPNを構築する方法
+    <CreatedAt> 2019-05-15
+    <Tags> OpenVPN, VPN, ラズパイ, ngrok
+    <Summary>
+        
+    </Summary>
+</Header>
+# 背景と問題
+    社内や, 学内のLANに外から接続したいことがあります.
+    ですが, 一般的に, 社員, 学生が社内や学内のルータの設定は変更できません.
+    そのため, 外からのSSH接続や, VPN接続に必要となるポート開放, 
+    ポートフォーワーディング(ポート転送)設定を変更できず, 
+    外から接続できません.
+    
+    ![失敗例](CURRENT_DIR/Images/SetupVPNWithoutRouterSettings/Traditional.png)
+    
+    そこで, 本稿ではこの問題を解決するため, ngrokなどのトンネルサービスを使用して,
+    LAN側に立ち上げたVPNサーバへ外から接続し, 社内, 学内LANに接続します.
+    
+    ![提案手法](CURRENT_DIR/Images/SetupVPNWithoutRouterSettings/Our.png)
+    
+# 構成
+    # ラズパイ
+        VPNサーバを動かすためのマシン.
+        常に電源をつけておきます.
+        
+    # pivpn
+        ラズパイでVPNサーバを動かすためのパッケージです.
+        [pivpn](http://www.pivpn.io/)は, 簡単にラズパイでOpenVPNをインストールできるものです.
+        
+    # ngrok
+        [ngrok](https://ngrok.com/)は, ファイアウォールやNATの後ろにあるローカルサーバを,
+        安全な通信路でインターネットに公開するものです^[ngrok-what].
+        
+        有料プランと無料プランがありますが, 今回は無料プランで足ります.
+        
+    
+# 手順
+    # ラズパイにVPNサーバをインストール
+        今回使用するのは, `pivpn`と呼ばれるものです.
+        
+        インストールの手順は, [pivpn公式サイト](http://www.pivpn.io/)のとおり,
+        以下のコマンドのみでインストールできます.
+        
+        ```bash
+            curl -L https://install.pivpn.io | bash
+        ```
+        
+        あとは, ウィザードに従って設定を進めていきますが, 以下のことに注意してください.
+        
+        
+        * プロトコル選択では, **TCP**を選択してください
+            `ngrok`で, UDPはサポートされていません.
+            
+        * `default OpenVPN Port`で表示されているポート番号を覚えておきます.
+            VPNサーバに接続する際に必要です.
+        
+        * カスタム検索ドメイン`Custom Search Domain`を持っていないときは, `NO`を選択
+            
+    # pivpnでユーザ追加
+        pivpnインストール後, 以下のコマンドを実行します.
+        
+        ```bash
+            pivpn add
+        ```
+        
+        作成するユーザの名前とパスワードを設定します.
+        
+        フォルダ`home/pi/ovpns`に作成されたプロファイル`{username}.opvn`を手持ちのパソコンにコピーします.
+        
+    
+    # ラズパイにngrokをインストール
+        基本的な手順は[ngrok setup](https://ngrok.com/download)を参考にします.
+    
+    # openVPN client を手持ちのパソコンにインストール
+        [OpenVPN ダウンロードサイト](https://www.openvpn.jp/download/)から,
+        インストーラをダウンロードし, インストールします.
+        
+    # ngrokの起動
+        ラズパイで以下のコマンドを実行しngrokを起動します.
+        
+        ```bash
+            ./ngrok tcp {ポート番号}
+        ```
+        
+        `{ポート番号}`は, pivpnのセットアップ時に覚えたポート番号`default OpenVPN Port`です.
+        
+        ここで, 表示されている`Forwarding: tcp://0.tcp.ngrok.io:{ngrok側ポート番号} -> localhost:{vpnサーバ側ポート番号}`の項目を覚えておきます.
+    
+    # openVPNプロファイルの編集
+        "pivpnでのユーザ追加"で作成されたプロファイルを変更します.
+        メモ帳などの編集ソフトでファイルを開いたのち, `remote`の行を探します.
+        
+        ```xml
+            remote xxx.xxx.xxx.xxx xxx
+        ```
+        
+        この行を, 先ほど"ngrokの起動"で覚えた`Forwarding`の設定に置き換えます.
+        
+        ```xml
+            remote 0.tcp.ngrok.io {ngrok側ポート番号}
+        ```
+    
+    # VPNサーバへの接続
+        最後に, 手持ちのパソコンからラズパイへVPN接続を行います.
+        
+        手持ちのパソコンとラズパイを異なるLANに置きます.
+        手持ちのパソコンのみ携帯回線を使うのもいいでしょう.
+        
+        手持ちのパソコンで起動しているOpenVPN-GUIに, 先ほど編集したプロファイルを
+        読み込ませ, 接続を開始します. 
+        
+        パスワードが聞かれたのち, 問題がなければ接続できます.
+        
+        [接続できない場合]
+        ==================
+            * ラズパイ上でpivpnは起動していますか?
+            * 設定しているポートに間違いはありませんか?
+            * openVPNプロファイルの設定に間違いはありませんか?
+        ==================
+
+--------------------------------------------------
+[ngrok-what]: "[What is ngrok](https://ngrok.com/product)". ngrok. (accessed at 2020-3-1)
+
+        

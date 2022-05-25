@@ -1,0 +1,144 @@
+<Header>
+    <Parent> String
+    <Title> Stringの使い方
+    <CreatedAt> 2016-3-3
+    <Tags> 
+    <Summary>
+        ここでは, Stringの基本的な使い方を説明します.
+        各説明項目は以下のとおりです.
+        
+        * 使用例
+        * Splitについて
+        * GetLineについて
+        
+    </Summary>
+</Header>
+# 使用例
+    ここでは, 使用例として文字列結合を行いたいと思います.
+
+
+    ```cpp
+        #include "String.h"
+        #include &lt;iostream&gt;
+        using namespace std;
+        int main()
+        {
+            String strA = "StrA";
+            
+            cout &lt;&lt; "strA: " &lt;&lt; strA.CharArray() &lt;&lt; "\n";    //*1
+            strA += "_Add";
+            cout &lt;&lt; "strA: " &lt;&lt; strA.CharArray() &lt;&lt; "\n";    //*1
+            return 0;
+        }
+        /*
+        実行結果
+        strA: StrA
+        strA: StrA_Add
+        */
+    ```
+
+    # 説明
+        # *1
+            "strA.CharArray()"とすることによってString内部のchar配列の先頭アドレスにアクセスすることができます.
+
+# [[Split]]Splitについて
+    Split関数はあるゆる場面で役立つ関数です. ここでは区切り文字を","にして実際に文字列を区切っていきます.
+
+    
+    ```cpp
+        #include "String.h"
+        #include &lt;iostream&gt;
+        using namespace std;
+        int main()
+        {
+            String saveParamsStr = "hp,1,isDead,true,mp,-1,stage,,isComplete,false";
+        
+            //区切り文字登録
+            List&lt;String&gt; separators;
+            separators.Add(String(","));
+        
+            //区切る
+            List&lt;String&gt;saveParams= saveParamsStr.Split(separators);
+        
+            //結果
+            cout &lt;&lt; "saveParamsStr: " &lt;&lt; saveParamsStr.CharArray() &lt;&lt; "\n";
+            cout &lt;&lt; "---Split---\n";
+            for (int i = 0; i &lt; saveParams.Count(); i+=2)
+            {
+                cout &lt;&lt; saveParams[i].CharArray() &lt;&lt; ": " &lt;&lt; saveParams[i + 1].CharArray() &lt;&lt;"\n";
+            }
+            return 0;
+        }
+        /*
+        実行結果
+        saveParamsStr: hp,1,isDead,true,mp,-1,stage,,isComplete,false
+        ---Split---
+        hp: 1
+        isDead: true
+        mp: -1
+        stage:
+        isComplete: false
+        */
+    ```
+
+# [[GetLine]]GetLineについて
+    GetLineを用いることで, ストリームから文字列を取得することができます.
+    キーボードからの取得とファイルからの取得の方法について説明します.
+
+    # キーボードからの取得
+        ```cpp
+            #include "String.h"                    
+            #include &lt;iostream&gt;
+            using namespace std;
+            int main()
+            {
+                cout << "input<< ";
+                String input = String::GetLine();
+                cout << "\n";
+                cout << "input: " << input.CharArray() << "\n";
+                return 0;
+            }
+            /*
+            実行結果
+            input<< InputTest
+            input: InputTest
+            */
+        ```
+
+    # ファイルからの取得
+        # Textファイルを用意します
+            ファイル名は"Text.txt"にします.
+
+            ```cpp
+                Line1
+                Line2
+                Line3
+                Line4
+            ```
+
+        # 上のファイルを用いたサンプルプログラム
+
+            ```cpp
+                #include "String.h"                    
+                #include &lt;iostream&gt;
+                #include &lt;stdlib.h&gt;
+                using namespace std;
+                int main()
+                {
+                    FILE *fp = fopen("Text.txt", "r");
+                    cout << "GetLineTest\n";
+                    while(!feof(fp))
+                    {
+                        cout << String::GetLine(fp).CharArray()<<"\n";
+                    }
+                    return 0;
+                }
+                /*
+                実行結果
+                GetLineTest
+                Line1
+                Line2
+                Line3
+                Line4
+                */
+            ```

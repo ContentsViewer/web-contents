@@ -1,0 +1,187 @@
+<Header>
+    <Parent> CollabCMS
+    <Title> 使い方
+    <CreatedAt> 2020-04-27
+    <Tags> 
+    <Summary>
+        本CMSの使い方
+        
+    </Summary>
+</Header>
+# コンテンツの編集(本CMSを利用)
+    ページ右上にある`編集`から行います.
+    
+    ユーザ名とパスワードの設定を行っていない場合は, 
+    [Install]からユーザ設定を行います.
+    
+# ディレクトリ, ファイルの操作(本CMSを利用)
+
+    ページ右上のヘッダ展開ボタンを押し, ログインアイコンをクリック, ログイン
+    
+    Contents欄から, 希望するディレクトリに行く
+    
+    # ファイルの追加
+        ファイル名前欄に希望のファイル名を入力し, 横の「+」ボタンをクリック
+    
+    # ファイルの一括アップロード
+        「ファイルをドラック&ドロップ」欄にアップしたいファイルをドラック&ドロップ
+        
+    # ディレクトリの追加
+        ディレクトリ名前欄に希望のディレクトリ名を入力し, 横の「+」ボタンをクリック
+    
+    # 削除
+        削除したいファイル/ディレクトリ横の「x」ボタンをクリック
+    
+    # 名前変更
+        変更したい名前を入力して, 「Rename」をクリック
+    
+    # 移動
+        移動先のパスを相対パスで入力して, 「Rename」をクリック
+        
+        ex)
+            + Contents
+                + DirA
+                    + file.content <- これを
+                + DirB
+                    + <- ここに置きたい
+                
+            ファイル名を「file.content」 -> 「../DirB/file.content」と入力して,
+            「Rename」をクリック
+
+# ファイル編集, 操作(他アプリケーション)
+    Gitや, Google Drive を利用したファイル編集と操作
+    
+    
+    `CollabCMS.php`->`USER_TABLE`で指定するユーザ設定内の`enableRemoteEdit`を`true`にし,
+    `remoteURL`に, 編集先のURLを入力します.
+    
+    ex) githubを使うとき
+    ```php
+        define('USER_TABLE', [
+            'master' => [
+                'hashedPassword' => '',
+                'digest' => '',
+                'contentsFolder' => './Master/Contents',
+                'isPublic' => true,
+                'enableRemoteEdit' => true,
+                'remoteURL' => 'https://github.com/ContentsViewer/CollabCMS-Contents/blob/master/{CONTENT_PATH}',
+            ],
+        ]);
+    ```
+    
+    `enableRemoteEdit`を`true`をすることで, 本CMSでファイルの編集, 操作を行う代わりに,
+    `remoteURL`先のアプリケーションへ任せます.
+    
+    `Edit`リンクをクリックすると, `remoteURL`の`{CONTENT_PATH}`を編集ファイルのパスに差し替え, 
+    リンク先のアプリケーションへリダイレクトします. 
+    
+    何らかの方法で, リモート先のコンテンツとCMS側のコンテンツを同期する必要があります.
+    
+    Github, Gitlab:
+        同期方法:
+            フックによるリポジトリ同期(Auto pull)
+    
+    GoogleDrive:
+        同期方法:
+            rclone などの同期アプリケーションの利用
+        
+        remote URL のリンク:
+            google Drive では, URL内にパスの情報が無く, ハッシュ値になります.
+            なので, パスからハッシュ値へ変換する処理が必要ですが,
+            Google App Script で対応可能です.
+            
+# アップデート
+    # git clone した場合
+        # 1.サーバにsshログイン
+
+        # 2.コマンド
+            CollabCMSが存在するディレクトリに移動します.
+
+            ```bash
+                cd ~/www/wiki
+            ```
+
+            以下のコマンドを打ち，最新版を取得します．
+            ```bash
+                git fetch
+                git merge origin/master
+            ```
+        
+    # FTP でアップロードした場合
+        # 1.Homeフォルダ以外を置き換えます
+    
+    # アップデート後のトラブル
+        アップデート後に何かトラブルが起きたとき, 多くは古いキャッシュやメタデータの互換性が問題です.
+        
+        以下のファイルを削除してください.
+        
+        + CollabCMS
+            + .htaccess <- 削除(カスタマイズしている場合は バックアップ -> 削除 -> 自動生成 -> 書き換え)
+            + Cache
+                + .htaccess
+                + ~.cache <- 削除
+                + ~.cache <- 削除
+                + ...     <- 削除
+            + Home
+                + Master
+                    + Contents
+                    + .metadata <- 削除
+                    + .index <- 削除
+                + <他ユーザ>
+                    + Contents
+                    + .metadata <- 削除
+                    + .index <- 削除
+            + Frontend
+            + Module
+            + ...
+
+        
+        
+# SSLリダイレクト
+    `http` -> `https`への自動リダイレクト
+    
+    `CollabCMS.php`内の`REDIRECT_HTTPS_ENABLED`を`true`にします.
+    
+    ```php
+        define('REDIRECT_HTTPS_ENABLED', true);
+    ```
+
+# `.htaccess`カスタマイズ
+    `# BEGIN CollabCMS` ~ `# END CollabCMS`は, 本CMSが自動で書き込みます.
+    この領域外でお好きなコードをお書きください.
+    
+    ```
+        # ここから
+        # ...
+        # ここまでカスタマイズ
+        
+        # BEGIN CollabCMS
+        
+        <IfModule mod_rewrite.c>
+        RewriteEngine On
+        
+        RewriteCond %{HTTPS} off
+        RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
+        
+        RewriteCond %{REQUEST_URI} !(^/CollabCMS/Client/)
+        RewriteCond %{REQUEST_URI} !(^/CollabCMS/Service/)
+        RewriteRule ^(.*)$ index.php
+        
+        RewriteCond %{HTTP:Authorization} ^(.*)
+        RewriteRule ^(.*) - [E=HTTP_AUTHORIZATION:%1]
+        </IfModule>
+        
+        # END CollabCMS
+    ```
+    
+# 応用例
+    # + Google Drive + Slack
+        Google Drive でファイル編集, Slackへ通知
+        
+        ![構成例](CURRENT_DIR/Images/fig-drive-slack.png)
+    
+    # + Gitlab, Github
+        Gitを用いたバージョン管理
+        
+        ![構成例](CURRENT_DIR/Images/WithGit.png)
+        

@@ -1,0 +1,96 @@
+<Header>
+    <Parent> ../ContentsPlanet
+    <Title> ダウンロード
+    <CreatedAt> 2018-10-07
+    <Tags> ダウンロード, CMS
+    <Summary>
+        本CMSは以下のサイトからダウンロードできます.
+        
+    </Summary>
+</Header>
+# Github
+____________________________
+
+    [ContentsPlanet - Github](https://github.com/ContentsViewer/ContentsPlanet)
+
+
+# バージョンについて
+____________________
+    バージョン名は, `2020.08.31`のようにリリース日と一致します.
+    バージョンが上がるごとに, 機能の追加, UIの改良が行われますが, 
+    コンテンツの記法や, コンテンツのディレクトリの扱い方などは, 
+    基本変更しません.
+    
+    __各バージョンごとにプレビュー期間があります.__
+    基本`master`ブランチはプレビューです. ある程度テストされ, 
+    リリースに値すると判断されたとき, その時点での最新のコミットに対してバージョン名でタグをつけます.
+    (ある時点でバージョン名が二週間後などになっているのは, 二週間後にそのバージョンをリリースにする予定であることを意味します.)
+    
+    [リリース一覧](https://github.com/ContentsViewer/ContentsPlanet/releases)
+    
+    特定のバージョンを使用したい場合は, タグからブランチを作成し, ブランチを切り替えてください.
+    
+    
+# ライセンス
+____________________________
+    このシステムは, __三条項BSDライセンス__が適用されています.
+    
+    このシステムに属しているモジュール(`SearchEngine`, `CacheManager`, `ContentsDatabase`
+    ...)なども特に記載がない限り, __三条項BSDライセンス__が適用されています.
+    
+    
+    [三条項BSDライセンス^[bsd-license]]
+    ===================================
+        
+        ```xml
+        BSD 3-Clause License
+        
+        Copyright (c) 2018, ContentsViewer
+        All rights reserved.
+        
+        Redistribution and use in source and binary forms, with or without
+        modification, are permitted provided that the following conditions are met:
+        
+        * Redistributions of source code must retain the above copyright notice, this
+          list of conditions and the following disclaimer.
+        
+        * Redistributions in binary form must reproduce the above copyright notice,
+          this list of conditions and the following disclaimer in the documentation
+          and/or other materials provided with the distribution.
+        
+        * Neither the name of the copyright holder nor the names of its
+          contributors may be used to endorse or promote products derived from
+          this software without specific prior written permission.
+        
+        THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+        AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+        IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+        DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+        FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+        DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+        SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+        CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+        OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+        OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+            
+        ```
+        
+        # OK
+            * Commercial use; 商用利用
+            * Modification; 改変
+            * Distribution; 配布
+            * Private use; 私的利用
+            
+        # NG
+            * Liability; 責任
+            * Warranty; 保証
+            
+        # 条件
+            * License and copyright notice; ライセンス表示, 著作権表示
+        
+    ====================================
+    
+    
+---------------------------------------------------------------------
+[bsd-license]: github
+    

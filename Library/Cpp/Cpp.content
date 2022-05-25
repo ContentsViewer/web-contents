@@ -1,0 +1,18 @@
+<Header>
+    <Parent> ../Library
+    <Title> C++ライブラリ
+    <CreatedAt> 2016-12-8
+    <Tags> 
+    <Summary>
+        
+        このページは筆者が作成したC++のライブラリが公開されます.
+        
+        
+    </Summary>
+    <Child> Unicode/Unicode
+    <Child> List
+    <Child> String
+    <Child> Stack
+    <Child> Queue
+</Header>
+

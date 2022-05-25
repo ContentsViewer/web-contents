@@ -1,0 +1,169 @@
+<Header>
+    <Parent> Structure
+    <Title> Arduino標準機能との融合
+    <CreatedAt> 2017-7-11
+    <Tags> 
+    <Summary>
+        ここでは, OSの機能とArduino標準機能と融合していきます.
+        融合するものとしては, Arduino言語―setup(), loop()―, 
+        Arduino標準関数に影響するタイマー割り込み部分です.
+    </Summary>
+</Header>
+
+# Arduino言語との融合
+    Arduinoには, setup(), loop()があります.
+    これらの関数は, 元のArduinoでは次のような仕組みになっていました.
+
+    <pre class="brush: cpp;">
+int main(void)
+{
+	init();
+
+	initVariant();
+
+#if defined(USBCON)
+	USBDevice.attach();
+#endif
+	
+	setup();
+    
+	for (;;) {
+		loop();
+		if (serialEventRun) serialEventRun();
+	}
+        
+	return 0;
+}
+    </pre>
+
+    main()からプログラムが動き, まずsetup()が実行されます.
+    その次に, forでloop()が繰り返し呼び出されていることがわかります.
+    これが, setup()がプログラム開始に一回呼ばれ, その後loop()が繰り返し実行されるゆえんです.
+
+    ただし, 上のようなコードはシングルループで動くことが前提で, 今回のようなマルチタスクで動くことは想定されていません.
+    ここでは, それらsetup(), loop()をどのようにしてOS上で実現するのか説明します.
+
+
+    # setup()
+        setup()が持つべき機能は以下のとおりです.
+
+        * プログラム開始時に一回呼ばれる.
+        * 呼ばれたらその後一切呼ばれない.
+
+        上の条件を満たすためにまず思いつくのは, スケジューラ開始前に呼ぶことです.
+        ただしこの方法は, setup()内でいかなる時間に関する関数が機能しない問題があります.
+        というのも, 時間のカウントは, OSのコンテキスト切り替え時に行われるので,
+        タスクスケジュールされていないことは, すなわち時間のカウントが行われていないことを意味します.
+
+        上の問題を解決するためには, タスクスケジュールが開始後に
+        setup()を呼ぶ必要があります. すると, setup()は以下のように実行することになります.
+        ただし, このときsetup()実行時にほかのタスクが実行されないようにタスク切り替えを止めておく必要があります
+        (システムの時間は更新されています).
+
+        <pre class="brush: cpp;">
+void SetupTask(void *parameters)
+{
+    // SetupTaskが処理を終えるまで他タスクを実行させない.
+    TaskSuspendAll();
+    {
+        setup();
+
+        TaskCreate(MainTask, (signed PortChar *)"Main", mainLoopStackSize, NULL, mainLoopPriority, &loopTaskHandle);
+
+    }
+
+    TaskResumeAll();
+
+    #if INCLUDE_TASK_DELETE
+        TaskDelete(NULL);
+
+    #else
+        while (true) TaskSuspend(NULL);
+    #endif
+}
+
+
+
+int main()
+{
+    init();
+
+#if defined(USBCON)
+    USBDevice.attach();
+#endif
+
+    TaskCreate(SetupTask, (signed PortChar *)"Setup", mainSetupStackSize, NULL, mainSetupPriority, &setupTaskhandle);
+    //setup();
+    //TaskCreate(MainTask, (signed PortChar *)"Main", mainLoopStackSize, NULL, mainLoopPriority, &loopTaskHandle);
+
+    TaskStartScheduler();
+    for (;;);
+
+    return 0;
+}
+        </pre>
+
+
+
+    # loop()
+        loop()の機能は以下のとおりです.
+
+        * setup()実行後, 繰り返し実行される.
+
+        上の条件を満たすことは, タスク内のforループ内にloop()を置くことです.
+        setup()実行中はタスク切り替えを一時停止しているので, loop()が呼ばれません.
+        
+        <pre class="brush: cpp;">
+void MainTask(void *parameters)
+{
+    for (;;)
+    {
+        loop();
+        if (serialEventRun) serialEventRun();
+    }
+}
+        </pre>
+
+# Arduino標準のタイマー割り込み部分
+    本来のArduinoでは, 時間のカウントをタイマ割り込みで実現しています.
+    ですが, このOSはそのタイマを使用しているので, 前のコードでは動きません.
+    この問題は, OSのタイムインクリメントイベント関数を使うことで解決します.
+
+    <pre class="brush: cpp;">
+
+void ApplicationTickHook(void)
+{
+
+    // copy these to local variables so they can be stored in registers
+    // (volatile variables must be read from memory on every access)
+    unsigned long m = timer0_millis;
+    unsigned char f = timer0_fract;
+
+    m += MILLIS_INC;
+    f += FRACT_INC;
+
+    if (f >= FRACT_MAX)
+    {
+        f -= FRACT_MAX;
+        m += 1;
+    }
+
+    timer0_fract = f;
+    timer0_millis = m;
+    timer0_overflow_count++;
+}
+    </pre>
+
+    
+    もともとタイマ割り込み関数に入っていた処理をApplicationTickHook()関数に入れます.
+    こうすることで, Arduinoネイティブのコードが問題なく動きます.
+
+# そのほかの関数
+    Arduinoそのほかの関数特に時間に影響しない, 割り込みに影響しない関数は問題なく動きます.
+    例えば, digitalWrite, digitalReadです. 
+
+    また, Timer0を使用しない関数も問題なく動きます.
+    例えば, 一部のPWM出力(Timer1, 2を使用するもの)です.
+
+    Timer0に関係する, または割り込みで動く関数-例えば, TImer0を使用するPWM出力, SPI, Serial-は,
+    スケジューラを停止(EnsScheduler()), 長期のクリティカルセクションを行わない限り問題ありません.

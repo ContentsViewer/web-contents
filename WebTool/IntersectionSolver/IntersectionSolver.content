@@ -1,0 +1,33 @@
+<Header>
+    <Parent> 
+    <Title> 
+    <CreatedAt> 2020-11-22
+    <Tags> noindex
+    <Summary>
+        
+    </Summary>
+</Header>
+<div id="test"></div>
+<script>
+let xa1 = 1037
+let ya1 = -180
+let xa2 = 1048
+let ya2 = -177
+
+let xb1 = 1060
+let yb1 = -53
+let xb2 = 1072
+let yb2 = -51
+
+let l = ((yb1 - ya1) * (xa2 - xa1) - (xb1 - xa1) * (ya2 - ya1)) / ((xb2 - xb1) * (ya2 - ya1) - (yb2 - yb1) * (xa2 - xa1))
+//alert(l)
+
+let xi = (1 - l) * xb1 + l * xb2
+let yi = (1 - l) * yb1 + l * yb2
+
+//alert(xi)
+//alert(yi)
+
+ele = document.getElementById("test")
+//ele.parentNode = this
+</script>

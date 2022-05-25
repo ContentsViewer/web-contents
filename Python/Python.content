@@ -1,0 +1,10 @@
+<Header>
+    <Parent> ../Root
+    <Title> Python
+    <CreatedAt> 2020-08-27
+    <Tags> Python
+    <Summary>
+        
+    </Summary>
+    <Child> stdlib/stdlib
+</Header>

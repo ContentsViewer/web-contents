@@ -1,0 +1,37 @@
+<Header>
+    <Parent> CameraController
+    <Title> CameraControllerの導入方法
+    <CreatedAt> 2016-12-8
+    <Tags> 
+    <Summary>
+        CameraControllerの導入方法を説明します.
+        説明項目は以下のとおりです.
+        
+        * ダウンロード
+        * Unityにインポート
+        
+        
+    </Summary>
+</Header>
+# ダウンロード
+    下記からダウンロードできます.
+
+    <!--[Unity-CameraController](https://github.com/ContentsViewer/Unity-CameraController/)-->
+    
+    <https://github.com/ContentsViewer/Unity-BasicAssets/tree/master/CameraController>
+
+# Unityにインポートします
+    # Unityを起動
+        ![Unity起動](CURRENT_DIR/Images/CameraController/Img1.png)
+    
+    # Unityプロジェクト画面内にダウンロードした'CameraController.cs'をドラックアンドドロップ
+
+    # MainCameraを選択
+        タグ名は'MainCamera'にすることをおすすめします.
+
+        ![MainCameraを選択](CURRENT_DIR/Images/CameraController/Img2.png)
+
+    # 'CameraController'をAddComponent
+        ![AddComponent](CURRENT_DIR/Images/CameraController/Img3.png)
+
+

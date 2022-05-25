@@ -1,0 +1,10 @@
+<Header>
+    <Parent> ../ShellScript
+    <Title> ライブラリ
+    <CreatedAt> 2020-05-21
+    <Tags> 
+    <Summary>
+        
+    </Summary>
+    <Child> std-bin/std-bin
+</Header>

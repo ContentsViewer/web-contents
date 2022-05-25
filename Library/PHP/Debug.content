@@ -1,0 +1,98 @@
+<Header>
+    <Parent> PHP
+    <Title> Debugツール
+    <CreatedAt> 2018-4-7
+    <Tags> ライブラリ, PHP, デバッガ, ダウンロード
+    <Summary>
+        PHPでWebアプリケーションを作るとき, 必ずデバックを行う必要があります.
+        Debugの方法として, "echo"関数などを使用したプログラムの状態を画面に出力するなどがありますが, 
+        ファイルとしてそのようなデバック情報が保存されないのが難点です.
+        
+        このDebugツールは以下の目的で作られました.
+        
+        * 簡単にDebugできるように
+        * 外部ファイルとしてデバック情報を保存
+        
+        
+        
+        
+        
+        
+    </Summary>
+</Header>
+# 特徴
+
+    # 簡単にDebug
+        導入方法は簡単です. 
+        ダウンロードした"Debug.php"をツールを使用したいphpファイルと同階層に置き,
+        以下の一行をphpファイルの上部に記述するのみです.
+
+        ```php
+            include "Debug.php";
+        ```
+
+        Debugの方法も簡単です.
+        以下のコードのように, 記述するだけで知りたい変数の状態が外部ファイルに出力されます.
+        
+        ```php
+            $test = 0;
+            Debug::Log($test);
+        ```
+
+        上に対する出力は次のようになります.
+
+        ```xml
+            22:06:16; 04.06.2018
+            0
+        ```
+
+        例では, int型を引数にとりましたが, そのほかの型も利用可能です.
+        型ごとに関数を分ける必要はなく上の関数一つで済みます.
+
+        また, 複数のDebugの種類を用意しています. 上の例では, 通常のDebugですが,
+        このほかにError, Warningの種類を使用可能です. それぞれの使用例は次のとおりです.
+        
+        ```php
+            $test = "Something error! ";
+            Debug::LogWarning($test);
+            
+            $test .= "FATAL! ";
+            Debug::LogError($test);
+        ```
+
+        上に対する出力は次のようになります.
+
+        ```xml
+            22:12:51; 04.06.2018
+            [WARNING] Something error! 
+            
+            22:12:51; 04.06.2018
+            [ERROR] Something error! FATAL! 
+        ```
+    
+    # 外部ファイル出力
+        Debugの情報は, 外部ファイルに書き込まれます.
+        こうすることで, あとからDebugの内容を見返すことができるほかに,
+        実際にWebアプリケーションを公開してからのエラーなどを見逃すことはなくなります.
+
+        また, この外部ファイルはデフォルトで１か月ごとに更新され, ログがたまり続けることはありません.
+
+
+# ダウンロードページ
+    以下のページでダウンロードが可能です.
+    
+    <https://github.com/ContentsViewer/ContentsPlanet/blob/master/Module/Debug.php>
+    
+    <!--[Lib-PHP-Debug](https://github.com/ContentsViewer/Lib-PHP-Debug/)-->
+        
+    [::NOTE]
+    =================================
+        Debug は, [ContentsPlanet(コンテンツ管理システム)](ROOT_URI/Master/ContentsPlanet/ContentsPlanet)
+        に導入され, メンテナンスは ContentsPlanet プロジェクト内で行われることになりました.
+    ================================
+
+    
+
+
+
+

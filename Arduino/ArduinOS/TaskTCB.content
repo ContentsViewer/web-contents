@@ -1,0 +1,94 @@
+<Header>
+    <Parent> TaskScheduler
+    <Title> タスクコントロールブロック(TCB)
+    <CreatedAt> 2017-7-11
+    <Tags> C言語
+    <Summary>
+        タスクを管理するにあたり, 各タスクの情報を保持しておく必要があります.
+        このような情報の塊をタスクコントロールブロック(TCB)と呼びます.
+        
+    </Summary>
+</Header>
+
+# TCBとは
+    TCBとは, タスクの情報を保持するものです. タスクの情報には, そのタスクの優先度, 状態, 前のプログラムコード位置
+    (タスクが切り換えられ復帰するための現在実行中のプログラムコードの位置)などを含みます.
+    OSはこれら情報を用いてタスクを管理します.
+
+# TCBコード
+    TCBは構造体を用いて実現します. 以下がそのコードです.
+    
+    ```cpp      
+        // 
+        // Task control block
+        // A task control block (TCB) is allocated for each task,
+        // and stores task state information, includeing a pointer to the task's context
+        // (the task's run time environment, includeing register values)
+        //
+        typedef struct 
+        {
+            // Points to the location of the last item placed on the tasks stack.
+            // THIS MUST BE THE FIRST MEMBER OF THE TCB STRUCT.
+            // 
+            // --- memo ---
+            // スタックポインタは常にスタックの先頭を指している.
+            //
+            volatile PortStackType *topOfStack;
+        
+            // The list that the state list item of a task is reference from denotes 
+            // the state of that task (Ready, Blocked, Suspended).
+            ListItem genericListItem;
+        
+            // Used to reference a task from an event list.
+            ListItem eventListItem;
+        
+            // The priority of the task. 0 is the lowest priority.
+            unsigned PortBaseType priority;
+        
+            // Points to the start of the stack.
+            PortStackType *stack;
+        
+            // Descriptive name given to the task when created. Facilitates debugging only.
+            signed char taskName[CONFIG_MAX_TASK_NAME_LEN];
+        
+            #if(PORT_STACK_GROWTH > 0)
+                // Points to the end of the stack or architectures where the stack grows up
+                // from low memory. 
+                PortStackType *endOfStack;
+            #endif
+        
+            #if(CONFIG_USE_MUTEXES == 1)
+                // The priority last assigned to the task - used by the priority inheritance machanism.
+                unsigned PortBaseType basePriority;
+            #endif
+        }TaskControlBlock;
+    ```
+
+    # topOfStack
+        このタスクが保有するスタックの先頭アドレス.
+
+    # genericListItem
+        タスクの状態を判別するためのリスト要素.
+        例えば, サスペンドリストにこの要素が登録されているときは, このタスクはサスペンド状態であることになります.
+
+    # eventListItem
+        タスクが, どのイベントを持っているか判別するためのリスト要素.
+
+    # priority
+        タスクの優先度.
+        優先度が高いタスクから処理が行われます. 優先度の低いタスクは高いタスクの処理が終わるまで実行されません.
+
+    # stack
+        タスクが保有するスタック領域の開始アドレス.
+
+    # taskName
+        タスクの名前.
+        主にデバックのために使用される. 例えば, どのタスクがスタックオーバーフローしたのかを確認するときに使用します.
+        タスクの名前の最大文字数は, 設定ファイル"ArduinOSConfig.h"内で定義してください.
+        定義しなかった場合は, デフォルトの文字数が適用されます.
+
+    # endOfStack
+        タスクが保有するスタック領域の終わりのアドレス.
+
+    # basePriority
+        本来の優先度. 優先度継承によって本来の優先度より高くなった時, 本来の優先度に戻るために使用します.

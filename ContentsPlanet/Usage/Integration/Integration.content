@@ -1,0 +1,20 @@
+<Header>
+    <Parent> ../Usage
+    <Title> 他システムとの連携方法
+    <CreatedAt> 2020-08-31
+    <Tags> 
+    <Summary>
+        Google Drive, Slack, Gitlab, Github, といった他システムの連携方法について
+    </Summary>
+</Header>
+
+# 応用例
+    # + Google Drive + Slack
+        Google Drive でファイル編集, Slackへ通知
+        
+        ![構成例](CURRENT_DIR/Images/fig-drive-slack.png)
+    
+    # + Gitlab, Github
+        Gitを用いたバージョン管理
+        
+        ![構成例](CURRENT_DIR/Images/WithGit.png)

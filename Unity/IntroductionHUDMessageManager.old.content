@@ -1,0 +1,96 @@
+<Header>
+    <Parent> HUDMessageManager
+    <Title> HUDMessageManagerの導入方法
+    <CreatedAt> 2016-12-8
+    <Tags> 
+    <Summary>
+        HUDMessageManagerの導入方法を説明します.
+        説明項目は以下のとおりです.
+        
+        * ダウンロード
+        * Unityにインポート
+        * 表示位置の設定
+        
+        
+    </Summary>
+</Header>
+# ダウンロード
+    下記からダウンロードできます.
+
+    [Unity-HUDMessageManager](https://github.com/ContentsViewer/Unity-HUDMessageManager/)
+
+# Unityにインポートします
+    # Unityを起動
+        ![Unity起動](CURRENT_DIR/Images/HUDMessageManager/Img0.png)
+    
+    # Unityプロジェクト画面内にダウンロードしたフォルダをドラックアンドドロップ
+
+
+# 表示位置を設定します
+    # Canvasを追加
+        ![Canvasを追加](CURRENT_DIR/Images/HUDMessageManager/Img1.png)
+    
+    # Canvasを設定します
+        Canvasを以下のように設定してください
+
+        ![Canvas設定](CURRENT_DIR/Images/HUDMessageManager/Img2.png)
+
+        
+        上のように設定することで異なる画面サイズでも自動で表示位置を調整してくれます
+
+    # Cancvas以下に新しくゲームオブジェクトを作成します
+        ゲームオブジェクトの名前は"HUD_MessageManager"にします
+
+        ![新規GameObject追加](CURRENT_DIR/Images/HUDMessageManager/Img3.png)
+
+    # ゲームオブジェクト"HUD_MessageManager"を設定します
+
+        以下のように設定してください
+
+        ![HUD_MessageManager設定](CURRENT_DIR/Images/HUDMessageManager/Img4.png)
+        
+        
+        "HUD_MessageManager"をAddComponentします<br />
+        RectTransformも写真のとおり設定してください<br />
+
+    # ゲームオブジェクト"HUD_MessageManager"以下にオブジェクトを作成します
+        以下のようにオブジェクトを追加してください
+
+        ![オブジェクト追加](CURRENT_DIR/Images/HUDMessageManager/Img5.png)
+        
+        ここで追加したオブジェクトの場所に文字が表示されることになります
+
+    # 追加したオブジェクトを設定します
+
+        上で作成したオブジェクト写真の通り設定してください。設定する場所はRectTransformとTextコンポーネント内です。
+        Textコンポーネント内のAlignmentを設定してください。<br />
+        オブジェクトTextBoxはImageをAddComponentします。これはテキストボックスになります。
+
+        # CenterText
+            ![CenterText](CURRENT_DIR/Images/HUDMessageManager/Img6.png)
+
+        # BottomText
+            ![BottomText](CURRENT_DIR/Images/HUDMessageManager/Img7.png)
+        
+        # TopText
+            ![TopText](CURRENT_DIR/Images/HUDMessageManager/Img8.png)
+
+        # TopLeftText
+            ![TopLeftText](CURRENT_DIR/Images/HUDMessageManager/Img9.png)
+        
+        # BottomRightText
+            ![BottomRightText](CURRENT_DIR/Images/HUDMessageManager/Img10.png)
+        
+        # TextBox
+            ![TextBox](CURRENT_DIR/Images/HUDMessageManager/Img11.png)
+        
+        # TextBoxText
+            ![TextBoxText](CURRENT_DIR/Images/HUDMessageManager/Img12.png)
+
+        
+        実を言うと上で設定したしたものは必ずしも写真の通りにする必要はありません。
+        表示位置を変更したい場合はRectTransformを設定します。
+        フォントサイズなどの変更も各自お好みで変えてくれても問題ありません。
+
+        上で作成したGameObjectをHUD_MEssageManagerにinspector上で登録してください.
+

@@ -1,0 +1,135 @@
+<Header>
+    <Parent> Programming
+    <Title> あるファイル(フォルダ)が指定されたフォルダ内にあるかの判定
+    <CreatedAt> 2018-10-06
+    <Tags> PHP, プログラミング, ディレクトリトラバーサル
+    <Summary>
+        あるファイルもしくは, フォルダが指定されたフォルダ以下にあるかどうかの
+        簡単な判定方法について考える.
+        
+        
+        
+    </Summary>
+</Header>
+# 問題
+____________________________
+    以下のディレクトリがあるとする.
+    
+    + fileR
+    + root
+        + folder
+            + fileA
+        + fileB
+        + fileC
+        
+    
+    この場合, folder, fileA, fileB, fileCは`root`内にあるが,
+    fileRは`root`外にある. これの判定をしたい.
+    
+    
+# 解決
+___________________________
+    
+    上の問題の場合, 各ファイルパスは以下のようになる.
+    
+    |[パス]
+    |-------||------------|
+    | fileR || ./fileR    |
+    | root  || ./root     |
+    | folder || __./root__/folder |
+    | fileA || __./root__/folder/fileA |
+    | fileB || __./root__/fileB |
+    | fileC || __./root__/fileC |
+    
+    ここで, `root`内にあるファイルフォルダは`./root`で始まっている.
+    つまり, パスが`./root`で始まっているものがそのフォルダ内にあり,
+    それ以外は, 外部である.
+    
+    スクリプトで書くとこうなるだろう.
+    
+    ```php
+    /*
+    * $fileNameが$root以下にあるか.
+    * 
+    * @return: あるときは, true, それ以外はfalse
+    */
+    function IsFileOwner($fileName, $root){
+        
+        // パス正規化. 
+        // この時, そのパス先にファイルがなくても動作したいため,
+        // realpath()は使わない.
+        $fileName = NormalizePath($fileName);
+
+        if(StartsWith($fileName, $root)){
+            return true;
+        }
+
+
+        return false;
+
+
+    }
+    
+    /* パス正規化
+    * ファイルが存在しなくても, パスを正規化する.
+    * ex:
+    *  ./files/../fileA -> ./fileA
+    *  /home/user/folder/../../ -> /home
+    */
+    function NormalizePath (string $str) {
+        $fn = explode("/", $str);
+        $stack = [];
+
+        $index = 0;
+        foreach ($fn as $path) {
+            if ($path === "..") {
+                if (count($stack))
+                    array_pop($stack);
+            }
+            // 最初の'.'は無視しない.
+            else if ($index != 0 && $path === ".") {
+                // 無視
+            }
+            else if ($path === "") {
+                // 無視
+            }
+            else {
+                array_push($stack, $path);
+            }
+
+            $index++;
+        }
+        return implode("/", $stack);
+    }
+
+    
+    /*
+    * $strが$searchで始まっているか.
+    *
+    */
+    function StartsWith($str, $search){
+    
+        if (substr($str,  0, strlen($search)) === $search) {
+            // Match
+            return true;
+        }
+
+        return false;
+    }
+    
+    ```
+    
+    ディレクトリトラバーサルの対策になるかもしれない.
+    
+    [ディレクトリトラバーサル]
+    =======================================
+        ディレクトリトラバーサル (英語: directory traversal) とは, 
+        利用者が供給した入力ファイル名のセキュリティ検証/無害化が不十分であるため, 
+        ファイルAPIに対して「親ディレクトリへの横断 (traverse)」
+        を示すような文字がすり抜けて渡されてしまうような攻撃手法のことである^[wiki].
+    ======================================
+    
+------------------------------------------------
+[wiki]: [Wiki pedia ディレクトリトラバーサル](https://ja.wikipedia.org/wiki/%E3%83%87%E3%82%A3%E3%83%AC%E3%82%AF%E3%83%88%E3%83%AA%E3%83%88%E3%83%A9%E3%83%90%E3%83%BC%E3%82%B5%E3%83%AB)
+
+

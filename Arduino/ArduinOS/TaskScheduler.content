@@ -1,0 +1,24 @@
+<Header>
+    <Parent> Structure
+    <Title> タスク管理
+    <CreatedAt> 2017-8-28
+    <Tags> 
+    <Summary>
+        ここでは, OSには必ずなくてはいけない機能の一つであるタスク管理について説明します.
+        
+        タスク管理には非常に多くのことが関わっているため以下のように分けていきます.
+        
+        * タスクコントロールブロック(TCB)
+        * メモリの構造
+        * 状態リスト
+        * コンテクスト
+        * システム割り込み
+        
+    </Summary>
+    <Child> TaskTCB
+    <Child> TaskStack
+    <Child> TaskStateList
+    <Child> TaskContext
+    <Child> TaskTick
+</Header>
+

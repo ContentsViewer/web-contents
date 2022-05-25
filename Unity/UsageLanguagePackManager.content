@@ -1,0 +1,149 @@
+<Header>
+    <Parent> LanguagePackManager
+    <Title> LanguagePackManagerの使い方
+    <CreatedAt> 2016-12-8
+    <Tags> 
+    <Summary>
+        ここでは, LanguagePackManagerの基本的な使い方を説明します.
+        説明項目は以下のとおりです.
+        
+        * パラメータの説明
+        * 言語パックの作成
+        * 使用例
+        * 言語パックの読み込みについて
+        
+        
+    </Summary>
+</Header>
+# パラメータの説明
+    ![パラメータ](CURRENT_DIR/Images/LanguagePackManager/Img3.png)
+
+    # dontDestroyObjectOnLoad
+        # true
+            シーン間でデストロイされません
+
+        # false
+            シーン間でデストロイされます<br />
+            デストロイされたときからはLanguagePackManagerの機能を使うことはできなくなります。
+
+    # languageID
+        表示言語を変えるときに使用します
+
+        # coreLanguagePackFileList
+            # packFileName
+                packFileが存在するパス<br />
+                'Assets/'から始まるパス<br />
+                '.txt'の付け忘れに注意してください<br />
+                ここで登録された言語パックファイルはシーン間でデストロイされません。
+                シーンをまたいでこの言語パックファイルにアクセスすることができます。
+
+            # sceneList
+                # sceneName
+                    シーンの名前
+
+                # languagePackFileList
+                    # packFileName
+                        packFileが存在するパス<br />
+                        'Assets/'から始まるパス<br />
+                        '.txt'の付け忘れに注意してください<br />
+                        ここで登録された言語パックファイルが存在できるのは指定されたシーン内のみです。
+                        指定されたシーンから出るとここで登録された言語パックファイルはアンロードされます。
+
+# 言語パックの作成
+    # テキストファイルを用意します
+
+    # Label名を書きます
+
+        例
+
+        <pre class="brush: csharp;">
+&lt;Label&gt;Mes0
+        </pre>
+
+    # Listを書きます
+        例
+        
+        <pre class="brush: csharp;">
+&lt;Label&gt;Mes0
+&lt;List&gt;Test
+&lt;List&gt;テスト
+        </pre>
+
+    # 上二つをLabel数繰り返します
+        例
+
+        <pre class="brush: csharp;">
+&lt;Label&gt;Mes0
+&lt;List&gt;Test
+&lt;List&gt;テスト
+&lt;Label&gt;Mes1
+&lt;List&gt;Hello
+&lt;List&gt;やあ
+        </pre>
+
+    # UTF8形式で保存します
+
+    # 補足
+        上の場合languageIDが0のとき英語, LanguageIDが1のとき日本語です
+
+# 使用例
+    # 前提
+        
+        上の言語ファイルを使用します<br />
+        ファイル名は'Pack1.txt'にします<br />
+        このファイルを'LanguagePack/'以下に配置します
+
+    # 言語パック'Pack1'を登録します
+        # 'coreLanguagePackFileList'のサイズを1にします
+
+        # 'packFileName'欄に'LanguagePack/Pack1.txt'を書きます
+
+    # 新しくGameObjectを追加して以下のスクリプトをアタッチします
+
+        <pre class="brush: csharp;">
+using UnityEngine;
+using System.Collections;
+public class test : MonoBehaviour {
+    
+    void Start () {
+        //languageIDを0にします.つまりリスト０番目: 英語です
+        LanguagePackManager.instance.languageID = 0;
+    }
+    
+    void Update () {
+        //Label'Mes0'と関連付けられている文字列を表示します
+        Debug.Log(LanguagePackManager.instance.GetString("Mes0"));
+    }
+}
+        </pre>
+
+    # 'Test'が表示されます
+        languagePackIDが1のときは'テスト'が表示されます
+
+# 言語パックの読み込みについて
+    言語パックの読み込みのタイミングは以下の図のようになっています.
+    'CoreLanguagePack'はゲーム起動と同時に読みこまれゲームを終了するまで破棄されることはありません.
+    'SceneごとのLanguagePack'は登録されたScene内でのみ有効です. そのSceneの読み込みと同時にLanguagePackが読み込まれ,
+    Scene終了と同時にそのLanguagePackは破棄されます.
+
+    ![読み込みのタイミング](CURRENT_DIR/Images/LanguagePackManager/Img4.png)
+    
+    上のように, LanguagePackManagerは事前に登録された情報でLanguagePackの読み込み, 破棄を行いますが,
+    任意のタイミングでLanguagePackを読むこむことが可能です.
+    下のようにするとLanguagePackを読み込むことができます.
+
+    <pre class="brush: csharp;">
+//Class'LanguagePackFile'とはロードしたいパックファイルの情報を格納するものです
+//以下のパックファイル情報を格納します
+//fileName = 'LanguagePack/Pack1.txt'
+LanguagePackFile file = new LanguagePackFile("LanguagePack/Pack1.txt");
+
+
+//これでfileに上記のパックファイル情報が格納されました
+//パックファイルのロード; シーン間でデストロイする
+LoadFile(file, false);
+    </pre>
+
+    関数'LoadFile'に関する詳しい情報は
+    [LanguagePackManagerの関数一覧](CURRENT_DIR/ReferenceLanguagePackManager)
+    を参照してください.

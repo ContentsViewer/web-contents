@@ -1,0 +1,34 @@
+<Header>
+    <Parent> ../Root
+    <Title> OutlineText (軽量マークアップ)
+    <CreatedAt> 2018-4-16
+    <Tags> 軽量マークアップ言語
+    <Summary>
+        ![OutlineText](CURRENT_DIR/Images/OutlineText.png)
+        
+        
+        OutlineTextは, プレーンテキストの段階で__文章のアウトラインを分かりやすくするため__に開発された
+        __軽量マークアップ言語__です.
+        他の軽量マークアップ言語(Markdown, AsciiDoc, ReStructuredText, ...)と異なり, 
+        __インデントは文章の階層構造を表します.__
+        このことで, 文章の階層構造が視覚的にわかりやすくなります.
+        
+        
+        OutlineTextの実行例をご覧になりたい時はこのウェブページを参照してください.
+        このウェブページはすべてOutlineTextで書かれています.
+        OutlineTextのプレーンテキストは, 
+        ウェブページ右下にある`このページのソースコードを表示`をクリックすることで,
+        確認できます.
+        
+        
+        **すぐに試してみたい方は, 以下のページから** \\
+        [すぐに試す](ROOT_URI/Client/OutlineText/outlinetext-editor_ja.html)
+        
+        
+    </Summary>
+    <Child> Features
+    <Child> Syntax
+    <Child> Style
+    <Child> Download
+    <Child> HowItWorks/HowItWorks
+</Header>

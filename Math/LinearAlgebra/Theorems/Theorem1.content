@@ -1,0 +1,745 @@
+<Header>
+    <Parent> Theorems
+    <Title> 定理集1
+    <CreatedAt> 2018-12-11
+    <Tags> 行列, 定理
+    <Summary>
+        
+    </Summary>
+</Header>
+# ヴァンデルモンドの行列式
+    
+    ```math
+        $$
+            det \left(\begin{array}{cccc}
+            1 & 1 & \ldots & 1 \\
+            x_1 & x_2 &   & x_n \\
+            x_1^2 & x_2^2 &  & x_n^2 \\
+            \vdots & \vdots &  & \vdots \\
+            x_1^{n-2} & x_2^{n-2} &  & x_n^{n-2} \\
+            x_1^{n-1} & x_2^{n-1} &  & x_n^{n-2} 
+            \end{array}\right)=\prod_{i>j}(x_i - x_j)
+        $$
+    ```
+    
+    ----------------------------------------------------------------------------
+    
+    
+    (i) $n-1$で成り立つと仮定. 
+    
+        $n$において,$i行-(i-1)行\times x_1$を$i=n,n-1,\cdots,1$の順に行う.
+        
+        ```math
+            $$
+                \begin{split}
+                (左辺)&=\left|\begin{array}{cccc}
+                1 & 1 & \ldots & 1 \\
+                0 & 1(x_2 - x_1) & & 1(x_n - x_1) \\
+                \vdots & \vdots & \ddots & \vdots \\
+                0 & x_2^{n-2}(x_2 - x_1) & \ldots & x_n^{n-2}(x_2 - x_1)
+                \end{array}\right| \\
+                
+                &=\left|\begin{array}{ccc}
+                (x_2 - x_1) & \ldots & (x_n -x_1) \\
+                \vdots & \ddots & \vdots \\
+                x_2^{n-2}(x_2 - x_1) & \ldots & x_n^{n-2}(x_n - x_1)
+                \end{array}\right|\quad (行列式の性質より) \\
+                
+                
+                &=\left|(x_2 - x_1)(x_3 - x_1)\ldots(x_n - x_1)\left(\begin{array}{ccc}
+                1 & \ldots & 1 \\
+                \vdots & \ddots & \vdots \\
+                x_2^{n-2} & \ldots & x_n^{n-2}
+                \end{array}\right)\right| \\
+                
+                
+                &=\left|(x_2 - x_1)(x_3 - x_1)\ldots(x_n - x_1)\right|\left|\begin{array}{ccc}
+                1 & \ldots & 1 \\
+                \vdots & \ddots & \vdots \\
+                x_2^{n-2} & \ldots & x_n^{n-2}
+                \end{array}\right| \quad(|AB|=|A||B|より)\\
+                
+                
+                &=(x_2 - x_1)(x_3 - x_1)\ldots(x_n - x_1)\left|\begin{array}{ccc}
+                1 & \ldots & 1 \\
+                \vdots & \ddots & \vdots \\
+                x_2^{n-2} & \ldots & x_n^{n-2}
+                \end{array}\right|　\\
+                
+                \end{split}
+            $$
+        ```
+        
+        $(n-1)$から$n$が示せた.
+    
+    (ii) $n=2$のとき
+        
+        ```math
+            $$
+                \left|\begin{array}{cc}
+                1 & 1 \\
+                x_1 & x_2 
+                \end{array}\right| = (x_2 - x_1)
+            $$
+        
+        ```
+        
+        より成立
+    
+    
+# 直交補空間
+    
+    $n$次元空間$V$の部分空間$W$のすべてのベクトルと直交するベクトル全体を$W^\perp$として,
+    これを$W$の直交補空間という. (つまり, $p \in W \quad q \in W^\perp$ならば, 内積$(p,q)=0$)
+    
+    このとき, 以下が成り立つ.
+    
+    a) $W^\perp$は$V$の部分空間
+    
+    b) $W^\perp\cap W={0}$
+    
+    ----------------------------------------------------------------------------
+
+    a)
+    
+        $x\in W, a,b \in W^\perp$ $(x,a)=(x,b)=0$を仮定
+        
+        (i) 明らかに$0\in W^\perp$
+            
+        (ii)
+        
+            ```math
+                $$
+                    \begin{split}
+                    (a+b, x) &= (a+b)\cdot x \\
+                             &= ax + bx \\
+                             &= 0 \quad (仮定より)
+                    \end{split}
+                $$
+            
+            ```
+        
+        (iii)
+        
+            ```math
+                $$
+                    \begin{split}
+                    (ka, x) &= kax \\
+                             &= 0 \quad (仮定より)
+                    \end{split}
+                $$
+            
+            ```
+    
+        以上から, 
+        $W^\perp \subset V$
+    
+    b)
+    
+        $0\in W^\perp \cap W$は明らか
+        
+        $\bf{a} \neq 0, \bf{a} \in W^\perp \cap W$について ($\bf{a}=0$以外について)
+        
+            $\bf{a} \in W, W^\perp$ より
+            
+            ```math
+                $$
+                    \begin{split}
+                    (\bf{a}, \bf{a})&=0 \\
+                    \bf{a} \cdot \bf{a} &= 0 \\
+                    \bf{a} &= 0
+                    \end{split}
+                $$
+            
+            ```
+
+    [部分空間]
+    ===========
+        ベクトル空間$V$野からではない部分集合$W$が和及びスカラー倍について閉じているとき
+        $W$を$V$の部分空間という.
+        
+        (i) $0 \in W$
+        
+        (ii) $a, b \in W \quad a+b \in W$
+        
+        (iii) $a \in W \quad ka \in W \quad (k \in K)$
+    ===========
+    
+    
+# 直交射影
+    一次独立なベクトル$a, b$が与えられたとき, $b$の$a$への直交射影は,
+    
+    ```math
+        $$x=\frac{(a,b)}{(a,a)} a$$
+    
+    ```
+    
+    と表せる.
+    
+    ![直交射影ベクトル](CURRENT_DIR/Images/ProjectionVec.png)
+    
+    ----------------------------------------------------------------------------
+    
+    ```math
+        $$
+            \begin{split}
+            x=\lambda a \quad (\lambda は任意) \\
+            (b - \lambda a, a) &= 0 \\
+            (b - \lambda a) \cdot a &= 0 \\
+            (b,a) - \lambda (a, a) &= 0 \\
+            \lambda = \frac{(b,a)}{(a,a)}
+            \end{split}
+        $$
+    ```
+    
+    よって,
+    
+    ```math
+        $$x=\frac{(a,b)}{(a,a)} a$$
+    
+    ```
+    
+    
+# ユニタリ行列の行列式
+    ユニタリ行列$U$ $(UU^H=U^HU=I)$の行列式の絶対値は1
+    
+    ----------------------------------------------------------------------------
+    
+    ```math
+        $$
+            \begin{split}
+            |UU^H| &= |U||U^H| \\
+                   &= |U||\overline{U}^T| \\
+                   &= |U||\overline{U}| \quad (|A^T|=|A|) \\
+                   &= \alpha \overline{\alpha} \\
+                   &= |\alpha|^2
+            \end{split}
+        $$
+    ```
+    
+    $|UU^H|=1$より,
+    
+    ```math
+        $$
+          \begin{split}
+            |\alpha|^2 &= 1 \\
+            |\alpha|   &= 1
+          \end{split}
+        $$
+    ```
+    
+    よって、$|U|=1$
+
+
+    [::NOTE]
+    ========
+        * 実対称行列$A$は, エルミート行列$H$の一種
+        * 直交行列$P$は, ユニタリ行列$U$の一種
+    ========
+
+# エルミート行列の固有値
+    エルミート行列$A$ $(A^H = A)$の固有値はすべて実数
+    
+    ----------------------------------------------------------------------------
+    
+    $Ax = \lambda x \quad$ ($x \neq 0$とする)
+    
+    ```math
+        $$
+            \begin{split}
+            x^H Ax &= x^H \lambda x \\
+                   &= \lambda x^H x
+            \end{split}
+        $$
+    ```
+    
+    ```math
+        $$
+            \begin{split}
+            x^H A^H x &= (Ax)^H x \\
+                      &= (\lambda x)^H x \\
+                      &= \overline{\lambda}x^H x
+            \end{split}
+        $$
+    ```
+    
+    $x^H Ax=x^H A^H x$より,
+    
+    ```math
+        $$
+            \lambda x^H x = \overline{\lambda}x^H x
+        $$
+    ```
+    
+    $\overline{\lambda}=\lambda$より, $\lambda$は実数. ($x^H x \neq 0$より)
+
+# 実対称行列の固有値
+    実対象行列A $(A=A^T)$の固有値はすべて実数
+    
+    ----------------------------------------------------------------------------
+    
+    
+    エルミート行列の固有値はすべて実数 であることから, 成立する.
+
+# ユニタリ行列の固有値
+    ユニタリ行列$U$の固有値の絶対値は1 ($U^H U = U U^H = I$)
+    
+    ----------------------------------------------------------------------------
+    
+    $Ux=\lambda x (x \neq 0)$とする.
+    
+    ```math
+        $$
+            \begin{split}
+            x^H Ux &= \lambda x^H x \\
+                   &= \lambda x^H U^H U x \quad (U^HU=Iより) \\
+                   &= \lambda (Ux)^H Ux \\
+                   &= \lambda (\lambda x)^H Ux \quad (Ux=\lambda x より) \\
+                   &= \lambda \overline{\lambda} x^H Ux
+            \end{split}
+        $$
+    ```
+    
+    $x^H Ux = \lambda x^H x$より,
+    
+    ```math
+        $$
+            \begin{split}
+            (\lambda \overline{\lambda} - 1)x^H x &= 0 \\
+            \lambda \overline{\lambda} &= 1 \quad (x^H x \neq 0) \\
+            |\lambda|^2 &= 1 \\
+            |\lambda| &= 1 \quad (|\lambda | > 0 より)
+            \end{split}
+        $$
+    ```
+    
+# 直交行列の固有値
+    直交行列の固有値の絶対値は1 ($U^T U = U U^T = I$)
+    
+    ----------------------------------------------------------------------------
+    
+    ユニタリ行列の固有値の絶対値は1であることより, 成立する.
+    
+
+# エルミート行列の固有ベクトルの直交性
+    エルミート行列$A$において, 重複のない固有値に対応する固有ベクトルは直交する.
+    
+    ----------------------------------------------------------------------------
+    
+    次のように置く. 
+    
+    ```math
+        $$
+            \begin{split}
+            Ax &= \lambda x \quad (x \neq 0) \\
+            Ay &= \mu y \quad (y \neq 0) \\
+            \lambda &\neq \mu \quad (重複のない固有値)
+            \end{split}
+        $$
+    ```
+    
+    次式が成立.
+    
+    ```math
+        $$
+            y^H A x = \lambda y^H x 
+        $$
+    ```
+    
+    また, これも成立.
+    
+    ```math
+        $$
+            \begin{split}
+            x^H A y &= \mu x^H y \\
+            (x^H A y)^H &= (\mu x^H y)^H \\
+            y^H A^H x &= \overline{\mu} y^H x \\
+            y^H A^H x &= \mu y^H x \quad (エルミート行列の固有値は実数) \\
+            y^H A x &= \mu y^H x
+            \end{split}
+        $$
+    ```
+    
+    よって,
+    
+    ```math
+        $$
+            \begin{split}
+            (\lambda - \mu)y^H x &= 0 \\
+            y^H x &= 0 \quad (\lambda \neq \mu)
+            \end{split}
+        $$
+    ```
+    
+    $x$と$y$は直交する.
+
+# 正規行列の固有値
+    $A$が正規行列($AA^H = A^H A$)のとき, $Ax=\lambda x$ならば, $A^H x = \overline{\lambda}x$
+    つまり, $A^H$の固有値は$\overline{\lambda}$である.
+    
+    ----------------------------------------------------------------------------
+    
+    ```math
+        $$
+            \begin{split}
+            (Ax - \lambda x)^H (Ax - \lambda x) &= x^H(A^H - \overline{\lambda}I)(A - \lambda I)x  \quad (x \neq 0)\\
+            &= x^H(A^H A - \lambda A^H - \overline{\lambda}A + |\lambda|^2)x \\
+            &= x^H(AA^H - \lambda A^H - \overline{\lambda}A + |\lambda|^2)x \\
+            &= x^H(A - \lambda I)(A^H - \overline{\lambda}I)x \\
+            &= ((A - \lambda I)^H x)^H (A - \lambda I)^Hx
+            \end{split}
+        $$
+    ```
+    
+    また, $Ax=\lambda x$より, $(Ax - \lambda x)^H (Ax - \lambda x) = 0$
+    
+    よって,
+    
+    ```math
+        $$
+            \begin{split}
+            (A - \lambda I)^H x &= 0 \\
+            A^H x &= \lambda^H x \\
+            A^H x &= \overline{\lambda}x
+            \end{split}
+        $$
+    ```
+
+# 固有ベクトルの一次独立性
+    $A$の相異なる固有値に対応する固有ベクトルは一次独立である.
+    特に, $A$が正規行列ならば直交する.
+    
+    ----------------------------------------------------------------------------
+    
+    次のようにおく.
+    
+    ```math
+        $$
+            \begin{split}
+                Ax &= \lambda x \\
+                Ay &= \mu y \quad (\lambda \neq \mu)(x \neq 0, y \neq 0)
+            \end{split}
+        $$
+    ```
+    
+    # 一次独立性
+        $\alpha x + \beta y =0 $について
+        
+        次が成立.
+        
+        ```math
+            $$
+                \begin{split}
+                \alpha Ax + \beta Ay &= 0 \\
+                \alpha \lambda x + \beta \mu y &= 0
+                \end{split}
+            $$
+        ```
+        
+        次も成立.
+        
+        ```math
+            $$
+                \alpha \mu x + \beta \mu y = 0
+            $$
+        ```
+    
+        以上から,
+        
+        ```math
+            $$
+                \begin{split}
+                \alpha(\mu - \lambda)x &= 0 \\
+                \alpha = 0 \quad (\mu \neq \lambda, x \neq 0 より)
+                \end{split}
+            $$
+        ```
+        
+        これを, $\alpha x + \beta y =0 $に代入
+        
+        ```math
+            $$
+                \begin{split}
+                \beta y &= 0 \\
+                \beta &= 0 \quad (y \neq 0より)
+                \end{split}
+            $$
+        ```
+        
+        以上から, $x, y$は一次独立
+        
+    # $A$が正規行列の場合
+        
+        ```math
+            $$
+                \begin{split}
+                \overline{\mu}y^H x &= (\mu y)^H x \\\
+                &= (Ay)^H x \\
+                &= y^H A^H x \\
+                &= \overline{\lambda}y^H x \quad (A^H の固有値は\overline{\lambda}) \\
+                (\overline{\mu} - \overline{\lambda})y^H x &= 0 \\
+                y^H x &= 0 \quad (\overline{\mu} \neq \overline{\lambda})
+                \end{split}
+            $$
+        ```
+        
+        よって, 直交する.
+
+# 三角化
+    行列$A$が適当なユニタリ行列$U$を使って三角化つまり, 
+    固有値を対角成分に持つ三角行列$S$に対して, $U^H AU=S$とできる.
+    ただし, $A$の固有値$\lambda_i$に対応する固有ベクトルを$u_i$とすると,
+    $U=(u_1 u_2 \ldots u_n)$である.
+    
+    特に, $A$が正規行列ならば, $S$を対角行列に選ぶことができる.
+    
+    ```math
+        $$
+            \begin{split}
+            U^H A U &= S \\
+            \left(\begin{array}{c}u_1^H \\
+            u_2^H \\
+            \vdots \\
+            u_n^H\end{array}\right) A \left(\begin{array}{cccc}u_1 & u_2 & \ldots & u_n\end{array}\right) 
+            &= \left(\begin{array}{cccc}
+            \lambda_1 &          &        & \Huge{*}  \\
+                      &\lambda_2 &        &           \\
+                      &          & \ddots &           \\
+            \Huge{0}  &          &        & \lambda_n 
+            \end{array}\right) \\
+            Au_i &= \lambda_i u_i \\
+            u_i^H u_j &= 0 \quad (i \neq j)
+            \end{split}
+        $$
+    ```
+    
+    ----------------------------------------------------------------------------
+    
+    特に以下の証明
+    
+    ```math
+        $$
+            \begin{split}
+            U^H AU &= S \\
+            UU^H AUU^H &= USU^H \\
+            A &= USU^H
+            \end{split}
+        $$
+    ```
+    
+    $A^H$について
+    
+    ```math
+        $$
+            \begin{split}
+            A^H &= (USU^H)^H \\
+                &= US^HU^H
+            \end{split}
+        $$
+    ```
+    
+    $AA^H=A^H A$なので, ($A$は正規行列なので)
+    
+    ```math
+        $$
+            \begin{split}
+            USU^H US^H U^H &= U S^H U^H U S U^H \\
+            USS^H U^H &= US^H SU^H \\
+            USS^H U^H U &= US^H SU^H U \quad (右からUをかける) \\
+            USS^H &= US^H S \\
+            SS^H &= S^H S \\
+            \left(\begin{array}{ccc}
+            *        &        & \Huge{*} \\
+                     & \ddots &          \\
+            \Huge{0} &        & *
+            \end{array}\right)
+            \left(\begin{array}{ccc}
+            *        &        & \Huge{0} \\
+                     & \ddots &          \\
+            \Huge{*} &        & *
+            \end{array}\right) &=
+            \left(\begin{array}{ccc}
+            *        &        & \Huge{0} \\
+                     & \ddots &          \\
+            \Huge{*} &        & *
+            \end{array}\right)
+            \left(\begin{array}{ccc}
+            *        &        & \Huge{*} \\
+                     & \ddots &          \\
+            \Huge{0} &        & *
+            \end{array}\right)
+            \end{split}
+        $$
+    ```
+    
+    数学的帰納法を用いての証明は略
+    
+    ```math
+        $$
+            S = \left(\begin{array}{ccc}
+            *        &        & \Huge{0} \\
+                     & \ddots &          \\
+            \Huge{0} &        & *
+            \end{array}\right)
+        $$
+    ```
+    
+# 対角化
+    行列$A(n \times n)$が適当な正則な行列$P$を使って対角化つまり, $P^{-1}AP$が
+    対角行列にできるための必要十分条件は, 固有値$\lambda_i$の重複度と
+    同じ数の独立な固有ベクトルが選べることである.
+    
+    このとき, 各固有ベクトル$v_i$は一次独立であり, 
+    $P=(v_1 v_2 \ldots v_n)$とすると, $P^{-1}AP=\Sigma=diag(\lambda_1 \lambda_2 \ldots \lambda_n$)となる.
+    
+    ----------------------------------------------------------------------------
+    
+    
+# エルミート行列の対角化
+    $A$がエルミート行列ならば$P$をユニタリ行列に選ぶことができる.
+    
+    ----------------------------------------------------------------------------
+    
+    エルミート行列$A$において, 重複のない固有値に対応する固有ベクトルは直交するので, 成立する.
+    
+# 実対称行列の対角化
+    $A$が実対称行列ならば, $P$を直交行列に選ぶことができる.
+    
+    ----------------------------------------------------------------------------
+
+# エルミート行列であるための必要十分条件
+    正規行列$A$がエルミート行列であるための必要十分条件は, $A$の固有値が実数であることである.
+    
+    ----------------------------------------------------------------------------
+    
+    $A$がエルミート行列ならば, $A$の固有値が実数であることは証明済み.
+    
+    $A$の固有値が実数であるならば, $A$がエルミート行列であることについて.
+    
+    $A$が正規行列であることから, 対角化可能.
+    
+    ```math
+        $$
+            \begin{split}
+            U^H AU &= \Sigma = \left(\begin{array}{cccc}
+            \lambda_1 &           &        & \Huge{0} \\
+                      & \lambda_2 &        &          \\
+                      &           & \ddots &          \\
+            \Huge{0}  &           &        & \lambda_n 
+            \end{array}\right) \\
+            (U^H A U)^H &= (\Sigma)^H \\
+            U^H A^H U &= \Sigma \\
+            U^H A^H U &= U^H A U \\
+            U U^H A^H U U^H &= U U^H A U U^H \\
+            A^H &= A
+            \end{split}
+        $$
+    ```
+
+# ユニタリ行列であるための必要十分条件
+    正規行列$A$がユニタリ行列であるための必要十分条件は, $A$の固有値$\lambda_i$の絶対値が1であることである.
+    
+    ----------------------------------------------------------------------------
+    
+    $A$がユニタリ行列ならば, $A$の固有値の絶対値が1であることは証明済み.
+    
+    $A$の固有値の絶対値が1ならば, $A$がユニタリ行列であることについて.
+    
+    $A$が正規行列であることから, 対角化可能.
+
+    ```math
+        $$
+            \begin{split}
+            U^H AU &= \Sigma = \left(\begin{array}{cccc}
+            \lambda_1 &           &        & \Huge{0} \\
+                      & \lambda_2 &        &          \\
+                      &           & \ddots &          \\
+            \Huge{0}  &           &        & \lambda_n 
+            \end{array}\right) \\
+            U^H A A^H U &= (U^H A U)(U^H A^H U) \\
+            &= \Sigma \Sigma^H \\
+            &= \left(\begin{array}{cccc}
+            |\lambda_1|^2 &               &        & \Huge{0}      \\
+                          & |\lambda_2|^2 &        &               \\
+                          &               & \ddots &               \\
+            \Huge{0}      &               &        & |\lambda_n|^2 
+            \end{array}\right) \\
+            &= I \\
+            UU^H AA^H UU^H &= UIU^H \\
+            AA^H &= I
+            \end{split}
+        $$
+    ```
+    
+    [::NOTE]
+    =========
+        $A^H = (\overline{A})^T$
+    =========
+
+# トレースと行列式
+    a) $tr(AB) = tr(BA)$
+    
+    b) $|AB| = |A||B| = |BA|$
+    
+    ----------------------------------------------------------------------------
+    
+    a)について
+        
+        ```math
+            $$
+                \begin{split}
+                tr(AB) &= \sum_{i=1}^m(AB)_{ii} \quad (A: m \times n, B: n \times m) \\
+                &= \sum_{i=1}^m \sum_{j=1}^n A_{ij} B_{ji} \\
+                &= \sum_{j=1}^n \sum_{i=1}^m B_{ji} A_{ij} \\
+                &= \sum_{j=1}^n (BA)_{jj} \\
+                &= tr(BA)
+                \end{split}
+            $$
+        ```
+
+# トレースと固有値
+    $tr(A) = \lambda_1 + \lambda_2 + \cdots + \lambda_n$
+    
+    ----------------------------------------------------------------------------
+    
+    ```math
+        $$
+            \begin{split}
+            U^H A U &= S \\
+            UU^H AUU^H &= USU^H \\
+            A &= USU^H
+            \end{split}
+        $$
+    ```
+    
+    なので,
+    
+    ```math
+        $$
+            \begin{split}
+            tr(A) &= tr(USU^H) \\
+            &= tr(SU^H U) \quad tr(ABC)=tr(BCA)=tr(CAB)\\
+            &= \lambda_1 + \lambda_2 + \cdots + \lambda_n
+            \end{split}
+        $$
+    ```
+    
+    [::NOTE]
+    ========
+        固有値の検算に最適
+    ========
+    
+# 行列式と固有値
+    $|A|=|USU^H|=|SUU^H|=\lambda_1 \cdot \lambda_2 \cdots \lambda_n$
+    
+    ----------------------------------------------------------------------------
+    
+    
+
+
+
+
+
+
+
+

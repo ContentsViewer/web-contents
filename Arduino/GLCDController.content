@@ -1,0 +1,28 @@
+<Header>
+    <Parent> GLCD
+    <Title> GLCDControllerの紹介
+    <CreatedAt> 2016-12-8
+    <Tags> ライブラリ
+    <Summary>
+        ![フレームレート測定画面](CURRENT_DIR/Images/GLCDController/GLCDTest.jpg)
+        
+        GLCDControllerとは、グラフィック液晶SG12864ASLB-GBを操作するものです.
+        GLCDControllerの特徴は以下の通りです.
+        
+        * 2Dグラフィック操作ライブラリ[Canvas](./Canvas)の利点を受け継ぎ
+        * 高いフレームレート
+        
+        このGLCDControllerのメンバ変数としてCanvasがあるのですが, このCanvasが2Dグラフィック操作を簡単にします.
+        Canvasについての特徴は[Canvasの特徴](./CanvasFeature)を参照してください.
+        
+        画面の更新速度ですが,最高60fps以上(最高fps85fps, 平均60fps, 全画面更新15fps)まで出せます(ArduinoUno 16Mhzで検証). 
+        
+        GLCDControllerを改良、強化、何でもしてください(;´∀｀)
+        
+        
+        
+    </Summary>
+    <Child> IntroductionGLCDController
+    <Child> UsageGLCDController
+    <Child> ReferenceGLCDController
+</Header>

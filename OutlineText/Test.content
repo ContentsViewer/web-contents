@@ -1,0 +1,102 @@
+<Header>
+    <CreatedAt> 2017/6/7
+    <Title> Test
+
+    <Summary>
+        Test
+    </Summary>
+
+
+</Header>
+
+Section
+______________________________________
+
+
+Section
+______________________________________
+
+
+[Box]
+==========================
+    in Box
+
+    paragraph, paragraph, paragraph, paragraph, 
+    paragraph, paragraph, paragraph, paragraph, 
+    paragraph, paragraph, paragraph, paragraph, 
+
+
+    paragraph, paragraph, paragraph, paragraph, 
+    paragraph, paragraph, paragraph, paragraph, 
+    paragraph, paragraph, paragraph, paragraph, 
+
+
+    # Section
+        # table
+            |[caption]
+            | A || B |
+            | C || D |
+
+    [Box]
+    =================
+        a
+
+    =================
+
+
+=========================
+
+[補足事項]
+============================================================
+    ボックスの中では, __見出し__, __テーブル__, __コードブロック__など
+    OutlineTextの記法がそのまま使用できます.
+
+    # 見出し
+    ================
+
+    |[ブラウザシェア2018]
+    | ブラウザ名 | シェア率 |
+    |-----------|---------|
+    | Chrome    | 59.67%   |
+    | Safari    | 14.51%   |
+    | UC Browser | 6.28%    |
+    | Firefox   | 4.93%   |
+    | Opera     | 3.5%   |
+    | IE        | 3.03% |
+
+    ```csharp
+public class MyClass
+{
+private string status = string.Empty;
+public string Status
+{
+get { return status; }
+private set { status = value; }
+}
+}
+    ```
+    
+    [ボックスの中でボックス]
+    =================================
+
+        ここまでいくことはまれ
+
+
+    =================================
+
+============================================================
+
+<div class="box">
+    <span class="box-title">コンパイル</span>
+    <p>
+        ArduinoIDEにおいて, コンパイラはスケッチファイル(.ino)の他に,
+        コアフォルダ(通常ならばcores/arduino, 今回のOS製作ではcores/arduino.MageOSになります)
+        内にあるcファイルもしくはcppファイルをそれぞれコンパイルします.
+    </p>
+
+    <p>
+        ArduinoIDEにおいて, コンパイラはスケッチファイル(.ino)の他に,
+        コアフォルダ(通常ならばcores/arduino, 今回のOS製作ではcores/arduino.MageOSになります)
+        内にあるcファイルもしくはcppファイルをそれぞれコンパイルします.
+    </p>
+</div>

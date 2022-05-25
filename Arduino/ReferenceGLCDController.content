@@ -1,0 +1,46 @@
+<Header>
+    <Parent> GLCDController
+    <Title> GLCDControllerの関数, 変数一覧
+    <CreatedAt> 2016-12-8
+    <Tags> 
+    <Summary>
+        |[関数]
+        |--------------||-------------------------------|
+        | [Begin](#Begin) || GLCDControllerの開始 |
+        | [Draw](#Draw)   || グラフィック液晶への描画 |
+        
+        |[変数]
+        |----------------------||------------------------------------|
+        | [canvas](#canvas)    || 描画空間 |
+        
+        
+        
+        
+    </Summary>
+</Header>
+# [[Begin]]Begin
+    Begin(Param param)
+
+    # パラメータ
+        |------||--------------------|
+        | param || GLCDControllerの設定が書かれたクラス |
+    
+    # 説明
+        GLCDControllerを開始します. 
+        GLCDControllerを使用する前に一回実行する必要があります。
+
+
+# [[Draw]]Draw
+    Draw()
+
+    # 説明
+        キャンバスの内容をグラフィック液晶に描画します.
+        Drawを実行するまでグラフィック液晶画面は更新されません.
+
+# [[canvas]]canvas
+    [Canvas](./CanvasReference) canvas
+
+    # 説明
+        グラフィック液晶に描画される前の描画空間
+
+

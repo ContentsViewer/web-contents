@@ -1,0 +1,483 @@
+<Header>
+    <Parent> ../Tips
+    <Title> WSL2でUSBデバイスを認識させる
+    <CreatedAt> 2020-08-15
+    <Tags> WSL, WSL2, USB
+    <Summary>
+        [この方法は古い可能性があります::WARNING]
+        ====
+            2021年12月現在, この記事で紹介している方法は古い可能性があります.
+            
+            最新の方法について,
+            microsoft 公式の以下のページか, 他の最新情報サイトをご覧ください.
+            
+            * ["Connecting USB devices to WSL". microsoft. accessed at 2021-12-16.](https://devblogs.microsoft.com/commandline/connecting-usb-devices-to-wsl/)
+        ====
+    
+        WSL2上でUSBデバイスを認識させるために, [VirtualHere](https://www.virtualhere.com)を用いた方法を, 
+        Linux側でUSB/IPの機能を有効にする方法も含めて, 説明します.
+        
+        ![WSL2上でArduino UNO が認識されている](CURRENT_DIR/Images/lsusb.jpg)
+    </Summary>
+</Header>
+# はじめに
+    WSL2は, Linuxのディストリビューションと, Windowsとの相互の通信方法が変更された, WSLの新しいバージョンのアーキテクチャです^[wsl2-new].
+    WSL1と比較して, WSL2にはシステムコールの完全な互換性を持ち, ファイルIOパフォーマンスが向上しています^[wsl1-wsl2].
+    
+    WSL2の欠点として, USBシリアルを使えない問題があります^[wsl2-faq]^[wsl-issue-4322]
+    (WSL1では, USBシリアルをサポートしています^[wsl1-serial-support]).
+    この問題により, パーフォーマンスが改善されたWSL2でも, Arduinoなどのシリアルを必要とする開発ができません.
+    
+    これまでに, WSL2上でUSBデバイスを認識させる試みがされてきました. 
+    WSLのGitHubフォーラム#5158^[wsl2-attach-usb]では, <https://github.com/cezanne/usbip-win> といったUSB/IPツールを用いることを提案されており, 
+    実際に試している件^[wsl2-usb-support]^[wsl2-adding-usb-support]がありました. 
+    しかしこの方法は, Windows側のUSB/IPのドライバを有効にするために, UEFIのセキュアブートを解除する必要があり, セキュリティの面で安全ではありません.
+    また同じGitHubフォーラム#5158^[wsl2-attach-usb]で, さらに簡単な方法として, [VirtualHere](https://www.virtualhere.com)というソフトフェアを用いて, 解決する方法もありました.
+    しかし, この方法において, Linux側のUSB/IPの機能を有効にする方法が詳しく書かれていません.
+    
+    本稿では, WSL2上でUSBデバイスを認識させるために, [VirtualHere](https://www.virtualhere.com)を用いた方法を, 
+    Linux側でUSB/IPの機能を有効にする方法も含めて, 説明します.
+    
+# 準備
+    # WSL2をインストールする
+        公式のリファレンスに従ってインストールします.
+        
+        ["Windows 10 用 Windows Subsystem for Linux のインストール ガイド"](https://docs.microsoft.com/ja-jp/windows/wsl/install-win10). Microsoft. accessed at 2020-08-13
+        
+        本稿では, //Ubuntu 18.04//を選択しています.
+        
+    # WSL2にGUI環境を構築する
+        WSL は, GUI デスクトップやアプリケーション (例: Gnome、KDE など) をサポートすることを目的としていません^[wsl-faq].
+        ですが, X Window System によって, WSL上でGUI環境を構築することが可能です.
+        「WSL2にGUI環境を構築する方法」は, すでに多くの情報がインターネット上にあるので調べてください.
+        
+        一応, 筆者が作成した, "shell環境を整えるスクリプト"を公開しているので, そちらも参考にしてみてください.
+        
+        * [/ShellScript/Setup]
+
+# 方法
+    # WSL Linux にUSBの機能を追加する
+        Microsoftが述べているように, WSL2はUSBをサポートしていません^[wsl2-faq]. 
+        Microsoftが提供するLinux カーネルにUSBの機能が含まれていないので, 各自でUSB機能を追加したカーネルをコンパイルする必要があります.
+        幸い, [WSL2 Linuxカーネルはオープンソース](https://github.com/microsoft/WSL2-Linux-Kernel)なので, 
+        カーネルのソースコードを入手することができます.
+        
+        # カーネル名を確認する.
+            ```shell
+                ~$ uname -v -r
+                4.19.104-microsoft-standard #1 SMP Wed Feb 19 06:37:35 UTC 2020
+            ```
+            
+            このカーネルは, 2020-02-19に作成されたことがわかります(現在日時: 2020-08-14).
+        
+        # カーネルのビルド準備
+            パッケージを更新する
+            
+            ```shell
+                ~$ sudo apt update
+                ~$ sudo apt upgrade
+            ```
+            
+            カーネルのビルドツールのインストール
+            
+            ```shell
+                ~$ sudo apt install build-essential flex bison libssl-dev libelf-dev libncurses-dev autoconf libudev-dev libtool
+            ```
+        
+        # カーネルのビルド
+            WSL2 Kernel を`/usr/src/[kernel_name]`にクローンする(本稿では, `4.19.104-microsoft-standard`になります). 
+                * [GitHub/microsoft/WSL2-Linux-Kernel](https://github.com/microsoft/WSL2-Linux-Kernel)
+            
+            ```shell
+                ~$ sudo git clone https://github.com/microsoft/WSL2-Linux-Kernel.git /usr/src/4.19.104-microsoft-standard
+                ~$ cd /usr/src/4.19.104-microsoft-standard
+            ```
+            
+            各自のカーネルバージョンに合わせて, チェックアウトする.
+            
+            ```shell
+                /usr/src/4.19.104-microsoft-standard$ sudo git checkout v4.19.104
+            ```
+            
+            現在のカーネル設定をコピーする
+            
+            ```shell
+                /usr/src/4.19.104-microsoft-standard$ sudo cp /proc/config.gz config.gz
+                /usr/src/4.19.104-microsoft-standard$ sudo gunzip config.gz
+                /usr/src/4.19.104-microsoft-standard$ sudo mv config .config
+            ```
+            
+            `menuconfig`を実行し, 追加したいカーネルモジュール(kernel modules) を選択する.
+            
+            ```shell
+                /usr/src/4.19.104-microsoft-standard$ sudo make menuconfig
+            ```
+            
+            ![`menuconfig`を実行すると, このような設定画面が出ます](CURRENT_DIR/Images/menuconfig.jpg)
+            
+            menuconfig を操作し, USB kernel modules を選択します.
+            以下のようにフラグを設定していきます.
+            
+            ```
+                Device Drivers->USB support[*]
+                Device Drivers->USB support->Support for Host-side USB[M]
+                Device Drivers->USB support->Enable USB persist by default[*]
+                Device Drivers->USB support->USB Modem (CDC ACM) support[M]
+                Device Drivers->USB support->USB Mass Storage support[M]
+                Device Drivers->USB support->USB/IP support[M]
+                Device Drivers->USB support->VHCI hcd[M]
+                Device Drivers->USB support->VHCI hcd->Number of ports per USB/IP virtual host controller(8)
+                Device Drivers->USB support->Number of USB/IP virtual host controllers(1)
+                Device Drivers->USB support->USB Serial Converter support[M]
+                Device Drivers->USB support->USB Serial Converter support->USB FTDI Single Port Serial Driver[M]
+                Device Drivers->USB support->USB Physical Layer drivers->NOP USB Transceiver Driver[M]
+                Device Drivers->Network device support->USB Network Adapters[M]
+                Device Drivers->Network device support->USB Network Adapters->[Deselect everything you don't care about]
+                Device Drivers->Network device support->USB Network Adapters->Multi-purpose USB Networking Framework[M]
+                Device Drivers->Network device support->USB Network Adapters->CDC Ethernet support (smart devices such as cable modems)[M]
+                Device Drivers->Network device support->USB Network Adapters->Multi-purpose USB Networking Framework->Host for RNDIS and ActiveSync devices[M]
+            ```
+            
+            これらのフラグ設定は, 以下のサイトを参考にしています.
+            
+            * ["Adding USB support to WSL 2"](https://github.com/rpasek/usbip-wsl2-instructions). GitHub. accessed at 2020-08-13
+            * ["USB support to WSL2"](http://ktkr3d.github.io/2020/07/06/USB-support-to-WSL2/). Memorandum!. accessed at 2020-08-13
+            
+            [::CAUTION]
+            ===========
+                設定項目が多いので, ここでもう一度正しく設定できているか見直してみましょう.
+                ここを間違うと後の手順で問題が起こる可能性があります.
+            ===========
+            
+            カーネルとモジュールをビルドします. ビルド時は可能な限り多くのジョブ数を指定します(-j[number of cores]).
+            この処理には, 少し時間がかかります.
+            
+            ```shell
+                sudo make -j 12 && sudo make modules_install -j 12 && sudo make install -j 12
+            ```
+            
+            [`make`コマンドの`j`オプション について]
+            ==========
+                `j`オプションで, コンパイル時に同時に実行できるジョブ数(並列処理の数)を指定します.
+                `-j 2`とすれば, 2つ, `-j 3`とすれば3つ同時に作業します.
+                
+                最適なジョブ数には様々な言説があります^[make-j]が, 
+                ["makeの並列オプションは何を指定するべきか"](http://lpha-z.hatenablog.com/entry/2018/12/30/231500)によると,
+                CPUのコア数 + 1" が最適なようです.
+            ==========
+            
+            ビルドが完了すると, どのkernel modules がインストールされたか表示されます.
+            
+            ```shell
+                INSTALL drivers/hid/hid-generic.ko
+                INSTALL drivers/hid/hid.ko
+                INSTALL drivers/hid/usbhid/usbhid.ko
+                INSTALL drivers/net/mii.ko
+                INSTALL drivers/net/usb/cdc_ether.ko
+                INSTALL drivers/net/usb/rndis_host.ko
+                INSTALL drivers/net/usb/usbnet.ko
+                INSTALL drivers/usb/class/cdc-acm.ko
+                INSTALL drivers/usb/common/usb-common.ko
+                INSTALL drivers/usb/core/usbcore.ko
+                INSTALL drivers/usb/serial/ftdi_sio.ko
+                INSTALL drivers/usb/phy/phy-generic.ko
+                INSTALL drivers/usb/serial/usbserial.ko
+                INSTALL drivers/usb/storage/usb-storage.ko
+                INSTALL drivers/usb/usbip/usbip-core.ko
+                INSTALL drivers/usb/usbip/vhci-hcd.ko
+                DEPMOD  4.19.43-microsoft-standard
+            ```
+            
+            USBIP tools をビルド
+            
+            ```shell
+                /usr/src/4.19.104-microsoft-standard$ cd tools/usb/usbip/
+                /usr/src/4.19.104-microsoft-standard/tools/usb/usbip$ sudo ./autogen.sh
+                /usr/src/4.19.104-microsoft-standard/tools/usb/usbip$ sudo ./configure
+                /usr/src/4.19.104-microsoft-standard/tools/usb/usbip$ sudo sed 's/-Werror//g' -i Makefile
+                /usr/src/4.19.104-microsoft-standard/tools/usb/usbip$ sudo sed 's/-Werror//g' -i src/Makefile
+                /usr/src/4.19.104-microsoft-standard/tools/usb/usbip$ sudo sed 's/-Werror//g' -i libsrc/Makefile
+                /usr/src/4.19.104-microsoft-standard/tools/usb/usbip$ sudo make install -j 12
+            ```
+            USBIP tools ライブラリを, USBIP が見つけられる場所へ複製する.
+            
+            ```shell
+                /usr/src/4.19.104-microsoft-standard/tools/usb/usbip$ sudo cp libsrc/.libs/libusbip.so.0 /lib/libusbip.so.0
+            ```
+            
+            カーネルをコピー
+            
+            ```shell
+                $ sudo cp /usr/src/4.19.104-microsoft-standard/vmlinux /mnt/c/Users/<username>/
+            ```
+            
+        # WSLの設定ファイルの作成
+            ビルドされたカーネルを指定するための, 設定ファイルを作成します.
+            
+            `C:\Users\{ユーザ名}\`内に以下の内容の設定ファイル`.wslconfig`を作成します.
+            
+            ```
+                [WSL2]
+                kernel=C:\\Users\\<username>\\vmlinux
+            ```
+            
+            設定を反映するために, 一度WSLをシャットダウンします.
+            PoweShellを起動し, 以下のコマンドを入力します.
+            
+            ```shell
+                wsl --shutdown
+            ```
+            
+            [::WARNING]
+            ===========
+                WSLをシャットダウンすると, 現在起動しているwslインスタンスが終了します.
+            ===========
+        
+        # ビルドしたカーネルを起動
+            WSLを起動します.
+            
+            wslカーネル名を確認
+            
+            ```shell
+                ~$ uname -r -v
+                4.19.104-microsoft-standard #2 SMP Fri Aug 14 22:38:30 JST 2020
+            ```
+            
+            ビルド日時が, 2020-08-14であることが確認でき, 自身がビルドしたものであることが分かります.
+            
+        # USBに関連するカーネルモジュールの起動
+            USBに関連する, すべてのカーネルモジュールを起動するためのスクリプトを, ホームディレクトリに作成します.
+            注意点として, `usbcore`と`usb-common`をはじめに読み込みます.
+            スクリプト名は`startusb.sh`とします.
+            
+            `startusb.sh`:
+                
+                ```shell
+                    #!/bin/bash
+                    sudo modprobe usbcore
+                    sudo modprobe usb-common
+                    sudo modprobe hid-generic
+                    sudo modprobe hid
+                    sudo modprobe usbnet
+                    sudo modprobe cdc_ether
+                    sudo modprobe rndis_host
+                    sudo modprobe usbserial
+                    sudo modprobe usb-storage
+                    sudo modprobe cdc-acm
+                    sudo modprobe ftdi_sio
+                    sudo modprobe usbip-core
+                    sudo modprobe vhci-hcd
+                    echo $(cat /etc/resolv.conf | grep nameserver | awk '{print $2}')
+                ```
+            
+                最終行の処理で表示されるIPアドレスは, Windows host のIPアドレスになります.
+                USB/IPのクライアントでホストのIPアドレスを入力する際に参考になります.
+            
+            [::CAUTION]
+            ===========
+                シェルスクリプトの改行コードは, `CR + LF`ではなく,
+                `LF`にする必要があります.
+            ===========
+            
+            `startusb.sh`に実行権限を与えます.
+            
+            ```shell
+                ~$ sudo chmod +x startusb.sh
+            ```
+            
+            `startusb.sh`を実行し, USBに関するカーネルモジュールを起動します.
+            
+            ```shell
+                ~$ ./startusb.sh
+            ```
+            
+            Errorが出る場合:
+                * カーネルモジュールの読み込みができない
+                    -> カーネルのビルド設定が合っているか確認する.
+                
+                * シェルスクリプトの改行コードが`CR + LF`である
+                    -> `LF`にする
+            
+            モジュールが起動できているか確認する.
+            
+            ```shell
+                ~$ lsmod
+                Module                  Size  Used by
+                vhci_hcd               32768  0
+                usbip_core             16384  1 vhci_hcd
+                ftdi_sio               49152  0
+                cdc_acm                32768  0
+                usb_storage            61440  0
+                usbserial              36864  1 ftdi_sio
+                rndis_host             16384  0
+                cdc_ether              16384  1 rndis_host
+                usbnet                 36864  2 rndis_host,cdc_ether
+                mii                    16384  1 usbnet
+                hid_generic            16384  0
+                hid                   102400  1 hid_generic
+                usbcore               200704  8 ftdi_sio,usbserial,usbnet,cdc_acm,usb_storage,rndis_host,cdc_ether,vhci_hcd
+                usb_common             16384  2 usbcore,vhci_hcd
+                
+            ```
+        
+    # VirtualHere のインストール
+        VirtualHere は, USB/IPを簡単に使えるソフトウェアです.
+        
+        * ["VirtualHere"](https://virtualhere.com/home)
+        
+        # VirtualHere USB Client をLinux側にインストール
+            * [VirtualHere USB Client](https://virtualhere.com/usb_client_software)
+            
+            バージョンは, "VirtualHere Client for Linux (amd64)"を選択します.
+            
+            ```shell
+                ~$ wget https://www.virtualhere.com/sites/default/files/usbclient/vhuit64
+                ~$ chmod 777 vhuit64
+                ~$ sudo ./vhuit64
+            ```
+        
+        # Windows USB Server をインストールする.
+            * [Windows USB Server](https://virtualhere.com/windows_server_software)
+            
+            上記サイトから, "VirtualHere Server"をダウンロードします.
+            32bit版, 64bit版があるので適したものをダウンロードしてください.
+            
+            試用バージョンでは, 一度に一つのデバイスのみ使用することができます.
+            たとえば, 二つのArduinoをWSL2には接続できません. 
+    
+    # 使ってみる
+        では, 実際にWSL2でUSBデバイスを認識させてみましょう.
+        手元にUSBデバイスを準備します. 本稿では, "Arduino UNO"を用意しました.
+        
+        1. Windows USB Serverを起動します. 
+            実行ファイル名は, "vhusbdwin64.exe"です.
+            
+            初回起動時は, ファイアウォールの許可や, 依存ライブラリのインストールがあります.
+        
+            ![USB Server が立ち上がる](CURRENT_DIR/Images/usb-server.jpg)
+        
+        2. WSLとX Server(WSLからのGUIを受け付けるもの)を立ち上げます.
+        
+        3. USBに関連するモジュールを読み込みます.
+            
+            ```shell
+                ~$ sudo ./startusb.sh
+                172.28.80.1
+            ```
+        
+        4. VirtualHere USB Clientを起動します.
+            ```shell
+                ~$ sudo ./vhuit64
+            ```
+            
+            ![USB Client が立ち上がる](CURRENT_DIR/Images/usb-client.jpg)
+        
+        5. Clientをサーバに接続します.
+            `USB Hubs`を右クリック -> `Specify Hubs` をクリック -> `Hubs` タブから `Add` を選択
+            
+            表示されている`server.local:7575`の`server.local`の部分を, 
+            手順3で表示されているIPアドレス(本稿の場合, `172.28.80.1`)に置き換える.
+            つまり, `172.28.80.1:7575`と入力.
+            
+            「OK」を押し, サーバに接続
+            
+        5. Arduino UNO をPCに接続します.
+            
+            ![COMポートが表示されている](CURRENT_DIR/Images/usb-client-listed.jpg)
+        
+        6. Arduino UNO をWSLに接続します.
+            USB Client から, 対象デバイスを右クリックし, `Use this device` をクリック
+            
+            ![対象デバイスを右クリックし, `Use this device` をクリック](CURRENT_DIR/Images/usb-client-use.jpg)
+            
+            ![使用中と表示される](CURRENT_DIR/Images/usb-client-in-use.jpg)
+        
+        7. 接続確認
+            別シェルで, `dmesg`コマンドを実行
+            
+            ```shell
+                ~$ dmesg
+                [ 6033.084345] vhci_hcd vhci_hcd.0: pdev(0) rhport(0) sockfd(12)
+                [ 6033.084348] vhci_hcd vhci_hcd.0: devid(4) speed(2) speed_str(full-speed)
+                [ 6033.362648] vhci_hcd: vhci_device speed not set
+                [ 6033.432601] usb 1-1: new full-speed USB device number 5 using vhci_hcd
+                [ 6033.512607] vhci_hcd: vhci_device speed not set
+                [ 6033.582600] usb 1-1: SetAddress Request (5) to port 0
+                [ 6033.633611] cdc_acm 1-1:1.0: ttyACM0: USB ACM device
+            ```
+            
+            `ttyACM0`に接続されていることが確認できる.
+            
+            `lsusb`コマンドを実行
+            
+            ```shell
+                ~$ lsusb
+                Bus 002 Device 001: ID 1d6b:0003 Linux Foundation 3.0 root hub
+                Bus 001 Device 005: ID 2341:0043 Arduino SA Uno R3 (CDC ACM)
+                Bus 001 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
+            ```
+            
+            Arduino UNO が接続されていることが確認できる.
+            
+            ![WSL2上でArduino UNO が認識されている](CURRENT_DIR/Images/lsusb.jpg)
+            
+# 使用例
+    # USBシリアル
+        Arduinoを`ttyACM0`に接続後
+        
+        `ttyACM0`に読み書きの権限を与える.
+        ```shell
+            ~$ sudo chmod 666 /dev/ttyACM0
+        ```
+        
+        あとは, pythonなどで通信
+    
+    # USBストレージ
+        USBストレージを接続後, `dmesg`コマンドで`sdc1`に接続されていることを確認.
+        
+        USB のマウントポイントを作成
+        ```shell
+            ~$ sudo mkdir /mnt/usb
+        ```
+        
+        `/mnt/usb` にマウント
+        ```shell
+            ~$ sudo mount /dev/sdc1 /mnt/usb
+        ```
+        
+        ファイル操作後, アンマウント
+        ```shell
+            ~$ sudo umount /dev/sdc1
+        ```
+
+
+# 参考文献
+    [wsl2-new]: ["WSL 2 の新機能"](https://docs.microsoft.com/ja-jp/windows/wsl/wsl2-index"). \
+                Microsoft. accessed at 2020-08-13
+                
+    [wsl1-wsl2]: ["WSL 1 と WSL 2 の比較"](https://docs.microsoft.com/ja-jp/windows/wsl/compare-versions). \
+                 Microsoft. accessed at 2020-08-13
+                 
+    [wsl2-faq]: ["WSL 2 に関する FAQ"](https://docs.microsoft.com/ja-jp/windows/wsl/wsl2-faq). \
+                Microsoft. accessed at 2020-08-13
+                
+    [wsl-faq]: ["Windows Subsystem for Linux に関してよく寄せられる質問"](https://docs.microsoft.com/ja-jp/windows/wsl/faq). \
+                Microsoft. accessed at 2020-08-13
+                
+    [wsl-issue-4322]: ["WSL2: Ubuntu 18.04 Serial devices are no longer mounted properly"](https://github.com/microsoft/WSL/issues/4322). \
+                      GitHub. accessed at 2020-08-13
+    
+    [wsl1-serial-support]: ["Serial Support on the Windows Subsystem for Linux"](https://docs.microsoft.com/ja-jp/archive/blogs/wsl/serial-support-on-the-windows-subsystem-for-linux). \
+                           Microsoft. accessed at 2020-08-13
+
+    [wsl2-attach-usb]: ["[WSL 2] Attaching an USB device"](https://github.com/microsoft/WSL/issues/5158). \
+                       GitHub. accessed at 2020-08-13
+    
+    [wsl2-usb-support]: ["USB support to WSL2"](http://ktkr3d.github.io/2020/07/06/USB-support-to-WSL2/). \
+                        Memorandum!. accessed at 2020-08-13
+    
+    [wsl2-adding-usb-support]: ["Adding USB support to WSL 2"](https://github.com/rpasek/usbip-wsl2-instructions). \
+                               GitHub. accessed at 2020-08-13
+
+    [make-j]: ["makeの並列オプションは何を指定するべきか"](http://lpha-z.hatenablog.com/entry/2018/12/30/231500). \
+              HatenaBlog. accessed at 2020-08-13
