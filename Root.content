@@ -1,7 +1,6 @@
 ---
 title: Welcome!
 date:  2016-8-28
-tags: root
 children:
     Math/Math
     Arduino/Arduino

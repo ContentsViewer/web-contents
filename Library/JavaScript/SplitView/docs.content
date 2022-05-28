@@ -1,0 +1,53 @@
+---
+parent: ../JavaScript
+title: 画面分割ライブラリ SplitView
+date: 2022-05-27
+tags: 編集中, JavaScript, ライブラリ, ダウンロード, 画面分割
+---
+
+ウェブブラウザ上で動作する, 画面分割ライブラリ.
+
+スクリプト内に一切の状態を持たず, 完全にエレメントのデータ (例えば, 属性やスタイル) や構造をベースに動作します.
+
+===
+
+# はじめに
+    多くの編集ソフトには, 一つの画面を分割する機能があります.
+    一つの画面を分割することで, 同じ画面で複数の作業を行うことができます.
+
+    これまで当サイトで紹介したライブラリ[/Library/JavaScript/Splitter-deprecated/docs]以外にも 多くの画面分割ライブラリがあります^[resizable-js]^[jquery-splitter]^[split-js]^[best-splitter]が,
+    いずれも, スクリプトに分割状態(例えば, 分割割合や方向など)を持ち, スクリプトがビューに対して支配的にスタイルを変更したり, 要素の追加をしています.
+    このため, ページロード時にスクリプトが読み込まれるまでの間, 一時的にレイアウトが崩れたり, JavaScriptを無効にするとレイアウトが崩れたままになったり, 他のスクリプトがビューに変更を加えた際に, スクリプトの内部状態とビューの状態が競合してしまったりすることがあります.
+
+    そこで, 本分割ライブラリは, スクリプト内に一切の状態を持たず, 完全にエレメントのデータ (例えば, 属性やスタイル) や構造をベースに動作します.
+
+# 特徴
+
+
+# サンプルページ
+    [サンプルページ](ROOT_URI/Client/SplitView/example.html)
+
+
+# 使い方
+
+
+# ダウンロード
+
+
+# 更新履歴
+    2022-04-29:
+        [../Splitter-deprecated/docs]から引き継ぎリリース
+
+# 参考文献
+
+    [resizable-js]: ["Resizable Split Layout In Pure JavaScript - Resizable.js"](https://www.cssscript.com/resizable-split-layout/). \
+        CSSScript.com. accessed at 2022-05-27.
+
+    [jquery-splitter]: ["Easy Split Layout Plugin For jQuery - Splitter"](https://www.jqueryscript.net/layout/Split-Layout-Plugin-jQuery-Splitter.html). \
+        jQueryScript.Net. accessed at 2022-05-27.
+
+    [split-js]: ["split.js"](https://split.js.org/). \
+        split.js. accessed at 2022-05-27.
+
+    [best-splitter]: ["7 Best Splitter JavaScript Libraries To Create Split Views"](https://www.jqueryscript.net/blog/best-splitter-view.html) \
+        jQueryScript.Net. accessed at 2022-05-27.
