@@ -3,7 +3,7 @@ parent: ../Library
 title: JavaScript
 date: 2018-10-09
 children:
-    Splitter
+    SplitView/docs
 ---
 
 このページは筆者が作成したJavaScriptのライブラリが公開されます.

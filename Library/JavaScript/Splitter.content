@@ -2,7 +2,8 @@
 parent: JavaScript
 title: 画面分割ライブラリ Splitter
 date: 2018-10-09
-tags: JavaScript, ライブラリ, ダウンロード
+tags: noindex, JavaScript, ライブラリ, ダウンロード
+redirect: /Library/JavaScript/SplitView/docs
 ---
 
 多くの編集ソフトには, 一つの画面を分割する機能があります.

@@ -2,12 +2,12 @@
 parent: ../JavaScript
 title: 画面分割ライブラリ SplitView
 date: 2022-05-27
-tags: 編集中, JavaScript, ライブラリ, ダウンロード, 画面分割
+tags: JavaScript, ライブラリ, ダウンロード, 画面分割
 ---
 
 ウェブブラウザ上で動作する, 画面分割ライブラリ.
 
-スクリプト内に一切の状態を持たず, 完全にエレメントのデータ (例えば, 属性やスタイル) や構造をベースに動作します.
+スクリプト内に一切の状態を持たず, 完全に要素のデータ (例えば, 属性やスタイル) と要素の構造をベースに動作します.
 
 ===
 
@@ -15,23 +15,154 @@ tags: 編集中, JavaScript, ライブラリ, ダウンロード, 画面分割
     多くの編集ソフトには, 一つの画面を分割する機能があります.
     一つの画面を分割することで, 同じ画面で複数の作業を行うことができます.
 
-    これまで当サイトで紹介したライブラリ[/Library/JavaScript/Splitter-deprecated/docs]以外にも 多くの画面分割ライブラリがあります^[resizable-js]^[jquery-splitter]^[split-js]^[best-splitter]が,
-    いずれも, スクリプトに分割状態(例えば, 分割割合や方向など)を持ち, スクリプトがビューに対して支配的にスタイルを変更したり, 要素の追加をしています.
+    ブラウザでも画面分割をするために, これまで当サイトで紹介したライブラリ[/Library/JavaScript/Splitter-deprecated/docs]以外にも 多くの JavaScript ライブラリがありました^[resizable-js]^[jquery-splitter]^[split-js]^[best-splitter].
+    
+    ですが, いずれもスクリプトに分割状態(例えば, 分割割合や方向など)を持ち, スクリプトがビューに対して支配的にスタイルを変更したり, 要素の追加をしています.
     このため, ページロード時にスクリプトが読み込まれるまでの間, 一時的にレイアウトが崩れたり, JavaScriptを無効にするとレイアウトが崩れたままになったり, 他のスクリプトがビューに変更を加えた際に, スクリプトの内部状態とビューの状態が競合してしまったりすることがあります.
 
-    そこで, 本分割ライブラリは, スクリプト内に一切の状態を持たず, 完全にエレメントのデータ (例えば, 属性やスタイル) や構造をベースに動作します.
+    そこで, //本ライブラリでは, スクリプト内に一切の状態を持たず, 完全に要素のデータ (例えば, 属性やスタイル) と要素の構造をベースに動作します.//
 
 # 特徴
-
+    # ページロード時のレイアウト変化なし
+        従来のライブラリでは, スクリプトが適切なレイアウトを設定するので,
+        スクリプトが読み込まれる前後でレイアウトが変化してしまいました.
+    
+        本ライブラリでは, スクリプトが読み込まれる前に, HTML, CSS が適切なレイアウトを決定し,
+        スクリプトは, そのレイアウトに基づいて, 要素を設定します.
+        なので, //スクリプトを読み込む前後で, レイアウトが変わることはありません.//
+        さらに言うと, JavaScript 無効時には, ただ単に分割バーが動かせないだけで,
+        レイアウトは初期状態のままで, 崩れることはありません.
+    
+    # ビューに対する自由な変更
+        スクリプトは, 分割方向や分割割合などの状態を持たず, 
+        ハンドルが掴まれたときにのみ状態を取得します. 
+        ハンドルがドラッグされている間を除き, //他スクリプトが自由に要素を編集することができます.//
+        例えば, 分割方向や割合を変えたり, 要素を入れ替えたりできます.
+    
+    # カスタム可能
+        スクリプトは要素のスタイル付けや, 要素の追加・削除を一切行いません. 
+        //デザインしたい要素があれば, いつも通りCSSを編集するだけです.//
+    
 
 # サンプルページ
     [サンプルページ](ROOT_URI/Client/SplitView/example.html)
 
 
 # 使い方
-
+    # 1. 基本のCSSを準備する
+        分割レイアウトするためのスタイルシートです.
+        レイアウト機能本体です.
+    
+        ```css
+            .gutter {
+              background-color: #eee;
+              background-repeat: no-repeat;
+              background-position: 50%;
+              flex: none;
+            }
+            
+            .split-view {
+              display: flex;
+            }
+            
+            .split-view.vertical {
+              flex-direction: column;
+            }
+            
+            .split-view.horizontal {
+              flex-direction: row;
+            }
+            
+            .split-view>*:not(.gutter){
+              flex-grow: 1;
+              overflow: scroll;
+            }
+            
+            .split-view>.gutter {
+              background-color: #eee;
+              background-repeat: no-repeat;
+              background-position: 50%;
+            }
+            
+            .split-view.horizontal>.gutter {
+              background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAeCAYAAADkftS9AAAAIklEQVQoU2M4c+bMfxAGAgYYmwGrIIiDjrELjpo5aiZeMwF+yNnOs5KSvgAAAABJRU5ErkJggg==');
+              cursor: col-resize;
+              width: 10px;
+            }
+            
+            .split-view.vertical>.gutter {
+              background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAFAQMAAABo7865AAAABlBMVEVHcEzMzMzyAv2sAAAAAXRSTlMAQObYZgAAABBJREFUeF5jOAMEEAIEEFwAn3kMwcB6I2AAAAAASUVORK5CYII=');
+              cursor: row-resize;
+              height: 10px;
+            }
+        ```
+        各クラス:
+            `split-view`:
+                分割ビュー. この要素内に, 上下または左右に並べたい要素を入れる.
+                分割ハンドル`gutter`も入れる.
+                
+            `horizontal`:
+                クラス`split-view`と合わせて指定する.
+                要素を左右に並べたいときに指定する.
+            
+            `vertical`:
+                クラス`split-view`と合わせて指定する.
+                要素を上下に並べたいときに指定する.
+            
+            `gutter`:
+                分割ハンドルに指定する.
+                
+                
+        ![水平・垂直レイアウト](CURRENT_DIR/images/fig-split-view-layout.jpg)
+        
+    # 2. レイアウトする
+        `html`に初期状態のレイアウトを書きます.
+        
+        ```html
+            <div id="main" class="split-view horizontal">
+              <div>
+                <h1>Hello</h1> 
+              </div>
+              <div class="gutter"></div>
+              <div class="split-view vertical">
+                <div>
+                  <h1>World</h1>
+                </div>
+                <div class="gutter"></div>
+                <div>
+                  <h1>🎉</h1>
+                </div>
+              </div>
+            </div>
+        ```
+        
+        例のように, 分割ビューを入れ子にすることができます.
+        
+        ![分割レイアウト例](CURRENT_DIR/images/fig-split-view-layout-example.jpg)
+    
+    # 3. アクティベートする
+        
+        スクリプトを読み込んで, 分割ビューをアクティベートします.
+        アクティベートすると, 分割ビュー内の分割ハンドルをドラッグすることができます.
+        
+        ```html
+            <script src="SplitView.js"></script>
+            <script>
+              SplitView.activate(document.getElementById("main"))
+            </script>
+        ```
+    
 
 # ダウンロード
+    以下のページからダウンロードできます.
+    
+    <https://github.com/ContentsViewer/ContentsPlanet/tree/master/Client/SplitView>
+
+    [::NOTE]
+    ========
+        SplitView は, [/ContentsPlanet/ContentsPlanet]
+        に導入され, メンテナンスは ContentsPlanet プロジェクト下で行われています.
+    ========
 
 
 # 更新履歴
