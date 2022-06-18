@@ -1,6 +1,6 @@
 ---
 parent: ShellScript
-titile: Shell環境セットアップ(WSL含む)
+title: Shell環境セットアップ(WSL含む)
 date: 2019-06-25
 tags: WSL
 ---

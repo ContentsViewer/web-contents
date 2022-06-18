@@ -1,6 +1,6 @@
 ---
 parent: ../Ubuntu
-titile: 環境構築
+title: 環境構築
 date: 2020-08-18
 children:
     nvidia-tf/nvidia-tf

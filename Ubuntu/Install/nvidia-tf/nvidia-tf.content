@@ -1,6 +1,6 @@
 ---
 parent: ../Install
-titile: フローチャートで進む, NVIDIA GPU ドライバ, CUDA, cuDNN, tensorflow のインストール方法
+title: フローチャートで進む, NVIDIA GPU ドライバ, CUDA, cuDNN, tensorflow のインストール方法
 date: 2020-08-18
 tags: NVIDIA, GPU, CUDA, cuDNN, tensorflow, ドライバ, Ubuntu, フローチャート
 ---

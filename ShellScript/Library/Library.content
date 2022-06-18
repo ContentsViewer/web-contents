@@ -1,6 +1,6 @@
 ---
 parent: ../ShellScript
-titile: ライブラリ
+title: ライブラリ
 date: 2020-05-21
 children:
     std-bin/std-bin

@@ -1,6 +1,6 @@
 ---
 parent: ../ShellScript
-titile: アプリケーション例
+title: アプリケーション例
 date: 2020-05-20
 children:
     Tetris/Tetris
