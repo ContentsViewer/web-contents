@@ -5,18 +5,146 @@ date: 2018-10-07
 tags: CMS
 ---
 
-本CMSの更新履歴が書かれます.
+本CMSの更新履歴
 
 ===
 
 # 2022/08/31
-    
+    要約:
+        * 検索機能の強化
+        * コンテンツURLのリダイレクトに対応
+        * コンテンツヘッダ情報の記述方法を大きく変更
+        * プラグイン機構を大きく変更
+        * `file-manager` ページを削除
+            * 管理者ページ`admin`の追加
+            * ログ表示機能を`log-viewer`に移行
+            * ファイル管理機能を`directory-viewer`に組み込み
+        * url 形式を変更
+            * UpperCamel から, hyphens-separated 方式に変更
+            * タグマップの接頭URLを`/TagMap`から`/:tagmap`へ変更
+        * `Splitter`を非推奨. `SplitView`へ機能引継ぎ
+
     Features:
-    
+        ContentsPlanet:
+            * 編集者がFrontend ページごとに html `head`, `js`, `css` を追加できるプラグイン機構の追加
+            * php 8.0 以上に対応
+        
+        Frontend:
+            * 検索機能の強化
+                * クエリ内の最終トピックに対する類似トピックの提示
+                * さらに提案コンテンツを絞り込むための次のトピックの提示
+                * 検索時間の提示
+                
+        Frontend/contents-viewer:
+            * URLリダイレクトに対応
+
+        Frontend/directory-viewer:
+            * ファイル管理機能を統合
+
+        Frontend/admin:
+            * 管理ページ追加
+
+        Frontend/log-viewer:
+            * ログ表示ページ追加
+
+        Module/ContentDatabase:
+            * 各リクエストで, 一度読み込まれたコンテンツを, メモリ上にキャッシュする機能の追加
+            * ヘッダ情報の新しい記法を追加
+                * 任意の追加情報を記述可能
+            
+        Module/PathUtils:
+            * パス操作モジュールの追加
+            
+        Module/PluginLoader:
+            * 共通html `head`, Frontend ページごとの追加スクリプトの読み込みを行うモジュールの追加
+        
+        Service/contents-search-service:
+            * レスポンスデータの追加
+                * クエリ内の最終トピックに対する類似トピック
+                * さらに提案コンテンツを絞り込むための次のトピック
+                * 検索時間
+        
+        Client/SplitView:
+            * 完全に要素ベースの画面分割ライブラリ
+            * Splitter から機能引継ぎ
+
     Changes:
+        ContentsPlanet:
+            * URL の表記を UpperCamel から, hyphens-separated 方式に変更
+            * 古いURL形式からのリダイレクト機能を削除
+            * 他システムへのリダイレクトURLに埋め込まれる編集対象パス変数を`{CONTENT_PATH}`から`{TARGET_PATH}`に変更
+            * コンテンツパスの正規化表現を変更
+                * 先頭の`./`を削除
+            * タグマップページやスクリプトへのURL形式を変更
+                * 各ユーザのコンテンツフォルダ内のリソース以外へのURL
+                * `:`から始まるURLへ変更. (e.g., `Master/:tagmap/~`, `Master/:scripts/~`)
+            * 一部コードをコーディングスタイル PSR-12 に従うように変更
+                * 今後, 順次変更予定
+            * セッションIDクッキーのセキュリティ問題を改善
+                * https 通信の場合は, `Secure`属性を追加
+                * javascript からのアクセスを防ぐ `HttpOnly`属性を追加
+
+        Frontend:
+            * ページに`閲覧`タブの追加
+            * タグ一覧とディレクトリ一覧の並び順を辞書順から自然順に変更
+            
+        Frontend/file-manager:
+            * 機能を`log-viewer`, `directory-viewer` に引き継ぎ, 削除
+
+        Frontend/viewer:
+            * ページ変数`rootDirectory`の削除
+        
+        Module/ContentDatabase:
+            * コンテンツの読み込み機能を class `Content` から class `ContentDatabase` に移譲
+            * データベースのメタデータ管理機能を class `ContentDatabase` から class `ContentDatabaseMetadata` に移譲
+            * コンテンツのクロール機能を class `ContentDatabse` から class `ContentsCrawler` へ移譲
     
+        Module/CacheManager:
+            * メソッドチェーンによる操作に対応
+            * gc発生確率を毎リクエストごとで一定になるように変更
+
+        Module/ScriptLoader:
+            * コンテンツファイルからスクリプトを取り出す従来の`PluginLoader`を, `ScriptLoader`へ名前変更
+        
+        Client/Common:
+            * 共通`css`の追加
+            * 共通`head`ファイル`CommonHead.html`の削除. 機能を`plugin`に引き継ぎ
+            * 末端コンテンツの共通`head`ファイル`EndpointCommonHead.html`の削除. 機能を`plugin`に引き継ぎ
+
+        Client/Splitter:
+            * SplitView に機能引継ぎ
+            * 今後から非推奨
+
+        Client/ace:
+            * `npm`に移行
+            * `v1.4.12` -> `v1.5.3` へアップデート
+
+        Client/ContentsViewer:
+            * css から非推奨の`webkit-transition`, `webkit-transform`プロパティを削除
+
+
     Bug Fixes:
+        Frontend/directory-viewer:
+            * `png`, `bmp` 画像がプレビュー表示されない問題の修正
+
+        Frontend/tag-viewer:
+            * 未定義変数へアクセスする問題の修正
     
+        Frontend/directry-viewer:
+            * ナビゲーション内で, 間違ったアイテムが選択表示される問題の修正
+        
+        Frontend/history-viewer:
+            * 対象がノートページの時, `コンテンツ`, `ノート`へのリンク先が誤っている問題の修正
+            
+        Module/CacheManager:
+            * gc中の冗長なループを修正
+            
+        Module/OutlineText:
+            * HeadingElement, ListElement 内のインラインコード含むインライン要素をパースできない問題の修正
+
+        Client/ContentsViewer:
+            * ページロード時に予期しないアニメーションが起こる問題の修正
+
 
 # 2021/08/31
 __________
@@ -25,7 +153,7 @@ __________
     ページの読み込み方法を見直し, より早くページが表示されるようにしました.
     データベース周りの設計を見直し, モジュールを分離し, シングルトンからマルチインスタンスベースの設計にしました.
     また, 細かなバグの修正とデザインの変更を行いました.
-    
+
     Changes:
         ContentsPlanet:
             * 最近の更新に含まないコントロールタグ`noindex-latest`を, `noindex-recent`に変更
@@ -45,10 +173,10 @@ __________
             * ページ生成時間の計測とログ機能の追加
             * 同じコンテンツを持つタグを一つのグループにしてコンテンツの一覧を表示した
                 * 異なるタグで同じコンテンツが表示され, 情報が冗長になるのを防いだ
-        
+
         directory-viewer:
             * 画像を遅延読み込みするよう変更
-            
+
         viewer:
             * コンテンツ公開日と更新日のデザインを変更
             * 目次の折りたたみボタンのアクセシビリティの改善
@@ -58,10 +186,10 @@ __________
             * ファーストコンテンツフルペイント(FCP)時間の短縮
                 * スタイルシートの分割と事前読み込み
                 * プラグインコードの遅延読み込み
-                
+
         error-page:
             * ファーストコンテンツフルペイント(FCP)時間の短縮
-            
+
         login:
             * ログインページのデザインを修正
 
@@ -124,7 +252,7 @@ __________
             * Chromium 77 以上のバージョンに対応
                 * オプショナルチェイニング(optional chaining)演算子 `?.`の使用を避けた
             * 使用していないコードを削除
-            
+
         Splitter:
             * Chromium 77 以上のバージョンに対応
                 * オプショナルチェイニング(optional chaining)演算子 `?.`の使用を避けた
@@ -135,10 +263,10 @@ __________
     Bug Fixes:
         tag-viewer:
             * ナビゲーションセクション内リストの間違ったHTMLフォーマットを修正
-        
+
         directory-viewer:
             * ナビゲーションセクション内リストの間違ったHTMLフォーマットを修正
-            
+
         contents-viewer:
             * 構造化データ内の誤った日時フォーマット(ISO-8601)を修正
 

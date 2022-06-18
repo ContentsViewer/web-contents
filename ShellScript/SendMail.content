@@ -1,6 +1,6 @@
 ---
 parent: ShellScript
-titile: gmailを経由してsendmailでメール送信
+title: gmailを経由してsendmailでメール送信
 date: 2018-11-26
 tags: ShellScript, メール送信
 ---
