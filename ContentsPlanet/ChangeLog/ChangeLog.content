@@ -13,20 +13,20 @@ tags: CMS
     要約:
         * 検索機能の強化
         * コンテンツURLのリダイレクトに対応
-        * コンテンツヘッダ情報の記述方法を大きく変更
+        * コンテンツヘッダの記法を大きく変更
         * プラグイン機構を大きく変更
         * `file-manager` ページを削除
-            * 管理者ページ`admin`の追加
+            * 代わりに, 管理者ページ`admin`の追加
             * ログ表示機能を`log-viewer`に移行
-            * ファイル管理機能を`directory-viewer`に組み込み
+            * ファイル管理機能を`directory-viewer`に移行
         * url 形式を変更
-            * UpperCamel から, hyphens-separated 方式に変更
+            * UpperCamelCase から, kebab-case 方式に変更
             * タグマップの接頭URLを`/TagMap`から`/:tagmap`へ変更
         * `Splitter`を非推奨. `SplitView`へ機能引継ぎ
 
     Features:
         ContentsPlanet:
-            * 編集者がFrontend ページごとに html `head`, `js`, `css` を追加できるプラグイン機構の追加
+            * ユーザがFrontend ページごとに `html head`, `js`, `css` を追加できるプラグイン機構の追加
             * php 8.0 以上に対応
         
         Frontend:
@@ -56,7 +56,7 @@ tags: CMS
             * パス操作モジュールの追加
             
         Module/PluginLoader:
-            * 共通html `head`, Frontend ページごとの追加スクリプトの読み込みを行うモジュールの追加
+            * 共通 `html head`, Frontend ページごとの追加スクリプトの読み込みを行うモジュールの追加
         
         Service/contents-search-service:
             * レスポンスデータの追加
@@ -70,17 +70,16 @@ tags: CMS
 
     Changes:
         ContentsPlanet:
-            * URL の表記を UpperCamel から, hyphens-separated 方式に変更
+            * URL の表記を UpperCamelCase から, kebab-case 方式に変更
             * 古いURL形式からのリダイレクト機能を削除
-            * 他システムへのリダイレクトURLに埋め込まれる編集対象パス変数を`{CONTENT_PATH}`から`{TARGET_PATH}`に変更
+            * 他システムへのリダイレクトURLに埋め込まれるパス変数名を`{CONTENT_PATH}`から`{TARGET_PATH}`に変更
             * コンテンツパスの正規化表現を変更
                 * 先頭の`./`を削除
-            * タグマップページやスクリプトへのURL形式を変更
-                * 各ユーザのコンテンツフォルダ内のリソース以外へのURL
+            * コンテンツリソース以外のURL形式を変更(e.g., タグマップページ, スクリプト)
                 * `:`から始まるURLへ変更. (e.g., `Master/:tagmap/~`, `Master/:scripts/~`)
             * 一部コードをコーディングスタイル PSR-12 に従うように変更
                 * 今後, 順次変更予定
-            * セッションIDクッキーのセキュリティ問題を改善
+            * セッションIDのクッキーに関するセキュリティ問題を改善
                 * https 通信の場合は, `Secure`属性を追加
                 * javascript からのアクセスを防ぐ `HttpOnly`属性を追加
 
@@ -95,9 +94,9 @@ tags: CMS
             * ページ変数`rootDirectory`の削除
         
         Module/ContentDatabase:
-            * コンテンツの読み込み機能を class `Content` から class `ContentDatabase` に移譲
-            * データベースのメタデータ管理機能を class `ContentDatabase` から class `ContentDatabaseMetadata` に移譲
-            * コンテンツのクロール機能を class `ContentDatabse` から class `ContentsCrawler` へ移譲
+            * コンテンツの読み込み機能を class `Content` から class `ContentDatabase` に移行
+            * データベースのメタデータ管理機能を class `ContentDatabase` から class `ContentDatabaseMetadata` に移行
+            * コンテンツのクロール機能を class `ContentDatabse` から class `ContentsCrawler` に移行
     
         Module/CacheManager:
             * メソッドチェーンによる操作に対応
@@ -108,15 +107,15 @@ tags: CMS
         
         Client/Common:
             * 共通`css`の追加
-            * 共通`head`ファイル`CommonHead.html`の削除. 機能を`plugin`に引き継ぎ
-            * 末端コンテンツの共通`head`ファイル`EndpointCommonHead.html`の削除. 機能を`plugin`に引き継ぎ
+            * 共通`head`ファイル`CommonHead.html`の削除. 対応する機能を新しいプラグイン機構に引き継ぎ
+            * 末端コンテンツの共通`head`ファイル`EndpointCommonHead.html`の削除. 対応する機能を新しいプラグイン機構に引き継ぎ
 
         Client/Splitter:
             * SplitView に機能引継ぎ
             * 今後から非推奨
 
         Client/ace:
-            * `npm`に移行
+            * パッケージ管理に`npm`を使用
             * `v1.4.12` -> `v1.5.3` へアップデート
 
         Client/ContentsViewer:
@@ -134,13 +133,13 @@ tags: CMS
             * ナビゲーション内で, 間違ったアイテムが選択表示される問題の修正
         
         Frontend/history-viewer:
-            * 対象がノートページの時, `コンテンツ`, `ノート`へのリンク先が誤っている問題の修正
+            * 現在のページがノートページの時, コンテンツ, ノートへのリンク先が誤っている問題の修正
             
         Module/CacheManager:
             * gc中の冗長なループを修正
             
         Module/OutlineText:
-            * HeadingElement, ListElement 内のインラインコード含むインライン要素をパースできない問題の修正
+            * HeadingElement, ListElement 内でインラインコード含むインライン要素をパースできない問題の修正
 
         Client/ContentsViewer:
             * ページロード時に予期しないアニメーションが起こる問題の修正
