@@ -54,7 +54,6 @@ tags: JavaScript, ライブラリ, ダウンロード, 画面分割
     # カスタム可能
         スクリプトは要素のスタイル付けや, 要素の追加・削除を一切行いません. 
         //デザインしたい要素があれば, いつも通りCSSを編集するだけです.//
-    
 
 # サンプルページ
     [サンプルページ](ROOT_URI/Client/SplitView/example.html)
@@ -87,7 +86,7 @@ tags: JavaScript, ライブラリ, ダウンロード, 画面分割
             
             .split-view>*:not(.gutter){
               flex-grow: 1;
-              overflow: scroll;
+              overflow: auto;
             }
             
             .split-view>.gutter {
@@ -163,7 +162,6 @@ tags: JavaScript, ライブラリ, ダウンロード, 画面分割
               SplitView.activate(document.getElementById("main"))
             </script>
         ```
-    
 
 # ダウンロード
     以下のページからダウンロードできます.
@@ -175,7 +173,6 @@ tags: JavaScript, ライブラリ, ダウンロード, 画面分割
         SplitView は, [/ContentsPlanet/ContentsPlanet]
         に導入され, メンテナンスは ContentsPlanet プロジェクト下で行われています.
     ========
-
 
 # 更新履歴
     2022-04-29:
