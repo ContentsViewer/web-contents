@@ -11,25 +11,25 @@ tags: 編集中, C++, スマートポインタ, メモリ管理
 ===
 
 # スコープ
+
     プログラムで要素たとえば、変数、クラス、関数などを宣言するとき、
     その名前はプログラムのある範囲でしか見ることができません。
 
     Block scope:
 
         Statement scope:
-    
+
     Namespace scope:
 
         Global namespace scope:
-    
+
     Function parameter scope:
-    
+
     Class scope:
 
     Enumeration scope:
 
     Template parameter scope:
-
 
 # オブジェクトの保存期間
 
@@ -48,15 +48,14 @@ tags: 編集中, C++, スマートポインタ, メモリ管理
 
     Dynamic storage duration:
 
-
 # 所有権
 
 # unique_ptr
 
 # shared_ptr
 
-
 # 参考文献
+
     * https://qiita.com/hmito/items/9b35a2438a8b8ee4b5af
     * https://www.chromium.org/developers/smart-pointer-guidelines/
     * https://www.geeksforgeeks.org/smart-pointers-cpp/
