@@ -1,0 +1,69 @@
+---
+title: 図で理解するC++スマートポインタの本質
+date: 2022-11-25
+tags: 編集中, C++, スマートポインタ, メモリ管理
+---
+
+
+本来手動でメモリ管理しなければならないオブジェクトを、
+スコープによって自動でメモリ管理するもの。
+
+===
+
+# スコープ
+    プログラムで要素たとえば、変数、クラス、関数などを宣言するとき、
+    その名前はプログラムのある範囲でしか見ることができません。
+
+    Block scope:
+
+        Statement scope:
+    
+    Namespace scope:
+
+        Global namespace scope:
+    
+    Function parameter scope:
+    
+    Class scope:
+
+    Enumeration scope:
+
+    Template parameter scope:
+
+
+# オブジェクトの保存期間
+
+    Static storage duration:
+
+    Thread storage duration:
+
+    Automattic storage duration:
+
+        C++仕様書6.7.5.4によると
+        >>>
+            ブロックやパラメータスコープに属し、static、thread_local、externのいずれにも明示的に宣言されていない変数は、
+            自動的に保存期間が設定されます。
+            これらの実体の保存期間は、それらが作成されたブロックが終了するまで続きます。
+        >>>
+
+    Dynamic storage duration:
+
+
+# 所有権
+
+# unique_ptr
+
+# shared_ptr
+
+
+# 参考文献
+    * https://qiita.com/hmito/items/9b35a2438a8b8ee4b5af
+    * https://www.chromium.org/developers/smart-pointer-guidelines/
+    * https://www.geeksforgeeks.org/smart-pointers-cpp/
+    * https://en.wikipedia.org/wiki/Resource_acquisition_is_initialization
+    * https://stackoverflow.com/questions/13852710/single-vs-shared-ownership-meaning
+    * https://stackoverflow.com/questions/8538165/when-does-an-object-on-the-heap-go-out-of-scope
+    * https://en.cppreference.com/w/cpp/language/scope
+    * https://learn.microsoft.com/en-us/cpp/cpp/scope-visual-cpp?view=msvc-170
+    * https://open-std.org/jtc1/sc22/wg21/docs/papers/2022/n4910.pdf
+    * https://learn.microsoft.com/ja-jp/cpp/cpp/smart-pointers-modern-cpp?view=msvc-170

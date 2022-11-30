@@ -9,4 +9,18 @@ Summary
 
 ===
 
-# Section
+# 行ベクトルと列ベクトル
+
+# メモリ順序
+
+# プラットフォームごとの違い
+
+# 相互変換
+
+# 参考文献
+
+* https://qiita.com/suzuryo3893/items/9e543cdf8bc64dc7002a
+* https://blog.natade.net/2017/06/11/vector-matrix-directx-opengl-hlsl-glsl/
+* https://en.wikipedia.org/wiki/Row-_and_column-major_order
+* https://en.wikipedia.org/wiki/Matrix_representation
+* https://www.scratchapixel.com/lessons/mathematics-physics-for-computer-graphics/geometry/row-major-vs-column-major-vector
