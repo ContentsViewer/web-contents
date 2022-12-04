@@ -1,14 +1,119 @@
 ---
-title: 図で理解するC++スマートポインタの本質
+title: 基本から理解するC++スマートポインタ
 date: 2022-11-25
 tags: 編集中, C++, スマートポインタ, メモリ管理
 ---
+
 
 
 本来手動でメモリ管理しなければならないオブジェクトを、
 スコープによって自動でメモリ管理するもの。
 
 ===
+
+# オブジェクトのライフタイム
+
+    プログラム実行中に生成されるオブジェクト(Object)には、必ずどこかの記憶域(Storage)が割り当てられます^[cpp-n4861]。
+    記憶域が有効である期間のことを記憶域期間(Storage duration)と呼びます^[cpp-n4861]^[cppref-storage-duration]^[ppp-storage-duration]。
+    オブジェクトは、この記憶域期間によってライフタイムが決まります^[cpp-n4861]。
+
+    [記憶域期間とオブジェクトのライフタイムは必ずしも一致しない]
+    ===
+        記憶域の期間と、そこに存在しているオブジェクトのライフタイムは必ずしも一致しないことに注意してください^[cpp-n4861]。
+        たとえば、型がクラスではないオブジェクト(int値やbool値)のライフタイムは、その記憶域が終わるときと一致しますが、\
+        型がクラスであるオブジェクトは、デストラクタが呼ばれた時がライフタイムの終わりであり、記憶域はそのまま残り続けることは許されます^[cpp-n4861]。
+        また記憶域が確保されても(ここから記憶域の期間が始まる)、その上でオブジェクトがコンストラクトされるまではオブジェクトのライフタイムは始まりません(std::vector::reserve()がよい例です)^[stackoverflow-duration-vs-lifetime]。
+
+        [TODO: 図が欲しい]
+    ===
+
+    C++で記憶域期間は以下4つに分けられます。
+
+    Static storage duration:
+        ThreadまたはDynamicな記憶域期間を持たず、ローカルでない変数は、静的記憶域期間(Static storage duration)を持ちます^[cpp-n4861]。
+        この期間は、プログラムの終了まで続きます。
+ 
+    Thread storage duration:
+
+    Automatic storage duration:
+        ブロックスコープ内の変数で、`static`, `thread_local`, `extern`で宣言されていない変数は、自動記憶域期間(Automatic storage duration)を持ちます^[cpp-n4861]。
+        メモリは、実行がブロックに入ったときに割り当てられ、ブロック終了時に割り当てを解除されます^[ms-learn-storage-class]。
+        
+    Dynamic storage duration:
+
+    以上をみると、プログラマが明示的に削除しないといけないのは、動的記憶域期間をもつオブジェクトであることがわかります。
+
+# スコープとオブジェクトのライフタイムの関係
+
+# 動的なオブジェクトのメモリを自動管理する
+
+    動的記憶域期間を持つオブジェクトは、C++の仕様で自動で解放されることはありません。
+    必ずdelete式で明示的に開放する必要があります。
+
+    そこで、この動的なオブジェクトをラップしてdeleteする責任を持たせたものがスマートポインタです。
+    スマートポインタは、自身が削除されるときに保持しているオブジェクトを必要ならば解放します。
+    スマートポインタ自体を、自動で解放される記憶域期間で使うことで、
+    動的なオブジェクトを
+
+
+    ```cpp
+    {
+        // 自動記憶域期間でresourceオブジェクトを生成
+        Resource resource;
+        
+        // ...
+    } // ブロックを抜けると, resourceオブジェクトは自動で解放
+
+    {
+        // 動的記憶域期間でresourceオブジェクトを生成
+        Resource *resource = new Resource;
+
+        // ...
+
+        // ブロックを抜ける前に手動でdelete
+        delete resource;
+    }
+
+    {
+        // スマートポインタで管理
+        std::unique_ptr<Resource> resource(new Resource);
+
+        // ...
+    }
+    ```
+
+# 所有権
+
+# unique_ptr
+
+# shared_ptr
+
+# 動的確保した記憶域のライフタイム
+
+    プログラム実行中にnew式で動的に作られた領域のことを動的領域(dynamic storage)と呼びます^[cpp-n4861]^[cppref-storage-duration]。
+    動的領域は、delete式で明示的に開放する必要があります。
+    動的領域が作られてから削除されるまでの期間をdynamic storage durationと呼びます^[cpp-n4861]。
+
+    [Storage duration^[cpp-n4861]]
+    ===
+
+        Static storage duration:
+
+        Thread storage duration:
+
+        Automattic storage duration:
+
+            C++仕様書6.7.5.4によると
+            >>>
+                ブロックやパラメータスコープに属し、static、thread_local、externのいずれにも明示的に宣言されていない変数は、
+                自動的に保存期間が設定されます。
+                これらの実体の保存期間は、それらが作成されたブロックが終了するまで続きます。
+            >>>
+
+        Dynamic storage duration:
+    ===
+
+    プログラマは、動的に確保した領域に対して、開放する責任があります。
 
 # スコープ
 
@@ -31,30 +136,22 @@ tags: 編集中, C++, スマートポインタ, メモリ管理
 
     Template parameter scope:
 
-# オブジェクトの保存期間
-
-    Static storage duration:
-
-    Thread storage duration:
-
-    Automattic storage duration:
-
-        C++仕様書6.7.5.4によると
-        >>>
-            ブロックやパラメータスコープに属し、static、thread_local、externのいずれにも明示的に宣言されていない変数は、
-            自動的に保存期間が設定されます。
-            これらの実体の保存期間は、それらが作成されたブロックが終了するまで続きます。
-        >>>
-
-    Dynamic storage duration:
-
-# 所有権
-
-# unique_ptr
-
-# shared_ptr
-
 # 参考文献
+
+    [cpp-n4861]: ["Working Draft, Standard for Programming Language C++"](https://www.open-std.org/jtc1/sc22/wg21/docs/papers/2020/n4861.pdf). \
+        open-std.org. Retrieved 2022-12-01.
+
+    [cppref-storage-duration]: ["Storage class specifiers"](https://en.cppreference.com/w/cpp/language/storage_duration). \
+        cppreference.com. Retrieved 2022-12-01.
+
+    [stackoverflow-duration-vs-lifetime]: ["storage duration vs lifetime"](https://stackoverflow.com/questions/21392160/storage-duration-vs-lifetime). \
+        Stack Overflow. Retrieved 2022-12-03.
+
+    [ms-learn-storage-class]: ["ストレージクラス"](https://learn.microsoft.com/ja-jp/cpp/cpp/storage-classes-cpp?view=msvc-170). \
+        Microsoft Learn. Retrieved 2022-12-03.
+    
+    [ppp-storage-duration]: ["記憶域期間 | Programming Place Plus　用語集"](https://programming-place.net/ppp/contents/glossary/ka/storage_duration.html). \
+        Programming Place Plus. Retrieved 2022-12-03.
 
     * https://qiita.com/hmito/items/9b35a2438a8b8ee4b5af
     * https://www.chromium.org/developers/smart-pointer-guidelines/
