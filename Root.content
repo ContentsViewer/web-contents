@@ -20,7 +20,7 @@ children:
     App/App
     Writing/Writing
     ImageProcessing/ImageProcessing
-    nodec/nodec
+    nodec-project/main
     Graphics/Graphics
     iPhone/iPhone
     Illust/Illust
