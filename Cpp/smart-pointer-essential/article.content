@@ -53,6 +53,14 @@ tags: 編集中, C++, スマートポインタ, メモリ管理
     以上をみると、プログラマが明示的に削除しないといけないのは、動的記憶域期間をもつオブジェクトであることがわかります。
 
 # スコープとオブジェクトのライフタイムの関係
+    # スコープとは
+        コンピュータサイエンスにおいてスコープという用語には、二つの意味があります^[wiki-sope]。
+        一つは、名前バインディング(変数などの、実体に名前を関連付けること)のスコープ、
+        もう一つは、
+        が有効なプログラムの一部分を指す
+        ソースコードの一部(テキスト領域)という意味でのプログラムの一部、
+        もう一つは、実行時間(実行中の時間帯)の一部
+        
 
 # 動的なオブジェクトのメモリを自動管理する
 
@@ -161,6 +169,9 @@ tags: 編集中, C++, スマートポインタ, メモリ管理
     
     [ppp-storage-duration]: ["記憶域期間 | Programming Place Plus　用語集"](https://programming-place.net/ppp/contents/glossary/ka/storage_duration.html). \
         Programming Place Plus. Retrieved 2022-12-03.
+
+    [wiki-sope]: ["Scope (computer science)"](https://en.wikipedia.org/wiki/Scope_%28computer_science%29). \
+        Wikipedia. Retrieved 2022-12-06.
 
     * https://qiita.com/hmito/items/9b35a2438a8b8ee4b5af
     * https://www.chromium.org/developers/smart-pointer-guidelines/
