@@ -2,7 +2,7 @@
 parent: ../Root
 title: [redirect] nodec (GameEngine)
 date: 2019-02-06
-tags: プロジェクト
+tags: noindex 
 redirect: nodec-framework/main
 ---
 
@@ -19,6 +19,7 @@ redirect: nodec-framework/main
 プラットフォームの上に、機能を抽象化したレイヤー(modules)があり、
 アプリ層はこのレイヤーを通してプラットフォームの機能を利用します。
 プラットフォームが異なっても、アプリでの実装の仕方は同じです。
+
 <!--
 このプロジェクト(nodec プロジェクト)は, 自分でゲームエンジンを作ることを目指したプロジェクトです.
 ゲームエンジンを自作する過程で得られるプログラミング技術の習得が主な目的です.
