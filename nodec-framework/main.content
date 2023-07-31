@@ -3,6 +3,9 @@ parent: ../Root
 title: nodec framework(プラットフォーム開発のためのフレームワーク)
 date: 2023-07-29
 tags: プロジェクト, フレームワーク
+children:
+    nodec/main
+    modules/main
 ---
 
 ![](CURRENT_DIR/images/nodec-framework.png)
@@ -21,6 +24,25 @@ tags: プロジェクト, フレームワーク
 アプリ層はこのレイヤーを通してプラットフォームの機能を利用します。
 プラットフォームが異なっても、アプリでの実装の仕方は同じです。
 
-![](CURRENT_DIR/images/architecture.drawio.png)
-
 ===
+
+# 構成
+    ![](CURRENT_DIR/images/architecture.drawio.png)
+
+    nodec:
+        プラットフォームに依存しない基本的なライブラリ群。
+
+    modules:
+        アプリ層に提供するインターフェイスを定義している。
+        アプリ層とプラットフォーム層の中間に位置する。
+
+        モジュールの機能は、プラットフォーム層で実装される。
+
+
+    platforms:
+        アプリ層を成り立たせるための基礎となるシステムでプログラムエントリを持つ。
+
+        OSやSDKと仲がいい。
+
+    apps:
+        プラットフォームとモジュールの上にあるアプリケーション層。
