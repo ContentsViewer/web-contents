@@ -18,6 +18,8 @@ jobs:
         sudo -v ; curl https://rclone.org/install.sh | sudo bash
         config_file="~/.config/rclone/rclone.conf"
         mkdir -p ~/.config/rclone
+        pwd
+        ls ~/.config/rclone
         echo "[contentsviewer]" > $config_file
         echo "type = ftp" >> $config_file
         echo "host = ${FTP_SERVER}" >> $config_file
@@ -26,7 +28,6 @@ jobs:
         echo "tls = false" >> $config_file
         echo "explicit_tls = true" >> $config_file
         rclone config show
-        pwd
         cat ~/.config/rclone/rclone.conf
 
     # - name: Fetch the latest document
