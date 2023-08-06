@@ -21,6 +21,8 @@ jobs:
         pwd
         rclone config file
         ls ~/.config/rclone
+        echo ~
+        echo "BBBBB"
         echo "[contentsviewer]" > $config_file
         echo "type = ftp" >> $config_file
         echo "host = ${FTP_SERVER}" >> $config_file
