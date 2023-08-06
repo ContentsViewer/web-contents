@@ -3,7 +3,7 @@ name: publish
 on:
   pull_request:
     branches: ["main"]
-    types: [closed]
+    # types: [closed]
 
 jobs:
   publish-to-site:
@@ -23,4 +23,4 @@ jobs:
       - name: Upload files to the site
         run: |
           sudo -v ; curl https://rclone.org/install.sh | sudo bash
-          rclone sync ./ ftp:${FTP_SERVER_DIR} --exclude="/.git**" --dry-run
+          rclone sync ./ ftp:${FTP_SERVER_DIR} --exclude="/.git**" -v
