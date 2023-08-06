@@ -20,5 +20,6 @@ jobs:
         username: ${{ vars.FTP_USERNAME }}
         password: ${{ secrets.FTP_PASSWORD }}
         server-dir: ${{ vars.FTP_SERVER_DIR }}
+        protocol: ftps
         security: strict
         dry-run: true
