@@ -19,6 +19,7 @@ jobs:
         config_file="~/.config/rclone/rclone.conf"
         mkdir -p ~/.config/rclone
         pwd
+        rclone config file
         ls ~/.config/rclone
         echo "[contentsviewer]" > $config_file
         echo "type = ftp" >> $config_file
