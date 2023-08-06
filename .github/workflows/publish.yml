@@ -1,0 +1,23 @@
+name: publish
+
+on:
+  pull_request:
+    branches: ["main"]
+
+jobs:
+  fetch-latest-document:
+    name: Fetch the latest document from document server
+    runs-on: ubuntu-latest
+    steps:
+    - name: Fetch main branch
+      uses: actions/checkout@v3
+      with:
+        ref: 'main'
+    - name: Fetch the latest document
+      uses: SamKirkland/FTP-Deploy-Action@v4.3.4
+      with:
+        server: ${{ secrets.server }}
+        username: ${{ secrets.username }}
+        password: ${{ secrets.password }}
+        server-dir: ${{ secrets.serverDir}}
+        dry-run: true
