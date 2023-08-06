@@ -15,7 +15,7 @@ jobs:
       RCLONE_CONFIG_FTP_USER: ${{ secrets.FTP_USERNAME }}
       RCLONE_CONFIG_FTP_PASS: ${{ secrets.FTP_PASSWORD }}
       RCLONE_CONFIG_FTP_TLS: false
-      RCLONE_CONFIG_FTP_EXPLICIT_TLS: true
+      RCLONE_CONFIG_FTP_EXPLICIT_TLS: false
       FTP_SERVER_DIR: ${{ secrets.FTP_SERVER_DIR }}
     steps:
       - name: Checkout
