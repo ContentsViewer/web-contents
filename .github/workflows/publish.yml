@@ -3,6 +3,7 @@ name: publish
 on:
   pull_request:
     branches: ["main"]
+    types: [closed]
 
 jobs:
   publish-to-site:
