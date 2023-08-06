@@ -31,9 +31,10 @@ jobs:
         echo "tls = false" >> $config_file
         echo "explicit_tls = true" >> $config_file
         rclone config show
-        rclone sync contentsviewer:${FTP_SERVER_DIR} ./
+        rclone sync --dry-run contentsviewer:${FTP_SERVER_DIR} ./
     - name: Push the changes to the main branch
       run: |
+        pwd
         git status
 
     # - name: Fetch the latest document
