@@ -14,12 +14,15 @@ jobs:
       with:
         ref: 'main'
     - name: Fetch the latest document
-      uses: SamKirkland/FTP-Deploy-Action@v4.3.4
-      with:
-        server: ${{ secrets.FTP_SERVER }}
-        username: ${{ secrets.FTP_USERNAME }}
-        password: ${{ secrets.FTP_PASSWORD }}
-        server-dir: ${{ secrets.FTP_SERVER_DIR }}
-        protocol: ftps
-        security: strict
-        # dry-run: true
+      run: |
+        sudo -v ; curl https://rclone.org/install.sh | sudo bash
+    # - name: Fetch the latest document
+    #   uses: SamKirkland/FTP-Deploy-Action@v4.3.4
+    #   with:
+    #     server: ${{ secrets.FTP_SERVER }}
+    #     username: ${{ secrets.FTP_USERNAME }}
+    #     password: ${{ secrets.FTP_PASSWORD }}
+    #     server-dir: ${{ secrets.FTP_SERVER_DIR }}
+    #     protocol: ftps
+    #     security: strict
+    #     # dry-run: true
