@@ -16,9 +16,9 @@ jobs:
     - name: Fetch the latest document
       uses: SamKirkland/FTP-Deploy-Action@v4.3.4
       with:
-        server: ${{ vars.FTP_SERVER }}
-        username: ${{ vars.FTP_USERNAME }}
+        server: ${{ secrets.FTP_SERVER }}
+        username: ${{ secrets.FTP_USERNAME }}
         password: ${{ secrets.FTP_PASSWORD }}
-        server-dir: ${{ vars.FTP_SERVER_DIR }}
+        server-dir: ${{ secrets.FTP_SERVER_DIR }}
         protocol: ftps
-        dry-run: true
+        # dry-run: true
