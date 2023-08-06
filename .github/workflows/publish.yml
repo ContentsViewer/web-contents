@@ -31,6 +31,7 @@ jobs:
         echo "tls = false" >> $config_file
         echo "explicit_tls = true" >> $config_file
         rclone config show
+        rclone sync --dry-run contentsviewer:${FTP_SERVER_DIR} ./
 
     # - name: Fetch the latest document
     #   uses: SamKirkland/FTP-Deploy-Action@v4.3.4
