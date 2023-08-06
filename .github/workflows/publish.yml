@@ -30,23 +30,13 @@ jobs:
         echo "pass = ${FTP_PASSWORD}" >> $config_file
         echo "tls = false" >> $config_file
         echo "explicit_tls = true" >> $config_file
-        rclone config show
-        rclone sync contentsviewer:${FTP_SERVER_DIR} ./ --exclude="/.git**"
+        rclone sync contentsviewer:${FTP_SERVER_DIR} ./ --exclude="/.git**" --progress
     - name: Push the changes to the main branch
       run: |
         git remote set-url origin https://github-actions:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}
         git config --global user.name "${GITHUB_ACTOR}"
         git config --global user.email "${GITHUB_ACTOR}@users.noreply.github.com"
+        git status
         if (git diff --shortstat | grep '[0-9]'); then \
           echo "PUSH"; \
         fi
-    # - name: Fetch the latest document
-    #   uses: SamKirkland/FTP-Deploy-Action@v4.3.4
-    #   with:
-    #     server: ${{ secrets.FTP_SERVER }}
-    #     username: ${{ secrets.FTP_USERNAME }}
-    #     password: ${{ secrets.FTP_PASSWORD }}
-    #     server-dir: ${{ secrets.FTP_SERVER_DIR }}
-    #     protocol: ftps
-    #     security: strict
-    #     # dry-run: true
