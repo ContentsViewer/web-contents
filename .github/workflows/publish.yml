@@ -16,6 +16,18 @@ jobs:
     - name: Fetch the latest document
       run: |
         sudo -v ; curl https://rclone.org/install.sh | sudo bash
+        config_file="~/.config/rclone/rclone.conf"
+        echo "[contentsviewer]" >> $config_file
+        echo "type = ftp" >> $config_file
+        echo "host = ${FTP_SERVER}" >> $config_file
+        echo "user = ${FTP_USERNAME}" >> $config_file
+        echo "pass = ${FTP_PASSWORD}" >> $config_file
+        echo "tls = false" >> $config_file
+        echo "explicit_tls = true" >> $config_file
+        rclone config show
+        pwd
+        cat ~/.config/rclone/rclone.conf
+
     # - name: Fetch the latest document
     #   uses: SamKirkland/FTP-Deploy-Action@v4.3.4
     #   with:
