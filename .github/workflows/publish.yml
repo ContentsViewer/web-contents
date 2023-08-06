@@ -17,6 +17,7 @@ jobs:
       run: |
         sudo -v ; curl https://rclone.org/install.sh | sudo bash
         config_file="~/.config/rclone/rclone.conf"
+        touch $config_file
         echo "[contentsviewer]" >> $config_file
         echo "type = ftp" >> $config_file
         echo "host = ${FTP_SERVER}" >> $config_file
