@@ -1,12 +1,12 @@
-name: publish
+name: sync
 
 on:
   pull_request:
     branches: ["main"]
 
 jobs:
-  fetch-latest-document:
-    name: Fetch the latest document from document server
+  sync-from-site:
+    name: Fetch the latest document from site
     runs-on: ubuntu-latest
     env:
       FTP_SERVER: ${{ secrets.FTP_SERVER }}
@@ -39,6 +39,6 @@ jobs:
         git status
         if (git diff --shortstat | grep '[0-9]'); then \
           git add .; \
-          git commit -m "Sync from the document server"; \
+          git commit -m "Sync from site"; \
           git push origin main; \
         fi
