@@ -20,9 +20,8 @@ jobs:
         mkdir -p ~/.config/rclone
         pwd
         rclone config file
-        ls ~/.config/rclone
         echo ~
-        echo "BBBBB"
+        echo "BBBBB ${config_file}"
         echo "[contentsviewer]" > $config_file
         echo "type = ftp" >> $config_file
         echo "host = ${FTP_SERVER}" >> $config_file
