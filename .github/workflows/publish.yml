@@ -31,7 +31,7 @@ jobs:
         echo "tls = false" >> $config_file
         echo "explicit_tls = true" >> $config_file
         rclone config show
-        rclone synccontentsviewer:${FTP_SERVER_DIR} ./ --exclude="/.git/**" --dry-run 
+        rclone sync contentsviewer:${FTP_SERVER_DIR} ./ --exclude="/.git/**" --dry-run 
     - name: Push the changes to the main branch
       run: |
         git remote set-url origin https://github-actions:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}
