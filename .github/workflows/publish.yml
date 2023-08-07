@@ -28,7 +28,7 @@ jobs:
         run: |
           sudo -v ; curl https://rclone.org/install.sh | sudo bash
 
-          options='-v --dry-run'
+          options='-v'
           echo "a: ${{ github.event.pull_request.head.sha }}"
           echo "b: ${{ github.event.pull_request.base.sha }}"
           echo "c: ${{ github.event.pull_request.merge_commit_sha }}"
@@ -42,6 +42,7 @@ jobs:
                   rclone deletefile ftp:${FTP_SERVER_DIR}$2 $options
 
                   echo ">rclone rmdir ftp:${FTP_SERVER_DIR}${2%/*}"
+                  # rclone rmdir ftp:${FTP_SERVER_DIR}${2%/*} $options
 
                   echo "> copyto ./$3 ftp:${FTP_SERVER_DIR}$3"
                   rclone copyto ./$3 ftp:${FTP_SERVER_DIR}$3 $options
@@ -57,6 +58,7 @@ jobs:
                   rclone deletefile ftp:${FTP_SERVER_DIR}$2 $options
 
                   echo ">rclone rmdir ftp:${FTP_SERVER_DIR}${2%/*}"
+                  # rclone rmdir ftp:${FTP_SERVER_DIR}${2%/*} $options
                   ;;
                 A)
                   echo "[ADD]    $2"
