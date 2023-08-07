@@ -3,6 +3,7 @@ parent: ../docs
 title: C++
 date: 2021-12-30
 children:
+    how-to-implement-a-thread-pool/article
     references/docs
 ---
 
