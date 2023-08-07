@@ -41,11 +41,11 @@ jobs:
                   echo "> deletefile ftp:${FTP_SERVER_DIR}$2"
                   rclone deletefile ftp:${FTP_SERVER_DIR}$2 $options
 
-                  echo ">rclone rmdir ftp:${FTP_SERVER_DIR}${2%/*}"
-                  # rclone rmdir ftp:${FTP_SERVER_DIR}${2%/*} $options
-
                   echo "> copyto ./$3 ftp:${FTP_SERVER_DIR}$3"
                   rclone copyto ./$3 ftp:${FTP_SERVER_DIR}$3 $options
+
+                  echo "> rmdir ftp:${FTP_SERVER_DIR}${2%/*}"
+                  rclone rmdir ftp:${FTP_SERVER_DIR}${2%/*} $options
                   ;;
                 M)
                   echo "[MODIFY] $2"
@@ -57,8 +57,8 @@ jobs:
                   echo "> deletefile ftp:${FTP_SERVER_DIR}$2"
                   rclone deletefile ftp:${FTP_SERVER_DIR}$2 $options
 
-                  echo ">rclone rmdir ftp:${FTP_SERVER_DIR}${2%/*}"
-                  # rclone rmdir ftp:${FTP_SERVER_DIR}${2%/*} $options
+                  echo "> rmdir ftp:${FTP_SERVER_DIR}${2%/*}"
+                  rclone rmdir ftp:${FTP_SERVER_DIR}${2%/*} $options
                   ;;
                 A)
                   echo "[ADD]    $2"
