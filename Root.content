@@ -5,29 +5,29 @@ children:
     Math/Math
     Arduino/Arduino
     Unity/Unity
+    ContentsPlanet/ContentsPlanet
+    OutlineText/OutlineText
+    nodec-framework/docs
+    nodec-game-engine/docs
+    WebTool/WebTool
+    software/docs
     Programming/Programming
     Cpp/Cpp
     ShellScript/ShellScript
-    Python/Python
     Ubuntu/Ubuntu
     WSL/WSL
     Network/Network
-    ContentsPlanet/ContentsPlanet
-    OutlineText/OutlineText
     ROS2/ROS2
     Library/Library
     Circuit/Circuit
     App/App
-    Writing/Writing
-    ImageProcessing/ImageProcessing
-    nodec-framework/main
-    nodec-game-engine/main
+    image-processing/docs
     Graphics/Graphics
+    Writing/Writing
     iPhone/iPhone
     Illust/Illust
     Music/Music
     Web/Web
-    WebTool/WebTool
     About/About
 ---
 

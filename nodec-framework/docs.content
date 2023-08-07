@@ -1,10 +1,14 @@
 ---
 parent: ../Root
-title: [redirect] nodec (GameEngine)
-date: 2019-02-06
-tags: noindex 
-redirect: nodec-framework/docs
+title: nodec framework(プラットフォーム開発のためのフレームワーク)
+date: 2023-07-29
+tags: プロジェクト, フレームワーク
+children:
+    nodec/docs
+    modules/docs
 ---
+
+![](CURRENT_DIR/images/nodec-framework.png)
 
 `nodec`は、ゲームエンジンなどのプラットフォームを新しく作成するためのフレームワークです。
 
@@ -20,21 +24,29 @@ redirect: nodec-framework/docs
 アプリ層はこのレイヤーを通してプラットフォームの機能を利用します。
 プラットフォームが異なっても、アプリでの実装の仕方は同じです。
 
-<!--
-このプロジェクト(nodec プロジェクト)は, 自分でゲームエンジンを作ることを目指したプロジェクトです.
-ゲームエンジンを自作する過程で得られるプログラミング技術の習得が主な目的です.
--->
-
-<https://github.com/ContentsViewer/nodec>
-
 ===
 
-# 要素技術
-    本プロジェクトで開発された要素技術
-    
-    # Unicode 文字列処理
-        * [/Library/Cpp/Unicode/Unicode]
-        * [/Programming/unicode-utf-conversion/unicode-utf-conversion]
-    
-    # スレッドプール
-        * [/Cpp/how-to-implement-a-thread-pool/article]
+# 構成
+    ![](CURRENT_DIR/images/architecture.drawio.png)
+
+    nodec:
+        プラットフォームに依存しない基本的なライブラリ群。
+
+    modules:
+        アプリ層に提供するインターフェイスを定義している。
+        アプリ層とプラットフォーム層の中間に位置する。
+
+        モジュールの機能は、プラットフォーム層で実装される。
+
+
+    platforms:
+        アプリ層を成り立たせるための基礎となるシステムでプログラムエントリを持つ。
+
+        OSやSDKと仲がいい。
+
+    apps:
+        プラットフォームとモジュールの上にあるアプリケーション層。
+
+# リポジトリ
+    <https://github.com/nodec-project>
+

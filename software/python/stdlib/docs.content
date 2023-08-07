@@ -1,0 +1,14 @@
+---
+parent: ../docs
+title: stdlib(再利用可能なモジュール群)
+date: 2020-08-27
+tags: ライブラリ
+---
+
+作成したpythonの再利用可能なモジュール群
+
+===
+
+# ダウンロード
+    Github:
+        <https://github.com/ContentsViewer/Python-stdlib>

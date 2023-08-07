@@ -1,0 +1,14 @@
+---
+parent: ../Root
+title: ソフトウェア開発
+date: 2023-08-07
+children:
+    cpp/docs
+    python/docs
+    references/docs
+---
+
+ソフトウェア開発に関する知識。
+各種プログラミング言語や開発手法に関する知識が書かれます。
+
+===
