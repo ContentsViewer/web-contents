@@ -29,9 +29,6 @@ jobs:
           sudo -v ; curl https://rclone.org/install.sh | sudo bash
 
           options='-v'
-          echo "a: ${{ github.event.pull_request.head.sha }}"
-          echo "b: ${{ github.event.pull_request.base.sha }}"
-          echo "c: ${{ github.event.pull_request.merge_commit_sha }}"
           git diff ${{ github.event.pull_request.merge_commit_sha }}^ --name-status | {
             while read line; do
               set $line
@@ -41,11 +38,11 @@ jobs:
                   echo "> deletefile ftp:${FTP_SERVER_DIR}$2"
                   rclone deletefile ftp:${FTP_SERVER_DIR}$2 $options
 
-                  echo ">rclone rmdir ftp:${FTP_SERVER_DIR}${2%/*}"
-                  # rclone rmdir ftp:${FTP_SERVER_DIR}${2%/*} $options
-
                   echo "> copyto ./$3 ftp:${FTP_SERVER_DIR}$3"
                   rclone copyto ./$3 ftp:${FTP_SERVER_DIR}$3 $options
+
+                  echo "> rmdir ftp:${FTP_SERVER_DIR}${2%/*}"
+                  rclone rmdir ftp:${FTP_SERVER_DIR}${2%/*} $options
                   ;;
                 M)
                   echo "[MODIFY] $2"
@@ -57,8 +54,8 @@ jobs:
                   echo "> deletefile ftp:${FTP_SERVER_DIR}$2"
                   rclone deletefile ftp:${FTP_SERVER_DIR}$2 $options
 
-                  echo ">rclone rmdir ftp:${FTP_SERVER_DIR}${2%/*}"
-                  # rclone rmdir ftp:${FTP_SERVER_DIR}${2%/*} $options
+                  echo "> rmdir ftp:${FTP_SERVER_DIR}${2%/*}"
+                  rclone rmdir ftp:${FTP_SERVER_DIR}${2%/*} $options
                   ;;
                 A)
                   echo "[ADD]    $2"
