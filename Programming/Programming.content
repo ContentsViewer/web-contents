@@ -3,7 +3,6 @@ parent: ../Root
 title: プログラミング
 date: 2019-04-26
 children:
-    OpenCV/OpenCV
     NamingRules
     DirectoryTraversal
     unicode-utf-conversion/unicode-utf-conversion

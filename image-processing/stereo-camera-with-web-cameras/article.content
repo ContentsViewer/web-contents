@@ -1,0 +1,92 @@
+---
+parent: ../docs
+title: OpenCVで二つのWEBカメラを用いたステレオカメラの実装
+date: 2019-06-19
+tags: OpenCV, Python, ステレオカメラ, 画像処理
+---
+
+ステレオカメラは，空間の深度を測定するのに使われます．
+本稿では，二台のウェブカメラを用いてステレオカメラを実装します．
+ある程度のロバスト性を確保するため，キャリブレーションも行います．
+
+結果，以下のような深度画像を得ることができた．
+
+
+![結果画像](CURRENT_DIR/Images/StereoCamera/result.jpg)
+
+===
+
+# ステレオカメラの準備
+    "LOGICOOL ウェブカム HD画質 120万画素 C270" を二つ用意し，
+    水平になるように並べて固定します．
+
+    ![ステレオカメラ](CURRENT_DIR/Images/StereoCamera/stereo-camera.jpg)
+
+# ダウンロード
+    今回使用するpythonスクリプトをダウンロードします.
+
+    [OpenCV-StereoCamera](https://github.com/ContentsViewer/OpenCV-StereoCamera)
+
+    # ファイル構成
+
+        + OpenCV-StereoCamera
+            + `chessboard`
+                + `chessboard_A.pdf`
+                + `chessboard_B.png`
+            + `lib`
+            + `camera_shutter.py`
+            + `stereo_camera_shutter.py`
+            + `camera_calibrate.py`
+            + `stereo_camera_calibrate.py`
+            + `stereo.py`
+
+
+    [環境の用意をしてください::NOTE]
+    =================================
+        本稿では, 主にpythonとopenCVを使用していきます.
+        これらの環境を整えてください．
+    =================================
+
+# 左右のカメラデバイス番号の把握
+    二つのカメラを接続します．
+
+    `camera_shutter.py`内の上部にある，`CAMERA_DEVISE`を0から始まる番号で適宜変えていき,
+    `camera_shutter.py`を実行します．
+
+    実行画面で表示されるカメラ画像から左右のカメラを把握し，対応するデバイス番号を覚えておきます．
+
+    [`camera_shutter.py`の仕様]
+    ===========================
+        `s`キーでカメラ撮影，`q`キーでプログラム終了．
+        撮影した画像は，`images`フォルダに格納されます．
+    ===========================
+
+# キャリブレーション
+    二つのカメラの製品は同じでも,個体差があり,同じ姿勢で同じシーンを撮影しても得られる画像は異なります.
+    そのため,二つのカメラにある差を補正するため,キャリブレーションを行います.
+
+    ディスプレイにダウンロードしたチェスボード画像
+    (chessboard_A.pdf)を表示させます．
+
+    ![チェスボード表示](CURRENT_DIR/Images/StereoCamera/chess-Left.jpg)
+
+    `stereo_camera_shutter.py`を実行し，
+    様々な角度でチェスボードの写真を撮ります．
+    撮る角度は，左右，上下，正面，斜めなど様々な角度で撮ります．
+
+    撮った写真は，`images`フォルダに蓄積されます．
+
+
+    ![撮影画像(左)](CURRENT_DIR/Images/StereoCamera/lookup-Left.jpg)
+
+    ![撮影画像(右)](CURRENT_DIR/Images/StereoCamera/lookup-Right.jpg)
+
+    `stereo_camera_calibrate.py`を実行しキャリブレーションを行います．
+    キャリブレーションデータは，ファイル'stereo_calibarate_data.json'に保存されます．
+
+# 実行
+    最後に，`stereo.py`を実行し，デプス画像を得ます．
+
+    ![結果画像](CURRENT_DIR/Images/StereoCamera/result.jpg)
+
+
