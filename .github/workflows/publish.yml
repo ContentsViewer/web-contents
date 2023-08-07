@@ -35,6 +35,7 @@ jobs:
               case $1 in\
                 R*)\
                   echo "RENAME $2 -> $3";\
+                  echo ftp:${FTP_SERVER_DIR}$2;\
                   rclone deletefile ftp:${FTP_SERVER_DIR}$2 $options;\
                   ;;\
                 M)\
@@ -45,6 +46,7 @@ jobs:
                   ;;\
                 A)\
                   echo "ADD    $2";\
+                  echo ./$2 ftp:${FTP_SERVER_DIR}$2;\
                   rclone copyto ./$2 ftp:${FTP_SERVER_DIR}$2 $options;\
                   ;;\
               esac;\
