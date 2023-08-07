@@ -3,13 +3,13 @@ name: publish
 on:
   pull_request:
     branches: ["main"]
-    types: [closed]
+    # types: [closed]
 
 jobs:
   publish-to-site:
     name: Publish the document to the site
     runs-on: ubuntu-latest
-    if: github.event.pull_request.merged == true
+    # if: github.event.pull_request.merged == true
     env:
       RCLONE_CONFIG_FTP_TYPE: ftp
       RCLONE_CONFIG_FTP_HOST: ${{ secrets.FTP_SERVER }}
@@ -19,18 +19,20 @@ jobs:
       RCLONE_CONFIG_FTP_EXPLICIT_TLS: true
       FTP_SERVER_DIR: ${{ secrets.FTP_SERVER_DIR }}
     steps:
-      - name: Checkout base
-        uses: actions/checkout@v3
-        with:
-          ref: ${{ github.event.pull_request.base.sha }}
+      # - name: Checkout base
+      #   uses: actions/checkout@v3
+      #   with:
+      #     ref: ${{ github.event.pull_request.base.sha }}
       - name: Checkout current
         uses: actions/checkout@v3
       - name: Upload files to the site
         run: |
           sudo -v ; curl https://rclone.org/install.sh | sudo bash
 
-          options='-v'
-          git diff ${{ github.event.pull_request.base.sha }}.. --name-status | {\
+          options='-v --dry-run'
+          echo "sha: ${{ github.sha }}"
+          echo "before: ${{ github.event.before }}"
+          git diff ${{ github.sha }} ${{ github.event.before }} --name-status | {\
             while read line; do\
               set $line;\
               case $1 in\
