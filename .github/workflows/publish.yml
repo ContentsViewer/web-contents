@@ -29,9 +29,6 @@ jobs:
           sudo -v ; curl https://rclone.org/install.sh | sudo bash
 
           options='-v'
-          echo "a: ${{ github.event.pull_request.head.sha }}"
-          echo "b: ${{ github.event.pull_request.base.sha }}"
-          echo "c: ${{ github.event.pull_request.merge_commit_sha }}"
           git diff ${{ github.event.pull_request.merge_commit_sha }}^ --name-status | {
             while read line; do
               set $line
