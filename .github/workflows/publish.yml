@@ -34,19 +34,26 @@ jobs:
               set $line;\
               case $1 in\
                 R*)\
-                  echo "RENAME $2 -> $3";\
-                  echo ftp:${FTP_SERVER_DIR}$2;\
+                  echo "[RENAME] $2 -> $3";\
+                  echo "> deletefile ftp:${FTP_SERVER_DIR}$2";\
                   rclone deletefile ftp:${FTP_SERVER_DIR}$2 $options;\
+
+                  echo "> copyto ./$3 ftp:${FTP_SERVER_DIR}$3";\
+                  rclone copyto ./$3 ftp:${FTP_SERVER_DIR}$3 $options;\
                   ;;\
                 M)\
-                  echo "MODIFY $2";\
+                  echo "[MODIFY] $2";\
+                  echo "> copyto ./$2 ftp:${FTP_SERVER_DIR}$2";\
+                  rclone copyto ./$2 ftp:${FTP_SERVER_DIR}$2 $options;\
                   ;;\
                 D)\
-                  echo "DELETE $2";\
+                  echo "[DELETE] $2";\
+                  echo "> deletefile ftp:${FTP_SERVER_DIR}$2";\
+                  rclone deletefile ftp:${FTP_SERVER_DIR}$2 $options;\
                   ;;\
                 A)\
-                  echo "ADD    $2";\
-                  echo ./$2 ftp:${FTP_SERVER_DIR}$2;\
+                  echo "[ADD]    $2";\
+                  echo "> copyto ./$2 ftp:${FTP_SERVER_DIR}$2";\
                   rclone copyto ./$2 ftp:${FTP_SERVER_DIR}$2 $options;\
                   ;;\
               esac;\
