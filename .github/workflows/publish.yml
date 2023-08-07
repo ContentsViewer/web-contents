@@ -3,7 +3,10 @@ name: publish
 on:
   pull_request:
     branches: ["main"]
-    types: [closed]
+    # types: [closed]
+
+concurrency:
+  site-operations
 
 jobs:
   publish-to-site:
