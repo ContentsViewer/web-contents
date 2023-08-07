@@ -45,8 +45,8 @@ jobs:
                   ;;\
                 A)\
                   echo "ADD    $2";\
+                  rclone copyto ./$2 ftp:${FTP_SERVER_DIR}$2 $options;\
                   ;;\
               esac;\
             done;\
           }
-          rclone sync ./ ftp:${FTP_SERVER_DIR} --exclude="/.git**" --checksum -v --dry-run
