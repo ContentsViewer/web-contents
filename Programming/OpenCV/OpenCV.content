@@ -1,7 +1,0 @@
----
-parent: ../Programming
-title: OpenCV
-date: 2019-06-19
-children:
-    StereoCamera
----
