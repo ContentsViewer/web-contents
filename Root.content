@@ -12,7 +12,6 @@ children:
     WebTool/WebTool
     software/docs
     Programming/Programming
-    Cpp/Cpp
     ShellScript/ShellScript
     Ubuntu/Ubuntu
     WSL/WSL
