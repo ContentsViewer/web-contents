@@ -7,6 +7,9 @@ on:
     # branches-ignore: ['**']
   workflow_dispatch:
 
+concurrency:
+  ${{ github.workflow }}
+
 jobs:
   sync-from-site:
     name: Fetch the latest document from the site

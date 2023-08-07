@@ -9,7 +9,7 @@ jobs:
   publish-to-site:
     name: Publish the document to the site
     runs-on: ubuntu-latest
-    # if: github.event.pull_request.merged == true
+    if: github.event.pull_request.merged == true
     env:
       RCLONE_CONFIG_FTP_TYPE: ftp
       RCLONE_CONFIG_FTP_HOST: ${{ secrets.FTP_SERVER }}
@@ -19,14 +19,12 @@ jobs:
       RCLONE_CONFIG_FTP_EXPLICIT_TLS: true
       FTP_SERVER_DIR: ${{ secrets.FTP_SERVER_DIR }}
     steps:
-      # - name: Checkout base
-      #   uses: actions/checkout@v3
-      #   with:
-      #     ref: ${{ github.event.pull_request.base.sha }}
-      - name: Checkout
+      - name: Checkout base branch
         uses: actions/checkout@v3
         with:
-          fetch-depth: 2
+          ref: ${{ github.event.pull_request.base.ref }}
+      - name: Checkout pull request branch
+        uses: actions/checkout@v3
       - name: Upload files to the site
         run: |
           sudo -v ; curl https://rclone.org/install.sh | sudo bash
@@ -34,37 +32,38 @@ jobs:
           options='-v --dry-run'
           echo "a: ${{ github.event.pull_request.head.sha }}"
           echo "b: ${{ github.event.pull_request.base.sha }}"
-          git diff HEAD^ --name-status | {\
-            while read line; do\
-              set $line;\
-              case $1 in\
-                R*)\
-                  echo "[RENAME] $2 -> $3";\
-                  echo "> deletefile ftp:${FTP_SERVER_DIR}$2";\
-                  rclone deletefile ftp:${FTP_SERVER_DIR}$2 $options;\
+          echo "c: ${{ github.event.pull_request.merge_commit_sha }}"
+          git diff ${{ github.event.pull_request.merge_commit_sha }}^ --name-status | {
+            while read line; do
+              set $line
+              case $1 in
+                R*)
+                  echo "[RENAME] $2 -> $3"
+                  echo "> deletefile ftp:${FTP_SERVER_DIR}$2"
+                  rclone deletefile ftp:${FTP_SERVER_DIR}$2 $options
 
                   echo ">rclone rmdir ftp:${FTP_SERVER_DIR}${2%/*}"
 
-                  echo "> copyto ./$3 ftp:${FTP_SERVER_DIR}$3";\
-                  rclone copyto ./$3 ftp:${FTP_SERVER_DIR}$3 $options;\
-                  ;;\
-                M)\
-                  echo "[MODIFY] $2";\
-                  echo "> copyto ./$2 ftp:${FTP_SERVER_DIR}$2";\
-                  rclone copyto ./$2 ftp:${FTP_SERVER_DIR}$2 $options;\
-                  ;;\
-                D)\
-                  echo "[DELETE] $2";\
-                  echo "> deletefile ftp:${FTP_SERVER_DIR}$2";\
-                  rclone deletefile ftp:${FTP_SERVER_DIR}$2 $options;\
+                  echo "> copyto ./$3 ftp:${FTP_SERVER_DIR}$3"
+                  rclone copyto ./$3 ftp:${FTP_SERVER_DIR}$3 $options
+                  ;;
+                M)
+                  echo "[MODIFY] $2"
+                  echo "> copyto ./$2 ftp:${FTP_SERVER_DIR}$2"
+                  rclone copyto ./$2 ftp:${FTP_SERVER_DIR}$2 $options
+                  ;;
+                D)
+                  echo "[DELETE] $2"
+                  echo "> deletefile ftp:${FTP_SERVER_DIR}$2"
+                  rclone deletefile ftp:${FTP_SERVER_DIR}$2 $options
 
                   echo ">rclone rmdir ftp:${FTP_SERVER_DIR}${2%/*}"
-                  ;;\
-                A)\
-                  echo "[ADD]    $2";\
-                  echo "> copyto ./$2 ftp:${FTP_SERVER_DIR}$2";\
-                  rclone copyto ./$2 ftp:${FTP_SERVER_DIR}$2 $options;\
-                  ;;\
-              esac;\
-            done;\
+                  ;;
+                A)
+                  echo "[ADD]    $2"
+                  echo "> copyto ./$2 ftp:${FTP_SERVER_DIR}$2"
+                  rclone copyto ./$2 ftp:${FTP_SERVER_DIR}$2 $options
+                  ;;
+              esac
+            done
           }
