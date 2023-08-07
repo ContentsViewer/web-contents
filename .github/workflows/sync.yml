@@ -2,8 +2,8 @@ name: sync
 
 on:
   pull_request:
-    # branches: ["main"]
-    branches-ignore: ['**']
+    branches: ["main"]
+    # branches-ignore: ['**']
 
 jobs:
   sync-from-site:
@@ -25,7 +25,7 @@ jobs:
     - name: Fetch the latest document
       run: |
         sudo -v ; curl https://rclone.org/install.sh | sudo bash
-        rclone sync ftp:${FTP_SERVER_DIR} ./ --exclude="/.git**" -v --dry-run
+        rclone sync ftp:${FTP_SERVER_DIR} ./ --exclude="/.git**" -v
     - name: Push the changes to the main branch
       run: |
         git remote set-url origin https://github-actions:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}
