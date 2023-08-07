@@ -28,7 +28,7 @@ jobs:
         run: |
           sudo -v ; curl https://rclone.org/install.sh | sudo bash
 
-          options='--exclude="/.git**" --checksum -v --dry-run'
+          options='-v --dry-run'
           git diff ${{ github.event.pull_request.base.sha }}.. --name-status | {\
             while read line; do\
               set $line;\
