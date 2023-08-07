@@ -1,0 +1,41 @@
+name: sync
+
+on:
+  pull_request:
+    branches: ["main"]
+    types: [opened, reopened]
+    # branches-ignore: ['**']
+  workflow_dispatch:
+
+jobs:
+  sync-from-site:
+    name: Fetch the latest document from the site
+    runs-on: ubuntu-latest
+    env:
+      RCLONE_CONFIG_FTP_TYPE: ftp
+      RCLONE_CONFIG_FTP_HOST: ${{ secrets.FTP_SERVER }}
+      RCLONE_CONFIG_FTP_USER: ${{ secrets.FTP_USERNAME }}
+      RCLONE_CONFIG_FTP_PASS: ${{ secrets.FTP_PASSWORD }}
+      RCLONE_CONFIG_FTP_TLS: false
+      RCLONE_CONFIG_FTP_EXPLICIT_TLS: true
+      FTP_SERVER_DIR: ${{ secrets.FTP_SERVER_DIR }}
+    steps:
+    - name: Fetch main branch
+      uses: actions/checkout@v3
+      with:
+        ref: 'main'
+    - name: Fetch the latest document
+      run: |
+        sudo -v ; curl https://rclone.org/install.sh | sudo bash
+        rclone sync ftp:${FTP_SERVER_DIR} ./ --exclude="/.git**" -v
+    - name: Push the changes to the main branch
+      run: |
+        git remote set-url origin https://github-actions:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}
+        git config --global user.name "${GITHUB_ACTOR}"
+        git config --global user.email "${GITHUB_ACTOR}@users.noreply.github.com"
+        git add -N .
+        git diff --exit-code || {
+          git add .
+          git commit -m "Sync from site"
+          git push origin main
+        }
