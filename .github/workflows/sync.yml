@@ -3,6 +3,7 @@ name: sync
 on:
   pull_request:
     branches: ["main"]
+    types: [opened, reopened]
     # branches-ignore: ['**']
   workflow_dispatch:
 

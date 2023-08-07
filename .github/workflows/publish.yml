@@ -9,6 +9,7 @@ jobs:
   publish-to-site:
     name: Publish the document to the site
     runs-on: ubuntu-latest
+    if: github.event.pull_request.merged == true
     env:
       RCLONE_CONFIG_FTP_TYPE: ftp
       RCLONE_CONFIG_FTP_HOST: ${{ secrets.FTP_SERVER }}
