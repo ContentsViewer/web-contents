@@ -1,0 +1,11 @@
+---
+parent: ../docs
+title: C++
+date: 2021-12-30
+children:
+    references/docs
+---
+
+プログラミング言語`C++`に関する知識
+
+===

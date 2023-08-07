@@ -1,15 +1,6 @@
 ---
-title: nodec game engine
-parent: ../Root
+title: [redirect] nodec-game-engine
 date: 2023-08-01
-tags: 編集中
+tags: noindex 
+redirect: nodec-game-engine/docs
 ---
-
-`nodec game engine`は、`nodec`フレームワークで作られたゲームエンジンです。
-
-[/nodec-framework/main]
-
-===
-
-# リポジトリ
-    <https://github.com/nodec-project/nodec_game_engine>

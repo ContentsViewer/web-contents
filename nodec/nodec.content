@@ -3,7 +3,7 @@ parent: ../Root
 title: [redirect] nodec (GameEngine)
 date: 2019-02-06
 tags: noindex 
-redirect: nodec-framework/main
+redirect: nodec-framework/docs
 ---
 
 `nodec`は、ゲームエンジンなどのプラットフォームを新しく作成するためのフレームワークです。

@@ -1,28 +1,27 @@
 ---
-parent: Python
-title: Tips
+parent: ../docs
+title: スニペット集
 date: 2019-05-15
 ---
 
 # フォルダがなければ作成
     ```python
         import os
-        
+
         if not os.path.exists('output'):
             os.mkdir('output')
     ```
 
 # 異なるディレクトリにあるモジュールインポート
-    
+
     ```python
         import sys
-        
+
         LIB_DIR = "{モジュールが存在するパス}"
         sys.path.append(LIB_DIR)
-        
+
         # インポート可能
         import something
-         
+
         # ...
-    
     ```

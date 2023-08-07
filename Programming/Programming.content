@@ -4,11 +4,9 @@ title: プログラミング
 date: 2019-04-26
 children:
     OpenCV/OpenCV
-    Python/Python
     NamingRules
     DirectoryTraversal
     unicode-utf-conversion/unicode-utf-conversion
-    Books/Books
 ---
 
 ここでは, プログラミングに関することが書かれます.
