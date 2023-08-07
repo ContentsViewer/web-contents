@@ -30,8 +30,8 @@ jobs:
           sudo -v ; curl https://rclone.org/install.sh | sudo bash
 
           options='-v --dry-run'
-          echo "sha: ${{ github.sha }}"
-          echo "before: ${{ github.event.before }}"
+          echo "a: ${{ github.event.pull_request.head.sha }}"
+          echo "b: ${{ github.event.pull_request.body.sha }}"
           git diff ${{ github.sha }} ${{ github.event.before }} --name-status | {\
             while read line; do\
               set $line;\
