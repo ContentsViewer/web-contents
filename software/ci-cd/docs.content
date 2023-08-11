@@ -1,0 +1,13 @@
+---
+parent: ../docs
+title: CI/CD
+date: 2023-08-11
+tags: CI-CD
+children:
+    ftp-with-rclone-on-github-actions/article
+---
+
+ソフトウェア開発における継続的インテグレーション(CI)や
+継続的デプロイ(CD)に関するノウハウと知識。
+
+===

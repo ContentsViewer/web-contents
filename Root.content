@@ -21,7 +21,7 @@ children:
     Circuit/Circuit
     App/App
     image-processing/docs
-    Graphics/Graphics
+    cg/docs
     Writing/Writing
     iPhone/iPhone
     Illust/Illust

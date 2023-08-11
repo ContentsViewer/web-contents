@@ -3,8 +3,6 @@ parent: ../Root
 title: コンピュータグラフィクス
 date: 2020-12-16
 tags: コンピュータグラフィックス
-children:
-    matrix-representation-difference/article
 ---
 
 Computer Graphics に関する知識
