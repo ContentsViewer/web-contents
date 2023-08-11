@@ -1,0 +1,537 @@
+---
+parent: ../docs
+title: rcloneを用いてftpのアップロードとダウンロードをGitHub Actionsで行う
+date: 2023-09-09
+tags: CI-CD, GitHub-Actions, 編集中
+---
+
+本稿では、外部アクションを用いずにrcloneをもちいた外部サーバとのファイル転送方法を説明します。
+rcloneとは、ftpだけに限らず外部サーバに対してファイルのアップロードやダウンロード、削除や移動といったファイル操作を行えるCLIツールです。
+rcloneをGitHub Actionsで使うことにより、特殊な要求にも柔軟に対応できるようになります。
+
+===
+
+# はじめに
+
+    GitHubには、リポジトリへの変更をトリガーとして様々な処理を自動で行うGitHub Actionsという機能があります。
+    これまで、
+    GitHub Actionsを用いて、静的サイトなどといった外部ホスティングサーバに
+    記事をアップロードする方法が考案されてきました^[github-actions-with-ftp-1]
+    ^[github-actions-with-ftp-2]。
+    そこでは、
+    FTPサーバへのアップロードを行う専用のアクションを用いた方法がよく説明されています。
+
+    専用アクションを用いた方法だと、少し入り組んだことをするときに実現が難しくなります。
+    たとえば、先ほど紹介したアクションでは、FTPへのアップロードができても、
+    ダウンロードはできません。特定のファイルのみアップロードすることも難しいです。
+
+    本稿では、外部アクションを用いずにrcloneをもちいた外部サーバとのファイル転送方法を説明します。
+    rcloneとは、ftpだけに限らず外部サーバに対してファイルのアップロードやダウンロード、削除や移動といったファイル操作を行えるCLIツールです。
+    rcloneをGitHub Actionsで使うことにより、特殊な要求にも柔軟に対応できるようになります。
+
+# rcloneとは
+    rcloneは、クラウドストレージのファイルを管理するオープンソースなコマンドラインプログラムです^[about-rclone]。
+    rcloneは、S3オブジェクトストレージやビジネスおよび個人向けのファイルストレージサービスなど、70種類以上のクラウドストレージに対応しています^[about-rclone]。
+    また、FTPやSFTPなどの標準的な転送プロトコルもサポートしています^[about-rclone]。
+
+# [[install-rclone]] GitHub Actionsでrcloneを使用する
+
+    GitHub Actionsで、rcloneを使用できるために、
+    まずrcloneバイナリをジョブマシンにインストールします。
+
+    ジョブマシンがLinux/macOS/BSDシステムの場合、
+    以下のコマンドをステップ内で実行します。
+
+    ```shell
+        sudo -v ; curl https://rclone.org/install.sh | sudo bash
+    ```
+
+    [そのほかのインストール方法]
+    ===
+        rcloneはこれ以外のインストール方法も提供されています。
+        WindowsやDockerにインストールしたい場合は、以下の公式ドキュメントを参考にしてください。
+
+        * [rclone/install](https://rclone.org/install/)
+    ===
+
+    実際にジョブファイルの内容は以下のようになります。
+
+    <!--
+        yamlのシンタックスハイライト対応してない...
+        syntax-highlighterライブラリはもうダメかな...
+    -->
+    ```shell
+        jobs:
+          your-job:
+            runs-on: ubuntu-latest
+              steps:
+              - run: |
+                  # install rclone
+                  sudo -v ; curl https://rclone.org/install.sh | sudo bash
+                  # ...
+    ```
+
+    これだけです。
+    このステップ以降で、rcloneコマンドを使えます。
+
+# rcloneがFTPサーバと接続するための設定を行う
+    rcloneがFTPサーバと接続するための設定を行います。
+
+    # FTPサーバ情報を確認する
+        FTPサーバに接続するためには、以下のサーバ情報が必要です。
+        お使いのFTPサーバ管理画面から情報を確認してください。
+
+        * FTPサーバ名
+            例: `example.com`
+        * アカウント名
+            FTPサーバへログインするためのアカウント名。
+        * パスワード
+            FTPサーバへログインするためのパスワード。
+
+    # rcloneのサーバ設定
+        rcloneに接続先のFTPサーバを設定しなければなりません。
+        よくされるrcloneの設定方法に、
+        `rclone config`コマンドを使う方法があります^[rclone-docs-configure]。
+        ですが、`config`コマンドは対話ベースで設定していくため、
+        スクリプトで設定するには相性が悪いです。
+
+        rcloneでは、`config`コマンドを用いずに、
+        環境変数で設定する方法が提供されています^[rclone-docs-environment-variables]。
+        環境変数の仕様は、`RCLONE_{リモート名}_{設定名}`です。
+        すべての文字は大文字でなければなりません。
+        リモート名は、設定したオンラインストレージを識別するためのもので、自由に決められます。
+
+        設定例は以下の通りです。
+
+        ```shell
+            RCLONE_CONFIG_FTP_TYPE="ftp"
+            RCLONE_CONFIG_FTP_HOST="example.com"
+            RCLONE_CONFIG_FTP_USER="your-name"
+            RCLONE_CONFIG_FTP_PASS="x0eOjb0dEzC0XhYHawfy6pjC9oA"
+            RCLONE_CONFIG_FTP_TLS="false"
+            RCLONE_CONFIG_FTP_EXPLICIT_TLS="true"
+        ```
+
+        各設定項目の説明は以下の通りです。
+
+        `TYPE`:
+            今回ファイルサーバはFTPサーバを想定しているので、`ftp`とします。
+
+        `HOST`:
+            FTPサーバ名。
+
+        `USER`:
+            FTPサーバへログインするためのアカウント名。
+
+        `PASS`:
+            FTPサーバへログインするためのハッシュ化されたパスワード。
+
+            rcloneでは、パスワードを平文で扱いません。
+            ジョブランナー上でなく、今自身が操作しているローカル環境にrcloneをインストールし、`rclone obscure`コマンドで平文パスワードをハッシュ化してください。
+
+            * [rclone/commands/rclone_obscure](https://rclone.org/commands/rclone_obscure/)
+
+        `TLS`:
+            FTPサーバと暗黙的にTLS通信する(Implicit FTPS)かどうか。
+
+            クライアントは、接続先のサーバがFTPSか確認せずに、
+            はじめからTLSで通信を行います(暗黙的)^[wikipedia-ftps]。
+            Implicit FTPSは、非推奨といわれている^[wikipedia-ftps]ので、
+            後述するExplicit FTPSを使用することをお勧めします。
+
+        `EXPLICIT_TLS`:
+            FTPサーバと明示的にTLS通信する(Explicit FTPS)かどうか。
+
+            クライアントはまず、接続先サーバにTLS通信を行うことを要求して、
+            そのあとに暗号化のもとでFTP通信を行います(明示的)^[wikipedia-ftps]。
+
+    # GitHub SecretsにFTPサーバ情報を追加する
+        サーバ情報をGitHub Actionsスクリプト上でrcloneに指定したいわけですが、
+        セキュリティの面でそのままスクリプトに書いてはいけません。
+
+        GitHub Actionsでは、アクション内でセンシティブな情報を扱うためのSecretsという機能があります。
+        Secretsは、組織やリポジトリ、リポジトリ環境で作成する変数のことです^[github-secrets]。
+        作成したSecretsは GitHub Actionsのワークフローで使用できます^[github-secrets]。
+
+        GitHub Secretsに、FTPサーバ情報を追加しましょう。
+        "GitHubリポジトリ設定"->"Secrets and variables"^[注.github-settings-secrets]から以下の変数を追加します。
+
+        | 変数名 | 内容 |
+        |-------|-----|
+        | FTP_SERVER | FTPサーバ名 |
+        | FTP_USERNAME | アカウント名 |
+        | FTP_PASSWORD | パスワード |
+
+        設定した値は、GitHub Actionsのスクリプト内で
+        `${{ secrets.<変数名> }}`とするとアクセスできます。
+
+    # GitHub ActionsでrcloneのFTPサーバ設定を行う
+
+        以上を踏まえて、ワークフロースクリプトは以下のようになります。
+        リモート名は`ftp`で、Explicit FTPSで接続しています。
+
+        ```shell
+            jobs:
+              your-job:
+                runs-on: ubuntu-latest
+                env: # (1)
+                  RCLONE_CONFIG_FTP_TYPE: ftp
+                  RCLONE_CONFIG_FTP_HOST: ${{ secrets.FTP_SERVER }}
+                  RCLONE_CONFIG_FTP_USER: ${{ secrets.FTP_USERNAME }}
+                  RCLONE_CONFIG_FTP_PASS: ${{ secrets.FTP_PASSWORD }}
+                  RCLONE_CONFIG_FTP_TLS: false
+                  RCLONE_CONFIG_FTP_EXPLICIT_TLS: true
+                steps:
+                - run: |
+                    # install rclone
+                    sudo -v ; curl https://rclone.org/install.sh | sudo bash
+                    # ...
+        ```
+
+        (1):
+            `env`は、ジョブのステップで環境変数として使うことができる変数のマップです。
+
+# FTPサーバにファイルをアップロードする
+
+    rcloneを用いてftpサーバにアップロードしてみましょう。
+
+    `rclone sync`コマンドは、転送元のファイルを転送先へ同期します^[rclone-commands-sync]。
+    クライアントのカレントディレクトリの内容を
+    リモート名`ftp`のパス`/home/username/www/`下に配置するには、
+    以下のようにします。
+
+    ```shell
+        rclone sync ./ ftp:/home/username/www/
+    ```
+
+    このコマンドは、たとえば以下のようにローカル環境のカレントディレクトリが
+    構成されていた時
+
+    + `./`
+        + `file-a`
+        + `directory-a`
+            + ...
+        + `...`
+
+    リモート側は次のようにコピーされます。
+
+    + `/home/username/www/
+        + `file-a`
+        + `directory-a`
+            + ...
+        + `...`
+
+    以上を踏まえて、リポジトリのファイルをリモートのFTPサーバにアップロードする
+    ワークフロースクリプトは以下のようになります。
+
+    ```shell
+        jobs:
+          your-job:
+            runs-on: ubuntu-latest
+            env:
+                RCLONE_CONFIG_FTP_TYPE: ftp
+                RCLONE_CONFIG_FTP_HOST: ${{ secrets.FTP_SERVER }}
+                RCLONE_CONFIG_FTP_USER: ${{ secrets.FTP_USERNAME }}
+                RCLONE_CONFIG_FTP_PASS: ${{ secrets.FTP_PASSWORD }}
+                RCLONE_CONFIG_FTP_TLS: false
+                RCLONE_CONFIG_FTP_EXPLICIT_TLS: true
+              steps:
+              # 最新の内容をチェックアウト
+              - uses: actions/checkout@v3
+              # rcloneによるファイルアップロード
+              - run: |
+                  # install rclone
+                  sudo -v ; curl https://rclone.org/install.sh | sudo bash
+                  # upload files
+                  rclone sync ./ ftp:/home/username/www/
+    ```
+
+    [リモート側のファイルがローカル側のファイルで上書きされてしまう]
+    ===
+        `rclone sync`コマンドは、基本的に、
+        転送元と転送先のファイルを
+        ファイルサイズと更新時間の両方またはMD5SUMのいずれかで検証し、
+        内容が同じであれば、ファイルを転送しません^[rclone-commands-sync]。
+        しかし、MD5SUMに対応していないFTPサーバもあります。
+        その場合、rcloneはファイルの更新日時とサイズで検証しますが、
+        ジョブごとにリポジトリからファイルをクローンしてくるため、
+        ファイルの更新日時はFTPサーバのよりも新しいタイムスタンプになります。
+        FTPサーバのよりも常に新しいタイムスタンプで更新日時がされてしまいます。
+        つまり、ジョブ側のファイルが最新で、すべてのファイルが転送対象となり、
+        リモート側のファイルはローカル側のファイルで上書きされてしまいます。
+
+        ローカルのファイルでリモートが上書きされるのは、結果的に同期したことになるので、
+        多くの場合、問題にはなりませんが、内容が変わっていないのにもかかわらず、
+        ファイルの更新日時が変更されるのは、望まれない場合があるでしょう。
+        たとえば、ファイルの更新日時で新規コンテンツのリストを作成している場合、
+        ジョブからアップロードされるたびにリストがリセットされてしまいます。
+
+        のちの応用例で、
+        ファイルをアップロードするたびに、
+        更新日時が書き換えられてしまう問題を解決する方法を説明します。
+    ===
+
+# FTPサーバからファイルをダウンロードする
+
+    rcloneを用いてFTPサーバからファイルをダウンロードしてみましょう。
+    アップロードの時と同じように、`rclone sync`コマンドを使いますが、
+    転送先と転送元を入れ替えます。
+
+    FTPサーバからファイルをダウンロードする
+    ワークフロースクリプトは以下のようになります。
+
+    ```shell
+        jobs:
+          your-job:
+            runs-on: ubuntu-latest
+            env:
+                RCLONE_CONFIG_FTP_TYPE: ftp
+                RCLONE_CONFIG_FTP_HOST: ${{ secrets.FTP_SERVER }}
+                RCLONE_CONFIG_FTP_USER: ${{ secrets.FTP_USERNAME }}
+                RCLONE_CONFIG_FTP_PASS: ${{ secrets.FTP_PASSWORD }}
+                RCLONE_CONFIG_FTP_TLS: false
+                RCLONE_CONFIG_FTP_EXPLICIT_TLS: true
+              steps:
+              # 最新の内容をチェックアウト
+              - uses: actions/checkout@v3
+              # rcloneによるファイルアップロード
+              - run: |
+                  # install rclone
+                  sudo -v ; curl https://rclone.org/install.sh | sudo bash
+                  # download files
+                  rclone sync ftp:/home/username/www/ ./
+    ```
+
+# 応用例
+    # FTPサーバから最新の内容を取得して、Gitリポジトリに差分をプッシュする
+
+        # 機能
+            * FTPサーバから最新の内容を取得し、mainブランチにコミット
+            * mainブランチへのプルリクエストが作成されたときに開始
+            * 手動で実行が可能
+
+        # この機能が必要となった経緯
+            * あるWebサイトがあり、そのサイトはサイト内のコンテンツをWebページにする
+            * コンテンツは、サイト上で編集できる
+            * サイト外でも編集できるように、複製したサイト内コンテンツをGitHubリポジトリで管理した
+            * Webサイト上で行った変更をGitリポジトリに反映する必要があった
+
+        # スクリプト
+            ```shell
+                name: sync
+
+                on:
+                  # (1)
+                  pull_request:
+                    branches: ["main"]
+                    types: [opened, reopened]
+                  # (2)
+                  workflow_dispatch:
+
+                # (3)
+                concurrency:
+                  ${{ github.workflow }}
+
+                jobs:
+                  sync-from-site:
+                    name: Fetch the latest document from the site
+                    runs-on: ubuntu-latest
+                    env:
+                      RCLONE_CONFIG_FTP_TYPE: ftp
+                      RCLONE_CONFIG_FTP_HOST: ${{ secrets.FTP_SERVER }}
+                      RCLONE_CONFIG_FTP_USER: ${{ secrets.FTP_USERNAME }}
+                      RCLONE_CONFIG_FTP_PASS: ${{ secrets.FTP_PASSWORD }}
+                      RCLONE_CONFIG_FTP_TLS: false
+                      RCLONE_CONFIG_FTP_EXPLICIT_TLS: true
+                      FTP_SERVER_DIR: ${{ secrets.FTP_SERVER_DIR }}
+                    steps:
+                    - name: Fetch main branch
+                      uses: actions/checkout@v3
+                      with:
+                        ref: 'main'
+                    - name: Fetch the latest document
+                      run: |
+                        # rcloneのインストール
+                        sudo -v ; curl https://rclone.org/install.sh | sudo bash
+
+                        # (4)
+                        rclone sync ftp:${FTP_SERVER_DIR} ./ --exclude="/.git**" -v
+                    - name: Push the changes to the main branch
+                      run: |
+                        # (5)
+                        git remote set-url origin https://github-actions:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}
+                        git config --global user.name "${GITHUB_ACTOR}"
+                        git config --global user.email "${GITHUB_ACTOR}@users.noreply.github.com"
+                        git add . # (6)
+                        git diff --cached --exit-code || { # (7)
+                          # (8)
+                          git commit -m "Sync from site"
+                          git push origin main
+                        }
+            ```
+
+        # 解説
+            (1):
+                mainブランチへのプルリクエストが新規または再オープンされたときに開始。
+
+            (2):
+                手動でワークフローを起動できるように設定。
+
+                [GitHub Actions/ワークフローをトリガーするイベント/workflow_dispatch](https://docs.github.com/ja/actions/using-workflows/events-that-trigger-workflows#workflow_dispatch)
+
+            (3):
+                このワークフローが重複で起動しないようにします。
+                複数のジョブが一つのFTPサーバに接続して、サーバに負荷がかかることを防ぎます。
+
+            (4):
+                FTPサーバからファイルを同期します。
+
+                `--exclude="/.git**"`オプションで、ルート直下の`.git`から始まるファイルまたはフォルダは同期の対象外にします。
+                git関連のファイルは、Webサイト側では関係がないので、
+                不要なファイルを意味もなく同期して、トラブルになるのを防ぎます。
+
+                `-v`オプションで、同期中の進捗状況を標準出力に表示します。
+
+            (5):
+                GitHub Actionsから、リモートリポジトリにプッシュするための設定です。
+
+            (6):
+                変更をコミットの前段階であるステージ状態にします。
+                仮にコミットする変更がない場合でも、コマンド自体は失敗しません。
+
+            (7):
+                コミットできる変更があるかどうかを確認します。
+
+                `--cached`オプションは、ステージされている変更を見るときに使います。
+
+                `--exit-code`オプションを指定すると、変更があるときコマンドはコード1(異常)で終了し、変更がないときコード0(正常)で終了します。
+
+            (8):
+                変更があった場合、mainブランチにコミットし、リモートにプッシュします。
+
+    # プルリクエストでmainブランチにマージされたときに、差分をFTPサーバに反映する
+
+        # 機能
+            * プルリクエストでmainブランチにマージされたときに開始する
+            * 差分のみFTPサーバへ転送
+
+        # この機能が必要となった経緯
+            * FTPサーバにアップロードするときに、サーバ上のすべてのファイルが上書きされてしまう
+            * ファイルの内容は変わっていないのに、更新日時がアップロード日時に書き変わってしまう
+            * Webサイトでは、ファイルの更新日時を見て変更があったファイルを一覧で表示している
+            * ファイルの内容が変わっていないのに、更新一覧に表示されてしまう
+
+        # スクリプト
+
+            ```shell
+                name: publish
+
+                on:
+                  # (1)
+                  pull_request:
+                    branches: ["main"]
+                    types: [closed]
+
+                jobs:
+                  publish-to-site:
+                    name: Publish the document to the site
+                    runs-on: ubuntu-latest
+                    if: github.event.pull_request.merged == true
+                    env:
+                      RCLONE_CONFIG_FTP_TYPE: ftp
+                      RCLONE_CONFIG_FTP_HOST: ${{ secrets.FTP_SERVER }}
+                      RCLONE_CONFIG_FTP_USER: ${{ secrets.FTP_USERNAME }}
+                      RCLONE_CONFIG_FTP_PASS: ${{ secrets.FTP_PASSWORD }}
+                      RCLONE_CONFIG_FTP_TLS: false
+                      RCLONE_CONFIG_FTP_EXPLICIT_TLS: true
+                      FTP_SERVER_DIR: ${{ secrets.FTP_SERVER_DIR }}
+                    steps:
+                      # (2)
+                      - name: Checkout merge-commit
+                        uses: actions/checkout@v3
+                        with:
+                          ref: ${{ github.event.pull_request.merge_commit_sha }}
+                          fetch-depth: 2
+                      - name: Upload files to the site
+                        run: |
+                          # rcloneのインストール
+                          sudo -v ; curl https://rclone.org/install.sh | sudo bash
+
+                          options='-v'
+
+                          # (3)
+                          git diff ${{ github.event.pull_request.merge_commit_sha }}^ --name-status | {
+                            while read line; do # (4)
+                              set $line # (5)
+                              case $1 in
+                                R*)
+                                  # (6)
+                                  echo "[RENAME] $2 -> $3"
+                                  echo "> deletefile ftp:${FTP_SERVER_DIR}$2"
+                                  rclone deletefile ftp:${FTP_SERVER_DIR}$2 $options
+
+                                  echo "> copyto ./$3 ftp:${FTP_SERVER_DIR}$3"
+                                  rclone copyto ./$3 ftp:${FTP_SERVER_DIR}$3 $options
+
+                                  echo "> rmdir ftp:${FTP_SERVER_DIR}${2%/*}"
+                                  rclone rmdir ftp:${FTP_SERVER_DIR}${2%/*} $options
+                                  ;;
+                                M)
+                                  # (7)
+                                  echo "[MODIFY] $2"
+                                  echo "> copyto ./$2 ftp:${FTP_SERVER_DIR}$2"
+                                  rclone copyto ./$2 ftp:${FTP_SERVER_DIR}$2 $options
+                                  ;;
+                                D)
+                                  # (8)
+                                  echo "[DELETE] $2"
+                                  echo "> deletefile ftp:${FTP_SERVER_DIR}$2"
+                                  rclone deletefile ftp:${FTP_SERVER_DIR}$2 $options
+
+                                  echo "> rmdir ftp:${FTP_SERVER_DIR}${2%/*}"
+                                  rclone rmdir ftp:${FTP_SERVER_DIR}${2%/*} $options
+                                  ;;
+                                A)
+                                  # (9)
+                                  echo "[ADD]    $2"
+                                  echo "> copyto ./$2 ftp:${FTP_SERVER_DIR}$2"
+                                  rclone copyto ./$2 ftp:${FTP_SERVER_DIR}$2 $options
+                                  ;;
+                              esac
+                            done
+                          }
+            ```
+        # 解説
+            (1):
+            (2):
+            (3):
+            (4):
+            (5):
+            (6):
+            (7):
+            (8):
+            (9):
+
+
+# 注釈
+    [注.github-settings-secrets]: GitHubサイトの更新により設定場所が変わる可能性があります。
+
+# 参考文献
+    [github-actions-with-ftp-1]: ["GitHub Actionsを使ったFTPの自動デプロイ"](https://qiita.com/chieeeeno/items/6be835c74d6d7f597c6a). Qiita. Retrieved 2023-08-11.
+
+    [github-actions-with-ftp-2]: ["github actionsを用いたFTP自動デプロイ。（例：さくらサーバー）"](https://zenn.dev/hirof1990/articles/2f8eeab56b8637). Zenn. Retrieved 2023-08-11.
+
+    [about-rclone]: ["rclone"](https://rclone.org/). rclone.org. Retrieved 2023-08-09.
+
+    [rclone-docs-configure]: ["rclone/docs/configure"](https://rclone.org/docs/#configure). rclone.org. Retrieved 2023-08-09.
+
+    [rclone-commands-sync]: ["rclone/commands/sync"](https://rclone.org/commands/rclone_sync/). rclone.org. Retrieved 2023-08-10.
+
+    [rclone-docs-environment-variables]: ["rclone/docs/environment-variables"](https://rclone.org/docs/#environment-variables). \
+        rclone.org. Retrieved 2023-08-10.
+
+    [wikipedia-ftps]: ["FTPS"](https://en.wikipedia.org/wiki/FTPS). \
+        wikipedia. Retrieved 2023-08-10.
+
+    [github-secrets]: ["Encrypted secrets"](https://docs.github.com/en/actions/security-guides/encrypted-secrets). \
+        GitHub. Retrieved 2023-08-10.
