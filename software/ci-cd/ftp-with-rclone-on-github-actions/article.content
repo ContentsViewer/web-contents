@@ -1,32 +1,31 @@
 ---
 parent: ../docs
-title: rcloneを用いてftpのアップロードとダウンロードをGitHub Actionsで行う
+title: rcloneを用いてFTPによるファイルのアップロードとダウンロードをGitHub Actions上で行う
 date: 2023-09-09
-tags: CI-CD, GitHub-Actions, 編集中
+tags: CI-CD, GitHub-Actions
 ---
 
-本稿では、外部アクションを用いずにrcloneをもちいた外部サーバとのファイル転送方法を説明します。
-rcloneとは、ftpだけに限らず外部サーバに対してファイルのアップロードやダウンロード、削除や移動といったファイル操作を行えるCLIツールです。
+本稿では、外部アクションに頼らずrcloneをもちいた外部サーバとのファイル転送方法を説明します。
+rcloneとは、FTPだけに限らず外部サーバに対してファイルのアップロードやダウンロード、削除や移動といったファイル操作を行えるCLIツールです。
 rcloneをGitHub Actionsで使うことにより、特殊な要求にも柔軟に対応できるようになります。
 
 ===
 
 # はじめに
 
-    GitHubには、リポジトリへの変更をトリガーとして様々な処理を自動で行うGitHub Actionsという機能があります。
+    GitHubには、リポジトリへの変更をトリガーとしてさまざまな処理を自動で行うGitHub Actionsという機能があります^[github-actions]。
     これまで、
-    GitHub Actionsを用いて、静的サイトなどといった外部ホスティングサーバに
-    記事をアップロードする方法が考案されてきました^[github-actions-with-ftp-1]
-    ^[github-actions-with-ftp-2]。
-    そこでは、
-    FTPサーバへのアップロードを行う専用のアクションを用いた方法がよく説明されています。
+    GitHub Actionsを使って、
+    静的サイトなどの外部ホスティングサーバーに記事をアップロードする方法が紹介されてきました^[github-actions-with-ftp-1]^[github-actions-with-ftp-2]。
+    紹介の中で、
+    FTPサーバへのアップロードを行う専用のアクションを用いた方法がよく使われています。
 
-    専用アクションを用いた方法だと、少し入り組んだことをするときに実現が難しくなります。
+    専用アクションを用いた方法だと、複雑なことをするときに実現が困難になる場合があります。
     たとえば、先ほど紹介したアクションでは、FTPへのアップロードができても、
     ダウンロードはできません。特定のファイルのみアップロードすることも難しいです。
 
-    本稿では、外部アクションを用いずにrcloneをもちいた外部サーバとのファイル転送方法を説明します。
-    rcloneとは、ftpだけに限らず外部サーバに対してファイルのアップロードやダウンロード、削除や移動といったファイル操作を行えるCLIツールです。
+    本稿では、外部アクションに頼らずrcloneをもちいた外部サーバとのファイル転送方法を説明します。
+    rcloneとは、FTPだけに限らず外部サーバに対してファイルのアップロードやダウンロード、削除や移動といったファイル操作を行えるCLIツールです。
     rcloneをGitHub Actionsで使うことにより、特殊な要求にも柔軟に対応できるようになります。
 
 # rcloneとは
@@ -88,7 +87,7 @@ rcloneをGitHub Actionsで使うことにより、特殊な要求にも柔軟に
         * パスワード
             FTPサーバへログインするためのパスワード。
 
-    # rcloneのサーバ設定
+    # rcloneの設定
         rcloneに接続先のFTPサーバを設定しなければなりません。
         よくされるrcloneの設定方法に、
         `rclone config`コマンドを使う方法があります^[rclone-docs-configure]。
@@ -127,6 +126,7 @@ rcloneをGitHub Actionsで使うことにより、特殊な要求にも柔軟に
             FTPサーバへログインするためのハッシュ化されたパスワード。
 
             rcloneでは、パスワードを平文で扱いません。
+            パスワードをハッシュ化する必要があります。
             ジョブランナー上でなく、今自身が操作しているローカル環境にrcloneをインストールし、`rclone obscure`コマンドで平文パスワードをハッシュ化してください。
 
             * [rclone/commands/rclone_obscure](https://rclone.org/commands/rclone_obscure/)
@@ -149,7 +149,7 @@ rcloneをGitHub Actionsで使うことにより、特殊な要求にも柔軟に
         サーバ情報をGitHub Actionsスクリプト上でrcloneに指定したいわけですが、
         セキュリティの面でそのままスクリプトに書いてはいけません。
 
-        GitHub Actionsでは、アクション内でセンシティブな情報を扱うためのSecretsという機能があります。
+        GitHub Actionsには、アクション内でセンシティブな情報を扱うためのSecretsという機能があります。
         Secretsは、組織やリポジトリ、リポジトリ環境で作成する変数のことです^[github-secrets]。
         作成したSecretsは GitHub Actionsのワークフローで使用できます^[github-secrets]。
 
@@ -162,12 +162,13 @@ rcloneをGitHub Actionsで使うことにより、特殊な要求にも柔軟に
         | FTP_USERNAME | アカウント名 |
         | FTP_PASSWORD | パスワード |
 
-        設定した値は、GitHub Actionsのスクリプト内で
+        設定した値は、ワークフローのスクリプト内で
         `${{ secrets.<変数名> }}`とするとアクセスできます。
 
     # GitHub ActionsでrcloneのFTPサーバ設定を行う
 
-        以上を踏まえて、ワークフロースクリプトは以下のようになります。
+        以上を踏まえて、rcloneがFTPサーバと接続できるようにする
+        ワークフロースクリプトは以下のようになります。
         リモート名は`ftp`で、Explicit FTPSで接続しています。
 
         ```shell
@@ -189,7 +190,7 @@ rcloneをGitHub Actionsで使うことにより、特殊な要求にも柔軟に
         ```
 
         (1):
-            `env`は、ジョブのステップで環境変数として使うことができる変数のマップです。
+            `env`は、ジョブのステップ内で環境変数として使うことができる変数のマップです。
 
 # FTPサーバにファイルをアップロードする
 
@@ -197,7 +198,7 @@ rcloneをGitHub Actionsで使うことにより、特殊な要求にも柔軟に
 
     `rclone sync`コマンドは、転送元のファイルを転送先へ同期します^[rclone-commands-sync]。
     クライアントのカレントディレクトリの内容を
-    リモート名`ftp`のパス`/home/username/www/`下に配置するには、
+    リモート名`ftp`上のパス`/home/username/www/`下に配置するには、
     以下のようにします。
 
     ```shell
@@ -205,7 +206,7 @@ rcloneをGitHub Actionsで使うことにより、特殊な要求にも柔軟に
     ```
 
     このコマンドは、たとえば以下のようにローカル環境のカレントディレクトリが
-    構成されていた時
+    構成されていた時、
 
     + `./`
         + `file-a`
@@ -257,14 +258,14 @@ rcloneをGitHub Actionsで使うことにより、特殊な要求にも柔軟に
         ジョブごとにリポジトリからファイルをクローンしてくるため、
         ファイルの更新日時はFTPサーバのよりも新しいタイムスタンプになります。
         FTPサーバのよりも常に新しいタイムスタンプで更新日時がされてしまいます。
-        つまり、ジョブ側のファイルが最新で、すべてのファイルが転送対象となり、
+        つまり、ジョブ側のファイルが常に最新と誤認し、すべてのファイルが転送対象となり、
         リモート側のファイルはローカル側のファイルで上書きされてしまいます。
 
-        ローカルのファイルでリモートが上書きされるのは、結果的に同期したことになるので、
-        多くの場合、問題にはなりませんが、内容が変わっていないのにもかかわらず、
-        ファイルの更新日時が変更されるのは、望まれない場合があるでしょう。
-        たとえば、ファイルの更新日時で新規コンテンツのリストを作成している場合、
-        ジョブからアップロードされるたびにリストがリセットされてしまいます。
+        リモートのファイルがローカルのファイルで上書きされるのは、同期したといえるので、
+        ほとんどの場合で問題になりません。ですが、内容が変わっていないのに、
+        ファイルの更新日時だけが変わってしまうと、困ることがあります。
+        たとえば、ファイルの更新日時で新規コンテンツのリストを作成しているとします。
+        このとき、ジョブからアップロードされるたびにリストが初期化されてしまいます。
 
         のちの応用例で、
         ファイルをアップロードするたびに、
@@ -436,6 +437,7 @@ rcloneをGitHub Actionsで使うことにより、特殊な要求にも柔軟に
                   publish-to-site:
                     name: Publish the document to the site
                     runs-on: ubuntu-latest
+                    # (2)
                     if: github.event.pull_request.merged == true
                     env:
                       RCLONE_CONFIG_FTP_TYPE: ftp
@@ -446,7 +448,7 @@ rcloneをGitHub Actionsで使うことにより、特殊な要求にも柔軟に
                       RCLONE_CONFIG_FTP_EXPLICIT_TLS: true
                       FTP_SERVER_DIR: ${{ secrets.FTP_SERVER_DIR }}
                     steps:
-                      # (2)
+                      # (3)
                       - name: Checkout merge-commit
                         uses: actions/checkout@v3
                         with:
@@ -459,13 +461,13 @@ rcloneをGitHub Actionsで使うことにより、特殊な要求にも柔軟に
 
                           options='-v'
 
-                          # (3)
+                          # (4)
                           git diff ${{ github.event.pull_request.merge_commit_sha }}^ --name-status | {
-                            while read line; do # (4)
-                              set $line # (5)
+                            while read line; do # (5)
+                              set $line # (6)
                               case $1 in
                                 R*)
-                                  # (6)
+                                  # (7)
                                   echo "[RENAME] $2 -> $3"
                                   echo "> deletefile ftp:${FTP_SERVER_DIR}$2"
                                   rclone deletefile ftp:${FTP_SERVER_DIR}$2 $options
@@ -477,13 +479,13 @@ rcloneをGitHub Actionsで使うことにより、特殊な要求にも柔軟に
                                   rclone rmdir ftp:${FTP_SERVER_DIR}${2%/*} $options
                                   ;;
                                 M)
-                                  # (7)
+                                  # (8)
                                   echo "[MODIFY] $2"
                                   echo "> copyto ./$2 ftp:${FTP_SERVER_DIR}$2"
                                   rclone copyto ./$2 ftp:${FTP_SERVER_DIR}$2 $options
                                   ;;
                                 D)
-                                  # (8)
+                                  # (9)
                                   echo "[DELETE] $2"
                                   echo "> deletefile ftp:${FTP_SERVER_DIR}$2"
                                   rclone deletefile ftp:${FTP_SERVER_DIR}$2 $options
@@ -492,7 +494,7 @@ rcloneをGitHub Actionsで使うことにより、特殊な要求にも柔軟に
                                   rclone rmdir ftp:${FTP_SERVER_DIR}${2%/*} $options
                                   ;;
                                 A)
-                                  # (9)
+                                  # (10)
                                   echo "[ADD]    $2"
                                   echo "> copyto ./$2 ftp:${FTP_SERVER_DIR}$2"
                                   rclone copyto ./$2 ftp:${FTP_SERVER_DIR}$2 $options
@@ -503,20 +505,78 @@ rcloneをGitHub Actionsで使うことにより、特殊な要求にも柔軟に
             ```
         # 解説
             (1):
+                mainブランチへのプルリクエストが閉じられたときに開始します。
+
             (2):
+                このプルリクエストがマージされたときに、ジョブを開始します。
+                (1)の指定と合わせて、
+                mainブランチにマージされ、プルリクエストが閉じられたときに、
+                ジョブが開始することになります。
+
             (3):
+                マージコミットをチェックアウトします。
+                のちに、`git diff`コマンドで前回コミットとの差分を見るため、
+                `fetch-depth`を`2`に設定します。
+
             (4):
+                マージコミットとその直前コミットとの差分を出力します。
+
+                `--name-status`オプションで、変更されたファイル名と変更要因(追加、変更、名前変更、削除など)を出力します。
+                たとえば、次のように出力されます。コメント部分は追記したものです。
+
+                ```shell
+                    A       file-a           # file-aが追加された(Added)
+                    M       file-b           # file-bを変更(Modified)
+                    R100    file-c   file-d  # file-cをfile-dに移動(Renamed). 内容は100%一致.
+                    D       file-e           # file-eを削除(Deleted)
+                ```
+
+                この標準出力を、パイプで後のシェルグループ`{}`につなげています。
+
             (5):
+                標準入力から一行読み込み、`line`変数に格納します。
+
             (6):
+                読み込んだ一行の文字列`line`を空白文字で分割し、位置パラメータに格納します。
+                具体例は以下の通りです。
+
+                ```shell
+                    line="R100    file-c   file-d"
+                    set $line
+                    echo $1
+                    # R100
+                    echo $2
+                    # file-c
+                    echo $3
+                    # file-d
+                ```
+
             (7):
+                変更要因が名前変更(Rename)の場合、
+                まずリモート側の変更前ファイルを削除し、次に変更後のファイルをリモートにアップロードします。
+
+                最後に、削除したファイルの親ディレクトリが空の場合は、削除します。
+
             (8):
+                変更要因が内容変更(Modify)の場合、
+                最新のファイルをリモートにアップロードします。
+
             (9):
+                変更要因が削除(Delete)の場合、
+                リモート側のファイルを削除します。
+
+            (10):
+                変更要因が追加(Add)の場合、
+                追加されたファイルをリモートにアップロードします。
 
 
 # 注釈
     [注.github-settings-secrets]: GitHubサイトの更新により設定場所が変わる可能性があります。
 
 # 参考文献
+    [github-actions]: ["GitHub Actions"](https://docs.github.com/en/actions).\
+        GitHub. Retrieved 2023-08-11.
+
     [github-actions-with-ftp-1]: ["GitHub Actionsを使ったFTPの自動デプロイ"](https://qiita.com/chieeeeno/items/6be835c74d6d7f597c6a). Qiita. Retrieved 2023-08-11.
 
     [github-actions-with-ftp-2]: ["github actionsを用いたFTP自動デプロイ。（例：さくらサーバー）"](https://zenn.dev/hirof1990/articles/2f8eeab56b8637). Zenn. Retrieved 2023-08-11.
