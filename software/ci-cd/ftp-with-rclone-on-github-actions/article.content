@@ -2,7 +2,7 @@
 parent: ../docs
 title: rcloneを用いてFTPによるファイルのアップロードとダウンロードをGitHub Actions上で行う
 date: 2023-09-09
-tags: CI-CD, GitHub-Actions
+tags: CI-CD, GitHub-Actions, FTP
 ---
 
 本稿では、外部アクションに頼らずrcloneをもちいた外部サーバとのファイル転送方法を説明します。
@@ -571,7 +571,7 @@ rcloneをGitHub Actionsで使うことにより、特殊な要求にも柔軟に
 
 
 # 注釈
-    [注.github-settings-secrets]: GitHubサイトの更新により設定場所が変わる可能性があります。
+    [注.github-settings-secrets]: GitHubのサイト更新により設定場所が変わる可能性があります。
 
 # 参考文献
     [github-actions]: ["GitHub Actions"](https://docs.github.com/en/actions).\
