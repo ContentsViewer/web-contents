@@ -83,18 +83,18 @@ tags: ライブラリ, Cpp
 # 導入方法
     以下のフォルダをダウンロードし, プロジェクトに含めてください.
     
-    * ["nodec". GitHub.](https://github.com/ContentsViewer/nodec/tree/main/nodec)
+    * ["nodec". GitHub.](https://github.com/nodec-project/nodec)
     
     `unicode`ライブラリのみインストールしたい場合は, 
     以下のファイルとそれに付随するファイル(インクルードしているファイル)を, 
     プロジェクトに含めてください.
     
-    * ["include/nodec/unicode.hpp". GitHub.](https://github.com/ContentsViewer/nodec/blob/main/nodec/include/nodec/unicode.hpp)
-    * ["src/nodec/unicode.cpp". GitHub](https://github.com/ContentsViewer/nodec/blob/main/nodec/src/nodec/unicode.cpp)
+    * ["include/nodec/unicode.hpp". GitHub.](https://github.com/nodec-project/nodec/blob/main/include/nodec/unicode.hpp)
+    * ["src/nodec/unicode.cpp". GitHub](https://github.com/nodec-project/nodec/blob/main/src/nodec/unicode.cpp)
     
     [::Note]
     =======
-        本ライブラリは, nodecプロジェクト([/nodec/nodec])に導入され, 
+        本ライブラリは, nodecプロジェクト([/nodec-framework/docs])に導入され, 
         メンテナンスは, このプロジェクト下で行われることになりました.
     =======
     

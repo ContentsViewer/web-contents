@@ -465,15 +465,15 @@ tags: Cpp, 非同期処理, デザインパターン, スレッドプール
     
     [::Note]
     =======
-        本コードは, nodecプロジェクト([/nodec/nodec])で利用しており, 
+        本コードは, nodecプロジェクト([/nodec-framework/docs])で利用しており, 
         メンテナンスは, このプロジェクト下で行われています.
         
         最新コードは以下を参照してください.
 
         
-        * [`ContentsViewer/nodec/concurrent/thread_pool_executor.hpp`](https://github.com/ContentsViewer/nodec/blob/main/nodec/include/nodec/concurrent/thread_pool_executor.hpp)
+        * [`nodec-project/nodec/concurrent/thread_pool_executor.hpp`](https://github.com/nodec-project/nodec/blob/main/include/nodec/concurrent/thread_pool_executor.hpp)
 
-        ライセンスは, [nodecプロジェクト](https://github.com/ContentsViewer/nodec)と同じです.
+        ライセンスは, [nodecプロジェクト](https://github.com/nodec-project/nodec/tree/main)と同じです.
     =======
 
 # 使用例

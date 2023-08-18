@@ -250,8 +250,8 @@ tags: Unicode, UTF-8, UTF-16, UTF-32, Cpp
     作成した`cpp`ファイル, `hpp`ファイルを以下にあげます. 
     本稿では, こちらのスクリプト^[注.nodec]にそって説明します.
     
-    * ["ContentsViewer/nodec/unicode.cpp"](https://github.com/ContentsViewer/nodec/blob/main/nodec/src/nodec/unicode.cpp). Github. accessed at 2021-04-24.
-    * ["ContentsViewer/nodec/unicode.hpp"](https://github.com/ContentsViewer/nodec/blob/main/nodec/include/nodec/unicode.hpp). Github. accessed at 2021-04-24.
+    * ["ContentsViewer/nodec/unicode.cpp"](https://github.com/nodec-project/nodec/blob/main/src/nodec/unicode.cpp). Github. accessed at 2021-04-24.
+    * ["ContentsViewer/nodec/unicode.hpp"](https://github.com/nodec-project/nodec/blob/main/include/nodec/unicode.hpp). Github. accessed at 2021-04-24.
     
     # UTF-8 と UTF-32間の変換方法
         # UTF-8 => UTF-32
