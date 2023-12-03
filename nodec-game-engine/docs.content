@@ -3,6 +3,8 @@ title: nodec game engine (ゲームエンジン)
 parent: ../Root
 date: 2023-08-01
 tags: 編集中
+children:
+    editor-usage/docs
 ---
 
 `nodec game engine`は、`nodec`フレームワークで作られたゲームエンジンです。

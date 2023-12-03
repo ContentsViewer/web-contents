@@ -1,0 +1,66 @@
+---
+title: モデルの取り込み方法
+date: 2023-12-02
+tags: 編集中
+parent: ../docs
+---
+
+Summary
+
+===
+
+# 手順
+
+    # 1. 3Dモデルファイルを用意する
+        読み込みたい3Dモデルデータを用意します。
+        
+        内部では、読み込みに`assimp`ライブラリを使用しており、
+        多くの3Dモデルデータ形式(`onj`, `stl`, `fbx`等)に対応しています。
+        
+        今回は、blenderで作成しfbxファイルに出力したシンプルな立方体を例に使います。
+        
+        ![](CURRENT_DIR/images/fig-blender-cube.png)
+    
+    # 2. エディタから3Dモデルファイルを取り込む
+        ゲームを立ち上げて、エディタウィンドウを開きます。
+        
+        3Dモデルの読み込みには、`Asset Importer`エディタウィンドウを使用します。
+        
+        ![](CURRENT_DIR/images/fig-asset-importer.png)
+        
+        
+        `Source Path`に用意したモデルファイルへの絶対パスを入力します。\\
+        例: `"C:/<path-to-model>/cube.fbx"`
+        
+        [パスの区切り文字は`/`を使用してください::CAUTION]
+        ===
+            パスの区切りにはスラッシュ`/`を使用します。
+            
+            Windowsで使われるバックスラッシュ`\`には対応しません。
+        ===
+        
+        `Import`ボタンを押します。\\
+        モデルファイルが読み込まれ、ゲームシーンに配置するまでの設定を行っていきます。
+        
+        ![](CURRENT_DIR/images/fig-import-asset.png)
+        
+        項目説明:
+            Resources:
+                
+                Resource Name Prefix:
+                
+                Mesh:
+                    Source:
+                    
+                    Target:
+                    
+                Material:
+                    Target Path:
+                    
+            Scene Export:
+                
+                    
+        
+        
+    # 3. 適切なマテリアルを設定する
+
