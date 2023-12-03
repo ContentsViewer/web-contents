@@ -1,66 +1,159 @@
 ---
 title: モデルの取り込み方法
 date: 2023-12-02
-tags: 編集中
+tags: ゲームエンジン, nodec, チュートリアル
 parent: ../docs
 ---
 
-Summary
+nodecゲームエディタを使用して、3Dモデルを取り込む方法を説明します。
 
 ===
+
+# 環境
+    このチュートリアルでは、以下の環境を想定しています。
+
+    サンプルプロジェクト:
+        * <https://github.com/nodec-project/hello-nodec-game>
 
 # 手順
 
     # 1. 3Dモデルファイルを用意する
         読み込みたい3Dモデルデータを用意します。
-        
+
         内部では、読み込みに`assimp`ライブラリを使用しており、
-        多くの3Dモデルデータ形式(`onj`, `stl`, `fbx`等)に対応しています。
-        
+        多くの3Dモデルデータ形式(`obj`, `stl`, `fbx`等)に対応しています。
+
         今回は、blenderで作成しfbxファイルに出力したシンプルな立方体を例に使います。
-        
+
+        [cube.fbx](CURRENT_DIR/data/cube.fbx)
+
         ![](CURRENT_DIR/images/fig-blender-cube.png)
-    
+
     # 2. エディタから3Dモデルファイルを取り込む
         ゲームを立ち上げて、エディタウィンドウを開きます。
-        
+
         3Dモデルの読み込みには、`Asset Importer`エディタウィンドウを使用します。
-        
+
         ![](CURRENT_DIR/images/fig-asset-importer.png)
-        
-        
+
         `Source Path`に用意したモデルファイルへの絶対パスを入力します。\\
         例: `"C:/<path-to-model>/cube.fbx"`
-        
+
         [パスの区切り文字は`/`を使用してください::CAUTION]
         ===
             パスの区切りにはスラッシュ`/`を使用します。
-            
+
             Windowsで使われるバックスラッシュ`\`には対応しません。
         ===
-        
+
         `Import`ボタンを押します。\\
         モデルファイルが読み込まれ、ゲームシーンに配置するまでの設定を行っていきます。
-        
+
         ![](CURRENT_DIR/images/fig-import-asset.png)
-        
+
         項目説明:
             Resources:
-                
-                Resource Name Prefix:
-                
-                Mesh:
-                    Source:
-                    
-                    Target:
-                    
-                Material:
-                    Target Path:
-                    
-            Scene Export:
-                
-                    
-        
-        
-    # 3. 適切なマテリアルを設定する
+                読み込んだ3Dモデルデータに含まれるリソース群。
 
+                Mesh, Materialが含まれます。
+
+                Resource Name Prefix:
+                    読み込んだモデル内のリソースは、それぞれファイルとして保存されます。出力されるファイルのディレクトリを指定します。
+
+                    ディレクトリには、アプリとして使用しているリソースディレクトリ下のパスを指定します。今回の例では、`org.nodec.hello-nodec-game/models/cube/`とします。
+
+                    [出力先のパスが存在しているか確認してください]
+                    ===
+                        出力先のパスが存在しているか確認してください。
+
+                        出力先のパスが存在しない場合、エラーが発生します。
+                    ===
+
+                Mesh:
+                    モデルに含まれるメッシュデータ。
+
+                    Source:
+                        読み込み時のメッシュ名。
+
+                    Target:
+                        保存するときのメッシュ名。
+                        ほかのTarget名と重複しないようにしてください。
+
+                Material:
+                    モデルに含まれるマテリアルデータ。
+
+                    Target Path:
+                        保存するときのマテリアル名。
+                        ほかのTarget名と重複しないようにしてください。
+
+            Scene Export:
+                ゲームシーンに配置するための設定。
+
+                Export:
+                    ボタンを押すと、上記のリソースデータがファイルとして保存され、読み込んだモデルがゲームシーンに配置されます。
+
+        上記の設定を行い、`Export`ボタンを押します。
+        モデルデータ内のリソースがファイルとして保存され、
+        モデルがゲームシーン上に配置されます。
+
+        今回の例では、以下のようなファイルが出力されます。
+
+        + `org.nodec.hello-nodec-game/models/cube/`
+            + `Cube##mesh-0.mesh`
+            + `Material.material`
+
+        また、シーン上に新しくエンティティが追加されます。今回の例では、以下のようなエンティティが追加されます。
+
+        + `RootNode`
+            + `Cube`
+            + `Light`
+            + `Camera`
+
+        ![](CURRENT_DIR/images/fig-export-cube.png)
+
+        おそらく、Cubeが表示されていないと思います。このような場合、以下のような原因があります。
+
+        * オブジェクトのスケールが極端に大きいか小さい
+        * マテリアルの設定が適切でない
+
+        まず、オブジェクトのスケールを確認します。
+        `Cube`エンティティを選択し、アタッチされているコンポーネントから`Local Transform`の詳細を開きます。Scaleの項目が`100, 100, 100`になっており、極端に大きいことがわかります。Scaleを`1, 1, 1`に変更します。
+
+        ![](CURRENT_DIR/images/fig-cube-inspector.png)
+
+        Cubeが表示されましたが、ライトの当たり方がおかしいです。これは、マテリアルの設定が適切でないためです。サンプルプロジェクトでは、Deffered Renderingを使用していますが、出力されるマテリアルファイルはForward Rendering用のものになっています。そのため、ライトの当たり方がおかしくなっています。のちの項目で、適切なマテリアルを設定していきます。このワークフローの改善は、今後の課題とします。
+
+        ![](CURRENT_DIR/images/fig-wrong-material.png)
+
+    # 3. 適切なマテリアルを設定する
+        サンプルプロジェクトでは、Deffered Renderingを使用していますが、出力されるマテリアルファイルはForward Rendering用のものになっています。
+        そのため、ライトの当たり方がおかしくなっています。
+        レンダリングされるためには、適切なマテリアルを設定する必要があります。
+
+        `Cube`エンティティを選択し、アタッチされているコンポーネントから`MeshRenderer`の詳細を開きます。
+
+        ![](CURRENT_DIR/images/fig-cube-inspector.png)
+
+        `Materials`の項目に出力されたマテリアルファイルが表示されています。
+        今回の例では、`org.nodec.hello-nodec-game/models/cube/Material.material`です。
+
+        今回、このマテリアルファイルを設定していきます。
+
+        エディタウィンドウから、`Material Editor`を開きます。
+        `Target`欄に設定対象のマテリアルファイル`org.nodec.hello-nodec-game/models/cube/Material.material`を指定します。
+        入力後、Enterを押すと、マテリアルの設定項目が表示されます。
+
+        ![](CURRENT_DIR/images/fig-material-editor.png)
+
+        今回`Shader`を`org.nodec.game-engine/shaders/pbr-defer`を指定します。
+        入力後、Enterを押し確定します。そうすると、正しくCubeが表示されました。
+
+        ![](CURRENT_DIR/images/fig-correct-material.png)
+
+        `Material Editor`の`Save`ボタンを押すと、マテリアルファイルが保存されます。
+
+        このようなマテリアルの設定は、ほかにも以下の場合に必要となります。
+
+        * テクスチャの指定
+            モデルファイルでテクスチャが使用されている場合、手動でテクスチャファイルをリソースフォルダ内の配置し、マテリアルの設定からテクスチャを指定する必要があります。
+            このワークフローの改善は、今後の課題とします。
