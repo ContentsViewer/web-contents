@@ -16,7 +16,6 @@ nodecゲームエディタを使用して、3Dモデルを取り込む方法を�
         * <https://github.com/nodec-project/hello-nodec-game>
 
 # 手順
-
     # 1. 3Dモデルファイルを用意する
         読み込みたい3Dモデルデータを用意します。
 
