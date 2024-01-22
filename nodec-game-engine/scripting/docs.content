@@ -1,0 +1,13 @@
+---
+title: スクリプト
+date: 2024-01-22
+tags: nodec-game-engine, チュートリアル
+parent: ../docs
+children:
+    add_component/docs
+---
+
+nodecゲームエンジンでのスクリプトの書き方を説明します。
+
+===
+

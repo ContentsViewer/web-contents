@@ -1,0 +1,256 @@
+---
+title: コンポーネントを追加する
+date: 2024-01-22
+tags: チュートリアル, nodec-game-engine
+parent: ../docs
+---
+
+`nodec_game_engine`で、新規にコンポーネントを追加する方法を説明します。
+
+===
+
+# 環境
+    このチュートリアルでは、以下の環境での操作を想定しています。
+
+    サンプルプロジェクト:
+        * <https://github.com/nodec-project/hello-nodec-game>
+
+# 目的
+    `nodec_game_engine`では、ECS(Entity Component System)を採用しています。
+    このため、ゲームオブジェクトは、コンポーネントを持つことで機能を実現します。
+
+    このチュートリアルでは、新規にコンポーネントを追加する方法を説明します。
+    ここでは、敵を表すコンポーネント(`Enemy`)を追加してみましょう。
+
+# 手順
+    # 1. コンポーネントクラスを作成する
+        プロジェクトディレクトリ内の`src/components`ディレクトリに、`enemy.hpp`を新しく作成し、以下の内容を記述します。
+
+        ```cpp
+        // (1)
+        #ifndef HELLO_NODEC_GAME__COMPONENTS__ENEMY_HPP_
+        #define HELLO_NODEC_GAME__COMPONENTS__ENEMY_HPP_
+
+        #include <nodec_scene_serialization/serializable_component.hpp>
+
+        namespace hello_nodec_game {
+        namespace components { // (2)
+
+        // (3)
+        struct Enemy : public nodec_scene_serialization::BaseSerializableComponent {
+            // (4)
+            Enemy()
+                : BaseSerializableComponent(this) {}
+
+            // (5)
+            float hp{100.f}
+
+            // (6)
+            template<class Archive>
+            void serialize(Archive &archive) {
+                archive(cereal::make_nvp("hp", hp));
+            }
+        };
+
+        } // namespace components
+        } // namespace hello_nodec_game
+
+        // (7)
+        NODEC_SCENE_REGISTER_SERIALIZABLE_COMPONENT(hello_nodec_game::components::Bullet)
+
+        #endif
+        ```
+
+        説明:
+            (1):
+                インクルードガードを記述します。
+
+                多くの場合、`<プロジェクト名>__<名前空間パス>__<ファイル名>_`という形式で、インクルードガードを記述します^[注.include-guard]。
+
+            (2):
+                `hello_nodec_game`名前空間内に、`components`名前空間を作成します。
+
+                この名前空間内に、コンポーネントクラスを記述します。
+
+            (3):
+                `Enemy`クラスを定義します。
+
+                `nodec_scene_serialization::BaseSerializableComponent`を継承しています。
+
+                `nodec_scene_serialization::BaseSerializableComponent`は、`nodec_scene_serialization`ライブラリによって提供される、シリアライズ可能なコンポーネントの基底クラスです。
+
+                `nodec_scene_serialization::BaseSerializableComponent`を継承することで、シリアライズ可能なコンポーネントとして振る舞うことができます。
+
+                シリアライズ可能なコンポーネントになることで以下のことが可能になります。
+
+                * コンポーネントの内容をファイルに保存し、読み込むことができる
+                * エディタ上やスクリプト等で動的にコンポーネントを複製することができる
+                * アニメーション等でプロパティ名によって動的に値を変更することができる
+
+            (4):
+                `nodec_scene_serialization::BaseSerializableComponent`のコンストラクタに、`this`を渡しています。
+                これは、継承元の`BaseSerializableComponent`が派生先の型情報を取得するために必要です。
+
+            (5):
+                `hp`というメンバ変数を定義しています。
+                `Enemy`コンポーネントとして持つべき情報を定義していきます。
+
+            (6):
+                `serialize`メンバ関数を定義しています。
+                シリアライズ可能なコンポーネントとして振る舞うためには、この関数を定義する必要があります。
+
+                `cereal::make_nvp`マクロを使って、`hp`メンバ変数をシリアライズしています。
+                `cereal::make_nvp`マクロの第一引数に、プロパティ名を指定し、第二引数に、シリアライズする変数を指定します。
+                プロパティ名は、メンバー変数名と同じにすることを推奨します。
+
+            (7):
+                `NODEC_SCENE_REGISTER_SERIALIZABLE_COMPONENT`マクロを使って、`Enemy`クラスを登録しています。
+                このマクロを使うことで、シリアライズ可能なコンポーネントとして振る舞うことができます。
+
+    # 2. コンポーネントクラスをシリアライズシステムに登録する
+        `Enemy`クラスは`BaseSerializableComponent`を継承しており、シリアライズ可能なクラスですが、
+        エンジンにこのクラスがシリアライズ可能なクラスであることを伝える必要があります。
+
+        `src/app.cpp`内の`Register components in serialization.`ブロック内で以下を追記します。
+
+        ```cpp
+            // Register components in serialization.
+            {
+                scene_serialization_.register_component<Bullet>();
+                scene_serialization_.register_component<PlayerControl>();
+                scene_serialization_.register_component<Enemy>(); // 追記
+            }
+        ```
+
+    # 3. (オプション) エディタにコンポーネントを登録する
+        追加で、エディタにコンポーネントを登録することで以下のことが行えます。
+
+        * エディタ上でコンポーネントを追加できるようになる
+        * エディタ上でコンポーネントのプロパティを編集できるようになる
+
+        `Enemy`コンポーネント用のエディタクラスを定義します。
+        `src/editors/`ディレクトリ内に、`enemy_editor.hpp`を新しく作成し、以下の内容を記述します。
+
+        ```cpp
+            #ifndef HELLO_NODEC_GAME__EDITORS__ENEMY_EDITOR_HPP_
+            #define HELLO_NODEC_GAME__EDITORS__ENEMY_EDITOR_HPP_
+
+            // (1)
+            #include <imgui.h>
+
+            // (2)
+            #include <nodec_scene_editor/component_editor.hpp>
+
+            // (3)
+            #include "../components/enemy.hpp"
+
+            namespace hello_nodec_game {
+            namespace editors {
+
+            // (4)
+            class EnemyEditor
+                : public nodec_scene_editor::BasicComponentEditor<components::Enemy> {
+            public:
+                // (5)
+                void on_inspector_gui(components::Enemy &enemy,
+                                    const nodec_scene_editor::InspectorGuiContext &context) override {
+                    // (6)
+                    ImGui::DragFloat("Hp", &enemy.hp);
+                }
+            };
+
+            } // namespace editors
+            } // namespace hello_nodec_game
+            #endif
+        ```
+
+        説明:
+            (1):
+                `imgui`ライブラリをインクルードします。
+
+                `imgui`ライブラリは、エディタのGUIを構築するためのライブラリです。
+
+            (2):
+                `nodec_scene_editor/component_editor.hpp`をインクルードします。
+
+                `component_editor.hpp`には、コンポーネントエディタの基底クラスが定義されています。
+
+            (3):
+                `Enemy`コンポーネントをインクルードします。
+
+            (4):
+                `EnemyEditor`クラスを定義します。
+
+                `nodec_scene_editor::BasicComponentEditor`を継承しています。
+
+                `nodec_scene_editor::BasicComponentEditor`は、`nodec_scene_editor`ライブラリによって提供される、コンポーネントエディタの基底クラスです。
+
+                `nodec_scene_editor::BasicComponentEditor`を継承することで、コンポーネントエディタとして振る舞うことができます。
+
+            (5):
+                `on_inspector_gui`メンバ関数を定義しています。
+
+                `nodec_scene_editor::BasicComponentEditor`の仮想関数です。
+
+                この関数をオーバーライドすることで、コンポーネントのプロパティを編集するGUIを構築することができます。
+                GUIは、`Entity Inspector`ウィンドウに表示されます。
+
+                この関数の第一引数には、編集するコンポーネントの参照が渡されます。
+                この関数の第二引数には、エディタのGUI構築に必要な情報が渡されます。
+
+                この関数内で、`imgui`ライブラリを使ってGUIを構築します。
+                `imgui`ライブラリの使い方については、[公式ドキュメント](https://github.com/ocornut/imgui)を参照してください。
+
+            (6):
+                `imgui`ライブラリを使って、`hp`メンバ変数を編集するGUIを構築しています。
+
+                エディタ上で表示されるプロパティ名は、単語始まりを大文字にし、境界をスペースで区切ることを推奨します。
+
+        最後に、エディタに`EnemyEditor`クラスを登録します。
+        `src/app.cpp`内で以下を追記します。
+
+        ```cpp
+        // ...
+
+        #ifdef EDITOR_MODE
+        #    include "editors/player_editor.hpp"
+        #    include "editors/enemy_editor.hpp" // 追記(1)
+        #endif
+
+        // ...
+
+        // (HelloNodecGameApplicationコンストラクタ内)
+        #ifdef EDITOR_MODE
+                // Set up systems if editor mode enabled.
+                {
+                    using namespace nodec_scene_editor;
+                    using namespace editors;
+                    auto &editor = app.get_service<SceneEditor>();
+
+                    editor.component_registry().register_component<PlayerControl, PlayerControlEditor>("Player Control");
+                    editor.component_registry().register_component<Bullet>("Bullet");
+                    editor.component_registry().register_component<Enemy, EnemyEditor>("Enemy"); // 追記(2)
+                }
+        #endif
+
+        // ...
+        ```
+
+        説明:
+            (1):
+                `EnemyEditor`クラスをインクルードします。
+
+                ゲームリリース時には、多くの場合エディタ機能が不要のため、
+                EDITOR_MODEマクロが定義されている(ゲーム開発中)場合のみ、このファイルをインクルードします。
+
+            (2):
+                `EnemyEditor`クラスを登録します。
+
+                `EnemyEditor`クラスを登録することで、エディタ上で`Enemy`コンポーネントを編集することができるようになります。
+                `register_component`関数の第一引数には、編集するコンポーネントの表示名を指定します。
+                名前は、単語始まりを大文字にし、境界をスペースで区切ることを推奨します。
+
+# 注釈
+    [注.include-guard]: \
+        [GoogleのC++コーディングガイドライン](https://google.github.io/styleguide/cppguide.html#The__define_Guard)をもとにしています。\
+        単語間の区切りは、アンダースコア2つで表しています。単語内境界と区別するためです。

@@ -1,7 +1,7 @@
 ---
 title: エディタの使い方
 date: 2023-12-02
-tags: チュートリアル, nodec, エディタ
+tags: チュートリアル, nodec-game-engine, エディタ
 parent: ../docs
 children:
     how-to-import-model/docs
