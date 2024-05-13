@@ -1,12 +1,118 @@
 ---
 title: モデルのテクスチャを変更する
 date: 2023-12-02
-tags: 編集中
+tags: ゲームエンジン, nodec-game-engine, チュートリアル
 parent: ../docs
 ---
 
-Summary
+nodecゲームエンジンを使用して、モデルのテクスチャを変更する方法を説明します。
 
 ===
 
-# Section
+# 環境
+    このチュートリアルでは、以下の環境での操作を想定しています。
+
+    サンプルプロジェクト:
+        * <https://github.com/nodec-project/hello-nodec-game>
+
+# 目的
+    モデルのテクスチャを変更する場面は多々あります。
+    たとえば、以下のような場面です。
+
+    * モデルを読み込んだ後に、テクスチャを変更したい場合
+
+    今、以下のようなCubeモデルを読み込んだとします。
+
+    ![デフォルトマテリアルが設定されたCube](./images/fig-plain-cube.png)
+
+    Cubeに割り当てられている`Mesh Renderer`を見ると、
+    `Material`に`org.nodec.game-engine/materials/pbr-defer-default.material`が割り当てられていることがわかります。
+    `pbr-defer-default.material`は、nodec game engineが提供する、Deferred Rendering用のデフォルトマテリアルになります。
+    デフォルトマテリアルには、色もテクスチャも適用されていない特色のないものになっています。
+
+    今回、このCubeに次のテクスチャを適用してみましょう。このテクスチャは、`resources/org.nodec.hello-nodec-game/textures/proto/prototype_512x512_blue1.png`にあります。
+
+    ![テクスチャ](./images/prototype_512x512_blue1.png)
+
+# 手順
+    # 1. マテリアルファイルを用意する
+        新しくテクスチャを変えるため、マテリアルファイルを新規で作成します。
+
+        `resources/org.nodec.hello-nodec-game/models/cube/cube.material`を新しく作成し、以下の内容を記述します。
+
+        ```js
+        {
+          "material": {
+            "shader": "org.nodec.game-engine/shaders/pbr-defer",
+            "cull_mode": 2,
+            "float_properties": [],
+            "vector4_properties": [],
+            "texture_properties": []
+          }
+        }
+        ```
+
+    # 2. マテリアルをモデルに設定する
+        `Cube`の`Mesh Renderer`を開き、`Material`に`org.nodec.hello-nodec-game/models/cube/cube.material`を設定します。
+
+    # 3. テクスチャをマテリアルに設定する
+        `Material Editor`を開き、`Target`に`org.nodec.hello-nodec-game/models/cube/cube.material`を設定します。
+
+        `albedo`の項目に、`org.nodec.hello-nodec-game/textures/proto/prototype_512x512_blue1.png`を設定します。
+        この時、Cubeのテクスチャが変わります。
+
+        ![テクスチャを設定したCube](./images/fig-custom-cube.png)
+
+        設定後、マテリアルファイルを保存するために、`Save`ボタンを押します。
+        この時、マテリアルファイルは以下のように保存されます。
+
+        ```js
+        {
+          "material": {
+            "shader": "org.nodec.game-engine/shaders/pbr-defer",
+            "cull_mode": 2,
+            "float_properties": [
+              {
+                "key": "metallic",
+                "value": 0.0
+              },
+              {
+                "key": "roughness",
+                "value": 0.0
+              }
+            ],
+            "vector4_properties": [
+              {
+                "key": "albedo",
+                "value": {
+                  "x": 1.0,
+                  "y": 1.0,
+                  "z": 1.0,
+                  "w": 1.0
+                }
+              },
+              {
+                "key": "tiling",
+                "value": {
+                  "x": 1.0,
+                  "y": 1.0,
+                  "z": 0.0,
+                  "w": 0.0
+                }
+              }
+            ],
+            "texture_properties": [
+              {
+                "key": "albedo",
+                "value": {
+                  "texture": "org.nodec.hello-nodec-game/textures/proto/prototype_512x512_blue1.png",
+                  "sampler": {
+                    "filter_mode": 1,
+                    "wrap_mode": 0
+                  }
+                }
+              }
+            ]
+          }
+        }
+        ```
