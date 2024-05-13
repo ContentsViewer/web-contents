@@ -28,16 +28,16 @@ parent: ../docs
 
         ```cpp
         // (1)
-        #ifndef HELLO_NODEC_GAME__COMPONENTS__ENEMY_HPP_
-        #define HELLO_NODEC_GAME__COMPONENTS__ENEMY_HPP_
+        #ifndef APP__COMPONENTS__ENEMY_HPP_
+        #define APP__COMPONENTS__ENEMY_HPP_
 
         #include <nodec_scene_serialization/serializable_component.hpp>
 
-        namespace hello_nodec_game {
+        namespace app {
         namespace components { // (2)
 
         // (3)
-        struct Enemy : public nodec_scene_serialization::BaseSerializableComponent {
+        struct Enemy : nodec_scene_serialization::BaseSerializableComponent {
             // (4)
             Enemy()
                 : BaseSerializableComponent(this) {}
@@ -53,10 +53,10 @@ parent: ../docs
         };
 
         } // namespace components
-        } // namespace hello_nodec_game
+        } // namespace app
 
         // (7)
-        NODEC_SCENE_REGISTER_SERIALIZABLE_COMPONENT(hello_nodec_game::components::Bullet)
+        NODEC_SCENE_REGISTER_SERIALIZABLE_COMPONENT(app::components::Enemy)
 
         #endif
         ```
@@ -66,9 +66,10 @@ parent: ../docs
                 インクルードガードを記述します。
 
                 多くの場合、`<プロジェクト名>__<名前空間パス>__<ファイル名>_`という形式で、インクルードガードを記述します^[注.include-guard]。
-
+                ですが、プロトタイプ開発では`<プロジェクト名>`は、あとから変更する可能性が高いため、今ケースでは`APP`としています。
+                
             (2):
-                `hello_nodec_game`名前空間内に、`components`名前空間を作成します。
+                `app`名前空間内に、`components`名前空間を作成します。
 
                 この名前空間内に、コンポーネントクラスを記述します。
 
@@ -132,8 +133,8 @@ parent: ../docs
         `src/editors/`ディレクトリ内に、`enemy_editor.hpp`を新しく作成し、以下の内容を記述します。
 
         ```cpp
-            #ifndef HELLO_NODEC_GAME__EDITORS__ENEMY_EDITOR_HPP_
-            #define HELLO_NODEC_GAME__EDITORS__ENEMY_EDITOR_HPP_
+            #ifndef APP__EDITORS__ENEMY_EDITOR_HPP_
+            #define APP__EDITORS__ENEMY_EDITOR_HPP_
 
             // (1)
             #include <imgui.h>
@@ -144,7 +145,7 @@ parent: ../docs
             // (3)
             #include "../components/enemy.hpp"
 
-            namespace hello_nodec_game {
+            namespace app {
             namespace editors {
 
             // (4)
@@ -160,7 +161,7 @@ parent: ../docs
             };
 
             } // namespace editors
-            } // namespace hello_nodec_game
+            } // namespace app
             #endif
         ```
 
