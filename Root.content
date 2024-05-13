@@ -19,7 +19,7 @@ children:
     ROS2/ROS2
     Library/Library
     Circuit/Circuit
-    App/App
+    apps/docs
     image-processing/docs
     cg/docs
     Writing/Writing

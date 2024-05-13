@@ -1,5 +1,5 @@
 ---
-parent: ../App
+parent: ../docs
 title: ブラウザゲーム一覧
 date: 2019-09-09
 tags: ゲーム, JavaScript
