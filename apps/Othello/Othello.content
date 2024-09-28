@@ -1,5 +1,5 @@
 ---
-parent: ../App
+parent: ../docs
 title: オセロ
 date: 2018-8-30
 tags: オセロ, Python, 遊び

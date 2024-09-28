@@ -3,6 +3,8 @@ parent: ../Root
 title: コンピュータグラフィクス
 date: 2020-12-16
 tags: コンピュータグラフィックス
+children:
+  references/docs
 ---
 
 Computer Graphics に関する知識

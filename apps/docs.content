@@ -3,6 +3,7 @@ parent: ../Root
 title: アプリケーション一覧
 date: 2018-8-30
 children:
+    cloud-music-box/docs
     GameList/GameList
     BrowserGames/BrowserGames
     Othello/Othello

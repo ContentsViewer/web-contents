@@ -1,0 +1,22 @@
+---
+title: 参考文献
+parent: ../docs
+date: 2023-02-24
+tags: 編集中
+---
+
+グラフィックスやシェーダのテクニック
+
+===
+
+# LearnOpenGL
+
+    * <https://learnopengl.com/Introduction>
+    
+
+# 3D Game Shaders For Beginners
+
+    * <https://lettier.github.io/3d-game-shaders-for-beginners/index.html>
+
+# The Book of Shaders
+    * <https://thebookofshaders.com/>

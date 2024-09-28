@@ -1,0 +1,154 @@
+---
+parent: ../docs
+title: Cloud Music Box - クラウドストレージからの音楽再生Webアプリ(PWA)
+date: 2024/5/13
+tags: クラウドミュージックプレイヤー
+---
+
+![Cloud Music Box](CURRENT_DIR/images/icon.png)
+
+//Cloud Music Box//は、クラウドストレージ(現在はOneDriveのみ)から音楽を再生するPWA音楽プレイヤーです。
+
+以下の特徴を持ちます。
+
+* PWAとして、多くのプラットフォーム(Windows, macOS, iOS, Android)上で同様のユーザ体験を実現します。
+* 一元管理されたクラウドストレージからの再生で、プレイヤーごとに音楽を同期する必要がありません。
+* オフラインでも、ダウンロード済みの音楽は再生可能です。
+* アプリがバックグラウンドにある場合でも、音楽の連続再生が可能です(iOSのみ動作しないことがある)。
+* 音楽に合わせて、動的にアプリのスタイルやアニメーションが変化します。
+
+===
+
+
+# はじめに
+
+    近年(2024年時点)、音楽のデジタル化が進み、音楽の再生は主にストリーミングサービス
+    (Spotify, AppleMusic, YoutubeMusic, AmazonMusic)を利用することが一般的になってきました。
+    しかし、ストリーミングサービスが始まるまでは、音楽はCDやダウンロードファイルとして保存され、再生されていました。
+    すでに購入した音楽をストリーミングサービスで再生することもできますが、
+    なかには、自分で保存した音楽を再生したいというニーズもあるでしょう^[注.want-to-play-own-music]。
+
+    自身が購入した音楽をクラウドストレージに保存し、それを再生することができるアプリケーションは多くあります。
+    たとえば、モバイルアプリでは"Cloud Beats"(
+    [iOS版](https://apps.apple.com/jp/app/cloudbeats%E3%82%AF%E3%83%A9%E3%82%A6%E3%83%89%E9%9F%B3%E6%A5%BD%E3%83%97%E3%83%AC%E3%82%A4%E3%83%A4%E3%83%BC/id573192227),
+    [Android版](https://play.google.com/store/apps/details?id=com.cloudbeats&hl=ja&gl=US)
+    )などがあります。
+    デスクトップ版だと、"[Music Player for OneDrive](https://apps.microsoft.com/detail/9p9z2f50vf40?hl=ja-JP&gl=JP)"などがあります。
+    これらのアプリケーションは、クラウドストレージから音楽を再生することができますが、
+    プラットフォームによって使用できるアプリが異なり、操作性や機能が異なることがあります。
+
+    そこで、Cloud Music Boxは、クラウドストレージから音楽を再生するPWA音楽プレイヤーとして、
+    多くのプラットフォーム(Windows, macOS, iOS, Android)上で同様のユーザ体験を実現します。
+    また、オフラインでも、ダウンロード済みの音楽は再生可能です。
+
+# インストール
+
+    <div style="text-align: center; margin-bottom: 1em">
+            <div>
+                <a href="https://contentsviewer.github.io/cloud-music-box/">
+                    <img src="images/icon.png" style='max-width: 80%'>
+                </a>
+            </div>
+            <div>
+                <a href="https://contentsviewer.github.io/cloud-music-box/">Launch App</a>
+            </div>
+            <div>
+                <a href="https://contentsviewer.github.io/cloud-music-box/" style='overflow-wrap: break-word'>
+                    https://contentsviewer.github.io/cloud-music-box/
+                </a>
+            </div>
+    </div>
+
+    1. 上記リンクをクリックして、Cloud Music Boxを起動します。
+    2. アプリを追加する。
+
+        Chrome, Edge - PC版:
+            URL欄にある, 「アプリをインストール」アイコンをクリック
+
+        Safari - モバイル版:
+            画面下部共有ボタンから, 「ホームに追加」をタップ
+
+        Chrome - モバイル版:
+            「ホーム画面に追加」をタップ
+
+        そのほかブラウザのアプリ追加については,
+        「PWA, {ブラウザ名}, アプリ追加」で検索してください.
+
+        [PWAとは]
+        =========
+            PWAは, プログレッシブウェブアプリ (Progressive web apps)の略で,
+            クロスプラットフォームのウェブアプリケーションにネイティブアプリと同様の使い勝手をもたらすウェブアプリのことです^[pwa-mdn].
+        =========
+
+
+        [現在、このアプリはアルファ版です::CAUTION]
+        ===
+            以下の点に注意してください。
+
+            * アップデート時にデータベースの互換性がなくなり、アプリを再インストールする必要があるかもしれません。
+            * 主機能は動作しますが、一部機能の動作が不安定な場合があります。
+        ===
+
+# 特徴
+
+    # PWAとして、多くのプラットフォーム(Windows, macOS, iOS, Android)上で同様のユーザ体験を実現
+
+        PWAとは、プログレッシブウェブアプリ (Progressive web apps)の略で、
+        クロスプラットフォームのウェブアプリケーションにネイティブアプリと同様の使い勝手をもたらすウェブアプリのことです^[pwa-mdn]。
+
+        Cloud Music Boxは、PWAとして開発されており、多くのプラットフォーム(Windows, macOS, iOS, Android)上で同様のユーザ体験を実現します。
+
+    # 一元管理されたクラウドストレージからの再生で、プレイヤーごとに音楽を同期する必要なし
+
+        Cloud Music Boxは、クラウドストレージ(現在はOneDriveのみ)から音楽を再生します。
+        そのため、複数のプレイヤーを使う場合でも、音楽を一元管理することができます。
+
+    # オフラインでも、ダウンロード済みの音楽は再生可能
+
+        Cloud Music Boxは、基本的に一度再生した音楽は、ローカルに保存され、オフラインでも再生が可能です。
+        また、手動で音楽をダウンロードすることもできます。
+        通信環境がない場合でも、再生したい音楽を事前にダウンロードしておけば、いつでも再生することができます。
+
+        容量の上限はブラウザのキャッシュ容量に依存します(Settings画面から確認できます)。
+        容量を超えると、古い音楽が自動的にローカルから削除されます。
+
+    # アプリがバックグラウンドにある場合でも、音楽の連続再生が可能
+
+        Cloud Music Boxは、アプリがバックグラウンドにある場合でも、音楽の連続再生が可能です。
+
+        ただし、iOSの場合、safariの制約により、バックグラウンド再生ができないことがあります。
+        もし、バックグラウンド再生できない場合は、以下の方法をお試しください。
+
+        1. アプリを立ち上げなおす
+        2. アプリから音楽を再生する
+        3. 画面をロックする
+        4. ロック画面に表示されている音楽再生コントロールの"戻る"ボタンを押し、もう一度音楽の冒頭から再生する
+
+    # 音楽に合わせて、動的にアプリのスタイルやアニメーションが変化
+
+        Cloud Music Boxは、音楽に合わせて、アプリのスタイルやアニメーションが変化します。
+        たとえば、以下のような機能があります。
+
+        * アルバムアートワークからの色を抽出し、アプリのスタイルに反映します。
+        * 音の共感覚に基づき、音楽のピッチに合わせて、アプリの背景色が変化します。
+        * 音圧に合わせて、背景色の明るさが変化します。
+
+        音楽に合わせたアプリの様相変化をお楽しみください。
+
+# 開発
+    開発方法は以下のページを参考にしてください。
+
+    * <https://github.com/ContentsViewer/cloud-music-box>
+
+# 関連アプリ
+    # [OMP - OneDrive Media Player on the web ](https://github.com/nini22P/omp)
+        本アプリと同様なOneDriveからの音楽再生を行うPWAアプリケーションです。
+        こちらが先にリリースされており、本アプリはその後に作成されました。
+        違いとして、OMPはストリーミング再生をメインにしており、オンラインでのみ再生が可能ですが、
+        本アプリはオフラインでも再生が可能です。
+
+# 注釈
+    [注.want-to-play-own-music]: 筆者がそうです。。。
+
+# 参考文献
+    [pwa-mdn]: ["プログレッシブウェブアプリ (PWA)"](https://developer.mozilla.org/ja/docs/Web/Progressive_web_apps). Mozilla and individual contributors. accessed at 2021-08-07.
