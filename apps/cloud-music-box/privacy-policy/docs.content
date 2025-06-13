@@ -1,0 +1,44 @@
+---
+title: CloudMusicBox - Privacy Policy
+parent: ../docs
+date: 2025-06-01
+---
+
+CloudMusicBox (the “App”) is a Progressive Web Application that lets you stream 
+and temporarily cache for offline playback the audio files you store in your own 
+cloud-storage accounts—currently Google Drive and Microsoft OneDrive. We never 
+collect, transmit, or monetise personal data beyond what is strictly necessary 
+to provide this functionality.
+
+===
+
+# 1. What data we access
+
+    | Category | Details | 	Where stored |
+    |----------|---------|---------|
+    | OAuth credentials | Short-lived access tokens & refresh tokens returned by Google Drive / OneDrive sign-in \
+        | Browser-side storage (IndexedDB / sessionStorage). Never leaves your device. |
+    | File metadata | File ID, name, MIME-type, size, thumbnail link, last-modified time \
+        | Memory only; optionally mirrored in IndexedDB for fast library loading. |
+    | Audio content | File bytes requested via providers’ APIs \
+        | Streamed to the <audio> element and optionally cached locally for offline listening. Evicted automatically when browser quota is exceeded. |
+    
+    We do not access contacts, photos, analytics identifiers, or any other personal data.
+        
+
+# 2. How we use the data
+    * List audio files, build your in-app library, and fetch album artwork colours for UI theming.
+
+    * Stream or play cached files—even when the device is offline.
+
+    * Refresh tokens silently so you don’t have to log in each time.
+        None of this information is transmitted to CloudMusicBox servers (there are none); all processing happens in the browser.
+
+# 3. Sharing & disclosure
+    We share nothing with third parties. 
+    File data moves only between your browser and the official Google Drive / OneDrive REST endpoints over TLS.
+
+# 4. Contact
+    Questions or requests?
+    
+    [/About/Contact]

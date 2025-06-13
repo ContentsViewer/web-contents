@@ -3,6 +3,8 @@ parent: ../docs
 title: Cloud Music Box - クラウドストレージからの音楽再生Webアプリ(PWA)
 date: 2024/5/13
 tags: クラウドミュージックプレイヤー
+children:
+  privacy-policy/docs
 ---
 
 ![Cloud Music Box](CURRENT_DIR/images/icon.png)
@@ -117,7 +119,7 @@ tags: クラウドミュージックプレイヤー
         Cloud Music Boxは、アプリがバックグラウンドにある場合でも、音楽の連続再生が可能です。
 
         ただし、iOSの場合、safariの制約により、バックグラウンド再生ができないことがあります。
-        もし、バックグラウンド再生できない場合は、以下の方法をお試しください。
+        もし、バックグラウンド再生できない場合は、以下の手順をお試しください。
 
         1. アプリを立ち上げなおす
         2. アプリから音楽を再生する

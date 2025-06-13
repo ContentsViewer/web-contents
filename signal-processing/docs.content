@@ -1,0 +1,11 @@
+---
+parent: ../Root
+title: 信号処理
+date: 2024-09-29
+children:
+    implement-butterworth-iir/article
+---
+
+アナログ、デジタル信号処理に関する知識。
+
+===

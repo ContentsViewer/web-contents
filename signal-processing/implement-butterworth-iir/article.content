@@ -1,0 +1,420 @@
+---
+parent: ../docs
+title: IIRによるButterworthフィルタの実装
+date: 2024-09-28
+tags: IIR, Butterworthフィルタ, 数学, 編集中
+---
+
+
+
+===
+
+# はじめに
+    IIRフィルタについて。
+    LPF, HPFでButterworthが使われる。
+
+    実装することはなく、たいていライブラリが使われる。
+    実装方法に関しても、断片的な情報、アナログフィルタの理論から、デジタルフィルタへの変換まで言及されていないことが多い。
+    (注で、チャットAIでも、アナログからデジタルまでの長い具体的な過程を語ることは難しい、数式に弱い)
+    本稿では、実際に実装を行い、理解を深める。
+    ライブラリがない場合、自分で実装することができる。
+
+# Butterworthフィルタ
+
+    ```math
+    $$
+        G(w) = \frac{1}{\sqrt{1 + w^{2n}}}
+    $$
+    ```
+
+# IIRフィルタ
+
+    ```math
+    $$
+        y(n) = -\sum_{m=1}^{I}a(m)y(n - m) + \sum_{m=0}^{J}b(m)x(n - m)
+    $$
+    ```
+
+    ![](CURRENT_DIR/images/fig-iir-diagram.png)
+
+    $y(n)$のz変換は以下のように定義されます。
+
+    ```math
+    $$
+        Y(z) = \sum_{n=-\infty}^{\infty}y(n)z^{-n}
+    $$
+    ```
+
+    ```math
+    \begin{align}
+        Y(z) &= \sum_{n=-\infty}^{\infty}\left( -\sum_{m=1}^{I}a(m)y(n - m) + \sum_{m=0}^{J}b(m)x(n - m)\right) z^{-n} \nonumber \\
+        &= -\sum_{n=-\infty}^{\infty}\sum_{m=1}^{I}a(m)y(n - m)z^{-n} + \sum_{n=-\infty}^{\infty}\sum_{m=0}^{J}b(m)x(n - m)z^{-n} \nonumber \\
+        &= -\sum_{m=1}^{I}a(m)\sum_{n=-\infty}^{\infty}y(n - m)z^{-n} + \sum_{m=0}^{J}b(m)\sum_{n=-\infty}^{\infty}x(n - m)z^{-n} \nonumber \\
+        &= -\sum_{m=1}^{I}a(m)\sum_{n=-\infty}^{\infty}y(n - m)z^{-n + m}z^{-m} \nonumber \\
+        & \quad \quad + \sum_{m=0}^{J}b(m)\sum_{n=-\infty}^{\infty}x(n - m)z^{-n + m}z^{-m}
+    \end{align}
+    ```
+
+    ```math
+    \begin{align}
+        Y(z) = -\sum_{m=1}^{I}a(m)Y(z)z^{-m} + \sum_{m=0}^{J}b(m)X(z)z^{-m}
+    \end{align}
+    ```
+
+    ```math
+    \begin{align}
+        Y(z) = -\sum_{m=\infty}^{\infty}a(m)Y(z)z^{-m} + \sum_{m=\infty}^{\infty}b(m)X(z)z^{-m}
+    \end{align}
+    ```
+
+    ```math
+    \begin{align}
+        A(z) &= \sum_{m=-\infty}^{\infty}a(m)z^{-m} \\
+        B(z) &= \sum_{m=-\infty}^{\infty}b(m)z^{-m}
+    \end{align}
+    ```
+
+    ```math
+    \begin{align}
+        Y(z) &= -A(z)Y(z) + B(z)X(z) \nonumber \\
+        Y(z) (1 + A(z)) &= B(z)X(z) \nonumber \\
+        \frac{Y(z)}{X(z)} &= \frac{B(z)}{1 + A(z)} \nonumber \\
+        H(z) &= \frac{B(z)}{1 + A(z)}
+    \end{align}
+    ```
+# ローパスフィルタ導出過程
+
+    # 1. 伝達関数の導出
+        $H(s)$をButterworthフィルタの伝達関数とし、$H(s)$を求めます。
+
+        ```math
+        \begin{align}
+            G(w)^2 &= |H(jw)|^2 \nonumber \\
+                   &= H(jw) \cdot \overline{H(jw)} \nonumber \\
+            \frac{1}{1 + w^{2n}} &= H(jw) \cdot \overline{H(jw)} \nonumber \\
+            H(jw) \cdot \overline{H(jw)} &= \frac{1}{1 + w^{2n}} \nonumber \\
+            H(s) \cdot \overline{H(s)} &= \frac{1}{1 + \left(\frac{s}{j}\right)^{2n}} \quad (s = jwより) \nonumber \\
+              &= \frac{1}{1 + (-1)^n s^{2n}}
+        \end{align}
+        ```
+
+        [ゲインについて]
+        ===
+            伝達関数$H(s)$において、$s=jw$を代入したい$H(jw)$を、
+            //周波数伝達関数//と呼びます^[book-fb]。
+
+            周波数に応じて変化する、振幅の変化を//ゲイン//、位相の差を//位相差//または//位相//と呼びます。
+            ゲインは、$|H(jw)|$で表され、位相は$\angle H(jw)$で表されます。
+        ===
+
+        極を求めるために、式()の分母=0となる$s$を求めます。$n$が偶数の場合と、奇数の場合に分けて考えます。
+
+        [極について]
+        ===
+            以下の伝達関数$G(s)$を持つシステムがあるとする。
+
+            ```math
+            $$
+                G(s) = \frac{N(s)}{D(s)} = \frac{b_ms^m + b_{m-1}s^{m-1} + \cdots + b_0}{s^n + a_{n-1}s^{n-1} + \cdots + a_0} \quad (n \geq m)
+            $$
+            ```
+
+            $D(s) = 0$の根をこのシステムの//極//(pole)、$N(s)=0$の根を//零点//(zero)と呼びます^[book-fb]。
+            システムの特性はこれらの極や零点によって定まります。
+        ===
+
+        $n$が偶数の場合:
+            ```math
+            \begin{align}
+                1 + (-1)^ns^{2n} = 0 \nonumber \\
+                1 + s^{2n} = 0 \quad ((-1)^n=1より) \nonumber \\
+                s^{2n} = -1 \nonumber \\
+            \end{align}
+            ```
+
+            ここで、$s=r(\cos\theta + j \sin\theta)$とおきます。
+
+            ```math
+            \begin{align}
+                s^{2n} &= \left(r(\cos\theta + j \sin\theta)\right)^{2n} \nonumber \\
+                       &= r^{2n}(\cos\theta + j \sin\theta)^{2n} \nonumber \\
+                       &= r^{2n}(\cos(2n\theta) + j \sin(2n\theta)) \quad (ド・モアブルの定理より)
+            \end{align}
+            ```
+
+            [ド・モアブルの定理]
+            ===
+                任意の実数$\theta$と整数$n$に対して、以下の式が成り立ちます^[wiki-de-moivre]。
+
+                ```math
+                $$
+                    (\cos\theta + j \sin\theta)^n = \cos(n\theta) + j \sin(n\theta)
+                $$
+                ```
+            ===
+
+            ```math
+            \begin{align}
+                -1 &= \cos\pi + j \sin\pi
+            \end{align}
+            ```
+
+            ```math
+            \begin{align}
+                r^{2n} &= 1 \nonumber \\
+                r &= 1
+            \end{align}
+            ```
+
+            ```math
+            \begin{align}
+                2n\theta &= \pi + 2k\pi \quad (kは整数) \nonumber \\
+                \theta &= (\frac{1}{2} + k)\frac{\pi}{n} \quad (0 \leq \theta < 2\pi)
+            \end{align}
+            ```
+
+            $k$の範囲について。
+
+            ```math
+            \begin{align}
+                0 \leq &\theta < 2\pi \nonumber \\
+                0 \leq &(\frac{1}{2} + k)\frac{\pi}{n} < 2\pi \nonumber \\
+                -\frac{1}{2} \leq &k < 2n - \frac{1}{2} \nonumber \\
+                -\frac{1}{2} < 0 \leq &k \leq 2n - 1 < 2n - \frac{1}{2}
+            \end{align}
+            ```
+
+        $n$が奇数の場合:
+
+            ```math
+            \begin{align}
+                1 + (-1)^ns^{2n} = 0 \nonumber \\
+                1 - s^{2n} = 0 \quad ((-1)^n=-1より) \nonumber \\
+                s^{2n} = 1 \nonumber \\
+            \end{align}
+            ```
+
+
+            ```math
+            \begin{align}
+                1 &= \cos 0 + j \sin 0
+            \end{align}
+            ```
+
+            ```math
+            \begin{align}
+                r^{2n} &= 1 \nonumber \\
+                r &= 1
+            \end{align}
+            ```
+
+            ```math
+            \begin{align}
+                2n\theta &= 2k\pi \quad (kは整数) \nonumber \\
+                \theta &= k \frac{\pi}{n} \quad (0 \leq \theta < 2\pi)
+            \end{align}
+            ```
+
+            $k$の範囲について。
+
+            ```math
+            \begin{align}
+                0 \leq &\theta < 2\pi \nonumber \\
+                0 \leq & k \frac{\pi}{n} < 2\pi \nonumber \\
+                0 \leq & k < 2n \nonumber \\
+                0 \leq & k \leq 2n - 1 < 2n
+            \end{align}
+            ```
+
+        以上から、式()の極sは以下のようになります。
+
+        ```math
+        \begin{align}
+            s_k &= r (\cos\theta_k + j \sin\theta_k) \quad (k=0, 1, \cdots, 2n - 1) \nonumber \\
+                &= \cos\theta_k + j \sin\theta_k \quad (r=1より) \nonumber \\
+                &= e^{j \theta_k} \quad (オイラーの公式より) \\
+                & \theta_k = \begin{cases}
+                    (\frac{1}{2} + k)\frac{\pi}{n} & (nが偶数の時) \\
+                    k\frac{\pi}{n} & (nが奇数の時)
+                \end{cases}
+                (k=0, 1, \cdots, 2n - 1) \nonumber
+        \end{align}
+        ```
+
+        $H(s)$は安定なシステムをとりたいため、実部が負の値をとる$s_k$を$H(s)$の極として選び、ほかの極は$\overline{H(s)}$になるように選びます。
+        $H(s)$の極を$s_{l, stable}$とおきます。その他の極は$s_{l', unstable}$とおきます。
+
+        よって、$H(S)$は以下のようになります。
+
+        ```math
+        \begin{align}
+            H(s) = \frac{1}{(s - s_{1, stable})(s - s_{2, stable})\cdots(s - s_{l_n, stable})}
+        \end{align}
+        ```
+
+        以上のButterworthフィルタの次数$n$から伝達関数$H(s)$の極を求めるコードを以下に示します。
+
+        ```js
+            class Complex {
+                real: number
+                imag: number
+
+                constructor(real: number, imag: number) {
+                    this.real = real
+                    this.imag = imag
+                }
+            }
+
+            function cexp(x: Complex) {
+                let r = Math.exp(x.real)
+                return new Complex(r * Math.cos(x.imag), r * Math.sin(x.imag))
+            }
+
+            // Butterworthフィルタの次数
+            const order = 4
+
+            let sPoles: Complex[] = new Array(order)
+
+            // 極の数
+            let numPoles: number = 0
+
+            for (let i = 0; i < 2 * n; ++i) {
+                const s = new Complex(
+                    0.0,
+                    (order & 1) == 1 ? (i * Math.PI) / order : ((i + 0.5) * Math.PI) / order
+                )
+                const z = cexp(s)
+                if (z.real < 0.0) {
+                    sPoles[numPoles++] = z
+                }
+            }
+
+            // 極を表示
+            console.log(sPoles)
+        ```
+
+    # 2. 極の調整
+        1.で求めた$H(s)$は、$H(jw)$としたときに、$w=1$でゲインが減衰するように設計しています。
+        あるカットオフ角周波数$w_c$でゲインが減衰するように、極を調整します。
+
+        ```math
+        $$
+            |H(jw)| = \frac{1}{\sqrt{1 + w^{2n}}}
+        $$
+        ```
+
+        ここで、$w=w_c$でゲインが減衰するように、$w -> \frac{w}{w_c}$と変数変換します。
+        変数変換した伝達関数を$H_{lpf}(s)$とおきます。
+
+        ```math
+        $$
+            |H_{lpf}(jw)| = \frac{1}{\sqrt{1 + \left(\frac{w}{w_c}\right)^{2n}}}
+        $$
+        ```
+
+        $w=w_c$の時の$|H_{lpf}(jw)|$のゲイン(dB)は、以下のようになります。
+
+        ```math
+        \begin{align}
+            20\log_{10}|H_{lpf}(jw_c)| &= 20\log_{10}\frac{1}{\sqrt{1 + \left(\frac{w_c}{w_c}\right)^{2n}}} \nonumber \\
+            &= -10\log_{10}(1 + \left(\frac{w_c}{w_c}\right)^{2n}) \nonumber \\
+            &= -10\log_{10}(2) \nonumber \\
+            &\approx -3 \text{dB}
+        \end{align}
+        ```
+
+
+        ```math
+        \begin{align}
+            |H_{lpf}(jw)| &= \left(\frac{1}{1 + \frac{w}{w_c}}\right)^{2n} \nonumber \\
+            H_{lpf}(jw) \cdot \overline{H_{lpf}(jw)} &= \frac{1}{1 + \left(\frac{w}{w_c}\right)^{2n}} \nonumber \\
+            H_{lpf}(s) \cdot \overline{H_{lpf}(s)} &= \frac{1}{1 + \left(\frac{s}{jw_c}\right)^{2n}} \quad (s=jwより) \nonumber \\
+             &= \frac{1}{1 + (-1)^n \left(\frac{s}{w_c}\right)^{2n}}
+        \end{align}
+        ```
+
+        式(), 式()より、$H_{lpf}(s)$は$H(s)$の$s$を$s->\frac{s}{w_c}$と変数変換したものになります。
+
+
+        ```math
+
+        \begin{align}
+            H_{lpf}(s) = \frac{1}{(\frac{s}{w_c} - s_{1, stable})(\frac{s}{w_c} - s_{2, stable})\cdots(\frac{s}{w_c} - s_{l_n, stable})}
+        \end{align}
+
+        ```
+
+        LPFでの極$s_{lpf, l, stable}$は、以下のようになります。
+
+        ```math
+        \begin{align}
+            s_{lpf, l, stable} = w_c s_{l, stable}
+        \end{align}
+        ```
+
+    # 3. s-z変換
+        s-z変換とは、アナログフィルタの伝達関数をデジタルフィルタの伝達関数に変換する方法です^[wiki-sz]。
+        s-z変換は、以下のように定義されます。ただし、$T$はサンプリング周期です。
+
+        ```math
+        \begin{align}
+            z = \frac{1 + \frac{sT}{2}}{1 - \frac{sT}{2}}
+        \end{align}
+        ```
+
+        この変換は、//双一次変換//とも呼ばれます^[wiki-sz]。
+
+        双一次変換での離散時間での角周波数$\omega_{d}$から、連続時間での角周波数$\omega_{a}$を求める式は以下のようになります^[wiki-sz]。
+
+        ```math
+        \begin{align}
+            \omega_{a} = \frac{2}{T}\tan\left(\frac{\omega_{d}T}{2}\right)
+        \end{align}
+        ```
+
+
+
+    # 3. IIRフィルタ係数の導出
+
+        [角速度と周波数の関係]
+        ===
+            角速度$\omega$は、単位時間あたりの角度の変化量を表します(定義)。
+            単位は、rad/sです。
+
+            周波数$f$は、単位時間あたりの周期の回数を表します(定義)。
+            単位は、Hzです。
+
+            周期$T$は、1回の周期にかかる時間を表します(定義)。
+            単位は、sです。
+
+
+            周期$T$と周波数$f$の関係は、以下のようになります。
+
+            ```math
+            $$
+                f = \frac{1}{T}
+            $$
+            ```
+
+            角速度$\omega$は、単位時間当たりの角度の変化量で、
+            単位時間でf回転するときの角速度は、$2\pi f$です。
+
+            ```math
+            $$
+                \omega = 2\pi f
+            $$
+            ```
+        ===
+
+
+# ハイパスフィルタ導出過程
+
+# 参考文献
+
+    [butterworth-paper]: Butterworth, S. (1930). ["On the Theory of Filter Amplifiers"](https://www.changpuak.ch/electronics/downloads/On_the_Theory_of_Filter_Amplifiers.pdf).
+
+    [book-fb]: 杉江俊治, 藤田政之. "フィードバック制御入門 第23刷". コロナ社, 2016.
+
+    [wiki-de-moivre]: ["De Moivre's formula"](https://en.wikipedia.org/wiki/De_Moivre%27s_formula). Wikipedia. accessed at 2024-09-28
+
+    [wiki-sz]: ["Bilinear transform"](https://en.wikipedia.org/wiki/Bilinear_transform). Wikipedia. accessed at 2024-09-28
