@@ -1,0 +1,47 @@
+---
+parent: ../Root_en
+title: About This Site
+date: 2018-11-24
+tags: about, contact
+children:
+    Contact_en
+---
+
+About the purpose and policies of this site.
+
+===
+
+# Purpose
+________________
+    The main purpose of this site is to __preserve the author's knowledge and works__.
+    In learning, I believe that sharing knowledge externally is important, so __making these publicly available__
+    is also included in the purpose. Additionally, since I think it's not good to just publish content without reflection,
+    instead of time-based content management like blogs, we perform __category-based content management__.
+    We strive to ensure that __both writers and readers benefit mutually (Win-Win)__.
+
+
+# Contact
+________________
+    If you have any questions or concerns about this website, please
+    contact us through the contact page below.
+    
+    [Contact_en]
+
+
+# About Advertisements on This Site
+________________
+    This site uses third-party advertising services (Google AdSense).
+    Such advertising service providers may use information about your visits to this site and other sites
+    (called 'Cookies', which do not include your name, address, email address, or phone number)
+    to provide advertisements about goods and services of interest to you.
+    For more details about this process and how to prevent such information from being used by advertising service providers,
+    please see [Google's Advertising Policies and Terms](https://policies.google.com/technologies/ads).
+    
+# About Analytics Tools Used on This Site
+________________
+    This site uses Google Analytics, an access analysis tool provided by Google.
+    Google Analytics uses cookies to collect traffic data.
+    This traffic data is collected anonymously and does not identify individuals.
+    You can refuse this data collection by disabling cookies in your browser settings.
+    For more information about these terms, please see the [Google Analytics Terms of Service](https://www.google.com/analytics/terms/),
+    or [How Google uses information from sites or apps that use our services](https://policies.google.com/technologies/partner-sites).
