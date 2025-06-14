@@ -4,41 +4,299 @@ parent: ../docs
 date: 2025-06-01
 ---
 
-CloudMusicBox (the “App”) is a Progressive Web Application that lets you stream 
-and temporarily cache for offline playback the audio files you store in your own 
-cloud-storage accounts—currently Google Drive and Microsoft OneDrive. We never 
-collect, transmit, or monetise personal data beyond what is strictly necessary 
-to provide this functionality.
+Cloud Music Box is a web application for playing music files stored in cloud storage services (Google Drive, OneDrive). This Privacy Policy explains how our application collects, uses, and protects your personal information.
 
 ===
 
-# 1. What data we access
+# Last Updated: June 14, 2025
 
-    | Category | Details | 	Where stored |
-    |----------|---------|---------|
-    | OAuth credentials | Short-lived access tokens & refresh tokens returned by Google Drive / OneDrive sign-in \
-        | Browser-side storage (IndexedDB / sessionStorage). Never leaves your device. |
-    | File metadata | File ID, name, MIME-type, size, thumbnail link, last-modified time \
-        | Memory only; optionally mirrored in IndexedDB for fast library loading. |
-    | Audio content | File bytes requested via providers’ APIs \
-        | Streamed to the <audio> element and optionally cached locally for offline listening. Evicted automatically when browser quota is exceeded. |
-    
-    We do not access contacts, photos, analytics identifiers, or any other personal data.
-        
+# 1. Introduction
+    Cloud Music Box is a web application for playing music files stored in cloud storage services (Google Drive, OneDrive). This Privacy Policy explains how our application collects, uses, and protects your personal information.
 
-# 2. How we use the data
-    * List audio files, build your in-app library, and fetch album artwork colours for UI theming.
+# 2. Information We Collect
+    # 2.1 Information Collected Through Google Drive Integration
+        Our application uses Google OAuth 2.0 to access your Google Drive.
 
-    * Stream or play cached files—even when the device is offline.
+        Data Collected:
+            * Google account basic information (email address, name, profile picture)
+            * Google Drive file listings (for searching and displaying music files)
+            * Music file metadata (filename, size, creation date, file type)
+            * Music file content (when accessed by user for playback and offline caching)
 
-    * Refresh tokens silently so you don’t have to log in each time.
-        None of this information is transmitted to CloudMusicBox servers (there are none); all processing happens in the browser.
+        Required Permissions:
 
-# 3. Sharing & disclosure
-    We share nothing with third parties. 
-    File data moves only between your browser and the official Google Drive / OneDrive REST endpoints over TLS.
+            Google Drive:
 
-# 4. Contact
-    Questions or requests?
-    
-    [/About/Contact]
+                * `https://www.googleapis.com/auth/drive.readonly` (read-only access)
+                * `openid`, `email`, `profile` (basic profile information)
+
+            Microsoft OneDrive:
+
+                * `Files.Read` (read-only access to OneDrive files)
+                * `Sites.Read.All` (read-only access to SharePoint sites, for OneDrive for Business accounts)
+
+    # 2.2 Information Collected Through OneDrive Integration
+        We use Microsoft Graph API to access OneDrive with the principle of least privilege.
+
+        Authentication Information:
+
+            * Microsoft account authentication tokens (managed by MSAL library)
+            * User ID and basic profile information required for OneDrive access
+            * Refresh tokens for maintaining authentication state
+
+        OneDrive File Access:
+
+            * File and folder metadata (names, paths, modification dates, file sizes)
+            * Music file content for playback purposes only
+            * Album artwork and music metadata (artist, title, duration, etc.)
+
+        Access Permissions Used:
+
+            * //Files.Read//: Read-only access to music files in OneDrive
+            * //Sites.Read.All//: Read-only access to SharePoint sites (requested for all accounts to ensure OneDrive for Business compatibility)
+            * These permissions are used exclusively for music file search and playback
+            * No administrative privileges or write permissions are requested
+
+        Important Notes:
+
+            * OneDrive file access uses read-only permissions only
+            * We do not modify, delete, or share your OneDrive files
+            * Authentication uses OAuth 2.0 with PKCE for enhanced security
+            * File data is only accessed when explicitly requested by user actions
+            * No automatic scanning or bulk downloading of user files
+            * Permissions can be revoked at any time through Microsoft account settings
+
+    # 2.3 Information Stored Locally
+        Information stored in your browser:
+
+            * Authentication credentials for maintaining login state
+            * User account identifiers (no personal details stored)
+            * Application settings (theme, volume settings, etc.)
+            * File listing cache for faster navigation
+            * Music file metadata (filename, size, file type)
+            * Album information derived from metadata
+            * Music file content (cached locally when accessed by user for offline playback)
+            * Cache management data (access times, storage usage tracking)
+
+    # 2.4 Analytics Information Collected
+        We use Google Analytics to understand how users interact with our application and to improve our services.
+
+        Data Collected Through Google Analytics:
+
+            * Page views and user navigation patterns
+            * Device and browser information (type, version, screen size)
+            * Geographic location (country/region level only)
+            * Session duration and frequency of use
+            * Feature usage statistics
+            * Error reports and performance metrics
+
+        Important Notes:
+
+            * No personally identifiable information (PII) is collected through Analytics
+            * Music file names, content, or cloud storage data are not tracked
+            * Analytics data is aggregated and anonymized
+            * You can opt out of Google Analytics tracking through browser settings or extensions
+
+# 3. How We Use Information
+    # 3.1 Core Functionality
+        * Searching and displaying music files in cloud storage
+        * Music file playback
+        * Playlist functionality
+        * Album display
+
+    # 3.2 User Experience Enhancement
+        * Caching metadata for fast file search and navigation
+        * Local music file caching for offline playback of previously accessed songs
+        * User-controlled cache with automatic size management and manual clearing options
+        * Saving personal settings and preferences
+
+    # 3.3 Offline Music Caching
+        * //User-initiated only//: Music files are only cached when you actively play or access them through the app
+        * //No automatic downloading//: The app does not automatically scan or download your entire music library
+        * //Storage management//: Cache size is automatically managed with configurable limits (typically 70% of available browser storage)
+        * //User control//: You can manually clear all cached music files from the settings page
+        * //Access-based retention//: Oldest cached files are automatically removed when storage limits are reached
+        * //Offline playback//: Cached music files enable playback without internet connection for previously accessed songs
+
+    # 3.4 Technical Functions
+        * Automatic authentication credential refresh
+        * Connection state management
+        * Error handling and debugging
+
+    # 3.5 Analytics and Service Improvement
+        * Understanding user behavior and app usage patterns
+        * Identifying popular features and areas for improvement
+        * Monitoring app performance and stability
+        * Troubleshooting technical issues
+        * Aggregate usage statistics for development planning
+
+# 4. Information Storage and Protection
+    # 4.1 Data Storage Location
+        * All data is stored only within the user's browser
+        * We do not store any user data on our application servers
+        * Cloud storage files remain in their original locations
+
+    # 4.2 Security Measures
+        * HTTPS encryption for all communications
+        * Secure authentication via OAuth 2.0
+        * Use of PKCE (Proof Key for Code Exchange) for OneDrive authentication
+        * Implementation of CSP (Content Security Policy)
+
+    # 4.3 Data Retention
+        * Authentication credentials: Automatically managed by browser security standards
+        * Metadata cache: Managed by application settings
+        * Music file cache: User-controlled with automatic size management
+        * Local storage: Retained until deleted by user
+        * Cache cleanup: Automatic removal of oldest files when storage limits exceeded
+        * Analytics data: Managed by Google Analytics retention policies (typically 26 months)
+
+# 5. Information Sharing with Third Parties
+    # 5.1 No Information Sharing
+        * We do not share user personal information with third parties
+        * We do not provide information to advertising or analytics companies
+        * We do not sell user data
+
+    # 5.2 Legal Requirements
+        * We do not disclose information except when required by law
+        * However, since we do not store user data on servers, information available for disclosure is limited
+
+# 6. International Data Transfers
+    # 6.1 Data Location
+        * User data is primarily stored within the user's browser
+        * Google Drive and OneDrive data is stored in their respective data centers
+
+    # 6.2 Applicable Laws
+        * Google Drive: Subject to Google's Privacy Policy
+        * OneDrive: Subject to Microsoft's Privacy Policy
+
+    # 6.3 Microsoft OneDrive Authentication Process
+        User Consent:
+
+            * Personal OneDrive access requires only user consent through Microsoft authentication
+            * The application uses incremental consent, requesting permissions only when needed
+            * The application requests consistent permission scopes for both personal and business accounts to ensure compatibility
+            * Users can review and manage granted permissions through Microsoft account settings
+
+        Organizational Environments:
+
+            * When using work or school accounts (OneDrive for Business), administrator pre-approval may be required
+            * SharePoint site access permissions are requested for all OneDrive connections to ensure compatibility with business accounts
+            * Organization privacy policies and data governance rules apply
+            * The application does not have independent access rights to organizational data
+
+        Consent Management:
+
+            * Consent can be revoked at any time through Microsoft account settings
+            * Revoking consent will disconnect OneDrive access but preserve other app functionality
+            * The application respects Microsoft's conditional access policies when configured
+
+# 7. User Rights
+    # 7.1 Right to Access
+        * Users can access their data at any time
+        * Local data can be inspected using browser developer tools
+
+    # 7.2 Right to Deletion
+        * All data can be deleted from the application settings screen
+        * Music cache can be selectively cleared without affecting other data
+        * Data can be deleted using browser clear functions
+        * Cloud storage connections can be disconnected
+
+    # 7.3 Data Portability
+        * Data is easily exportable as it resides in the user's browser
+        * Data can be backed up using standard browser functions
+
+    # 7.4 Microsoft 365 Business Environment Usage
+        When using this application with work or school Microsoft accounts:
+
+        * Organization administrators may control application access and data handling
+        * Your organization's privacy policies and data governance rules take precedence
+        * The application does not store organizational data on our servers
+        * Data protection rights should be exercised through your organization's data protection procedures
+        * IT administrators may have visibility into application usage through Microsoft's admin tools
+
+# 8. Cookies and Tracking Technologies
+    # 8.1 Cookies Used
+        First-party Cookies:
+
+            * Maintaining authentication state
+            * Saving user preferences
+            * Storing application settings
+            * Google Analytics cookies for usage analytics and performance monitoring (implemented as first-party cookies)
+            * These analytics cookies collect anonymized usage statistics only
+            * You can opt out of Google Analytics tracking through browser settings or extensions
+            * No personally identifiable information is collected through these cookies
+
+        [::Note]
+        ===
+            We do not use third-party tracking cookies. All cookies are set under our domain.
+        ===
+
+    # 8.2 Local Storage
+        * Saving configuration information
+        * Storing authentication credentials
+        * Caching data
+
+# 9. Age Restrictions
+    This application is not intended for children under 13 years of age. If a child under 13 has inadvertently provided personal information, we will promptly delete it.
+
+# 10. Privacy Policy Changes
+    # 10.1 Change Notification
+        * Privacy Policy updates will be published on this page with a new "Last Updated" date
+        * For significant changes affecting user rights, we may provide additional notice through:
+            * GitHub repository updates and release notes
+            * Website announcements (if applicable)
+        * Users are encouraged to review this Privacy Policy periodically
+
+    # 10.2 Change Effectiveness
+        * Changes become effective from the publication date shown in "Last Updated"
+        * Continued use of the application after changes constitutes acceptance of the updated Privacy Policy
+
+    # 10.3 Microsoft Graph API Changes
+        * Microsoft Graph API specification changes may require updates to privacy practices
+        * Important changes affecting user privacy will be communicated in advance
+        * Users will be notified of significant changes through appropriate channels
+        * The application maintains compatibility with Microsoft's evolving security requirements
+
+# 11. Open Source
+    # 11.1 Source Code Publication
+        * This application is published as open source
+        * Source code can be reviewed to verify privacy protection
+
+    # 11.2 Transparency
+        * Data handling can be verified through source code
+        * Third-party security audits are possible
+
+# 12. Contact Us
+    If you have any questions or concerns about this Privacy Policy, please contact us:
+
+    Contact Information:
+
+        * GitHub Issues: <https://github.com/ContentsViewer/cloud-music-box/issues>
+        * WebSite Form: <https://contentsviewer.work/Master/About/Contact>
+
+# 13. Governing Law and Jurisdiction
+    This Privacy Policy is governed by Japanese law, and the Tokyo District Court shall have exclusive jurisdiction for the first instance.
+
+---
+
+# Appendix: Technical Details
+    # A. Authentication Flow Used
+        * OAuth 2.0 Implicit Grant Flow for Google Drive (access token only)
+        * OAuth 2.0 Authorization Code Flow with PKCE for OneDrive (managed by MSAL library)
+        * OpenID Connect for user information
+
+    # B. Encryption Technologies
+        * TLS 1.3 for data transmission
+        * Browser-native encryption for local storage
+
+    # C. Automatic Data Management
+        * Cache expiration policies with least-recently-used cleanup
+        * Automatic storage size management within browser limits
+        * Authentication credential refresh mechanisms
+        * Manual data clearing options for music cache and all data
+
+    # D. Microsoft Graph API Compliance
+        * //API Version Management//: Compatible with current Microsoft Graph API specifications
+        * //Permission Scope Compliance//: Adheres to Microsoft's least privilege principle
+        * //Error Handling//: Proper handling of Microsoft Graph API responses and error codes
+        * //Rate Limiting//: Respects Microsoft Graph API throttling and retry policies

@@ -5,6 +5,7 @@ tags: root
 children:
     ContentsPlanet/ContentsPlanet_en
     OutlineText/OutlineText_en
+    About/About_en
 ---
 
 Welcome to ContentsViewer!
