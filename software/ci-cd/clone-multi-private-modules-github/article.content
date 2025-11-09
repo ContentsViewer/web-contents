@@ -1,0 +1,178 @@
+---
+parent: ../docs
+title: GitHub ActionsのWindowsランナーで複数のPrivateサブモジュールを含んだリポジトリをクローンする方法
+date: 2025-07-04
+tags: CI-CD, GitHub-Actions, Windows, SSH, Git-Submodules
+---
+
+GitHubのCI/CDでActionsを使って自動化することがあると思います。
+今回は、Windowsランナーで複数のPrivateサブモジュールを含むリポジトリをクローンする際に直面した問題と、その解決方法を共有します。
+
+===
+
+# 問題の概要
+_________________
+    GitHub ActionsでPrivateサブモジュールを含むリポジトリをクローンしようとすると、
+    通常のチェックアウト方法では認証エラーが発生します。
+    特に、**Windowsランナーでは追加の設定が必要**になります。
+
+# 一般的なチェックアウト方法（これだけでは不十分）
+_______________________________________________
+    まず、一般的にActionsでリポジトリをチェックアウトする際は以下のようにします：
+
+    ```shell
+    jobs:
+      build-on-win:
+        runs-on: windows-2022
+        steps:
+          - name: Checkout
+            uses: actions/checkout@v4
+            with:
+              submodules: recursive
+    ```
+
+    しかし、この方法では**Privateリポジトリはクローンできません**。
+
+# SSH Deploy Keysを使った認証設定
+_________________________________
+
+    # 1. SSH鍵の生成
+        各Privateサブモジュールリポジトリ用にSSH鍵を生成します：
+
+        ```bash
+        ssh-keygen -t ed25519 -C "<リポジトリのssh url>" -f ~/.ssh/temp
+        ```
+
+        `<リポジトリのssh url>`には、各サブモジュールのSSH URLを指定します。
+
+        例:
+            * `git@github.com:<Your Account Name>/<Your Repository Name>.git`
+
+    # 2. Deploy Keyの登録
+        * 生成した公開鍵（`.pub`ファイル）を各サブモジュールリポジトリの`Settings > Deploy keys`に登録
+        * 読み取り専用権限で設定
+
+    # 3. Secretsに秘密鍵を登録
+        メインリポジトリの`Settings > Secrets and variables > Actions`で秘密鍵を登録：
+        * `DEPLOY_KEY_YOUR_REPOSITORY_NAME_1`
+        * `DEPLOY_KEY_YOUR_REPOSITORY_NAME_2`
+        * `DEPLOY_KEY_YOUR_REPOSITORY_NAME_3`
+
+# 解決方法：完全なワークフロー
+_______________________________
+
+    以下が、WindowsとmacOS/Linux両方で動作する完全なワークフローです：
+
+    ```shell
+    name: Build with Private Submodules
+
+    on:
+      push:
+        branches: [ main ]
+      pull_request:
+        branches: [ main ]
+
+    jobs:
+      build:
+        runs-on: ${{ matrix.os }}
+        strategy:
+          matrix:
+            os: [ubuntu-latest, macos-latest, windows-2022]
+
+        steps:
+          # Windowsランナー用のSSH設定（重要!）
+          - name: Set GIT_SSH_COMMAND on Windows
+            if: runner.os == 'Windows'
+            shell: bash
+            run: |
+              echo "GIT_SSH_COMMAND=ssh -F /c/Users/runneradmin/.ssh/config -o \"UserKnownHostsFile /c/Users/runneradmin/.ssh/known_hosts\"" >> "${GITHUB_ENV:?}"
+
+          # SSH認証の設定（バージョン固定が重要!）
+          - name: Setup SSH for private submodules
+            uses: webfactory/ssh-agent@v0.7.0
+            with:
+              ssh-private-key: |
+                ${{ secrets.DEPLOY_KEY_YOUR_REPOSITORY_NAME_1 }}
+                ${{ secrets.DEPLOY_KEY_YOUR_REPOSITORY_NAME_2 }}
+                ${{ secrets.DEPLOY_KEY_YOUR_REPOSITORY_NAME_3 }}
+
+          # リポジトリとサブモジュールのチェックアウト
+          - name: Checkout repository with submodules
+            uses: actions/checkout@v4
+            with:
+              submodules: recursive
+
+          # 以降、ビルド処理など...
+          - name: Build project
+            run: |
+              # ビルドコマンド
+    ```
+
+    # 詳細解説
+        # Windowsランナー用のSSH設定
+
+            Windowsランナーで、追加の設定をしないで実行すると以下のエラーが発生することがあります。
+
+            ```
+            Error: Command failed: git submodule update --init --recursive
+            Cloning into 'path/to/submodule'...
+            git@github.com: Permission denied (publickey).
+            fatal: Could not read from remote repository.
+            ```
+
+            この問題は、[webfactory/ssh-agent#230](https://github.com/webfactory/ssh-agent/issues/230#issue-2657588883)で報告されており、回避策として、`GIT_SSH_COMMAND`環境変数を設定する方法が挙げられています。
+
+            ```shell
+                - name: Set GIT_SSH_COMMAND on Windows
+                    if: runner.os == 'Windows'
+                    shell: bash
+                    run: |
+                        echo "GIT_SSH_COMMAND=ssh -F /c/Users/MY_USERNAME/.ssh/config -o \"UserKnownHostsFile /c/Users/MY_USERNAME/.ssh/known_hosts\"" >> "${GITHUB_ENV:?}"
+            ```
+
+            [Windows用のGIT_SSH_COMMAND設定の詳細]
+            ===
+                以下コマンドの詳細説明。
+
+                ```bash
+                echo "GIT_SSH_COMMAND=ssh -F /c/Users/runneradmin/.ssh/config -o \"UserKnownHostsFile /c/Users/runneradmin/.ssh/known_hosts\"" >> "${GITHUB_ENV:?}"
+                ```
+                1. `echo "..."`
+                    * 指定された文字列を標準出力に出力するコマンド
+                    * ここでは環境変数の設定文字列を出力
+
+                2. `GIT_SSH_COMMAND=...`
+                    * Gitが使用するSSHコマンドをカスタマイズするための環境変数
+                    * Gitがリモートリポジトリにアクセスする際のSSH動作を制御
+
+                3. `ssh -F /c/Users/runneradmin/.ssh/config`
+                    * `-F`オプション: SSH設定ファイルのパスを明示的に指定
+                    * `/c/Users/runneradmin/.ssh/config`: WindowsランナーでのSSH設定ファイルの絶対パス
+
+                4. `-o "UserKnownHostsFile /c/Users/runneradmin/.ssh/known_hosts"`
+                    * `-o`オプション: SSH接続時の追加オプションを指定
+                    * `UserKnownHostsFile`: 既知のホスト情報を格納するファイルを指定
+                    * `/c/Users/runneradmin/.ssh/known_hosts`: WindowsランナーでのKnown Hostsファイルの絶対パス
+                5. `>> "${GITHUB_ENV:?}"`
+                    * `>>`: ファイルに追記（リダイレクト
+                    * `"${GITHUB_ENV:?}"`: GitHub Actionsの環境変数ファイルのパス
+                        * `GITHUB_ENV`はGitHub Actionsが自動的に設定する特殊な環境変数
+                        * `?`は変数が未定義の場合にエラーを発生させる記法
+            ===
+
+        # webfactory/ssh-agentのバージョン固定
+            **`webfactory/ssh-agent@v0.7.0`** を使用することが重要です。
+
+            `v0.8`, `v0.9`では、Windowsでの動作に回帰的な問題が報告されています。
+            `v0.7.0`は安定してWindowsランナーで動作することが確認されています。
+            この問題は[webfactory/ssh-agent#221](https://github.com/webfactory/ssh-agent/issues/221)で報告されています。
+
+# まとめ
+________
+    WindowsランナーでPrivateサブモジュールを含むリポジトリをクローンする際のポイントは以下の通りです。
+
+    1. **webfactory/ssh-agent@v0.7.0** を使用する
+    2. Windows環境では事前に**GIT_SSH_COMMAND**を設定する
+    3. 複数のDeploy keyを適切に設定する
+
+    これらのポイントを押さえることで、Windowsランナーでも安全にPrivateサブモジュールにアクセスできます。

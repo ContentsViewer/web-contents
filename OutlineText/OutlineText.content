@@ -8,6 +8,7 @@ children:
     Syntax
     Style
     Download
+    vscode-extension/docs
     HowItWorks/HowItWorks
 ---
 
