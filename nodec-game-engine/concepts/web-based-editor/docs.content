@@ -1,0 +1,299 @@
+---
+title: ランタイムと分離されたWebベースエディターの提案
+parent: ../docs
+date: 2026-01-02
+tags: nodec-game-engine, ゲームエンジン
+---
+
+本稿では、ゲームエンジンのエディタをWebベースで実装し、
+エンジンランタイムと分離するアーキテクチャを提案する。
+従来のゲームエンジン(Unity, Unreal, Godot等)ではエディタとエンジンが密結合しているが、
+本設計ではEditor WebUIとEngine RuntimeをREST API/WebSocketで接続することで、
+障害分離・リモート編集・独立した更新サイクルを実現する。
+
+===
+
+
+# はじめに
+    多くのゲームエンジンは、独自のエディタアプリを持つ。
+    たとえば、Unity^[unity], Unreal Engine^[unreal], Godot^[godot], Bevy^[bevy]などが代表例である。
+
+    エディタがエンジンと密接に結びついていることのメリット:
+        * エディタとエンジンの連携が容易
+        * パフォーマンスが良い
+
+    デメリット:
+        * エディタの開発と保守が複雑
+            * エンジン開発者はエディタのUI機能の実装が必要
+            * エンジンユーザは独自のエディタ拡張方法を理解する必要がある
+        * エンジンのクラッシュがエディタに影響を与える可能性がある
+
+    しかし、近年のWeb技術の進歩により、Webベースのエディタが現実的な選択肢となってきた。
+    本ドキュメントでは、Webベースのエディタの利点と、その設計について提案する。
+
+    本稿の提案実装は、`nodec game engine`の一部として実装されている。
+
+    <https://github.com/nodec-project/nodec_game_engine>
+
+# Webベースエディタの利点
+
+    UIフレームワークの豊富さ:
+        Web技術には、React, Vue, Angularなど成熟したUIフレームワークが存在する。
+        Material-UIやdockviewなどのコンポーネントライブラリも豊富である。
+
+    安定したレンダリングとパフォーマンス:
+        モダンブラウザは高度に最適化されたレンダリングエンジンを持つ。
+
+    クロスプラットフォーム対応:
+        ブラウザが動作する環境であれば、どこでもエディタが利用可能。
+
+    リモートデバッグ・編集:
+        マシンをまたいでのリモートデバッグやエディタ操作が可能。
+        ゲームが動作するマシンと、エディタを操作するマシンを分離できる。
+
+    エンジンはデプロイに集中した設計が可能:
+        デプロイ時にエディタ機能は不要であり、
+        エンジン本体はゲーム実行に必要な機能のみに集中できる。
+
+    障害分離:
+        エンジンクラッシュ時にエディタの作業内容がロストしない。
+        逆に、エディタ側の問題がエンジンに影響を与えることもない。
+
+    エディタ更新の容易さ:
+        エディタ更新にエンジン再コンパイルが不要。
+        フロントエンド開発のホットリロードを活用できる。
+
+# 設計
+______
+
+    ![エディタとエンジンの関係](CURRENT_DIR/images/figure-editor-engine.png)
+
+    上記図は、Webベースエディタの基本的なアーキテクチャを示している。
+    システムは大きく**Editor WebUI**と**Engine Runtime**の2つのコンポーネントに分かれ、
+    Editor APIを介して通信する。
+
+    # Editor WebUI
+
+        Editor WebUIは、ブラウザ上で動作するエディタのフロントエンドである。
+
+        主な役割:
+            * シーン階層の表示と操作 (Scene Hierarchy Window)
+            * エンティティのコンポーネント編集 (Entity Inspector Window)
+            * アニメーションの編集 (Animation Editor Window)
+            * その他のエディタウィンドウ
+
+        技術スタック:
+            * Next.js 14 (React フレームワーク)
+            * TypeScript
+            * dockview (ドッキングレイアウトシステム)
+            * @xyflow/react (ノードベースグラフ可視化)
+
+        Editor WebUIは、編集中のエンティティやリソースのローカルコピーを保持する。
+        これにより、エンジンとの通信遅延やエンジンクラッシュの影響を最小限に抑える。
+
+        ![WebUIデモ](CURRENT_DIR/images/figure-editor-demo.png)
+
+    # Engine Runtime
+
+        Engine Runtimeは、ゲームロジック、レンダリング、物理演算などを実行する本体である。
+
+        主な役割:
+            * ゲームロジックの実行
+            * レンダリング
+            * エンティティとリソースの管理
+            * Editor API Serverの提供
+
+        Engine Runtimeは、実際のゲームデータ(エンティティ、リソース)を保持し、
+        Editor API Serverを通じてエディタからの要求に応答する。
+
+        ![Engineデモ](CURRENT_DIR/images/figure-engine-demo.png)
+
+    # Editor API
+
+        Editor APIは、Editor WebUIとEngine Runtime間の通信プロトコルである。
+
+        # REST API
+
+            エンティティやコンポーネントの取得・更新にはREST APIを使用する。
+
+            主なエンドポイント:
+                * `GET /api/entities/roots` - ルートエンティティ一覧の取得
+                * `GET /api/entities/ids/:id` - 特定エンティティの詳細取得
+                * `GET /api/entities/ids/:id/components` - エンティティのコンポーネント取得
+                * `POST /api/entities/ids/:id/components` - コンポーネントの追加
+                * `PATCH /api/entities/ids/:id/components` - コンポーネントの更新
+                * `DELETE /api/entities/ids/:id/components/:typeIndex` - コンポーネントの削除
+
+            リソース関連:
+                * `GET /api/resources/:type/:name` - リソースの取得
+                * `PUT /api/animation-clips/:name` - アニメーションクリップの更新
+
+        # WebSocket
+
+            リアルタイム更新にはWebSocketを使用する。
+
+            * エンティティコンポーネントの変更通知をサブスクライブ
+            * 接続状態の監視と自動再接続
+
+        # シリアライズ形式
+
+            エンティティ、コンポーネント、リソースのデータは、
+            JSONベースのシリアライズ形式で通信される。
+            C++側ではcereal^[cereal]ライブラリのポリモーフィックシリアライゼーションを使用し、
+            コンポーネントの型情報を保持する。
+
+# 実装
+______
+
+    本設計の実装は、`nodec game engine`で公開されている。
+
+    <https://github.com/nodec-project/nodec_game_engine>
+
+    # Editor WebUI
+
+        パス: `game_editor/web_ui/`
+
+        ディレクトリ構成:
+            + app/
+                + layout.tsx (ルートレイアウト)
+                + page.tsx (メインページ)
+            + src/
+                + api/
+                    + gameEngine.ts (Editor APIクライアント)
+                + components/
+                    + SceneHierarchy.tsx (シーン階層ウィンドウ)
+                    + ComponentInspector.tsx (コンポーネントインスペクター)
+
+        セットアップ:
+            * Node.js 18以上が必要
+            * `npm install`で依存関係をインストール
+            * `npm run dev`で開発サーバー起動 (localhost:3000)
+            * Engine RuntimeがEditor Server有効(ポート8080)で起動している必要がある
+
+# 応用
+__________
+
+    # リモートエディティング
+
+        本設計の最大の応用例は、リモートエディティングである。
+        Editor WebUIとEngine RuntimeがHTTP/WebSocketで通信するため、
+        同一マシンである必要がない。
+
+        # ユースケース
+
+            モバイルデバイスでの開発:
+                iOSやAndroidデバイス上でEngine Runtimeを起動し、
+                PC上のブラウザからエディタで編集できる。
+                実機での動作確認をしながら、リアルタイムでパラメータ調整が可能。
+
+            コンソール機での開発:
+                PlayStation, Xbox, Nintendo Switch等のコンソール機上で
+                Engine Runtimeを実行し、開発PCからエディタで操作できる。
+
+            VR/ARデバイスでの開発:
+                VRヘッドセット上でゲームを実行しながら、
+                別のPCでエディタを操作してシーンを調整できる。
+                VR空間内での見え方を確認しながらのイテレーションが可能。
+
+            クラウドゲーミング環境:
+                クラウドサーバー上でEngine Runtimeを実行し、
+                ローカルPCからエディタで接続することで、
+                高性能なクラウドリソースを活用した開発が可能。
+
+        # 構成例
+
+            ```
+                [開発PC]                      [ターゲットデバイス]
+                ブラウザ                       Engine Runtime
+                Editor WebUI  <--- HTTP --->  Editor API Server
+                localhost:3000               192.168.x.x:8080
+            ```
+
+            Editor WebUIの接続先を`localhost:8080`から
+            ターゲットデバイスのIPアドレスに変更するだけで、
+            リモートエディティングが可能になる。
+
+        # 考慮事項
+
+            ネットワーク遅延:
+                ローカル接続と比較してレイテンシが増加する。
+                WebSocketによるリアルタイム更新で体感を軽減できる。
+
+            セキュリティ:
+                Editor API Serverは認証なしで公開される設計のため、
+                信頼できるネットワーク内での使用を推奨する。
+                本番環境では認証機構の追加を検討すべきである。
+
+            ファイアウォール:
+                ポート8080(Editor API Server)への接続を許可する必要がある。
+
+<!--
+# 関連技術
+__________
+
+    # Bevy Editor
+    ___________
+
+        Rust製ゲームエンジンBevyでも、エディタの開発が進められている^[bevy-editor]^[bevy-editor-vision]。
+        Bevyのアプローチは本提案とは異なる設計思想を持つ。
+
+        # Bevyのエディタ設計
+
+            Bevyエディタは、Bevy自身とbevy_uiを使用して構築されるネイティブアプリケーションである^[bevy-editor-arch]。
+            エディタはBevyのメインリポジトリ内に配置され、エンジンの開発プロセスの一部として更新される。
+
+            主な特徴:
+                * Bevy自身で構築されたネイティブバイナリ
+                * "Feathers" UIウィジェットセット^[bevy-feathers]を使用
+                * モジュラーで再利用可能なコンポーネント設計
+                * エンジンと同一リポジトリで管理
+
+        # ゲームとの通信方式
+
+            Bevyエディタは**アウトオブプロセス**アプローチを採用している。
+            エディタは実行中のゲームプロセスを直接インスペクトしない。
+            代わりに、ユーザーはモジュラーな開発ツールを自身のプロジェクトにコンパイルし、
+            `dev_tools`フィーチャーフラグで有効化する方式をとる。
+
+            [:: NOTE]
+            ============
+                "The editor will not try and inspect the running process"^[bevy-editor-arch]
+
+                ゲームとエディタ間の通信方式は、Bevyでは未解決の設計課題として残されている。
+            ============
+
+        # 本提案との比較
+
+            |[設計比較]
+            | 項目 || 本提案 (nodec) | Bevy Editor |
+            |------||----------------|-------------|
+            | UI技術 || Web (React/Next.js) | Native (bevy_ui/Feathers) |
+            | エンジンとの関係 || 完全分離 | 同一リポジトリ |
+            | ゲームとの通信 || REST API + WebSocket | 未定義 (開発ツールをコンパイル) |
+            | リモート編集 || 可能 (HTTP経由) | 困難 |
+            | プロセスモデル || インプロセス (APIサーバー) | アウトオブプロセス |
+            | エディタ更新 || エンジン再コンパイル不要 | エンジンと同時更新 |
+
+        # トレードオフ
+
+            Bevyアプローチの利点:
+                * エンジンとの緊密な統合
+                * 単一言語(Rust)での開発
+                * ネイティブパフォーマンス
+
+            本提案の利点:
+                * Web技術エコシステムの活用
+                * リモートデバッグ・編集の容易さ
+                * 障害分離 (エンジンクラッシュがエディタに影響しない)
+                * 明確に定義された通信プロトコル
+                * エディタの独立した更新
+-->
+
+---
+
+# 参考文献
+    [unity]: [Unity](https://unity.com/)
+    [unreal]: [Unreal Engine](https://www.unrealengine.com/)
+    [godot]: [Godot Engine](https://godotengine.org/)
+    [bevy]: [Bevy Engine](https://bevy.org/)
+    [cereal]: [cereal - A C++11 library for serialization](https://uscilab.github.io/cereal/)

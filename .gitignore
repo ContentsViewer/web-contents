@@ -1,3 +1,5 @@
 .vscode
 *.drawio.bkp
 *.drawio.dtmp
+CLAUDE.md
+.DS_Store
