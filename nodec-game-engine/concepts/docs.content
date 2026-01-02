@@ -1,0 +1,13 @@
+---
+title: コンセプト
+parent: ../docs
+date: 2026-01-02
+tags: nodec-game-engine, ゲームエンジン
+children:
+    web-based-editor/docs
+---
+
+nodec_game_engineを作成するにあたっての基本的な考え方やコンセプトを説明する。
+
+===
+
