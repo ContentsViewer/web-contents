@@ -72,7 +72,7 @@ ContentsPlanet は, 次の三つの特徴を持つWebコンテンツ管理シス
     本CMSの対応環境は以下の通りです. 無料のレンタルサーバでも動くようにしています.
 
     * Apache HTTP Server
-    * PHP 7.1 以上, PHP 8.0 以上
+    * PHP 8.3 以上
     * PHP 拡張モジュール
         * mbstring
         * openssl

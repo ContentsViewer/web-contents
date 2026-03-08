@@ -12,12 +12,81 @@ tags: CMS
 # 2026/03/22
 
     要約:
-    
+        * モジュール設計をstaticクラスからインスタンスベースに移行（Authenticator, SearchEngine, Notifier, Logger）
+        * PHP 8.3対応
+        * 検索インデックスのパフォーマンス改善
+        * ログシステムの刷新（PSR-3ベースのログレベル、ログローテーション、ログビューアUX改善）
+
     Features:
-    
+        Module/Logger:
+            * PSR-3ベースのログシステムの追加
+                * 5段階のログレベル: critical, error, warning, notice, debug
+                * 1MBでのログローテーション対応（OutputLog.txt → OutputLog.1.txt）
+            * `Debug`モジュールを置き換え
+
+        Module/Notifier:
+            * `Notifyer`からリネーム・リファクタリング
+            * staticクラスからインスタンスベースに変更
+            * `MAIL_ENVELOPE_FROM`設定によるバウンスアドレス対応
+
+        Frontend/log-viewer:
+            * ログレベル別の色分け表示
+            * レベルフィルタ（チェックボックス）
+            * 新しいエントリを上に表示（逆順）
+            * 表示件数制限による大量ログ対応（500件ずつ遅延レンダリング）
+            * ログファイルのダウンロード機能
+            * ダークモード対応
+
+        Frontend/contents-viewer:
+            * ページビルドレポートにインデックス更新状態の表示を追加
+
     Changes:
-    
-    Bug Fixes:
+        ContentsPlanet:
+            * バージョンを`2026.03.22`に更新
+            * `MAIL_ENVELOPE_FROM`設定の追加
+            * PHP 8.3対応: 文字列補間を修正
+
+        Module/Authenticator:
+            * staticクラスからインスタンスベースに変更
+            * メソッド名をPascalCaseからcamelCaseに変更（PSR-12準拠）
+            * 型宣言の追加（引数・戻り値）
+            * `strpos()`から`str_starts_with()`への置き換え
+            * ヘルパー関数`authenticator()`によるアクセス
+
+        Module/SearchEngine:
+            * `Searcher`クラスを`Index`クラスに統合
+            * メソッド名をPascalCaseからcamelCaseに変更（PSR-12準拠）
+            * インデックスの直列化形式をJSONから`serialize()`に変更（パフォーマンス改善）
+            * 類似トピック検索ロジックの簡素化
+
+        Module/BinarySearch:
+            * メソッド名をPascalCaseからcamelCaseに変更（PSR-12準拠）
+
+        Module/ErrorHandling:
+            * ログレベルをerrorからcriticalに変更（ユーザに見えるエラーのため）
+
+        Frontend/contents-viewer:
+            * 検索インデックスの更新をコンテンツ変更時のみに限定（パフォーマンス改善）
+            * インデックス更新結果のキャッシュ化
+
+        Frontend/tag-viewer:
+            * コードのリファクタリング（PSR-12準拠のcamelCase化）
+            * 配列操作のモダンPHP構文への書き換え（`array_map`, `fn()`）
+
+        Frontend/log-viewer:
+            * ローテーションされたログファイル（OutputLog.1.txt）の読み込みに対応
+
+        Frontend/error-pages (400, 404, 500):
+            * 適切なログレベルに変更（500: critical, 404/400: notice）
+
+        Module/Debug:
+            * 削除。`Logger`に置き換え
+
+        Module/Notifyer:
+            * 削除。`Notifier`に置き換え
+
+        Client/SplitView:
+            * exampleページのオーバーフロースクロールの修正
     
 
 # 2022/08/31
