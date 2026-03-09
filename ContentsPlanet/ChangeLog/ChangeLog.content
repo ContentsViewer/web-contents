@@ -16,6 +16,15 @@ tags: CMS
         * PHP 8.3対応
         * 検索インデックスのパフォーマンス改善
         * ログシステムの刷新（PSR-3ベースのログレベル、ログローテーション、ログビューアUX改善）
+        * キャッシュモジュールのリネームとserialize形式への移行（CacheManager → CacheStore）
+        * ファイル配信のHTTPキャッシュ対応（ETag/304）
+
+    [::CAUTION]
+    ====
+        既存のcache, indexファイルの互換性がなくなります。
+        キャッシュファイルは自動再生成されますが、history情報は失われます。
+        必要な場合は事前にバックアップを推奨します。
+    ====
 
     Features:
         Module/Logger:
@@ -64,6 +73,17 @@ tags: CMS
 
         Module/ErrorHandling:
             * ログレベルをerrorからcriticalに変更（ユーザに見えるエラーのため）
+
+        Module/CacheStore:
+            * `CacheManager`から`CacheStore`にリネーム
+            * メソッド名の簡潔化: `cacheExists`→`exists`, `getCacheDate`→`getDate`, `getCacheFilePath`→`filePath`
+            * キャッシュの直列化形式をJSONから`serialize()`に変更（パフォーマンス改善）
+            * 空キャッシュ読み込み時のフォールバックを`[]`に統一
+
+        Frontend/file-server:
+            * HTTPキャッシュヘッダーの追加（ETag, Last-Modified, Cache-Control: no-cache）
+            * 条件付きリクエスト（If-None-Match, If-Modified-Since）による304 Not Modified対応
+            * PHPプロセス占有時間の短縮による503エラーの軽減
 
         Frontend/contents-viewer:
             * 検索インデックスの更新をコンテンツ変更時のみに限定（パフォーマンス改善）
