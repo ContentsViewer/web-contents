@@ -1,0 +1,124 @@
+---
+parent: ../PHP
+title: PHPでキャッシュ管理 CacheStore
+date: 2025-03-15
+tags: ライブラリ, PHP, キャッシュ
+---
+
+PHPでアプリケーションを作成するとき, 処理結果を一時的に保存して再利用したいことがあります.
+本ライブラリは, RedisやMemcachedなどの外部サービスを使わず,
+`CacheStore.php`の一ファイルでファイルベースのキャッシュ管理を実現します.
+
+ファイルロックによる同時アクセス保護と, 古いキャッシュの自動削除(GC)を備えています.
+
+===
+
+# はじめに
+    PHPでアプリケーションを作成するとき, データを一時的に保存したい時があります.
+    例えば, 重いテキストの変換処理を毎アクセス時にするよりは,
+    はじめの一回だけ処理を行い, 結果をキャッシュに保存し, 以降のアクセスでは,
+    キャッシュを利用する方が, 早くレスポンスを返すことができます.
+
+    本稿では, //ファイルベースのキャッシュ管理ライブラリ CacheStore//を紹介します.
+
+    [::NOTE]
+    =======
+        本モジュールは, 旧名 CacheManager から CacheStore にリネームされました.
+    =======
+
+# 使い方
+    CacheStoreは, 二つのクラスで構成されています.
+
+    * `Cache`: 個別のキャッシュエントリに対する操作（接続, ロック, 読み書き, 反映）
+    * `CacheStore`: キャッシュディレクトリ全体の管理（存在確認, 更新日時取得, GC）
+
+    # Cacheクラス
+        まず, スクリプト上部で`CacheStore.php`を読み込みます.
+
+        ```php
+            require_once "CacheStore.php";
+        ```
+
+        キャッシュを作成し, キャッシュに接続します.
+
+        ```php
+            $cache = new Cache();
+            $cache->connect('temp');
+        ```
+
+        キャッシュの内容を取ってきます.
+        同時に, 他のスクリプトがキャッシュに対して書きこみして,
+        ファイルが破損しないように, ロックするのがおすすめです.
+
+        ```php
+            $cache->lock(LOCK_SH);
+            $cache->fetch();
+            $cache->unlock();
+        ```
+
+        そのあと, キャッシュに対して読み書きを行います.
+
+        ```php
+            $navigator = $cache->data['navigator'];
+            $cache->data['text'] = parse();
+        ```
+
+        変更を反映します.
+        ここでも同時にほかのスクリプトが, 同じファイルを読み書きして,
+        ファイルが破損しないように, ロックするのがおすすめです.
+
+        ```php
+            $cache->lock(LOCK_EX);
+            $cache->apply();
+            $cache->unlock();
+        ```
+
+        最後に, キャッシュの接続を解除します.
+
+        ```php
+            $cache->disconnect();
+        ```
+
+        まとめると, 基本的な操作フローは以下のようになります.
+
+        ```
+            connect → lock → fetch → {read/write data} → apply → unlock → disconnect
+        ```
+
+    # CacheStoreクラス
+        `CacheStore`クラスは, キャッシュディレクトリ全体を管理するstaticユーティリティです.
+
+        ```php
+            // キャッシュの存在確認
+            if (CacheStore::exists('temp')) {
+                // キャッシュの更新日時を取得
+                $date = CacheStore::getDate('temp');
+            }
+
+            // キャッシュファイルのパスを取得
+            $path = CacheStore::filePath('temp');
+        ```
+
+# ダウンロード
+    <https://github.com/ContentsViewer/ContentsPlanet/blob/main/Module/CacheStore.php>
+
+    [::NOTE]
+    =======
+        CacheStoreは, [ContentsPlanet(コンテンツ管理システム)](ROOT_URI/Master/ContentsPlanet/ContentsPlanet)
+        に導入され, メンテナンスは ContentsPlanet プロジェクト内で行われることになりました.
+    =======
+
+# GC（ガベージコレクション）
+    CacheStoreには, 古くなったキャッシュを自動的に削除するGC機能があります.
+
+    * `disconnect()`時に確率的に実行されます（デフォルト5%の確率）
+    * デフォルトの有効期間は1週間です
+    * キャッシュデータ内の`expires`キーで有効期間を個別に設定できます
+
+    ```php
+        // キャッシュの有効期間を1日に設定
+        $cache->data['expires'] = 86400;
+
+        // 有効期間を無期限に設定
+        $cache->data['expires'] = false;
+    ```
