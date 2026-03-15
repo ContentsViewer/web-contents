@@ -15,13 +15,14 @@ tags: CMS
         * モジュール設計をstaticクラスからインスタンスベースに移行（Authenticator, SearchEngine, Notifier, Logger）
         * PHP 8.3対応
         * 検索インデックスのパフォーマンス改善
+        * ContentsDatabaseMetadataのファイルIOパフォーマンスを改善(ファイル形式をserialize形式へ移行)
         * ログシステムの刷新（PSR-3ベースのログレベル、ログローテーション、ログビューアUX改善）
         * キャッシュモジュールのリネームとserialize形式への移行（CacheManager → CacheStore）
         * ファイル配信のHTTPキャッシュ対応（ETag/304）
 
     [::CAUTION]
     ====
-        既存のcache, indexファイルの互換性がなくなります。
+        既存のcache, metadata, indexファイルの互換性がなくなります。
         キャッシュファイルは自動再生成されますが、history情報は失われます。
         必要な場合は事前にバックアップを推奨します。
     ====
@@ -67,9 +68,15 @@ tags: CMS
             * メソッド名をPascalCaseからcamelCaseに変更（PSR-12準拠）
             * インデックスの直列化形式をJSONから`serialize()`に変更（パフォーマンス改善）
             * 類似トピック検索ロジックの簡素化
+            * 検索インデックスファイルの軽量化
+                * idのエイリアス化
+                * offset配列を1要素にパッキング
 
         Module/BinarySearch:
-            * メソッド名をPascalCaseからcamelCaseに変更（PSR-12準拠）
+            * SearchEngineに統合し、削除
+            
+        Module/ContentDatabase:
+            * metadataのファイルIO読み込み速度を改善(ファイル形式をserialize形式へ変更)
 
         Module/ErrorHandling:
             * ログレベルをerrorからcriticalに変更（ユーザに見えるエラーのため）
