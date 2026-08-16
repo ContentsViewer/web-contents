@@ -1,0 +1,1053 @@
+---
+parent: ../Circuit
+title: フェザー表示を用いた交流回路の理解
+date: 2026-08-15
+tags: 交流回路, フェザー表示, 電気回路
+---
+
+本記事では、//フェザー表示//を使って交流回路を理解する。
+正弦波交流を複素数で表すことで、微分・積分が複素数の掛け算・割り算に置き換わり、オームの法則やキルヒホッフの電流則・電圧則が直流回路と同じ形で成り立ち、交流回路を直流回路と同じ感覚で計算できるようになる。
+以下では、その準備として実効値と平均電力を定義したあと、フェザー表示を導入し、インピーダンスと基本素子(抵抗・インダクタ・キャパシタ)の性質を順に導出する。
+
+===
+
+# はじめに
+
+    交流回路は、私たちの生活に最も身近な電気回路である。家庭のコンセントに届いている電気は交流であり、日本では実効値100Vの交流電圧が供給されている。照明、モーター、家電製品など、日常で使う電気機器の多くはこの交流によって動いている。
+
+    一方で、交流は直流と異なり、電圧と電流が時間とともに絶えず変動する。さらに、コイルやコンデンサを含む回路では電圧と電流の間に位相差が生じるため、瞬時値のまま扱うと微分方程式を解くことになり、回路の特性を把握するのが難しい。
+
+    そこで本記事では、//フェザー表示//を使って交流回路を理解する。
+    正弦波交流を複素数で表すことで、微分・積分が複素数の掛け算・割り算に置き換わり、オームの法則やキルヒホッフの電流則・電圧則が直流回路と同じ形で成り立ち、交流回路を直流回路と同じ感覚で計算できるようになる。
+    以下では、その準備として実効値と平均電力を定義したあと、フェザー表示を導入し、インピーダンスと基本素子(抵抗・インダクタ・キャパシタ)の性質を順に導出する。
+
+# 正弦波交流
+
+    初期位相角$\varphi$, 振幅$V_m$, 角周波数$\omega$の正弦波交流電圧の瞬時値$v(t)$は次の式で表される。
+
+    ```math
+    $$
+    \begin{align}
+        v(t) &= V_m \cos(\omega t + \varphi) \nonumber \\
+    \end{align}
+    $$
+    ```
+
+    この時の電流$i(t)$は、位相角$\theta$だけ遅れた正弦波交流電流として次の式で表される。
+
+    ```math
+    $$
+    \begin{align}
+        i(t) &= I_m \cos(\omega t + \varphi + \theta) \nonumber \\
+    \end{align}
+    $$
+    ```
+
+    Fig.1に正弦波交流の電圧と電流の波形を示す。電流は電圧より位相角$\theta$だけ遅れていることがわかる。
+
+    ![Fig.1. 正弦波交流](CURRENT_DIR/images/fig-ac.jpg)
+
+# 実効値
+
+    交流の大きさを表すには、最大値$V_m$のほかに//実効値//がよく用いられる。
+    実効値$V$は、瞬時値の2乗を1周期$T$にわたって平均し、その平方根をとった値として定義される。
+
+    ```math
+    $$
+    \begin{align}
+        V = \sqrt{\dfrac{1}{T} \int_{0}^{T} v(t)^2 \, dt} \label{eq:rms}
+    \end{align}
+    $$
+    ```
+
+    正弦波交流$v(t) = V_m \cos(\omega t + \varphi)$の場合を計算する。2乗の1周期平均は、
+
+    ```math
+    $$
+    \begin{align}
+        \dfrac{1}{T} \int_{0}^{T} v(t)^2 \, dt &= \dfrac{V_m^2}{T} \int_{0}^{T} \cos^2(\omega t + \varphi) \, dt \nonumber \\
+        &= \dfrac{V_m^2}{T} \int_{0}^{T} \dfrac{1 + \cos(2\omega t + 2\varphi)}{2} \, dt \quad (半角の公式より) \nonumber \\
+        &= \dfrac{V_m^2}{2T} \left( \int_{0}^{T} dt + \int_{0}^{T} \cos(2\omega t + 2\varphi) \, dt \right) \nonumber \\
+        &= \dfrac{V_m^2}{2T} \left( T + 0 \right) \quad (\cos(2\omega t + 2\varphi)の1周期の積分は0) \nonumber \\
+        &= \dfrac{V_m^2}{2} \nonumber
+    \end{align}
+    $$
+    ```
+
+    [半角の公式]
+    ===
+        $$\cos^2 x = \dfrac{1 + \cos 2x}{2}$$
+    ===
+
+    よって、実効値$V$と最大値$V_m$の関係は次の式で表される。
+
+    ```math
+    $$
+    \begin{align}
+        V = \dfrac{V_m}{\sqrt{2}} \label{eq:rms_relation}
+    \end{align}
+    $$
+    ```
+
+    電流についても同様に、
+    
+    ```math
+    $$
+    \begin{align}
+        I = \dfrac{I_m}{\sqrt{2}} \label{eq:rms_relation_current}
+    \end{align}
+    $$
+    ```
+
+
+# 平均電力
+
+    素子に電圧$v(t)$を加えて電流$i(t)$が流れているとき、素子で消費される//瞬時電力//$p(t)$は次の式で定義される。
+
+    ```math
+    $$
+    \begin{align}
+        p(t) = v(t) i(t)
+    \end{align}
+    $$
+    ```
+
+    瞬時電力は時間とともに変動するため、電力としては1周期$T$の平均をとった//平均電力//$P$を用いる。
+
+    ```math
+    $$
+    \begin{align}
+        P = \dfrac{1}{T} \int_{0}^{T} p(t) \, dt \label{eq:average_power}
+    \end{align}
+    $$
+    ```
+
+    正弦波交流の場合を計算する。積和の公式より、
+
+    ```math
+    $$
+    \begin{align}
+        p(t) &= V_m \cos(\omega t + \varphi) \cdot I_m \cos(\omega t + \varphi + \theta) \nonumber \\
+        &= \dfrac{V_m I_m}{2} \{ \cos( (\omega t + \varphi) - (\omega t + \varphi + \theta) ) + \cos( (\omega t + \varphi) + (\omega t + \varphi + \theta) ) \} \quad (積和の公式より) \nonumber \\
+        &= \dfrac{V_m I_m}{2} \{ \cos(-\theta) + \cos(2\omega t + 2\varphi + \theta) \} \nonumber \\
+        &= \dfrac{V_m I_m}{2} \{ \cos\theta + \cos(2\omega t + 2\varphi + \theta) \} \quad (\cos(-\theta) = \cos\theta) \nonumber
+    \end{align}
+    $$
+    ```
+
+    [積和の公式]
+    ===
+        $$\cos A \cos B = \dfrac{1}{2} \{ \cos(A - B) + \cos(A + B) \}$$
+    ===
+
+
+    これを式(\ref{eq:average_power})に代入すると、平均電力$P$は次の式で表される。
+
+    ```math
+    $$
+    \begin{align}
+        P &= \dfrac{1}{T} \int_{0}^{T} \dfrac{V_m I_m}{2} \{ \cos\theta + \cos(2\omega t + 2\varphi + \theta) \} \, dt \nonumber \\
+        &= \dfrac{V_m I_m}{2T} \left( \int_{0}^{T} \cos\theta \, dt + \int_{0}^{T} \cos(2\omega t + 2\varphi + \theta) \, dt \right) \nonumber \\
+        &= \dfrac{V_m I_m}{2T} \left( T \cos\theta + 0 \right) \quad (\cos\thetaは定数、\cos(2\omega t + 2\varphi + \theta)の1周期の積分は0) \nonumber \\
+        &= \dfrac{V_m I_m}{2} \cos\theta \nonumber \\
+        &= \dfrac{V_m}{\sqrt{2}} \cdot \dfrac{I_m}{\sqrt{2}} \cos\theta \nonumber \\
+        &= V I \cos\theta
+    \end{align}
+    $$
+    ```
+
+    この平均電力$P$は//有効電力//とも呼ばれる。また、$\cos\theta$を//力率//と呼ぶ。
+
+
+# フェザー表示
+
+    1つの回路では、角周波数$\omega$はすべての電圧・電流に共通である。
+    そこで、正弦波の残りの情報である//大きさと初期位相//を1つの複素数で表す方法である//フェザー表示//を導入する。
+    変形にはオイラーの公式を使う。
+
+    [オイラーの公式]
+    ===
+        ```math
+        $$
+        \begin{align}
+            e^{j\theta} = \cos(\theta) + j\sin(\theta)
+        \end{align}
+        $$
+        ```
+
+        公式に$\theta = \pi/2$を代入すると、
+
+        ```math
+        $$
+        \begin{align}
+            e^{j \frac{\pi}{2}} &= \cos\dfrac{\pi}{2} + j\sin\dfrac{\pi}{2} \nonumber \\
+                       &= j
+        \end{align}
+        $$
+        ```
+    ===
+
+    電圧$v(t)$を複素数の実部として表す。
+
+    ```math
+    $$
+    \begin{align}
+        v(t) &= V_m \cos(\omega t + \varphi) \nonumber \\
+             &= Re[V_m e^{j(\omega t + \varphi)}] \quad (オイラーの公式より) \nonumber \\
+             &= Re[\sqrt{2} V e^{j(\omega t + \varphi)}] \quad (式\ref{eq:rms_relation}より) \nonumber \\
+             &= \sqrt{2} Re[V e^{j\varphi} e^{j\omega t}] \nonumber \\
+             &= \sqrt{2} Re[\dot{V} e^{j\omega t}] \quad \dot{V} = V e^{j\varphi}
+    \end{align}
+    $$
+    ```
+
+    時間による回転$e^{j\omega t}$と、時間によらない複素数$\dot{V}$に分離できた。電流$i(t)$も同様に変形する。
+
+    ```math
+    $$
+    \begin{align}
+        i(t) &= I_m \cos(\omega t + \varphi + \theta)       \nonumber \\
+             &= Re[I_m e^{j(\omega t + \varphi + \theta)}] \quad (オイラーの公式より) \nonumber \\
+             &= Re[\sqrt{2} I e^{j(\omega t + \varphi + \theta)}] \quad (式\ref{eq:rms_relation_current}より) \nonumber \\
+             &= \sqrt{2} Re[I e^{j(\varphi + \theta)} e^{j\omega t}] \nonumber \\
+             &= \sqrt{2} Re[\dot{I} e^{j\omega t}] \quad \dot{I} = I e^{j(\varphi + \theta)}
+    \end{align}
+    $$
+    ```
+
+    ここで、$\dot{V}$を//電圧フェザー//、$\dot{I}$を//電流フェザー//と呼ぶ。
+    フェザーの大きさは実効値、偏角は初期位相を表す。
+    回転因子$e^{j\omega t}$はすべての電圧・電流に共通なので、以降はフェザーだけで回路を扱うことができる。
+
+
+# キルヒホッフの電流則
+
+    ![Fig.2. キルヒホッフの電流則](CURRENT_DIR/images/fig-kirchhoff-current-law.jpg)
+
+    Fig.2.のように点Pに流れ込む電流を$i_k=I_{mk}\cos(\omega t + \theta_k) (k=1,2,\ldots,n)$とする。キルヒホッフの電流則は次のように表される。
+
+    ```math
+    $$
+    \begin{align}
+        i_1 + i_2 + \cdots + i_n = 0 \nonumber \\
+        \sum_{k=1}^{n} i_k = 0 \label{eq:kirchhoff_current_law}
+    \end{align}
+    $$
+    ```
+
+    次のように変形できる。
+
+    ```math
+    $$
+    \begin{align}
+        \sum_{k=1}^{n} i_k &= \sum_{k=1}^{n} I_{mk}\cos(\omega t + \theta_k) \nonumber \\
+        &= \sum_{k=1}^{n} Re[I_{mk} e^{j(\omega t + \theta_k)}] \quad (オイラーの公式より) \nonumber \\
+        &= \sum_{k=1}^{n} Re[\sqrt{2} I_k e^{j(\omega t + \theta_k)}] \quad (I_{mk} = \sqrt{2} I_kより) \nonumber \\
+        &= \sqrt{2} \sum_{k=1}^{n} Re[\dot{I}_k e^{j\omega t}] \quad (\dot{I}_k = I_k e^{j\theta_k}、複素数の性質2より) \nonumber \\
+        &= \sqrt{2} Re[\sum_{k=1}^{n} \dot{I}_k e^{j\omega t}] \quad (複素数の性質1より) \label{eq:current_law_complex}
+    \end{align}
+    $$
+    ```
+
+
+    [複素数の実部Reの性質]
+    ===
+        1. 複素数$z_1(t)$と$z_2(t)$に対して、
+
+            $$Re[z_1(t) + z_2(t)] = Re[z_1(t)] + Re[z_2(t)]$$
+
+
+        2. 複素数$z(t)$に対して、任意の実数$a$に対して、
+
+            $$Re[a z(t)] = a Re[z(t)]$$
+
+        3. 複素数$\dot{A}$とすべての実数$t$に対して、
+
+            $$\dfrac{d}{dt} Re[\dot{A} e^{j\omega t}] = Re[\dfrac{d}{dt}\dot{A} e^{j\omega t}]=Re[j\omega\dot{A} e^{j\omega t}]$$
+
+        4. 複素数$\dot{A_1}$, $\dot{A_2}$とすべての実数$t$に対して、
+
+            $$Re[\dot{A_1} e^{j\omega t}] = Re[\dot{A_2} e^{j\omega t}]$$
+
+            ならば、次の式が成り立つ。
+            $$\dot{A_1} = \dot{A_2}$$
+    ===
+
+    式(\ref{eq:kirchhoff_current_law})と式(\ref{eq:current_law_complex})より、次の式が導かれる。
+
+    ```math
+    $$
+    \begin{align}
+        \sqrt{2} Re[\sum_{k=1}^{n} \dot{I}_k e^{j\omega t}] = 0 \nonumber
+    \end{align}
+    $$
+    ```
+
+    両辺を$\sqrt{2}$で割ると、
+
+    ```math
+    $$
+    \begin{align}
+        Re[\sum_{k=1}^{n} \dot{I}_k e^{j\omega t}] = 0 \nonumber
+    \end{align}
+    $$
+    ```
+
+    複素数の性質4より、すべての実数$t$に対して次の式が成り立つ。
+
+    ```math
+    $$
+    \begin{align}
+        \sum_{k=1}^{n} \dot{I}_k = 0 \nonumber
+    \end{align}
+    $$
+    ```
+
+    よって、フェザー表示の電流則が成り立つことがわかる。
+
+
+# インピーダンス
+
+    ![Fig.3. インピーダンス](CURRENT_DIR/images/fig-impedance.jpg)
+
+    Fig.3.のように、二端子素子に電流$\dot{I}$を流したとき、端子電圧が$\dot{V}$になるとする。このときの電圧と電流の比$\dot{Z}$を
+    二端子素子の//複素インピーダンス//、あるいは単に//インピーダンス//と呼ぶ。
+
+    ```math
+    $$
+    \begin{align}
+        \dot{Z} = \dfrac{\dot{V}}{\dot{I}} \label{eq:impedance}
+    \end{align}
+    $$
+    ```
+
+    複素インピーダンスの大きさ$Z$は、次の式で表される。
+
+    ```math
+    $$
+    \begin{align}
+        Z = |\dot{Z}| = \dfrac{|\dot{V}|}{|\dot{I}|} = \dfrac{V}{I} \nonumber
+    \end{align}
+    $$
+    ```
+
+    フェザーの大きさは実効値($|\dot{V}| = V$、$|\dot{I}| = I$)であるから、$Z$は電圧と電流の実効値の比である。
+
+    インピーダンスを以下の式で表し、
+
+    ```math
+    $$
+    \begin{align}
+        \dot{Z} = R + jX
+    \end{align}
+    $$
+    ```
+
+    $R$をインピーダンスの抵抗(分)、$X$をリアクタンス(分)という。
+
+# 合成インピーダンス
+    # 直列接続
+
+        ![Fig.4. 直列接続](CURRENT_DIR/images/fig-impedance-series.jpg)
+
+        Fig.4.のように、$N$個のインピーダンスが直列に接続されている。
+
+        電流則により、
+
+        ```math
+        $$
+        \begin{align}
+            \dot{I} = \dot{I}_1 = \dot{I}_2 = \cdots = \dot{I}_N \nonumber
+        \end{align}
+        $$
+        ```
+
+        電圧則により、
+
+        ```math
+        $$
+        \begin{align}
+            \dot{V} = \dot{V}_1 + \dot{V}_2 + \cdots + \dot{V}_N \nonumber
+        \end{align}
+        $$
+        ```
+
+        各インピーダンスについて、
+
+        ```math
+        $$
+        \begin{align}
+            \dot{V}_k = \dot{Z}_k \dot{I}_k \quad (k=1,2,\ldots,N) \nonumber
+        \end{align}
+        $$
+        ```
+
+        合成インピーダンス$\dot{Z}$は、次の式で表される。
+
+        ```math
+        $$
+        \begin{align}
+            \dot{Z} &= \dfrac{\dot{V}}{\dot{I}} \nonumber \\
+            &= \dfrac{\dot{V}_1 + \dot{V}_2 + \cdots + \dot{V}_N}{\dot{I}} \nonumber \\
+            &= \dfrac{\dot{Z}_1 \dot{I}_1 + \dot{Z}_2 \dot{I}_2 + \cdots + \dot{Z}_N \dot{I}_N}{\dot{I}} \nonumber \\
+            &= \dfrac{\dot{Z}_1 \dot{I} + \dot{Z}_2 \dot{I} + \cdots + \dot{Z}_N \dot{I}}{\dot{I}} \nonumber \\
+            &= \dot{Z}_1 + \dot{Z}_2 + \cdots + \dot{Z}_N
+        \end{align}
+        $$
+        ```
+
+    # 並列接続
+
+        ![Fig.5. 並列接続](CURRENT_DIR/images/fig-impedance-parallel.jpg)
+
+        Fig.5.のように、$N$個のインピーダンスが並列に接続されている。
+
+        電圧則により、
+
+        ```math
+        $$
+        \begin{align}
+            \dot{V} = \dot{V}_1 = \dot{V}_2 = \cdots = \dot{V}_N \nonumber
+        \end{align}
+        $$
+        ```
+
+        電流則により、
+
+        ```math
+        $$
+        \begin{align}
+            \dot{I} = \dot{I}_1 + \dot{I}_2 + \cdots + \dot{I}_N \nonumber
+        \end{align}
+        $$
+        ```
+
+        各インピーダンスについて、
+
+        ```math
+        $$
+        \begin{align}
+            \dot{I}_k = \dfrac{\dot{V}_k}{\dot{Z}_k} \quad (k=1,2,\ldots,N) \nonumber
+        \end{align}
+        $$
+        ```
+
+        合成インピーダンス$\dot{Z}$の逆数は、次の式で表される。
+
+        ```math
+        $$
+        \begin{align}
+            \dfrac{1}{\dot{Z}} &= \dfrac{\dot{I}}{\dot{V}} \nonumber \\
+            &= \dfrac{\dot{I}_1 + \dot{I}_2 + \cdots + \dot{I}_N}{\dot{V}} \nonumber \\
+            &= \dfrac{1}{\dot{V}} \left( \dfrac{\dot{V}_1}{\dot{Z}_1} + \dfrac{\dot{V}_2}{\dot{Z}_2} + \cdots + \dfrac{\dot{V}_N}{\dot{Z}_N} \right) \nonumber \\
+            &= \dfrac{1}{\dot{V}} \left( \dfrac{\dot{V}}{\dot{Z}_1} + \dfrac{\dot{V}}{\dot{Z}_2} + \cdots + \dfrac{\dot{V}}{\dot{Z}_N} \right) \nonumber \\
+            &= \dfrac{1}{\dot{Z}_1} + \dfrac{1}{\dot{Z}_2} + \cdots + \dfrac{1}{\dot{Z}_N}
+        \end{align}
+        $$
+        ```
+
+        よって、合成インピーダンス$\dot{Z}$は、次の式で表される。
+
+        ```math
+        $$
+        \begin{align}
+            \dot{Z} = \dfrac{1}{\dfrac{1}{\dot{Z}_1} + \dfrac{1}{\dot{Z}_2} + \cdots + \dfrac{1}{\dot{Z}_N}} \nonumber
+        \end{align}
+        $$
+        ```
+
+
+# 基本的な素子の電流と電圧の関係
+
+     ```math
+    $$
+    \begin{align}
+        v(t) = V_m \cos(\omega t + \varphi) = \sqrt{2} Re[\dot{V} e^{j\omega t}] \quad \dot{V} = V e^{j\varphi} \label{eq:voltage}
+    \end{align}
+    $$
+    ```
+
+
+    ```math
+    $$
+    \begin{align}
+        i(t) = I_m \cos(\omega t + \varphi + \theta) = \sqrt{2} Re[\dot{I} e^{j\omega t}] \quad \dot{I} = I e^{j(\varphi + \theta)} \label{eq:current}
+    \end{align}
+    $$
+    ```
+
+    # 抵抗
+        ![Fig.6. 抵抗](CURRENT_DIR/images/fig-resistor.jpg)
+
+        抵抗素子の場合
+
+        ```math
+        $$
+        \begin{align}
+            v(t) = R i(t) \nonumber
+        \end{align}
+        $$
+        ```
+
+        式(\ref{eq:voltage})と式(\ref{eq:current})を代入すると、次の式が導かれる。
+
+        ```math
+        $$
+        \begin{align}
+            \sqrt{2} Re[\dot{V} e^{j\omega t}] = R \sqrt{2} Re[\dot{I} e^{j\omega t}] \nonumber
+        \end{align}
+        $$
+        ```
+
+        両辺を$\sqrt{2}$で割ると、
+
+        ```math
+        $$
+        \begin{align}
+            Re[\dot{V} e^{j\omega t}] = R Re[\dot{I} e^{j\omega t}] \nonumber
+        \end{align}
+        $$
+        ```
+
+        複素数の性質2より、次の式が導かれる。
+
+        ```math
+        $$
+        \begin{align}
+            Re[\dot{V} e^{j\omega t}] = Re[R \dot{I} e^{j\omega t}] \nonumber
+        \end{align}
+        $$
+        ```
+
+        複素数の性質4より、次の式が導かれる。
+
+        ```math
+        $$
+        \begin{align}
+            \dot{V} = R \dot{I}
+        \end{align}
+        $$
+        ```
+
+        よって、抵抗の複素インピーダンス$\dot{Z_R}$は、次の式で表される。
+
+        ```math
+        $$
+        \begin{align}
+            \dot{Z_R} &= \dfrac{\dot{V}}{\dot{I}} \nonumber \\
+              &= R
+        \end{align}
+        $$
+        ```
+
+        電圧と電流の位相差について。
+
+        ```math
+        $$
+        \begin{align}
+        \dot{I} &= \dfrac{1}{R} \dot{V} \nonumber \\
+                 &= \dfrac{ V e^{j\varphi}}{R} \quad (式\ref{eq:voltage}より) \nonumber \\
+                 &= \dfrac{ V }{R} e^{j\varphi} \nonumber
+        \end{align}
+        $$
+        ```
+
+        この式から、//抵抗の電流は電圧と同位相//であることがわかる。
+
+
+    # インダクタ
+        ![Fig.7. インダクタ](CURRENT_DIR/images/fig-inductor.jpg)
+
+        瞬時値の関係は次の式で表される。
+
+        ```math
+        $$
+        \begin{align}
+            v(t) = L \dfrac{di(t)}{dt} \nonumber
+        \end{align}
+        $$
+        ```
+
+        式(\ref{eq:voltage})と式(\ref{eq:current})を代入すると、次の式が導かれる。
+
+        ```math
+        $$
+        \begin{align}
+            \sqrt{2} Re[\dot{V} e^{j\omega t}] &= L \dfrac{d}{dt} \left( \sqrt{2} Re[\dot{I} e^{j\omega t}] \right) \nonumber \\
+            &= \sqrt{2} L \dfrac{d}{dt} Re[\dot{I} e^{j\omega t}] \quad (\sqrt{2}は定数) \nonumber \\
+            &= \sqrt{2} L Re[j \omega \dot{I} e^{j\omega t}] \quad (複素数の性質3より) \nonumber \\
+            &= \sqrt{2} Re[j \omega L \dot{I} e^{j\omega t}] \quad (複素数の性質2より) \nonumber
+        \end{align}
+        $$
+        ```
+
+        両辺を$\sqrt{2}$で割ると、
+
+        ```math
+        $$
+        \begin{align}
+            Re[\dot{V} e^{j\omega t}] = Re[j \omega L \dot{I} e^{j\omega t}] \nonumber
+        \end{align}
+        $$
+        ```
+
+        複素数の性質4より、次の式が導かれる。
+
+        ```math
+        $$
+        \begin{align}
+            \dot{V} = j \omega L \dot{I}
+        \end{align}
+        $$
+        ```
+
+        よって、インダクタの複素インピーダンス$\dot{Z_L}$は、次の式で表される。
+
+        ```math
+        $$
+        \begin{align}
+            \dot{Z_L} &= \dfrac{\dot{V}}{\dot{I}} \nonumber \\
+            &= j \omega L
+        \end{align}
+        $$
+        ```
+
+        電圧と電流の位相差について。
+
+        ```math
+        $$
+        \begin{align}
+        \dot{I} &= \frac{1}{j \omega L} \dot{V} \nonumber \\
+                 &= \frac{1}{\omega L} e^{-j \frac{\pi}{2}} \dot{V}  \quad (オイラーの公式 j = e^{j\frac{\pi}{2}}より) \nonumber \\
+                 &= \frac{ V e^{j\varphi}}{\omega L} e^{-j \frac{\pi}{2}} \quad (式\ref{eq:voltage}より) \nonumber \\
+                 &= \frac{ V }{\omega L} e^{j(\varphi - \frac{\pi}{2})}\nonumber
+        \end{align}
+        $$
+        ```
+
+        この式から、//インダクタの電流は電圧より90度遅れる//ことがわかる。
+
+
+        [jを掛けると90°回転することの証明]
+        ===
+            任意の複素数を$z = r e^{j\alpha}$（大きさ$r$、偏角$\alpha$）とすると、
+
+            ```math
+            $$
+            \begin{align}
+                jz = e^{j\frac{\pi}{2}} \cdot r e^{j\alpha} = r e^{j(\alpha + \frac{\pi}{2})} \nonumber
+            \end{align}
+            $$
+            ```
+
+            大きさ$r$は変わらず、偏角だけが$\dfrac{\pi}{2}$増える。よって、$j$を掛けることは複素平面上で反時計回りに$90°$回転することを意味する。
+        ===
+
+    # キャパシタ
+        ![Fig.8. キャパシタ](CURRENT_DIR/images/fig-capacitor.jpg)
+
+        瞬時値の関係は次の式で表される。
+
+        ```math
+        $$
+        \begin{align}
+            i(t) = C \dfrac{dv(t)}{dt} \nonumber
+        \end{align}
+        $$
+        ```
+
+        式(\ref{eq:voltage})と式(\ref{eq:current})を代入すると、次の式が導かれる。
+
+        ```math
+        $$
+        \begin{align}
+            \sqrt{2} Re[\dot{I} e^{j\omega t}] &= C \dfrac{d}{dt} \left( \sqrt{2} Re[\dot{V} e^{j\omega t}] \right) \nonumber \\
+            &= \sqrt{2} C \dfrac{d}{dt} Re[\dot{V} e^{j\omega t}] \quad (\sqrt{2}は定数) \nonumber \\
+            &= \sqrt{2} C Re[j \omega \dot{V} e^{j\omega t}] \quad (複素数の性質3より) \nonumber \\
+            &= \sqrt{2} Re[j \omega C \dot{V} e^{j\omega t}] \quad (複素数の性質2より) \nonumber
+        \end{align}
+        $$
+        ```
+
+        両辺を$\sqrt{2}$で割ると、
+
+        ```math
+        $$
+        \begin{align}
+            Re[\dot{I} e^{j\omega t}] = Re[j \omega C \dot{V} e^{j\omega t}] \nonumber
+        \end{align}
+        $$
+        ```
+
+        複素数の性質4より、次の式が導かれる。
+
+        ```math
+        $$
+        \begin{align}
+            \dot{I} = j \omega C \dot{V}
+        \end{align}
+        $$
+        ```
+
+        よって、キャパシタの複素インピーダンス$\dot{Z_C}$は、次の式で表される。
+
+        ```math
+        $$
+        \begin{align}
+            \dot{Z_C} &= \dfrac{\dot{V}}{\dot{I}} \nonumber \\
+            &= \dfrac{1}{j \omega C}
+        \end{align}
+        $$
+        ```
+
+        電圧と電流の位相差について。
+
+        ```math
+        $$
+        \begin{align}
+        \dot{I} &= j \omega C \dot{V} \nonumber \\
+                 &= \omega C e^{j \frac{\pi}{2}} \dot{V} \quad (オイラーの公式 j = e^{j\frac{\pi}{2}}より) \nonumber \\
+                 &= \omega C V e^{j\varphi} e^{j \frac{\pi}{2}} \quad (式\ref{eq:voltage}より) \nonumber \\
+                 &= \omega C V e^{j(\varphi + \frac{\pi}{2})} \nonumber
+        \end{align}
+        $$
+        ```
+
+        この式から、//キャパシタの電流は電圧より90度進む//ことがわかる。
+
+
+    # まとめ
+        [抵抗]
+        ===
+            ![抵抗](CURRENT_DIR/images/fig-resistor.jpg)
+
+            インピーダンス:
+                $$\dot{Z_R} = R$$
+
+            位相:
+                電流は電圧と//同位相//
+
+            ポイント:
+                インピーダンスは周波数$\omega$によらず一定で、位相も変えない。
+        ===
+
+        [インダクタ]
+        ===
+            ![インダクタ](CURRENT_DIR/images/fig-inductor.jpg)
+
+            インピーダンス:
+                $$\dot{Z_L} = j \omega L$$
+
+            位相:
+                電流は電圧より//$90°$遅れる//
+
+            ポイント:
+                $|\dot{Z_L}| = \omega L$より、$\omega$が増えるとインピーダンスが上がる。
+                つまり、インダクタは//低周波をよく通し//、高周波を通しにくい。直流($\omega = 0$)ではただの導線と同じになる。
+        ===
+
+        [キャパシタ]
+        ===
+            ![キャパシタ](CURRENT_DIR/images/fig-capacitor.jpg)
+
+            インピーダンス:
+                $$\dot{Z_C} = \dfrac{1}{j \omega C}$$
+
+            位相:
+                電流は電圧より//$90°$進む//
+
+            ポイント:
+                $|\dot{Z_C}| = \dfrac{1}{\omega C}$より、$\omega$が増えるとインピーダンスが下がる。
+                つまり、キャパシタは//高周波をよく通し//、低周波を通しにくい。直流($\omega = 0$)では電流を通さない。
+        ===
+
+
+# インピーダンスと有効電力
+    インピーダンス$\dot{Z} = R + jX$回路の有効電力$P$を考える。
+
+    瞬時電力に$v(t) = \sqrt{2} Re[\dot{V} e^{j\omega t}]$、$i(t) = \sqrt{2} Re[\dot{I} e^{j\omega t}]$を代入すると、
+
+    ```math
+    $$
+    \begin{align}
+        p(t) &= v(t) i(t) \nonumber \\
+        &= \sqrt{2} Re[\dot{V} e^{j\omega t}] \cdot \sqrt{2} Re[\dot{I} e^{j\omega t}] \nonumber \\
+        &= 2 Re[\dot{V} e^{j\omega t}] Re[\dot{I} e^{j\omega t}] \nonumber \\
+        &= 2 \cdot \dfrac{1}{2} \left( Re[\dot{V} e^{j\omega t} \cdot \dot{I} e^{j\omega t}] + Re[\dot{V} e^{j\omega t} \cdot \overline{\dot{I} e^{j\omega t}}] \right) \quad (実部の積の公式に a = \dot{V} e^{j\omega t}、b = \dot{I} e^{j\omega t}を代入) \nonumber \\
+        &= Re[\dot{V} \dot{I} e^{j 2\omega t}] + Re[\dot{V} \bar{\dot{I}} e^{j\omega t} e^{-j\omega t}] \quad (\overline{\dot{I} e^{j\omega t}} = \bar{\dot{I}} e^{-j\omega t}) \nonumber \\
+        &= Re[\dot{V} \dot{I} e^{j 2\omega t}] + Re[\dot{V} \bar{\dot{I}}] \quad (e^{j\omega t} e^{-j\omega t} = e^{0} = 1) \nonumber
+    \end{align}
+    $$
+    ```
+
+    [実部の積の公式]
+    ===
+        複素数$a$, $b$に対して、次の式が成り立つ($\bar{b}$は$b$の共役複素数)。
+
+        $$Re[a] Re[b] = \dfrac{1}{2} \left( Re[ab] + Re[a\bar{b}] \right)$$
+
+        証明:
+            $Re[z] = \dfrac{z + \bar{z}}{2}$より、
+
+            ```math
+            $$
+            \begin{align}
+                Re[a] Re[b] &= \dfrac{a + \bar{a}}{2} \cdot \dfrac{b + \bar{b}}{2} \nonumber \\
+                &= \dfrac{(a + \bar{a})(b + \bar{b})}{4} \nonumber \\
+                &= \dfrac{ab + a\bar{b} + \bar{a}b + \bar{a}\bar{b}}{4} \nonumber \\
+                &= \dfrac{(ab + \overline{ab}) + (a\bar{b} + \overline{a\bar{b}})}{4} \quad (\bar{a}\bar{b} = \overline{ab}、\bar{a}b = \overline{a\bar{b}}) \nonumber \\
+                &= \dfrac{2Re[ab] + 2Re[a\bar{b}]}{4} \quad (z + \bar{z} = 2Re[z]より) \nonumber \\
+                &= \dfrac{1}{2} \left( Re[ab] + Re[a\bar{b}] \right) \nonumber
+            \end{align}
+            $$
+            ```
+    ===
+
+    [共役複素数]
+    ===
+        複素数$z = a + jb$($a$, $b$は実数)に対して、虚部の符号を反転した複素数
+
+        $$\bar{z} = a - jb$$
+
+        を$z$の//共役複素数//という。極形式では、$z = r e^{j\alpha}$に対して$\bar{z} = r e^{-j\alpha}$となる。
+
+        よく使う性質:
+
+        1. $z + \bar{z} = (a + jb) + (a - jb) = 2a = 2Re[z]$
+
+        2. $z \bar{z} = (a + jb)(a - jb) = a^2 + b^2 = |z|^2$ (実数になる)
+
+        3. $\overline{z_1 z_2} = \bar{z_1} \bar{z_2}$ (積の共役は共役の積)
+
+        4. $\overline{z_1 + z_2} = \bar{z_1} + \bar{z_2}$ (和の共役は共役の和)
+    ===
+
+
+    ここで、$\dot{V} \dot{I}$は時間によらない1つの複素数なので、極形式で$\dot{V} \dot{I} = |\dot{V} \dot{I}| e^{j\beta}$($\beta$は$\dot{V} \dot{I}$の偏角)と表せる。
+    これを式(\ref{eq:average_power})に代入して1周期平均をとる。
+
+    ```math
+    $$
+    \begin{align}
+        P &= \dfrac{1}{T} \int_{0}^{T} p(t) \, dt \nonumber \\
+        &= \dfrac{1}{T} \int_{0}^{T} \left( Re[\dot{V} \dot{I} e^{j 2\omega t}] + Re[\dot{V} \bar{\dot{I}}] \right) dt \nonumber \\
+        &= \dfrac{1}{T} \int_{0}^{T} Re[\dot{V} \dot{I} e^{j 2\omega t}] \, dt + \dfrac{1}{T} \int_{0}^{T} Re[\dot{V} \bar{\dot{I}}] \, dt \quad (積分の線形性より) \nonumber \\
+        &= \dfrac{1}{T} \int_{0}^{T} Re[|\dot{V} \dot{I}| e^{j(2\omega t + \beta)}] \, dt + \dfrac{1}{T} \int_{0}^{T} Re[\dot{V} \bar{\dot{I}}] \, dt \quad (\dot{V} \dot{I} = |\dot{V} \dot{I}| e^{j\beta}を代入、指数法則より) \nonumber \\
+        &= \dfrac{1}{T} \int_{0}^{T} |\dot{V} \dot{I}| \cos(2\omega t + \beta) \, dt + \dfrac{1}{T} \int_{0}^{T} Re[\dot{V} \bar{\dot{I}}] \, dt \quad (オイラーの公式より) \nonumber \\
+        &= 0 + \dfrac{1}{T} \cdot T \cdot Re[\dot{V} \bar{\dot{I}}] \quad (\cos(2\omega t + \beta)の1周期の積分は0、Re[\dot{V} \bar{\dot{I}}]は時間によらない定数) \nonumber \\
+        &= Re[\dot{V} \bar{\dot{I}}] \nonumber
+    \end{align}
+    $$
+    ```
+
+    よって、有効電力$P$は次の式で表される。
+
+    ```math
+    $$
+    \begin{align}
+        P = Re[\dot{V} \bar{\dot{I}}] \label{eq:power_phasor}
+    \end{align}
+    $$
+    ```
+
+    ここで、基本素子ごとの有効電力について。
+
+    抵抗($\dot{V} = R \dot{I}$)の場合:
+
+        ```math
+        $$
+        \begin{align}
+            P &= Re[\dot{V} \bar{\dot{I}}] \nonumber \\
+            &= Re[R \dot{I} \bar{\dot{I}}] \quad (\dot{V} = R \dot{I}を代入) \nonumber \\
+            &= R |\dot{I}|^2 \quad (\dot{I} \bar{\dot{I}} = |\dot{I}|^2、Rは実数) \nonumber \\
+            &= R I^2 \quad (|\dot{I}| = Iは実効値) \nonumber
+        \end{align}
+        $$
+        ```
+
+    インダクタ($\dot{V} = j \omega L \dot{I}$)の場合:
+
+        ```math
+        $$
+        \begin{align}
+            P &= Re[\dot{V} \bar{\dot{I}}] \nonumber \\
+            &= Re[j \omega L \dot{I} \bar{\dot{I}}] \quad (\dot{V} = j \omega L \dot{I}を代入) \nonumber \\
+            &= Re[j \omega L I^2] \quad (\dot{I} \bar{\dot{I}} = I^2) \nonumber \\
+            &= 0 \quad (j \omega L I^2は純虚数) \nonumber
+        \end{align}
+        $$
+        ```
+
+    キャパシタ($\dot{I} = j \omega C \dot{V}$)の場合:
+
+        ```math
+        $$
+        \begin{align}
+            P &= Re[\dot{V} \bar{\dot{I}}] \nonumber \\
+            &= Re[\dot{V} \overline{j \omega C \dot{V}}] \quad (\dot{I} = j \omega C \dot{V}を代入) \nonumber \\
+            &= Re[-j \omega C \dot{V} \bar{\dot{V}}] \quad (\overline{j \omega C \dot{V}} = -j \omega C \bar{\dot{V}}) \nonumber \\
+            &= Re[-j \omega C V^2] \quad (\dot{V} \bar{\dot{V}} = V^2、|\dot{V}| = Vは実効値) \nonumber \\
+            &= 0 \quad (-j \omega C V^2は純虚数) \nonumber
+        \end{align}
+        $$
+        ```
+
+    以上から、
+    //抵抗は有効電力を消費するが、インダクタとキャパシタの有効電力は0である//。
+
+    回路全体で消費される有効電力は、各素子の有効電力の和である(エネルギー保存)。
+    インダクタとキャパシタの寄与は0なので、次の式が導かれる。
+
+    ```math
+    $$
+    \begin{align}
+        P = \sum_{k} R_k I_k^2 \label{eq:power_impedance}
+    \end{align}
+    $$
+    ```
+
+    ここで、$R_k$は回路中の$k$番目の抵抗、$I_k$はその抵抗を流れる電流の実効値である。
+    つまり、//直列・並列などの接続形態によらず、有効電力はすべて抵抗で消費される//。
+
+# 例題
+    # 例題1
+        ![例題1](CURRENT_DIR/images/fig-ex1.jpg)
+
+        図のような交流回路において、抵抗12Ωの両端の電圧$V$[V]は。
+
+        ---
+
+        解答:
+
+            抵抗とインダクタの直列接続の合成インピーダンス$\dot{Z}$は、
+
+            ```math
+            $$
+            \begin{align}
+                \dot{Z} &= \dot{Z_R} + \dot{Z_L} \nonumber \\
+                &= 12 + j16 \quad [\Omega] \nonumber
+            \end{align}
+            $$
+            ```
+
+            大きさ$Z$は、
+
+            ```math
+            $$
+            \begin{align}
+                Z = |\dot{Z}| = \sqrt{12^2 + 16^2} = \sqrt{400} = 20 \quad [\Omega] \nonumber
+            \end{align}
+            $$
+            ```
+
+            電源電圧の実効値を$V_S$として、
+            回路を流れる電流の実効値$I$は、
+
+            ```math
+            $$
+            \begin{align}
+                I &= |\dot{I}| \nonumber \\
+                  &= \left| \dfrac{\dot{V_s}}{\dot{Z}} \right| \quad (インピーダンスの定義式\ref{eq:impedance}より) \nonumber \\
+                  &= \dfrac{|\dot{V_s}|}{|\dot{Z}|} \quad (絶対値の性質 \left| z_1/z_2 \right| = |z_1|/|z_2| より) \nonumber \\
+                  &= \dfrac{200}{20} \nonumber \\
+                  &= 10 \quad [\mathrm{A}] \nonumber
+            \end{align}
+            $$
+            ```
+
+            直列接続なので、抵抗にも同じ電流$I$が流れる。よって、抵抗の両端の電圧$V$は、
+
+            ```math
+            $$
+            \begin{align}
+                V = |\dot{V_R}| = |\dot{Z_R} \dot{I}| = R I = 12 \times 10 = 120 \quad [\mathrm{V}] \nonumber
+            \end{align}
+            $$
+            ```
+    # 例題2
+        ![例題2](CURRENT_DIR/images/fig-ex2.jpg)
+
+        図のような回路で、抵抗$R$に流れる電流が4A、リアクタンス$X$に
+        流れる電流が3Aであるとき、この回路の消費電力[W]は。
+
+        ---
+
+        解答:
+            消費電力は、有効電力である。
+            式(\ref{eq:power_impedance})より、有効電力は接続形態によらず、すべて抵抗で消費される。
+            よって、//抵抗$R$に流れる電流$4$Aだけに注目すればよい//。
+
+            ```math
+            $$
+            \begin{align}
+                P = V I_R = 100 \times 4 = 400 \quad [\mathrm{W}] \nonumber
+            \end{align}
+            $$
+            ```
+
+
+    # 例題3
+        単相200Vの回路に、消費電力2.0kW、力率80%の負荷を接続した場合、回路に流れる電流[A]は。
+
+        ---
+
+        解答:
+            有効電力の定義式は、
+
+            ```math
+            $$
+            \begin{align}
+                P = V I \cos \theta \nonumber
+            \end{align}
+            $$
+            ```
+
+            $V=200\ \mathrm{V}$、$P=2.0\ \mathrm{kW}$、$\cos \theta = 0.8$を代入すると、
+
+            ```math
+            $$
+            \begin{align}
+                I = \dfrac{P}{V \cos \theta} = \dfrac{2.0 \times 10^3}{200 \times 0.8} = 12.5 \quad [\mathrm{A}] \nonumber
+            \end{align}
+            $$
+            ```
+
+    # 例題4
+        ![例題4](CURRENT_DIR/images/fig-ex4.jpg)
+
+        図のような交流回路で、抵抗の両端の電圧が80[V]、リアクタンスの両端の電圧が60[V]であるとき、負荷の力率[%]は。
+
+        ---
+
+        解答:
+
+            回路全体を流れる電流の実効値を$I$とする。
+            このとき、有効電力$P$は、抵抗で消費されるので、
+
+            ```math
+            $$
+            \begin{align}
+                P = V_R I \label{eq:ex4_power}
+            \end{align}
+            $$
+            ```
+
+            有効電力の定義式から、負荷の力率$\cos \theta$は、
+
+            ```math
+            $$
+            \begin{align}
+                \cos \theta &= \dfrac{P}{V I} \nonumber \\
+                 &= \dfrac{V_R I}{V I} \quad (\text{式\ref{eq:ex4_power}より})  \nonumber \\
+                 &= \dfrac{V_R}{V}  \nonumber \\
+                 &= \dfrac{80}{100} \nonumber \\
+                 &= 0.8 \nonumber
+            \end{align}
+            $$
+            ```
+
+            よって、負荷の力率は$80\%$である。
+
+# 参考文献
+
+    * 奥村浩士. "エース 電気回路理論入門 第13刷". 朝倉書店, 2014.
