@@ -36,17 +36,50 @@ date: 2016-12-8
             alert("本文がありません.");
             return false;
         }
-        
-        var otp = document.getElementsByName('otp').item(0).content;
-        var input=document.createElement('input');
-        input.name ='otp'; input.type='hidden'; input.value=otp;
-        document.form.appendChild(input);
-        
-        var contentPath = document.getElementsByName('content-path').item(0).content;
-        input=document.createElement('input');
-        input.name='contentPath'; input.type='hidden'; input.value=contentPath;
-        document.form.appendChild(input);
-        
-        return true;
+
+        // 再試行でここが再度走るため, 隠しフィールドが二重に付くのを防ぐ.
+        if (document.form.elements['contentPath'] == null) {
+            var contentPath = document.getElementsByName('content-path').item(0).content;
+            var input = document.createElement('input');
+            input.name = 'contentPath'; input.type = 'hidden'; input.value = contentPath;
+            document.form.appendChild(input);
+        }
+
+        if (!window.AccessGate) {
+            // あえて素の送信にフォールバックしない: トークンが無いと
+            // mail-service.php は 428 を返すので, 素通りさせると
+            // 「問題なし」と伝えた直後に生のJSONエラーを見せることになる.
+            alert('確認機構を読み込めませんでした。ページを再読み込みしてお試しください。');
+            return false;
+        }
+
+        // AccessGateトークンを取得してから送信する (旧OTPの置き換え).
+        //
+        // ensureToken ではなく acquireToken を使う (毎回鋳造し直す). トークンは
+        // 発行時のIPに束縛されており (IPv4は/32, IPv6は/64), Wi-Fiとモバイル回線を
+        // またぐと無効になる. 一方 ensureToken が見るのは Cookie の「存在」だけな
+        // ので, 無効なトークンでも {ok:true} を返してしまう —— 実測でそのまま送信
+        // され, 訪問者は生の {"error":"challenge_required"} を見ることになった.
+        // 送信は極端に低頻度なので, 毎回証明計算を払うほうが確実.
+        //
+        // 証明計算は16bitで期待65,536回, 実測 0.029ms/回 = 期待約2秒. 幾何分布なので
+        // 中央値は約1.4秒だが上位5%は6秒を超える. 止まったと思われないよう試行回数
+        // を出す.
+        var serviceUri = document.getElementsByName('service-uri').item(0).content;
+        var button = document.querySelector('form[name=form] button[type=submit]');
+        button.disabled = true;
+        button.textContent = '確認中…';
+        AccessGate.acquireToken(serviceUri, function (attempts) {
+            button.textContent = '確認中… ' + attempts.toLocaleString();
+        }).then(function (result) {
+            if (result.ok) {
+                document.form.submit(); // プログラム的submitはonsubmitを再発火しない
+            } else {
+                button.disabled = false;
+                button.textContent = 'Submit';
+                alert('確認に失敗しました。時間をおいて再度お試しください。');
+            }
+        });
+        return false;
     }
 </script>

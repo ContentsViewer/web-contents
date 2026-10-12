@@ -3,10 +3,10 @@ parent: ../Library
 title: PHPライブラリ
 date: 2018-4-4
 children:
-    Debug
-    CacheManager/CacheManager
+    Logger/docs
+    CacheStore/docs
     Localization/Localization
-    SearchEngine/SearchEngine
+    SearchEngine/docs
     Stopwatch
 ---
 

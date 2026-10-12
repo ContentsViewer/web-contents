@@ -19,6 +19,8 @@ tags: CMS
         * ログシステムの刷新（PSR-3ベースのログレベル、ログローテーション、ログビューアUX改善）
         * キャッシュモジュールのリネームとserialize形式への移行（CacheManager → CacheStore）
         * ファイル配信のHTTPキャッシュ対応（ETag/304）
+        * メール配信の`From`アドレス設定を追加（Gmail等のDMARC拒否を回避）
+        * タグページの`noindex`化と`robots` metaタグ対応
 
     [::CAUTION]
     ====
@@ -38,6 +40,8 @@ tags: CMS
             * `Notifyer`からリネーム・リファクタリング
             * staticクラスからインスタンスベースに変更
             * `MAIL_ENVELOPE_FROM`設定によるバウンスアドレス対応
+            * `MAIL_FROM`設定による`From`ヘッダアドレス対応（自ドメイン固定でGmail等のDMARC拒否を回避）
+            * 送信者名を`From`の表示名に、送信者アドレスを`Reply-To`に設定
 
         Frontend/log-viewer:
             * ログレベル別の色分け表示
@@ -50,10 +54,14 @@ tags: CMS
         Frontend/contents-viewer:
             * ページビルドレポートにインデックス更新状態の表示を追加
 
+        Frontend/viewer:
+            * `robots` metaタグの出力に対応（`metaRobots`変数で制御）
+
     Changes:
         ContentsPlanet:
             * バージョンを`2026.03.22`に更新
             * `MAIL_ENVELOPE_FROM`設定の追加
+            * `MAIL_FROM`設定の追加
             * PHP 8.3対応: 文字列補間を修正
 
         Module/Authenticator:
@@ -67,7 +75,7 @@ tags: CMS
             * `Searcher`クラスを`Index`クラスに統合
             * メソッド名をPascalCaseからcamelCaseに変更（PSR-12準拠）
             * インデックスの直列化形式をJSONから`serialize()`に変更（パフォーマンス改善）
-            * 類似トピック検索ロジックの簡素化
+            * 検索処理の最適化
             * 検索インデックスファイルの軽量化
                 * idのエイリアス化
                 * offset配列を1要素にパッキング
@@ -99,6 +107,7 @@ tags: CMS
         Frontend/tag-viewer:
             * コードのリファクタリング（PSR-12準拠のcamelCase化）
             * 配列操作のモダンPHP構文への書き換え（`array_map`, `fn()`）
+            * タグ関連ページを`noindex, follow`に設定（検索エンジンのインデックス対象から除外）
 
         Frontend/log-viewer:
             * ローテーションされたログファイル（OutputLog.1.txt）の読み込みに対応

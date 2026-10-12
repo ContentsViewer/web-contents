@@ -36,17 +36,55 @@ If you have any questions or concerns about this site, please let us know using 
             alert("Please enter your message.");
             return false;
         }
-        
-        var otp = document.getElementsByName('otp').item(0).content;
-        var input=document.createElement('input');
-        input.name ='otp'; input.type='hidden'; input.value=otp;
-        document.form.appendChild(input);
-        
-        var contentPath = document.getElementsByName('content-path').item(0).content;
-        input=document.createElement('input');
-        input.name='contentPath'; input.type='hidden'; input.value=contentPath;
-        document.form.appendChild(input);
-        
-        return true;
+
+        // Guarded because this runs again if the visitor retries after a
+        // failed check, and a second hidden field would be sent too.
+        if (document.form.elements['contentPath'] == null) {
+            var contentPath = document.getElementsByName('content-path').item(0).content;
+            var input = document.createElement('input');
+            input.name = 'contentPath'; input.type = 'hidden'; input.value = contentPath;
+            document.form.appendChild(input);
+        }
+
+        if (!window.AccessGate) {
+            // Deliberately NOT a plain submit: mail-service.php answers 428
+            // without a gate token, so falling through would show the visitor
+            // a raw JSON error after telling them nothing was wrong.
+            alert('Could not load the verification component. Please reload the page and try again.');
+            return false;
+        }
+
+        // Acquire an AccessGate token before sending (this replaced the former
+        // OTP).
+        //
+        // acquireToken, not ensureToken: mint a fresh one every time. A token
+        // is bound to the address it was issued to (IPv4 /32, IPv6 /64), so it
+        // dies when a visitor moves between Wi-Fi and a mobile network --
+        // while ensureToken only checks that a cookie EXISTS and so answers
+        // {ok:true} for a dead one. Measured: it submits anyway and the
+        // visitor is shown a raw {"error":"challenge_required"}. Contact
+        // submissions are rare enough that paying the proof of work every
+        // time is the cheaper mistake.
+        //
+        // That proof of work expects 65,536 digests at 16 bits, measured at
+        // 0.029 ms each: about 2 s. It is geometric, so the median is nearer
+        // 1.4 s but the slowest 5% run past 6 s -- hence the attempt counter,
+        // so the wait does not look like a hang.
+        var serviceUri = document.getElementsByName('service-uri').item(0).content;
+        var button = document.querySelector('form[name=form] button[type=submit]');
+        button.disabled = true;
+        button.textContent = 'Verifying…';
+        AccessGate.acquireToken(serviceUri, function (attempts) {
+            button.textContent = 'Verifying… ' + attempts.toLocaleString();
+        }).then(function (result) {
+            if (result.ok) {
+                document.form.submit(); // a scripted submit does not re-fire onsubmit
+            } else {
+                button.disabled = false;
+                button.textContent = 'Submit';
+                alert('Verification failed. Please wait a moment and try again.');
+            }
+        });
+        return false;
     }
 </script>

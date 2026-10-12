@@ -3,7 +3,7 @@ parent: ../Root
 title: 電子回路
 date: 2020-02-22
 children:
-    Power/Power
+    ac-phasor-theory/article
     recipes/recipes
     Books/Books
 ---
